@@ -1,14 +1,15 @@
 import "./App.css";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
+import AdminMain from "./page/admin/AdminMain.jsx";
 
 function App() {
   return (
     <>
-      <Routes>
-        <Route path="/" element={<Board />} />
-        <Route path="/insert" element={<Insert />} />
-        <Route path="/select/:id" element={<Select />} />
-        <Route path="/update" element={<Update />} />
-      </Routes>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<AdminMain />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
