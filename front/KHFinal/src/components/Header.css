@@ -1,0 +1,27 @@
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #003366;
+    color: white;
+  }
+  
+  .nav-menu {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .nav-menu a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .login button {
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  

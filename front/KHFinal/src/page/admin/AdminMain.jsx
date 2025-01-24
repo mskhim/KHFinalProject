@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 const AdminMain = () => {
   const [test, setTest] = useState("");
   const [inputValue, setInputValue] = useState(""); // input 필드 값
-  
+
   useEffect(() => {
     fetch("http://localhost:8080/admin/test", {
       method: "GET",

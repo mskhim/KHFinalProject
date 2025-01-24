@@ -14,7 +14,7 @@ public class SecurityConfig {
             .csrf().disable() // CSRF 비활성화
             .cors().and() // CORS 활성화
             .authorizeHttpRequests()
-            .requestMatchers("/admin/**").permitAll() // /admin/** 경로 허용
+            .requestMatchers("/**").permitAll() // /admin/** 경로 허용
             .anyRequest().authenticated(); // 나머지 요청은 인증 필요
         return http.build();
     }
