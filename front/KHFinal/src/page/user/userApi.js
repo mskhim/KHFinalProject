@@ -27,9 +27,12 @@ export const handleCallback = async (code, state) => {
     const data = await response.json(); // JSON 데이터 파싱
     const accessToken = data.accessToken; // Access Token
     const userInfo = data.userInfo; // 사용자 정보
+    const userJwt = data.userJwt; // 사용자 정보
 
     if (accessToken) {
       localStorage.setItem("accessToken", accessToken); // Access Token 저장
+      localStorage.setItem("userJwt", userJwt); // Access Token 저장
+
       console.log("Access Token 저장 완료:", accessToken);
     } else {
       console.error("Access Token이 없습니다!");

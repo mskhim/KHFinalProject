@@ -1,18 +1,20 @@
 import React, { useEffect } from "react";
 import { getAuthUrl, handleCallback } from "../userApi";
 import BtnNaverLogin from "./btnNaverLogin.png";
+import { Navigate } from "react-router-dom";
 function NaverLogin() {
   useEffect(() => {
+    const nav = Navigate;
     // URL에 code와 state가 있는 경우 콜백 처리
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get("code"); // 인증 코드
     const state = urlParams.get("state"); // state 값
 
     if (code && state) {
-      alert("콜백 처리 시작");
       handleCallback(code, state)
         .then((data) => {
           console.log("사용자 정보:", data); // 사용자 정보 출력
+          // window.location.href = "/"; // 메인 페이지로 이동
         })
         .catch((error) => {
           console.error("콜백 처리 실패:", error);
