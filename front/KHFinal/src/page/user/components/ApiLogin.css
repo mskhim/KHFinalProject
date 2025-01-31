@@ -1,0 +1,22 @@
+/* 전체 컨테이너 스타일 */
+.api-login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px; /* 버튼 간격 */
+  margin-top: 50px; /* 위쪽 여백 */
+}
+
+/* 로그인 버튼 스타일 */
+.login-button {
+  width: 200px; /* 버튼 너비 */
+  height: auto; /* 비율에 맞춰 높이 자동 조정 */
+  cursor: pointer; /* 클릭 가능한 포인터 표시 */
+  transition: transform 0.2s ease; /* 클릭 시 애니메이션 효과 */
+}
+
+/* 버튼 클릭 애니메이션 */
+.login-button:hover {
+  transform: scale(1.05); /* 살짝 확대 */
+}

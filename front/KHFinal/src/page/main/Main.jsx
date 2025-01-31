@@ -1,28 +1,28 @@
-import React, { useEffect } from "react";
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
-import "./Main.css";
+import React, { useEffect } from 'react';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+import './Main.css';
 
 const Main = () => {
   useEffect(() => {
-    const toggleButtons = document.querySelectorAll(".toggle-btn");
+    const toggleButtons = document.querySelectorAll('.toggle-btn');
     toggleButtons.forEach((button) => {
-      button.addEventListener("click", () => {
+      button.addEventListener('click', () => {
         const extraImages = button.nextElementSibling;
-        if (extraImages && extraImages.style.display === "block") {
-          extraImages.style.display = "none";
-          button.textContent = "확장";
+        if (extraImages && extraImages.style.display === 'block') {
+          extraImages.style.display = 'none';
+          button.textContent = '확장';
         } else if (extraImages) {
-          extraImages.style.display = "block";
-          button.textContent = "축소";
+          extraImages.style.display = 'block';
+          button.textContent = '축소';
         }
       });
     });
 
-    const upButton = document.getElementById("up-button");
+    const upButton = document.getElementById('up-button');
     if (upButton) {
-      upButton.addEventListener("click", () => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
+      upButton.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     }
   }, []);
