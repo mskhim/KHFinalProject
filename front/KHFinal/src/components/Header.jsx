@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom'; // ✅ NavLink 추가
 import './Header.css';
 import { handleLogout, checkAuthStatus } from '../page/user/userApi';
 
@@ -32,20 +32,43 @@ const Header = () => {
   };
 
   return (
-    <header>
-      <div className="nav-menu">
-        <a href="#">축제</a>
-        <a href="#">축제지도</a>
-        <a href="#">축제 달력</a>
-        <a href="#">Q&A</a>
-        <a href="#">공지사항</a>
-      </div>
-      <div className="login">
-        {isAuthenticated ? (
-          <button onClick={Logout}>로그아웃</button>
-        ) : (
-          <button onClick={handleLogin}>로그인</button>
-        )}
+    <header className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div className="container">
+        <NavLink className="navbar-brand" to="/">
+          🎉 축제 페이지
+        </NavLink>
+
+        {/* ✅ 네비게이션 메뉴 */}
+        <nav className="navbar-nav">
+          <NavLink className="nav-item nav-link" to="/eventList">
+            축제
+          </NavLink>
+          <NavLink className="nav-item nav-link" to="/eventMap">
+            축제 지도
+          </NavLink>
+          <NavLink className="nav-item nav-link" to="/eventCalendar">
+            축제 달력
+          </NavLink>
+          <NavLink className="nav-item nav-link" to="/qnaList">
+            Q&A
+          </NavLink>
+          <NavLink className="nav-item nav-link" to="/noticeList">
+            공지사항
+          </NavLink>
+        </nav>
+
+        {/* ✅ 로그인 / 로그아웃 버튼 */}
+        <div className="ml-auto">
+          {isAuthenticated ? (
+            <button className="btn btn-outline-light" onClick={Logout}>
+              로그아웃
+            </button>
+          ) : (
+            <button className="btn btn-primary" onClick={handleLogin}>
+              로그인
+            </button>
+          )}
+        </div>
       </div>
     </header>
   );
