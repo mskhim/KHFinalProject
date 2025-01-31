@@ -13,7 +13,7 @@ import {
   AdminStats,
   AdminUserManage,
 } from './page/admin';
-import { ProtectedRoute } from './components';
+import { ProtectedRoute, Unauthorized } from './components';
 import { EventList, EventRead } from './page/event';
 import { EventCalendar } from './page/eventCalendar';
 import { EventMap } from './page/eventMap';
@@ -70,7 +70,7 @@ function App() {
           <Route path="/qnaReInsert/:id" element={<QnaReInsert />} />
 
           {/* ✅ 권한 없을 때 */}
-          <Route path="/unauthorized" element={<AdminMain />} />
+          <Route path="/unauthorized" element={<Unauthorized />} />
 
           {/* ✅ 관리자 페이지 */}
           <Route
