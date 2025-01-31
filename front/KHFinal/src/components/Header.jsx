@@ -22,7 +22,6 @@ const Header = () => {
   const Logout = () => {
     handleLogout().then(() => {
       setIsAuthenticated(false); // ✅ 로그인 상태 업데이트
-      navigate('/');
     });
   };
 

@@ -30,6 +30,7 @@ const UserLoginSuccess = () => {
 
         // ✅ 로그인 성공 후, 이전 페이지로 이동
         const preLoginUrl = sessionStorage.getItem('preLoginUrl') || '/';
+        alert(preLoginUrl);
         navigate(preLoginUrl);
         sessionStorage.removeItem('preLoginUrl');
       }
