@@ -51,7 +51,7 @@ const Header = () => {
     navigate('/userLoginPage');
   };
 
-  // ✅ 다크 모드 토글 함수
+  // ✅ 다크 모드 토글 함수 (기본: 흰색 / 토글 시 검은색)
   const toggleDarkMode = () => {
     setDarkMode((prev) => !prev);
     document.body.classList.toggle('dark-mode');
@@ -68,10 +68,19 @@ const Header = () => {
 
   return (
     <>
-      {/* ✅ 상단 네비게이션 */}
-      <Navbar bg="dark" variant="dark" expand="lg" className="py-3">
+      {/* ✅ 상단 네비게이션 (기본: 흰색 / 토글 시 검은색) */}
+      <Navbar
+        expand="lg"
+        className={`py-3 ${
+          darkMode ? 'bg-dark text-light' : 'bg-light text-dark'
+        }`}
+      >
         <Container fluid className="header-container px-4" id="headerContainer">
-          <Navbar.Brand as={NavLink} to="/" className="brand-text">
+          <Navbar.Brand
+            as={NavLink}
+            to="/"
+            className={darkMode ? 'text-light' : 'text-dark'}
+          >
             VIVAFESTA
           </Navbar.Brand>
 
@@ -79,10 +88,22 @@ const Header = () => {
           <Navbar.Collapse id="navbarColor01">
             <Nav className="me-auto nav-links">
               {/* ✅ '축제' 클릭 시 네비게이션 토글 */}
-              <Nav.Link onClick={toggleFestivalNav}>축제</Nav.Link>
+              <Nav.Link
+                className={darkMode ? 'text-light' : 'text-dark'}
+                onClick={toggleFestivalNav}
+              >
+                축제
+              </Nav.Link>
 
               {/* ✅ 고객지원 드롭다운 */}
-              <NavDropdown title="고객지원" id="nav-dropdown">
+              <NavDropdown
+                title={
+                  <span className={darkMode ? 'text-light' : 'text-dark'}>
+                    고객지원
+                  </span>
+                }
+                id="nav-dropdown"
+              >
                 <NavDropdown.Item as={NavLink} to="/qnaList">
                   QNA
                 </NavDropdown.Item>
@@ -100,11 +121,23 @@ const Header = () => {
                     <span className="d-flex align-items-center user-info">
                       <BsPersonCircle
                         size={30}
-                        color="white"
-                        className="me-2"
+                        className={`me-2 ${
+                          darkMode ? 'text-light' : 'text-dark'
+                        }`}
                       />
-                      <span className="user-name">{userName}</span>
-                      <BsChevronDown size={16} className="ms-1 dropdown-icon" />
+                      <span
+                        className={`user-name ${
+                          darkMode ? 'text-light' : 'text-dark'
+                        }`}
+                      >
+                        {userName}
+                      </span>
+                      <BsChevronDown
+                        size={16}
+                        className={`ms-1 dropdown-icon ${
+                          darkMode ? 'text-light' : 'text-dark'
+                        }`}
+                      />
                     </span>
                   }
                   id="user-dropdown"
@@ -122,7 +155,7 @@ const Header = () => {
                 </NavDropdown>
               ) : (
                 <Button
-                  variant="outline-light"
+                  variant={darkMode ? 'outline-light' : 'outline-dark'}
                   onClick={handleLogin}
                   className="me-3"
                 >
@@ -131,7 +164,10 @@ const Header = () => {
               )}
               {isAuthenticated && (
                 <div className="position-relative me-3">
-                  <FaBell size={24} color="white" />
+                  <FaBell
+                    size={24}
+                    className={darkMode ? 'text-light' : 'text-dark'}
+                  />
                   {notifications > 0 && (
                     <Badge pill bg="danger" className="notification-badge">
                       {notifications}
@@ -145,7 +181,10 @@ const Header = () => {
                 rel="noopener noreferrer"
                 className="github-link ms-3"
               >
-                <FaGithub size={30} color="white" />
+                <FaGithub
+                  size={30}
+                  className={darkMode ? 'text-light' : 'text-dark'}
+                />
               </a>
               <Button
                 variant="link"
@@ -153,9 +192,9 @@ const Header = () => {
                 onClick={toggleDarkMode}
               >
                 {darkMode ? (
-                  <FaSun size={24} color="white" />
+                  <FaSun size={24} className="text-light" />
                 ) : (
-                  <FaMoon size={24} color="white" />
+                  <FaMoon size={24} className="text-dark" />
                 )}
               </Button>
             </div>
