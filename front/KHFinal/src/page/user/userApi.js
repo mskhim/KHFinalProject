@@ -184,14 +184,11 @@ export const checkAuthStatus = async () => {
     });
 
     if (!response.ok) {
-      console.warn('JWT가 없거나 만료됨. 로그아웃 처리');
       return { authenticated: false };
     }
-
     const data = await response.json();
     return data; // { authenticated: true, user: {...} }
   } catch (error) {
-    console.error('인증 상태 확인 실패:', error);
     return { authenticated: false };
   }
 };

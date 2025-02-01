@@ -135,7 +135,7 @@ public class UserController {
 	            "user", user, // ✅ 회원가입 화면에서 사용할 정보 제공
 	            "message", "회원가입 필요"
 	        ));
-	    }
+	    } 
 
 	    // ✅ 기존 회원이라면 JWT 생성 및 쿠키에 저장
 	    String jwtAccessToken = JwtUtil.createAccessToken(user);

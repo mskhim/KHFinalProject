@@ -1,27 +1,202 @@
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #003366;
-    color: white;
+/* ✅ 네비게이션 바 (최상단 유지) */
+.navbar {
+  font-size: 1.1rem;
+  display: flex;
+  position: relative;
+  z-index: 3; /* ✅ 헤더 최상위 유지 */
+}
+
+/* ✅ 헤더 컨테이너 */
+#headerContainer {
+  z-index: 3;
+}
+
+/* ✅ 브랜드 로고 */
+.brand-text {
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* ✅ 네비게이션 링크 스타일 */
+.nav-links .nav-link {
+  margin-right: 15px;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+/* ✅ 사용자 정보 드롭다운 */
+.user-info {
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+  color: white;
+  margin-right: 15px;
+}
+
+.user-name {
+  font-weight: bold;
+}
+
+.dropdown-icon {
+  color: white;
+}
+
+/* ✅ 사용자 드롭다운 메뉴 */
+.user-dropdown .dropdown-toggle::after {
+  display: none;
+}
+
+.user-dropdown .dropdown-menu {
+  border-radius: 8px;
+  padding: 8px;
+  background-color: #222;
+}
+
+.user-dropdown .dropdown-item {
+  color: white !important;
+}
+
+.user-dropdown .dropdown-item:hover {
+  background-color: #444 !important;
+}
+
+/* ✅ 깃허브 링크 */
+.github-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  margin-right: 10px;
+}
+
+.github-link:hover svg {
+  color: #999;
+}
+
+/* ✅ 포인트 표시 */
+.points-display {
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+}
+
+/* ✅ 알림 배지 */
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  font-size: 0.8rem;
+  padding: 5px;
+}
+
+/* ✅ 다크 모드 버튼 */
+.theme-toggle-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.theme-toggle-btn:hover {
+  opacity: 0.8;
+}
+
+/* ✅ 다크 모드 스타일 */
+body.dark-mode {
+  background-color: #181818;
+  color: white;
+}
+
+/* ✅ '축제' 메뉴 좌측 정렬 */
+.nav-links .nav-link {
+  margin-left: 10px;
+  font-size: 1.2rem;
+}
+
+/* ✅ 네비게이션 애니메이션 */
+.festival-nav {
+  position: relative;
+  width: 100%;
+  background-color: white;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #ddd;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  z-index: 2;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+/* ✅ 기본적으로 숨김 상태 */
+.festival-nav.hidden {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+/* ✅ 애니메이션 적용 */
+.festival-nav.with-animation {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* ✅ 네비게이션 내부 컨테이너 */
+.festival-nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding-left: 15px; /* ✅ 왼쪽 정렬 유지 */
+}
+
+/* ✅ 네비게이션 아이템 */
+.festival-nav-item {
+  text-align: center;
+  font-size: 1rem;
+  color: #333;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.3s, font-weight 0.3s;
+  position: relative;
+  padding: 10px 15px;
+  margin-right: 10px;
+}
+
+/* ✅ 활성화된 항목 스타일 */
+.festival-nav-item.active {
+  color: black;
+  font-weight: bold;
+}
+
+/* ✅ 활성화된 항목 하단 바 */
+.festival-nav-item.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 100%;
+  height: 3px;
+  background-color: black;
+  border-radius: 3px;
+}
+
+/* ✅ 네비게이션 아이콘 */
+.festival-nav-item svg {
+  display: block;
+  margin: 0 auto;
+  color: #333;
+}
+
+/* ✅ 네비게이션 애니메이션 (토글할 때만) */
+.festival-nav.with-animation {
+  animation: slide-down 0.3s ease-out;
+}
+
+@keyframes slide-down {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
   }
-  
-  .nav-menu {
-    display: flex;
-    gap: 15px;
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
-  
-  .nav-menu a {
-    color: white;
-    text-decoration: none;
-  }
-  
-  .login button {
-    background-color: #ff6600;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-  }
-  
+}
