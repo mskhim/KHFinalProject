@@ -1,7 +1,66 @@
-footer {
-    padding: 10px 20px;
-    background-color: #003366;
+ .sns {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    border-bottom: 1px solid rgb(152, 152, 152);
+    padding-bottom: 30px;
+    margin-bottom: 10px;
+}
+
+.sns > a {
+    margin-right: 30px;
+    font-size: 20px;
+}
+
+
+.sns > a > img {
+    margin-right: 10px;
+    width: 50px;
+    border-radius: 50%;
+    background-color: gray;
+    transition: background-color 0.2s;
+}
+
+div > a {
+    text-decoration: none;
     color: white;
-    text-align: center;
-  }
-  
+}
+
+a:hover > img {
+    background-color: rgb(255, 255, 255);
+}
+
+.col > a {
+    color: gray;
+}
+
+.col:hover > a {
+    color: white;
+    transition: background-color 0.5s;
+}
+
+span {
+    display: block;
+    margin-top: 30px;
+}
+
+.copyRight {
+   
+    padding-top: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+}
+
+.copyRight img {
+    width: 120px;
+    height: 40px;
+    background-color: gray;
+    margin-right: 3px;
+}
+
+.copyRight .webCertification {
+    width: 70px;
+}
