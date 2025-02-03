@@ -1,10 +1,9 @@
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
+import { Header, Footer } from '../../components';
 
 const EventMap = () => {
   return (
     <>
-      <Header />
+      <Header page="map" />
       <h1>EventMap</h1>
       <Footer />
     </>

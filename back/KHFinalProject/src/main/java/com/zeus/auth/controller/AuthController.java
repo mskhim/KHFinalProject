@@ -15,7 +15,6 @@ public class AuthController {
     @GetMapping("/jwtAdmin")
     @PreAuthorize("hasRole('0')") // ROLE_0만 접근 가능
     public String adminAccess() {
-    	log.info("어드민");
         return "Admin Access Granted!";
     }
 
@@ -28,8 +27,6 @@ public class AuthController {
     @GetMapping("/jwtUser")
     @PreAuthorize("hasAnyRole('0', '1', '2')") // ROLE_0, ROLE_1, ROLE_2 접근 가능
     public String userAccess() {
-    	log.info("유저");
-    	
         return "User Access Granted!";
     }
 }

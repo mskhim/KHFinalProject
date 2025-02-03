@@ -36,8 +36,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // ✅ JWT 검증
                 Claims claims = jwtUtil.validateToken(token);
                 String authority = claims.get("role", String.class);
-
-                // ✅ ROLE 값이 있다면 "ROLE_" prefix 추가
                 log.info(authority);
                 // ✅ 인증 객체 생성 및 SecurityContext 설정
                 UsernamePasswordAuthenticationToken authentication =

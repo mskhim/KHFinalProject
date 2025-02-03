@@ -163,7 +163,7 @@ public class UserController {
 	            "message", "등록되지 않은 사용자입니다. 회원가입이 필요합니다."
 	        ));
 	    }
-
+	    deleteJwtCookie(response, "refresh_token"); // 리프레시 토큰 삭제
 	    // ✅ JWT 생성 (액세스 토큰 & 리프레시 토큰)
 	    String accessToken = JwtUtil.createAccessToken(user2);
 	    String refreshToken = JwtUtil.createRefreshToken(user2);
@@ -195,7 +195,7 @@ public class UserController {
 	        @CookieValue(name = "jwt", required = false) String jwtToken) { // ✅ 쿠키에서 JWT 가져오기
 
 	    if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken)) {
-	        return ResponseEntity.status(401).body(Map.of("authenticated", false, "message", "JWT가 없거나 만료됨"));
+	        return ResponseEntity.ok(Map.of("authenticated", false, "message", "JWT가 없거나 만료됨"));
 	    }
 
 	    // ✅ JWT가 유효하면 사용자 정보 반환
@@ -228,9 +228,13 @@ public class UserController {
 	    User user = new User();
 	    user.setId(userId);
 	    user.setProvider(provider);
-	    user = service.getUserByIdAndProvider(user);
-	    String newAccessToken = JwtUtil.createAccessToken(user);
-
+	    User dbUser = new User();
+	    dbUser = service.getUserByIdAndProvider(user);
+	    if (dbUser == null) {
+	        log.warn("❌ 리프레시 토큰 변조 또는 탈퇴한 유저 (userId: {}, provider: {})", userId, provider);
+	        return ResponseEntity.status(403).body(Map.of("error", "유효하지 않은 리프레시 토큰 또는 탈퇴한 사용자"));
+	    }
+	    String newAccessToken = JwtUtil.createAccessToken(dbUser);
 	    // ✅ 새로운 JWT를 HttpOnly 쿠키에 저장
 	    addJwtCookie(response, "jwt", newAccessToken, 60 * 15); // 15분 유지
 
@@ -257,6 +261,7 @@ public class UserController {
 		cookie.setSecure(true);
 		cookie.setPath("/");
 		cookie.setMaxAge(maxAge);
+		cookie.setAttribute("SameSite", "Strict"); // XSRF 방지
 		response.addCookie(cookie);
 	}
 

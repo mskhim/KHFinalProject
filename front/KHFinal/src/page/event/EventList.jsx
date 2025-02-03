@@ -1,10 +1,9 @@
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
+import { Header, Footer } from '../../components';
 
 const EventList = () => {
   return (
     <>
-      <Header />
+      <Header page="list" />
       <h1>EventList</h1>
       <Footer />
     </>

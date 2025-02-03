@@ -1,11 +1,11 @@
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 
 const NoticeList = () => {
   return (
     <>
       <Header />
-      <h1>NoticeList</h1>
+      <h1>NoticeList 승택</h1>
       <Footer />
     </>
   );

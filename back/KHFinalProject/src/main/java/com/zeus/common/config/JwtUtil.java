@@ -24,9 +24,6 @@ public class JwtUtil {
 
     /** ✅ JWT 액세스 토큰 생성 */
     public String createAccessToken(User user) {
-        String birthDate = (user.getBirth() != null) 
-            ? user.getBirth().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) 
-            : "N/A"; // null일 경우 기본값 설정
 
         return Jwts.builder()
                 .setSubject("userRegister")
@@ -35,7 +32,6 @@ public class JwtUtil {
                 .claim("provider", user.getProvider())
                 .claim("phone", user.getPhone())
                 .claim("gender", String.valueOf(user.getGender()))
-                .claim("birth", birthDate) // 수정된 부분
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION_TIME))    
                 .signWith(SignatureAlgorithm.HS256, secretKey)
@@ -46,8 +42,11 @@ public class JwtUtil {
     public String createRefreshToken(User user) {
         return Jwts.builder()
                 .setSubject("refreshToken")
-                .claim("id", user.getId()) // 리프레시 토큰에도 사용자 ID 포함
+                .claim("id", user.getId())
+                .claim("role", "ROLE_" + user.getRole())
                 .claim("provider", user.getProvider())
+                .claim("phone", user.getPhone())
+                .claim("gender", String.valueOf(user.getGender()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION_TIME))    
                 .signWith(SignatureAlgorithm.HS256, secretKey)
