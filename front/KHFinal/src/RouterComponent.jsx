@@ -44,6 +44,7 @@ const RouterComponent = () => {
   useEffect(() => {
     if (
       location.pathname !== '/userLoginPage' &&
+      location.pathname !== '/userInsert' &&
       location.pathname !== '/userLoginSuccess'
     ) {
       sessionStorage.setItem(

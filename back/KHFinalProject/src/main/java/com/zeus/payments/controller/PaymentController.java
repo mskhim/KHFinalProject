@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequestMapping("/api/payment")
-public class PaymentController {
+public class PaymentController { 
 
     @Value("${toss.secret-key}")
     private String SECRET_KEY;
@@ -46,7 +46,7 @@ public class PaymentController {
             ResponseEntity<String> response = restTemplate.exchange(
                     "https://api.tosspayments.com/v1/payments/confirm",
                     HttpMethod.POST,
-                    entity,
+                    entity, 
                     String.class
             );
             return ResponseEntity.ok(response.getBody());

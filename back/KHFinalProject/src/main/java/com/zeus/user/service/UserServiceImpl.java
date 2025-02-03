@@ -38,6 +38,7 @@ public class UserServiceImpl implements UserService {
 
     @Value("${kakao.redirect-uri}")
     private String kakaoRedirectUri;
+    
     @Value("${jwt.secret}") // application.properties에서 비밀키 읽기
     private String secretKey;
 
