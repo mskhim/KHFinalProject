@@ -106,6 +106,7 @@ const RouterComponent = () => {
         <Route path="adminNoticeModify/:id" element={<AdminNoticeModify />} />
         <Route path="adminNoticeRead/:id" element={<AdminNoticeRead />} />
         <Route path="adminUserManage" element={<AdminUserManage />} />
+        <Route path="adminMain" element={<AdminMain />} />
       </Route>
 
       {/* ✅ 매니저 페이지 */}

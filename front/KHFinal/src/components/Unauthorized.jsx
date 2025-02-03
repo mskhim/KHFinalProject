@@ -23,10 +23,7 @@ const Unauthorized = () => {
         <h1 className="mb-3">🚫 접근 불가</h1>
         <p>⚠️ 해당 페이지에 접근할 권한이 없습니다.</p>
         <p className="text-muted">5초 후 메인 페이지로 이동합니다.</p>
-        <button
-          onClick={() => navigate('/userLoginPage')}
-          className="btn btn-danger mt-3"
-        >
+        <button onClick={() => navigate('/')} className="btn btn-danger mt-3">
           메인 페이지로 이동
         </button>
       </div>

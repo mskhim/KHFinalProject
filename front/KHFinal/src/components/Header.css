@@ -23,6 +23,7 @@
   margin-right: 15px;
   font-size: 1.2rem;
   font-weight: 500;
+  transition: color 0s !important;
 }
 
 /* ✅ 사용자 정보 드롭다운 */
@@ -123,16 +124,18 @@ body.dark-mode {
   display: flex;
   align-items: center;
   z-index: 2;
-  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transform: translateY(0%); /* 기본적으로 숨김 */
+  opacity: 1;
 }
 
-/* ✅ 기본적으로 숨김 상태 */
+/* ✅ 네비게이션이 사라질 때 */
 .festival-nav.hidden {
   transform: translateY(-100%);
   opacity: 0;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; /* ✅ 숨길 때도 애니메이션 적용 */
 }
 
-/* ✅ 애니메이션 적용 */
+/* ✅ 네비게이션이 나타날 때 */
 .festival-nav.with-animation {
   transform: translateY(0);
   opacity: 1;
@@ -176,6 +179,8 @@ body.dark-mode {
   height: 3px;
   background-color: black;
   border-radius: 3px;
+  opacity: 1; /* 서서히 나타남 */
+  transform: scaleX(1); /* 가로 길이 확장 */
 }
 
 /* ✅ 네비게이션 아이콘 */
@@ -184,10 +189,23 @@ body.dark-mode {
   margin: 0 auto;
   color: #333;
 }
-
+/* ✅ 기본 상태에서 강조 바 숨김 */
+.festival-nav-item::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 100%;
+  height: 3px;
+  background-color: black;
+  border-radius: 3px;
+  opacity: 0; /* 초기 투명 상태 */
+  transform: scaleX(0);
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
 /* ✅ 네비게이션 애니메이션 (토글할 때만) */
 .festival-nav.with-animation {
-  animation: slide-down 0.3s ease-out;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
 
 @keyframes slide-down {
@@ -199,4 +217,23 @@ body.dark-mode {
     transform: translateY(0);
     opacity: 1;
   }
+}
+/* ✅ 다크 모드 드롭다운 메뉴 스타일 */
+.user-dropdown .dropdown-menu {
+  background-color: white; /* 기본 배경 */
+  border-radius: 8px;
+  padding: 8px;
+}
+
+body.dark-mode .user-dropdown .dropdown-menu {
+  background-color: #222; /* ✅ 다크 모드 배경 */
+  border: 1px solid #444;
+}
+
+body.dark-mode .user-dropdown .dropdown-item {
+  color: white !important;
+}
+
+body.dark-mode .user-dropdown .dropdown-item:hover {
+  background-color: #444 !important;
 }
