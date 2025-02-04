@@ -1,0 +1,16 @@
+.admin-app-container {
+  display: flex;
+}
+
+.admin-main-content {
+  margin-left: 200px;
+  width: calc(100%);
+  border: solid 1px black;
+}
+
+.admin-content {
+  margin-top: 60px;
+  margin-left: 20px;
+  margin-right: 20px;
+  padding: 20px;
+}
