@@ -143,9 +143,7 @@ export const refreshAccessToken = async () => {
       method: 'POST',
       credentials: 'include', // ✅ 쿠키 자동 포함
     });
-
     if (!response.ok) throw new Error('토큰 갱신 실패');
-
     console.log('🔄 액세스 토큰 갱신 완료');
   } catch (error) {
     console.error('리프레시 토큰 요청 실패:', error);

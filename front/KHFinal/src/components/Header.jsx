@@ -25,18 +25,19 @@ import { Context } from '../Context';
 const Header = ({ page }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isAuthenticated, setIsAuthenticated] = useState(false); //로그인여부
-  const [userName, setUserName] = useState('사용자'); //사용자 이름
-  const [notifications, setNotifications] = useState(3); //알림
-  const [showFestivalNav, setShowFestivalNav] = useState(false); //축제 네비게이션 표시여부
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userName, setUserName] = useState('사용자');
+  const [notifications, setNotifications] = useState(3);
+  const [showFestivalNav, setShowFestivalNav] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [activeTab, setActiveTab] = useState('');
-  const { darkMode, setDarkMode } = useContext(Context); //useContext 로 다크모드 전역관리
+  const { darkMode, setDarkMode } = useContext(Context);
+
   useEffect(() => {
-    page && setShowFestivalNav(true); // 네비게이션 보이게 설정
+    page && setShowFestivalNav(true);
     setActiveTab(page);
     setDarkMode(sessionStorage.getItem('darkMode') === 'true');
-    document.body.classList.toggle('dark-mode', darkMode);
+    document.body.classList.toggle('Header-dark-mode', darkMode);
     checkAuthStatus().then((data) => {
       setIsAuthenticated(data.authenticated);
       if (data.authenticated && data.userName) {
@@ -55,17 +56,46 @@ const Header = ({ page }) => {
     navigate('/userLoginPage');
   };
 
-  // ✅ 다크 모드 토글 함수 (기본: 흰색 / 토글 시 검은색)
   const toggleDarkMode = () => {
+    // ✅ 모든 요소의 transition을 비활성화 (즉시 적용)
+    const disableTransitions = () => {
+      const style = document.createElement('style');
+      style.innerHTML = `
+        * {
+          transition: none !important;
+        }
+      `;
+      style.id = 'disable-transitions';
+      document.head.appendChild(style);
+    };
+
+    // ✅ transition 복구 (300ms 뒤에 다시 활성화)
+    const enableTransitions = () => {
+      const style = document.getElementById('disable-transitions');
+      if (style) {
+        setTimeout(() => {
+          style.remove();
+        }, 300); // 300ms 후 원래 상태로 복구
+      }
+    };
+
     setDarkMode((prev) => {
       const newDarkMode = !prev;
-      sessionStorage.setItem('darkMode', newDarkMode); // ✅ 새로운 상태를 올바르게 저장
-      document.body.classList.toggle('dark-mode', newDarkMode);
+
+      // ✅ 애니메이션 비활성화
+      disableTransitions();
+
+      // ✅ 다크 모드 전환 적용
+      sessionStorage.setItem('darkMode', newDarkMode);
+      document.body.classList.toggle('Header-dark-mode', newDarkMode);
+
+      // ✅ 애니메이션 복구
+      enableTransitions();
+
       return newDarkMode;
     });
   };
 
-  // ✅ '축제' 클릭 시 네비게이션 표시 토글 (애니메이션 적용)
   const toggleFestivalNav = () => {
     setIsAnimating(true);
     setShowFestivalNav((prev) => !prev);
@@ -73,14 +103,17 @@ const Header = ({ page }) => {
 
   return (
     <>
-      {/* ✅ 상단 네비게이션 (기본: 흰색 / 토글 시 검은색) */}
       <Navbar
         expand="lg"
         className={`py-3 ${
-          darkMode ? 'bg-dark text-light' : 'bg-light text-dark'
-        }`}
+          darkMode ? 'bg-dark text-light' : 'bg-white text-dark'
+        } `}
       >
-        <Container fluid className="header-container px-4" id="headerContainer">
+        <Container
+          fluid
+          className="Header-header-container px-4"
+          id="Header-headerContainer"
+        >
           <Navbar.Brand
             as={NavLink}
             to="/"
@@ -91,61 +124,52 @@ const Header = ({ page }) => {
 
           <Navbar.Toggle aria-controls="navbarColor01" />
           <Navbar.Collapse id="navbarColor01">
-            <Nav className="me-auto nav-links">
-              {/* ✅ '축제' 클릭 시 네비게이션 토글 */}
+            <Nav className="me-auto Header-nav-links">
               <Nav.Link
                 className={darkMode ? 'text-light' : 'text-dark'}
-                onClick={!page ? toggleFestivalNav : undefined} // ✅ page가 없을 때만 클릭 이벤트 적용
+                onClick={!page ? toggleFestivalNav : undefined}
               >
                 축제
               </Nav.Link>
-
-              {/* ✅ 고객지원 드롭다운 */}
               <NavDropdown
                 title={
                   <span className={darkMode ? 'text-light' : 'text-dark'}>
-                    고객지원
+                    고객지원{' '}
                     <BsChevronDown
                       size={16}
-                      className={`ms-1 dropdown-icon ${
+                      className={`ms-1 Header-dropdown-icon ${
                         darkMode ? 'text-light' : 'text-dark'
                       }`}
                     />
                   </span>
                 }
-                id="user-dropdown"
+                id="Header-user-dropdown"
                 align="end"
-                className={`user-dropdown ${
-                  darkMode ? 'bg-dark text-light' : 'bg-light text-dark'
-                }`} // ✅ 다크 모드 스타일 적용
+                className="Header-user-dropdown"
+                menuVariant={darkMode ? 'dark' : 'light'} // ✅ 다크 모드에 따라 메뉴 스타일 변경
               >
                 <NavDropdown.Item
                   as={NavLink}
                   to="/qnaList"
-                  className={darkMode ? 'text-light' : 'text-dark'} // ✅ 텍스트 색상 변경
+                  className={darkMode ? 'text-light' : 'text-dark'} // ✅ 다크 모드 적용
                 >
-                  <span className={darkMode ? 'text-light' : 'text-dark'}>
-                    QNA
-                  </span>
+                  QNA
                 </NavDropdown.Item>
                 <NavDropdown.Item
                   as={NavLink}
                   to="/noticeList"
-                  className={darkMode ? 'text-light' : 'text-dark'} // ✅ 텍스트 색상 변경
+                  className={darkMode ? 'text-light' : 'text-dark'} // ✅ 다크 모드 적용
                 >
-                  <span className={darkMode ? 'text-light' : 'text-dark'}>
-                    공지사항
-                  </span>
+                  공지사항
                 </NavDropdown.Item>
               </NavDropdown>
             </Nav>
 
-            {/* ✅ 오른쪽 UI 요소 */}
             <div className="d-flex align-items-center">
               {isAuthenticated ? (
                 <NavDropdown
                   title={
-                    <span className="d-flex align-items-center user-info">
+                    <span className="d-flex align-items-center Header-user-info">
                       <BsPersonCircle
                         size={24}
                         className={`me-2 ${
@@ -153,7 +177,7 @@ const Header = ({ page }) => {
                         }`}
                       />
                       <span
-                        className={`user-name ${
+                        className={`Header-user-name ${
                           darkMode ? 'text-light' : 'text-dark'
                         }`}
                       >
@@ -161,32 +185,24 @@ const Header = ({ page }) => {
                       </span>
                       <BsChevronDown
                         size={16}
-                        className={`ms-1 dropdown-icon ${
+                        className={`ms-1 Header-dropdown-icon ${
                           darkMode ? 'text-light' : 'text-dark'
                         }`}
                       />
                     </span>
                   }
-                  id="user-dropdown"
+                  id="Header-user-dropdown"
                   align="end"
-                  className="user-dropdown"
+                  className="Header-user-dropdown"
                 >
                   <NavDropdown.Item as={NavLink} to="/mypage">
-                    <span className={darkMode ? 'text-light' : 'text-dark'}>
-                      마이페이지
-                    </span>
+                    마이페이지
                   </NavDropdown.Item>
                   <NavDropdown.Item as={NavLink} to="/reservations">
-                    <span className={darkMode ? 'text-light' : 'text-dark'}>
-                      예매 내역 확인
-                    </span>
+                    예매 내역 확인
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
-                  <NavDropdown.Item onClick={Logout}>
-                    <span className={darkMode ? 'text-light' : 'text-dark'}>
-                      로그아웃
-                    </span>
-                  </NavDropdown.Item>
+                  <NavDropdown.Item onClick={Logout}>로그아웃</NavDropdown.Item>
                 </NavDropdown>
               ) : (
                 <Button
@@ -204,7 +220,11 @@ const Header = ({ page }) => {
                     className={darkMode ? 'text-light' : 'text-dark'}
                   />
                   {notifications > 0 && (
-                    <Badge pill bg="danger" className="notification-badge">
+                    <Badge
+                      pill
+                      bg="danger"
+                      className="Header-notification-badge"
+                    >
                       {notifications}
                     </Badge>
                   )}
@@ -214,7 +234,7 @@ const Header = ({ page }) => {
                 href="https://github.com/your-github-profile"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="github-link ms-3"
+                className="Header-github-link ms-3"
               >
                 <FaGithub
                   size={30}
@@ -223,7 +243,7 @@ const Header = ({ page }) => {
               </a>
               <Button
                 variant="link"
-                className="theme-toggle-btn me-3"
+                className="Header-theme-toggle-btn me-3"
                 onClick={toggleDarkMode}
               >
                 {darkMode ? (
@@ -237,42 +257,38 @@ const Header = ({ page }) => {
         </Container>
       </Navbar>
 
-      {/* ✅ 헤더 아래 네비게이션 바 (애니메이션 적용) */}
       <div
-        className={`festival-nav ${
+        className={`Header-festival-nav ${darkMode ? 'Header-dark-mode' : ''} ${
           showFestivalNav
             ? isAnimating
-              ? 'with-animation'
+              ? 'Header-with-animation'
               : 'visible'
-            : 'hidden'
+            : 'Header-hidden'
         }`}
       >
-        <Container fluid className={`festival-nav-container ms-5`}>
+        <Container fluid className="Header-festival-nav-container ms-5">
           <div
-            className={`festival-nav-item ${
-              activeTab === 'list' ? 'active' : ''
+            className={`Header-festival-nav-item ${
+              activeTab === 'list' ? 'Header-active' : ''
             } `}
             onClick={() => navigate('/eventList')}
           >
-            <FaTicketAlt size={24} />
             <span>축제 목록</span>
           </div>
           <div
-            className={`festival-nav-item ${
-              activeTab === 'cal' ? 'active' : ''
+            className={`Header-festival-nav-item ${
+              activeTab === 'cal' ? 'Header-active' : ''
             }`}
             onClick={() => navigate('/eventCalendar')}
           >
-            <FaCalendarAlt size={24} />
             <span>축제 달력</span>
           </div>
           <div
-            className={`festival-nav-item ${
-              activeTab === 'map' ? 'active' : ''
+            className={`Header-festival-nav-item ${
+              activeTab === 'map' ? 'Header-active' : ''
             } `}
             onClick={() => navigate('/eventMap')}
           >
-            <FaMapMarkedAlt size={24} />
             <span>지역별 축제</span>
           </div>
         </Container>
