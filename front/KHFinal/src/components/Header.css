@@ -55,6 +55,10 @@
   margin-right: 10px;
 }
 
+.Header-cart-icon {
+  cursor: pointer;
+}
+
 .Header-github-link:hover svg {
   color: #999;
 }

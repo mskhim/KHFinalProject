@@ -1,0 +1,22 @@
+.admin-table,
+.admin-table tr {
+  width: 100%;
+  text-align: center;
+  border-collapse: collapse;
+}
+.admin-table th,
+.admin-table td {
+  border: solid black 1.5px;
+  padding: 8px;
+}
+
+.admin-button-section {
+  display: flex;
+  justify-content: right;
+}
+.admin-button-section button {
+  height: 30px;
+  width: 50px;
+  margin-left: 5px;
+  margin-bottom: 5px;
+}
