@@ -1,0 +1,65 @@
+/* ✅ 내부 이미지 리스트 */
+.EventListVisualWrap-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  overflow: hidden;
+  height: 400px; /* 고정 높이 */
+}
+
+/* ✅ 개별 이미지 감싸는 div */
+.EventListVisualWrap-item {
+  position: relative;
+  transition: flex 0.5s ease-in-out, transform 0.3s ease-in-out;
+  overflow: hidden;
+  border-radius: 10px;
+  height: 100%;
+}
+
+/* ✅ 활성화된 이미지 */
+.EventListVisualWrap-active {
+  flex: 3;
+}
+
+/* ✅ 비활성화된 이미지 */
+.EventListVisualWrap-inactive {
+  flex: 0.7;
+}
+
+/* ✅ 이미지 기본 스타일 */
+.EventListVisualWrap-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease-in-out, object-position 0.5s ease-in-out;
+  object-position: center;
+}
+
+/* ✅ 마우스 호버 시 약간 확대 */
+.EventListVisualWrap-active .EventListVisualWrap-image {
+  transform: scale(1.05);
+}
+
+/* ✅ 비활성화된 이미지 일부만 보이게 */
+.EventListVisualWrap-inactive .EventListVisualWrap-image {
+  object-position: center 50%;
+}
+
+/* ✅ 텍스트 표시 (활성화된 이미지에만) */
+.EventListVisualWrap-text {
+  position: absolute;
+  bottom: 50%;
+  left: 20%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 1.2rem;
+  text-align: center;
+  font-weight: bold;
+  opacity: 0; /* 기본적으로 숨김 */
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* ✅ 활성화된 이미지에만 텍스트 표시 */
+.EventListVisualWrap-active .EventListVisualWrap-text {
+  opacity: 1;
+}

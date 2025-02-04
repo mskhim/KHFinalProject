@@ -130,6 +130,7 @@ body.Header-dark-mode .Header-festival-nav {
 .Header-festival-nav.Header-with-animation {
   transform: translateY(0);
   opacity: 1;
+  flex: 3;
 }
 
 /* ✅ 네비게이션 내부 컨테이너 */

@@ -1,0 +1,113 @@
+/* ✅ 전체 컨테이너 */
+.EventListViewWrap-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* ✅ 카드 스타일 */
+.EventListViewWrap-card {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+/* ✅ 카드 호버 효과 */
+.EventListViewWrap-card:hover {
+  transform: scale(1.05);
+}
+
+/* ✅ 카드 이미지 스타일 */
+.EventListViewWrap-card-img {
+  height: 200px;
+  object-fit: cover;
+}
+
+/* ✅ 축제 제목 */
+.EventListViewWrap-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* ✅ 개최 기간 */
+.EventListViewWrap-period {
+  font-size: 0.9rem;
+  color: #666;
+}
+/* ✅ 전체 컨테이너 */
+.EventListViewWrap-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* ✅ 카드 스타일 */
+.EventListViewWrap-card {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+/* ✅ 카드 호버 효과 */
+.EventListViewWrap-card:hover {
+  transform: scale(1.05);
+}
+
+/* ✅ 카드 이미지 스타일 */
+.EventListViewWrap-card-img {
+  height: 200px;
+  object-fit: cover;
+}
+
+/* ✅ 축제 제목 */
+.EventListViewWrap-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* ✅ 개최 기간 */
+.EventListViewWrap-period {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* ✅ 다크 모드에서 페이지네이션 스타일 */
+.dark-mode .custom-pagination .page-item .page-link {
+  color: #f8f9fa;
+  background-color: #343a40;
+  border: 1px solid #495057;
+}
+
+.dark-mode .custom-pagination .page-item.active .page-link {
+  background-color: #007bff;
+  color: white;
+}
+
+.dark-mode .custom-pagination .page-item .page-link:hover {
+  background-color: #0056b3;
+  color: white;
+}
+/* ✅ 정렬 버튼 그룹 */
+.sort-button {
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 8px 16px;
+  border: 1px solid #007bff;
+  transition: all 0.3s ease-in-out;
+}
+
+/* ✅ 정렬 버튼 기본 색상 */
+.sort-button:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+/* ✅ 활성화된 정렬 버튼 (언더바 강조) */
+.sort-button.active {
+  background-color: #007bff;
+  color: white;
+  border-bottom: 3px solid #0056b3; /* ✅ 언더바 강조 */
+}

@@ -60,7 +60,7 @@ const EventListSearchWrap = ({ onSearch }) => {
   return (
     <Container
       fluid
-      className={`EventListSearchWrap-search-bar py-3 px-4 rounded`}
+      className={`EventListSearchWrap-search-bar py-3 px-4 rounded shadow-none `}
     >
       <Row className="align-items-center justify-content-center">
         {/* ✅ 날짜 입력 */}

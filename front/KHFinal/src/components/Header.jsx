@@ -106,8 +106,8 @@ const Header = ({ page }) => {
       <Navbar
         expand="lg"
         className={`py-3 ${
-          darkMode ? 'bg-dark text-light' : 'bg-light text-dark'
-        }`}
+          darkMode ? 'bg-dark text-light' : 'bg-white text-dark'
+        } `}
       >
         <Container
           fluid
@@ -273,7 +273,6 @@ const Header = ({ page }) => {
             } `}
             onClick={() => navigate('/eventList')}
           >
-            <FaTicketAlt size={24} />
             <span>축제 목록</span>
           </div>
           <div
@@ -282,7 +281,6 @@ const Header = ({ page }) => {
             }`}
             onClick={() => navigate('/eventCalendar')}
           >
-            <FaCalendarAlt size={24} />
             <span>축제 달력</span>
           </div>
           <div
@@ -291,7 +289,6 @@ const Header = ({ page }) => {
             } `}
             onClick={() => navigate('/eventMap')}
           >
-            <FaMapMarkedAlt size={24} />
             <span>지역별 축제</span>
           </div>
         </Container>
