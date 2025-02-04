@@ -12,6 +12,7 @@ export const Provider = ({ children }) => {
   // const { getDarkMode, getDarkModeHover } = useContext(Context); 로 호출
   // className={`${getDarkModeHover()}`} 와 같이 사용
   // 이외에 다른 css를 적용하려면 !important를 사용해서 적용
+
   // 다크모드에 맞는 클래스를 반환하는 함수
 
   const getDarkMode = (baseClass = '') => {

@@ -1,0 +1,229 @@
+/* ============================================
+   테이블 스타일
+   ============================================ */
+   .Notice-table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* ============================================
+   공지사항 섹션 스타일
+   ============================================ */
+.Notice-section {
+    padding: 80px 0;
+}
+
+.Notice-page-title {
+    margin-bottom: 60px;
+}
+
+.Notice-page-title h3 {
+    font-size: 28px;
+    color: #333333;
+    font-weight: 400;
+    text-align: center;
+}
+
+/* ============================================
+   검색창 스타일
+   ============================================ */
+.Notice-board-search .Notice-search-window {
+    padding: 15px 0;
+    background-color: #f9f7f9;
+}
+
+.Notice-board-search .Notice-search-window .Notice-search-wrap {
+    position: relative;
+    padding-right: 124px;
+    margin: 0 auto;
+    width: 80%;
+    max-width: 564px;
+}
+
+.Notice-board-search .Notice-search-window .Notice-search-wrap input {
+    height: 40px;
+    width: 100%;
+    font-size: 14px;
+    padding: 7px 14px;
+    border: 1px solid #ccc;
+}
+
+.Notice-board-search .Notice-search-window .Notice-search-wrap input:focus {
+    border-color: #333;
+    outline: 0;
+    border-width: 1px;
+}
+
+.Notice-board-search .Notice-search-window .Notice-search-wrap .Notice-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 108px;
+    padding: 0;
+    font-size: 16px;
+}
+
+/* ============================================
+   테이블 스타일 - 공지사항 목록
+   ============================================ */
+.Notice-board-table {
+    font-size: 13px;
+    width: 100%;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+
+.Notice-board-table a {
+    text-decoration: none;
+    display: inline-block;
+    line-height: 1.4;
+    word-break: break-all;
+    vertical-align: middle;
+}
+
+.NoticeRead-title {
+    text-decoration: none;
+    color: #333;
+}
+
+.Notice-board-table a:hover {
+    text-decoration: underline;
+}
+
+.Notice-board-table th {
+    text-align: center;
+}
+
+.Notice-board-table .Notice-th-num {
+    width: 100px;
+    text-align: center;
+}
+
+.Notice-board-table .Notice-th-date {
+    width: 200px;
+}
+
+.Notice-board-table th, .Notice-board-table td {
+    padding: 14px 0;
+}
+
+.Notice-board-table tbody td {
+    border-top: 1px solid #e7e7e7;
+    text-align: center;
+}
+
+.Notice-board-table tbody th {
+    padding-left: 28px;
+    padding-right: 14px;
+    border-top: 1px solid #e7e7e7;
+    text-align: left;
+}
+
+.Notice-board-table tbody th p {
+    display: none;
+}
+
+/* ============================================
+   버튼 스타일
+   ============================================ */
+.Notice-btn {
+    display: inline-block;
+    padding: 0 30px;
+    font-size: 15px;
+    font-weight: 400;
+    background: transparent;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid transparent;
+    text-transform: uppercase;
+    border-radius: 0;
+    transition: all 0.3s;
+}
+.NoticeRead-btn, .NoticeRead-btn-dark {
+    display: inline-block;
+    padding: 0 30px;
+    font-size: 15px;
+    font-weight: 400;
+    background: transparent;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid transparent;
+    text-transform: uppercase;
+    border-radius: 0;
+    transition: all 0.3s;
+    margin-bottom: 10px;
+}
+
+.NoticeRead-btn-dark {
+    background: #555;
+    color: #fff;
+}
+
+.Notice-btn-dark {
+    background: #555;
+    color: #fff;
+}
+
+.Notice-btn-dark:hover, .Notice-btn-dark:focus {
+    background: #373737;
+    border-color: #373737;
+    color: #fff;
+}
+
+/* ============================================
+   Clearfix
+   ============================================ */
+.Notice-clearfix:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+/* ============================================
+   공통 컨테이너 스타일
+   ============================================ */
+.Notice-container {
+    width: 1100px;
+    margin: 0 auto;
+    padding-bottom: 50px;
+    text-decoration: none;
+}
+
+/* ============================================
+   접근성 스타일 (숨기기)
+   ============================================ */
+.Notice-blind {
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    margin: -1px;
+    width: 1px;
+    height: 1px;
+}
+
+.Notice-main-btn {
+    display: flex;
+    justify-content: center; /* 버튼을 가운데 정렬 */   
+    margin-bottom: 10px; 
+}
+
+.Notice-main-btn-dark {
+    padding: 10px 20px;
+    font-size: 15px;
+    background: #555;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.Notice-main-btn-dark:hover {
+    background: #373737;
+}

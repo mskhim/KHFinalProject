@@ -10,9 +10,7 @@ const EventList = () => {
       <br />
       <EventListSearchWrap />
       <br />
-      <br />
       <EventListVisualWrap />
-      <br />
       <EventListViewWrap />
       <Footer />
     </>

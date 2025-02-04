@@ -9,15 +9,7 @@ import {
   Badge,
 } from 'react-bootstrap';
 import { BsPersonCircle, BsChevronDown } from 'react-icons/bs';
-import {
-  FaGithub,
-  FaBell,
-  FaMoon,
-  FaSun,
-  FaTicketAlt,
-  FaCalendarAlt,
-  FaMapMarkedAlt,
-} from 'react-icons/fa';
+import { FaGithub, FaBell, FaMoon, FaSun, FaCartPlus } from 'react-icons/fa';
 import './Header.css';
 import { handleLogout, checkAuthStatus } from '../page/user/userApi';
 import { Context } from '../Context';
@@ -28,10 +20,11 @@ const Header = ({ page }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userName, setUserName] = useState('사용자');
   const [notifications, setNotifications] = useState(3);
+  const [cartElement, setCartElement] = useState(2);
   const [showFestivalNav, setShowFestivalNav] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [activeTab, setActiveTab] = useState('');
-  const { darkMode, setDarkMode } = useContext(Context);
+  const { darkMode, setDarkMode, getDarkMode } = useContext(Context);
 
   useEffect(() => {
     page && setShowFestivalNav(true);
@@ -195,10 +188,10 @@ const Header = ({ page }) => {
                   align="end"
                   className="Header-user-dropdown"
                 >
-                  <NavDropdown.Item as={NavLink} to="/mypage">
+                  <NavDropdown.Item as={NavLink} to="/user/userMypage">
                     마이페이지
                   </NavDropdown.Item>
-                  <NavDropdown.Item as={NavLink} to="/reservations">
+                  <NavDropdown.Item as={NavLink} to="/user/bookingList">
                     예매 내역 확인
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
@@ -217,15 +210,36 @@ const Header = ({ page }) => {
                 <div className="position-relative me-3">
                   <FaBell
                     size={24}
-                    className={darkMode ? 'text-light' : 'text-dark'}
+                    className={`${
+                      darkMode ? 'text-light' : 'text-dark'
+                    } Header-cart-icon`}
                   />
                   {notifications > 0 && (
                     <Badge
                       pill
                       bg="danger"
-                      className="Header-notification-badge"
+                      className="Header-notification-badge Header-cart-icon"
                     >
                       {notifications}
+                    </Badge>
+                  )}
+                </div>
+              )}
+              {isAuthenticated && (
+                <div className="position-relative me-3">
+                  <FaCartPlus
+                    size={24}
+                    className={`${getDarkMode} ms-3 Header-cart-icon`}
+                    onClick={() => navigate('/userCart')}
+                  />
+                  {notifications > 0 && (
+                    <Badge
+                      pill
+                      bg="success"
+                      className="Header-notification-badge Header-cart-icon"
+                      onClick={() => navigate('/user/userCart')}
+                    >
+                      {cartElement}
                     </Badge>
                   )}
                 </div>
