@@ -3,17 +3,29 @@ import Footer from "../../components/Footer";
 import "./Notice.css";
 import { Link } from "react-router-dom";
 import { Context } from "../../Context";
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import { Pagination } from "react-bootstrap";
 
 const NoticeList = () => {
   const { getDarkMode } = useContext(Context);
+  // ✅ 현재 페이지 상태
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 5; // 전체 페이지 개수
+  // ✅ 페이지 변경 함수
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+      console.log(`Fetching data for page: ${page}`);
+    }
+  };
+
   return (
     <>
       <Header />
       <section className="Notice-notice">
         <div className="Notice-page-title">
-          <div className="Notice-container">
-            <h3>공지사항</h3>
+          <div className={`Notice-container`}>
+            <h3 className={`${getDarkMode()} span`}>공지사항</h3>
           </div>
         </div>
 
@@ -98,6 +110,29 @@ const NoticeList = () => {
           </div>
         </div>
       </section>
+
+      <Pagination
+        className={`EventListViewWrap-custom-pagination justify-content-center mt-4 ${getDarkMode()}`}
+        variant="dark"
+      >
+        <Pagination.Prev
+          disabled={currentPage === 1}
+          onClick={() => handlePageChange(currentPage - 1)}
+        />
+        {Array.from({ length: totalPages }, (_, i) => (
+          <Pagination.Item
+            key={i + 1}
+            active={i + 1 === currentPage}
+            onClick={() => handlePageChange(i + 1)}
+          >
+            {i + 1}
+          </Pagination.Item>
+        ))}
+        <Pagination.Next
+          disabled={currentPage === totalPages}
+          onClick={() => handlePageChange(currentPage + 1)}
+        />
+      </Pagination>
       <Footer />
     </>
   );
