@@ -1,18 +1,6 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
-import {
-  AdminCarousel,
-  AdminEventPermit,
-  AdminMain,
-  AdminManagerInsert,
-  AdminManagerList,
-  AdminNoticeInsert,
-  AdminNoticeList,
-  AdminNoticeModify,
-  AdminNoticeRead,
-  AdminStats,
-  AdminUserManage,
-} from './page/admin';
+import RouterComponentAdmin from './RouterComponentAdmin';
 import { ProtectedRoute, Unauthorized } from './components';
 import { EventList, EventRead } from './page/event';
 import { EventCalendar } from './page/eventCalendar';
@@ -89,27 +77,7 @@ const RouterComponent = () => {
       <Route path="/unauthorized" element={<Unauthorized />} />
 
       {/* ✅ 관리자 페이지 */}
-      <Route
-        path="/admin/*"
-        element={
-          <ProtectedRoute requiredRole={0} endpoint="jwtAdmin">
-            <AdminLayout />
-          </ProtectedRoute>
-        }
-      >
-        <Route path="adminStats" element={<AdminStats />} />
-        <Route path="adminCarousel" element={<AdminCarousel />} />
-        <Route path="adminEventPermit" element={<AdminEventPermit />} />
-        <Route path="adminManagerInsert" element={<AdminManagerInsert />} />
-        <Route path="adminManagerList" element={<AdminManagerList />} />
-        <Route path="adminNoticeInsert" element={<AdminNoticeInsert />} />
-        <Route path="adminNoticeList" element={<AdminNoticeList />} />
-        <Route path="adminNoticeModify/:id" element={<AdminNoticeModify />} />
-        <Route path="adminNoticeRead/:id" element={<AdminNoticeRead />} />
-        <Route path="adminUserManage" element={<AdminUserManage />} />
-        <Route path="adminMain" element={<AdminMain />} />
-      </Route>
-
+      <Route path="/admin/*" element={<RouterComponentAdmin />} />
       {/* ✅ 매니저 페이지 */}
       <Route
         path="/manager/*"
