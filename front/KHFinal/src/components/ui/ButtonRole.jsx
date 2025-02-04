@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 const ButtonRole = ({ text, role, onClick }) => {
   //text = 버튼 text, role = 버튼 보여줄 role(manager,admin), onClick = 버튼 클릭 시 실행할 함수
+  //<ButtonRole text="삭제" role="manager" onClick={() => console.log('버튼 클릭')} />
   const [tokenRole, setTokenRole] = useState('Role_1'); // 추후 토큰에서 role값 추출
   const [jwtRole, setJwtRole] = useState(null);
   const [visible, setVisible] = useState(false);
