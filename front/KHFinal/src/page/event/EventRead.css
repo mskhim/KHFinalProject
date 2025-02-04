@@ -1,0 +1,82 @@
+/* 📌 전체 컨테이너 */
+.EventReadTitle-container {
+  padding: 40px;
+}
+
+/* 📌 메인 이미지 스타일 */
+.EventReadTitle-main-image {
+  width: 100%;
+  max-height: 400px;
+  border-radius: 10px;
+}
+
+/* 📌 서브 이미지 컨테이너 (가로 한 줄 정렬) */
+.EventReadTitle-sub-container {
+  display: flex;
+  gap: 10px;
+}
+
+/* 📌 서브 이미지 (가로 한 줄) */
+.EventReadTitle-sub-image {
+  width: 120px;
+  height: 80px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.EventReadTitle-sub-image:hover {
+  transform: scale(1.1);
+}
+
+/* 📌 축제 정보 */
+.EventReadTitle-title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.EventReadTitle-price {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+
+/* 📌 티켓 수량 선택 */
+.EventReadTitle-ticket-btn {
+  font-size: 1rem;
+  padding: 8px 15px;
+}
+
+.EventReadTitle-ticket-count {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* 📌 장바구니 버튼 */
+.EventReadTitle-cart-btn {
+  margin-top: 20px;
+}
+
+/* 📌 다크 모드 스타일 */
+.dark-mode .EventReadTitle-container {
+  background-color: #222;
+  color: white;
+}
+
+.dark-mode .EventReadTitle-ticket-btn {
+  color: white;
+  border-color: white;
+}
+
+.dark-mode .EventReadTitle-ticket-btn:hover {
+  background-color: white;
+  color: black;
+}
+
+.dark-mode .EventReadTitle-cart-btn {
+  background-color: white;
+  color: black;
+}
+
+.dark-mode .EventReadTitle-cart-btn:hover {
+  background-color: #ddd;
+}
