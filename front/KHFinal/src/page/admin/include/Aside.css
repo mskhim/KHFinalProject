@@ -1,0 +1,51 @@
+.admin-aside-sidebar {
+  width: 200px;
+  height: 100vh;
+  background: #2c3e50;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  position: fixed;
+}
+
+.admin-aside-sidebar-brand h2 {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.admin-aside-sidebar-brand h2 a {
+  color: black;
+  text-decoration: none;
+  font-weight: bolder;
+}
+
+.admin-aside-nav-menu {
+  flex-grow: 1;
+}
+
+.admin-aside-nav-menu ul {
+  list-style: none;
+  padding: 0;
+}
+
+.admin-aside-nav-menu li {
+  margin: 30px 0px;
+}
+
+.admin-aside-nav-menu a {
+  color: white;
+  text-decoration: none;
+  font-size: 17px;
+  display: block;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.admin-aside-nav-menu a:hover,
+.admin-aside-nav-menu .active {
+  background: #16a085;
+  transition: 0.3s;
+}

@@ -1,0 +1,21 @@
+import React, { useState } from "react";
+import { Container } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+
+export default function Question() {
+  //변수
+  const [item, setItem] = useState([]);
+  const [rdo, setRdo] = useState();
+  const navigate = useNavigate();
+
+  //이벤트 멤버함수(화살표)
+
+  //서버로부터 데이터 로딩, 전송
+
+  //화면 렌더링{}, map, filter
+  return (
+    <Container className="text-center p-5">
+      <h2 className="text-center"> 설문조사</h2>
+    </Container>
+  );
+}
