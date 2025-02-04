@@ -1,8 +1,8 @@
-import { Routes, Route, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
-import Header from "./page/admin/include/Header";
-import Aside from "./page/admin/include/Aside";
-import "./page/admin/include/RouterComponentAdmin.css";
+import { Routes, Route, useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import Header from './page/admin/include/Header';
+import Aside from './page/admin/include/Aside';
+import './page/admin/include/RouterComponentAdmin.css';
 import {
   AdminMain,
   ManagerManage,
@@ -14,70 +14,60 @@ import {
   BannerManage,
   PaymentHistoryManage,
   StatHistory,
-} from "./page/admin";
-import { ProtectedRoute, Unauthorized } from "./components";
-import { EventList, EventRead } from "./page/event";
-import { EventCalendar } from "./page/eventCalendar";
-import { EventMap } from "./page/eventMap";
-import { AdminLayout, ManagerLayout, UserLayout } from "./page/layout";
-import { ManagerMain, ManagerEventInsert, ManagerStats } from "./page/manager";
-import { NoticeList, NoticeRead } from "./page/notice";
+} from './page/admin';
+import { ProtectedRoute, Unauthorized } from './components';
+import { EventList, EventRead } from './page/event';
+import { EventCalendar } from './page/eventCalendar';
+import { EventMap } from './page/eventMap';
+import { AdminLayout, ManagerLayout, UserLayout } from './page/layout';
+import { ManagerMain, ManagerEventInsert, ManagerStats } from './page/manager';
+import { NoticeList, NoticeRead } from './page/notice';
 import {
   QnaInsert,
   QnaList,
   QnaModify,
   QnaReInsert,
   QnaRead,
-} from "./page/qna";
-import {
-  UserCart,
-  UserDelete,
-  UserInsert,
-  UserLoginPage,
-  UserLoginSuccess,
-  UserMypage,
-  UserReservedList,
-  UserUpdate,
-} from "./page/user";
+} from './page/qna';
 
 const RouterComponentAdmin = () => {
   const location = useLocation();
-  const [sectionName, setSectionName] = useState("");
+  const [sectionName, setSectionName] = useState('');
 
   useEffect(() => {
-    switch (location.pathname.split("/")[2]) {
-      case "adminmain":
-        setSectionName("관리자 메인");
+    switch (location.pathname.split('/')[2]) {
+      case 'adminmain':
+        setSectionName('관리자 메인');
         break;
-      case "managermanage":
-        setSectionName("매니저 관리");
+      case 'managermanage':
+        setSectionName('매니저 관리');
         break;
-      case "usermanage":
-        setSectionName("유저 관리");
+      case 'usermanage':
+        setSectionName('유저 관리');
         break;
-      case "festivalmanage":
-        setSectionName("축제 관리");
+      case 'festivalmanage':
+        setSectionName('축제 관리');
         break;
-      case "reviewmanage":
-        setSectionName("리뷰 관리");
+      case 'reviewmanage':
+        setSectionName('리뷰 관리');
         break;
-      case "qnamanage":
-        setSectionName("Q&A 관리");
+      case 'qnamanage':
+        setSectionName('Q&A 관리');
         break;
-      case "noticemanage":
-        setSectionName("공지사항 관리");
+      case 'noticemanage':
+        setSectionName('공지사항 관리');
         break;
-      case "bannermanage":
-        setSectionName("배너 관리");
+      case 'bannermanage':
+        setSectionName('배너 관리');
         break;
-      case "paymenthistorymanage":
-        setSectionName("예매내역 관리");
+      case 'paymenthistorymanage':
+        setSectionName('예매내역 관리');
         break;
-      case "StatHistory":
-        setSectionName("통계 내역");
+      case 'StatHistory':
+        setSectionName('통계 내역');
         break;
       default:
-        setSectionName("관리자 페이지");
+        setSectionName('관리자 페이지');
     }
   }, [location.pathname]);
 
