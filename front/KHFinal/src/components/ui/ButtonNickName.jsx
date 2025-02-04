@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 const ButtonNickName = ({ text, nickName, isManager, onClick }) => {
   //text = 버튼 , role = nickName(manager,user) 메니저와 user의 닉네임을 jwt에서 추출후 프로퍼티값과 비교, isManager = true일때는 manager버튼 false 일때는 user버튼 ,onClick = 버튼 클릭 시 실행할 함수
+  //<ButtonNickName text="삭제" nickName="manager" isManager={true} onClick={() => console.log('버튼 클릭')} />
   const [tokenNickName, setTokenNickName] = useState('nickName'); //추후 토큰에서 nickName값 추출
   const [tokenRole, setTokenRole] = useState('Role_1'); //추후 토큰에서 role값 추출
   const [visible, setVisible] = useState(false);
