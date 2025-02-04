@@ -16,8 +16,11 @@ body {
 
 /* ✅ 버튼 & 링크 */
 button,
+input,
+select,
 a {
   font-family: 'Pretendard', sans-serif;
+  cursor: pointer;
 }
 
 /* ✅ 달력 스타일 (숫자 가독성 고려) */
@@ -38,8 +41,131 @@ a {
   font-size: 1rem;
 }
 
-/* ✅ 푸터 */
-.footer {
-  font-family: 'Pretendard', sans-serif;
-  font-size: 1rem;
+/* ✅ 공통 스타일 */
+.darkModeClass {
+  border-radius: 5px;
+  border: 1px solid;
+  transition: background 0.3s, color 0.3s, border 0.3s;
+  background: transparent;
+}
+
+/* ✅ 라이트 모드 스타일 */
+.light-mode,
+.light-mode-hover {
+  color: #333;
+  border-color: #333;
+}
+
+.light-mode-hover:hover {
+  background: #333;
+  color: white;
+}
+
+/* ✅ 다크 모드 스타일 */
+.dark-mode,
+.dark-mode-hover {
+  color: white;
+  border-color: white;
+}
+
+.dark-mode-hover:hover {
+  background: white;
+  color: #333;
+}
+
+/* ✅ input의 placeholder 색상 */
+.light-mode input::placeholder,
+.light-mode-hover input::placeholder {
+  color: #999;
+}
+
+.dark-mode input::placeholder,
+.dark-mode-hover input::placeholder {
+  color: #ddd;
+}
+
+/* ✅ select (드롭다운) */
+.light-mode select {
+  background-color: white;
+  color: black;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.dark-mode select {
+  background-color: #333;
+  color: white;
+  border: 1px solid #666;
+  cursor: pointer;
+}
+
+.dark-mode option {
+  background-color: #444;
+  color: white;
+}
+
+.dark-mode input[type='date']::-webkit-calendar-picker-i ndicator {
+  filter: invert(1);
+  cursor: pointer;
+}
+
+/* ✅ 체크박스 & 라디오 버튼 */
+.dark-mode input[type='checkbox'],
+.dark-mode input[type='radio'] {
+  accent-color: white;
+}
+
+.light-mode input[type='checkbox'],
+.light-mode input[type='radio'] {
+  accent-color: black;
+}
+
+/* ✅ 테이블 스타일 */
+.light-mode table {
+  background-color: white;
+  color: black;
+  border-collapse: collapse;
+}
+
+.dark-mode table {
+  background-color: #222;
+  color: white;
+  border-collapse: collapse;
+}
+
+.dark-mode thead {
+  background-color: #333;
+}
+
+.dark-mode tbody tr:nth-child(even) {
+  background-color: #2a2a2a;
+}
+
+/* ✅ 툴팁 */
+.dark-mode .tooltip-inner {
+  background-color: #333;
+  color: white;
+}
+
+.dark-mode .tooltip-arrow::before {
+  border-top-color: #333 !important;
+}
+
+/* ✅ 스크롤바 */
+.dark-mode ::-webkit-scrollbar {
+  width: 10px;
+}
+
+.dark-mode ::-webkit-scrollbar-track {
+  background: #222;
+}
+
+.dark-mode ::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 5px;
+}
+/* ✅ 다크 모드에서 달력 아이콘 스타일 변경 (크롬, 엣지, 사파리) */
+.dark-mode input[type='date']::-webkit-calendar-picker-indicator {
+  filter: invert(1); /* 아이콘 색 반전 */
+  cursor: pointer;
 }

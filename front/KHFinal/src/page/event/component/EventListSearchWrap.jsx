@@ -4,7 +4,7 @@ import { Context } from '../../../Context'; // ✅ 다크모드 Context 사용
 import './EventListSearchWrap.css';
 import { ButtonDarkMode } from '../../../components/ui';
 const EventListSearchWrap = ({ onSearch }) => {
-  const { darkMode } = useContext(Context); // ✅ 다크모드 여부
+  const { getDarkMode, getDarkModeHover } = useContext(Context); // ✅ 다크모드 여부
   const [searchDate, setSearchDate] = useState('');
   const [searchRegion, setSearchRegion] = useState('');
   const [searchName, setSearchName] = useState('');
@@ -60,18 +60,20 @@ const EventListSearchWrap = ({ onSearch }) => {
   return (
     <Container
       fluid
-      className={`EventListSearchWrap-search-bar ${
-        darkMode ? 'bg-dark text-light' : 'bg-light text-dark'
-      } py-3 px-4 rounded`}
+      className={`EventListSearchWrap-search-bar py-3 px-4 rounded`}
     >
       <Row className="align-items-center justify-content-center">
         {/* ✅ 날짜 입력 */}
-        <Col xs={12} md={3} className="mb-2 mb-md-0">
+        <Col
+          xs={12}
+          md={3}
+          className={`mb-2 mb-md-0 border-0 ${getDarkMode()}`}
+        >
           <Form.Control
             type="date"
             value={searchDate}
             onChange={(e) => setSearchDate(e.target.value)}
-            className="EventListSearchWrap-form-input"
+            className={`EventListSearchWrap-form-input border-1 ${getDarkMode()} `}
           />
         </Col>
 
@@ -80,7 +82,7 @@ const EventListSearchWrap = ({ onSearch }) => {
           <Form.Select
             value={searchRegion}
             onChange={(e) => setSearchRegion(e.target.value)}
-            className="EventListSearchWrap-form-input"
+            className={`EventListSearchWrap-form-input ${getDarkMode()}`}
           >
             <option value="">전체 지역</option>
             {regions.map((region) => (
@@ -92,13 +94,17 @@ const EventListSearchWrap = ({ onSearch }) => {
         </Col>
 
         {/* ✅ 이름 입력 */}
-        <Col xs={12} md={3} className="mb-2 mb-md-0">
+        <Col
+          xs={12}
+          md={3}
+          className={`mb-2 mb-md-0 border-0 ${getDarkMode()}`}
+        >
           <Form.Control
             type="text"
             placeholder="축제 이름 검색"
             value={searchName}
             onChange={(e) => setSearchName(e.target.value)}
-            className="EventListSearchWrap-form-input"
+            className={`EventListSearchWrap-form-input ${getDarkMode()}`}
           />
         </Col>
 
