@@ -1,0 +1,113 @@
+/* ============================================
+   공지사항 상세 페이지 스타일
+   ============================================ */
+   .NoticeRead-board-view {
+    padding: 40px 0;
+    position: relative;
+}
+
+.NoticeRead-page-title h3 {
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.NoticeRead-page-title h3 a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* 목록으로 버튼 스타일 */
+.NoticeRead-btn-wrap {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+    padding-left: 20px;
+}
+
+/* 수정 및 삭제 버튼 */
+.NoticeRead-btn-group {
+    display: flex;
+    gap: 10px;
+}
+
+/* 공통 버튼 스타일 */
+.NoticeRead-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+/* 목록으로 버튼 스타일 */
+.NoticeRead-btn-dark {
+    background: #555;
+    color: #fff;
+}
+
+.NoticeRead-btn-dark:hover {
+    background: #373737;
+}
+
+/* 수정 버튼 */
+.NoticeRead-btn-light {
+    background: #ddd;
+    color: #333;
+}
+
+.NoticeRead-btn-light:hover {
+    background: #bbb;
+}
+
+/* 삭제 버튼 */
+.NoticeRead-btn-danger {
+    background: #d9534f;
+    color: #fff;
+}
+
+.NoticeRead-btn-danger:hover {
+    background: #c9302c;
+}
+
+/* 게시글 테이블 */
+.NoticeRead-board-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.NoticeRead-board-table th {
+    display: none; /* 제목 행 제거 */
+}
+
+.NoticeRead-board-table td {
+    padding: 15px;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+}
+
+/* 제목 스타일 */
+.NoticeRead-view-title {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 20px;
+    text-align: center;
+}
+
+/* 게시글 내용 */
+.NoticeRead-view-content {
+    min-height: 300px;
+    padding: 30px;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* 등록일 및 버튼 컨테이너 */
+.NoticeRead-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    font-size: 14px;
+    color: #888;
+}
