@@ -1,0 +1,121 @@
+/* 기본적인 레이아웃 */
+.MyPageMain-container {
+  font-family: Arial, sans-serif;
+}
+
+.MyPageMain-wrapper {
+  display: flex;
+}
+
+.MyPageMain-header {
+  margin-top: 50px;
+  margin-left: 50px;
+  margin-bottom: 50px;
+}
+
+.MyPageMain-menu {
+  width: 200px;
+  border-top: 3.5px solid #252429;
+  border-bottom: 3.5px solid #252429;
+  padding: 20px;
+  box-sizing: border-box;
+  height: 430px;
+  position: fixed;
+}
+
+.MyPageMain-menu ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.MyPageMain-menu li {
+  margin: 10px 0;
+}
+
+.MyPageMain-menu a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  display: block;
+  padding: 10px;
+  border-radius: 5px;
+  position: relative;
+  transition: color 0.3s ease, padding-left 0.3s ease;
+}
+
+.MyPageMain-menu a:hover {
+  color: #252429;
+  padding-left: 20px;
+}
+
+.MyPageMain-menu a::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 5px;
+  width: 0;
+  height: 2px;
+  background-color: #252429;
+  transition: width 0.3s ease;
+}
+
+.MyPageMain-menu a:hover::before {
+  width: 100%;
+}
+
+/* 클릭한 항목에 밑줄 유지 */
+.MyPageMain-menu a.active::before {
+  width: 100%;
+}
+
+/* 오른쪽 콘텐츠 */
+.MyPageMain-content {
+  margin-left: 370px;
+  padding: 20px;
+  width: calc(100% - 220px);
+}
+
+.MyPageMain-section {
+  display: none;
+}
+
+.MyPageMain-section.active {
+  display: block;
+}
+
+.MyPageMain-button {
+  padding: 10px 20px;
+  margin-top: 10px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: #252429;
+  color: white;
+}
+
+.MyPageMain-button:hover {
+  background-color: #252429d8;
+}
+
+/* 프로필 이미지 스타일 */
+.MyPageMain-profile-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.MyPageMain-profile-img {
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  margin-bottom: 20px;
+}
+
+.MyPageMain-input {
+  margin-top: 5px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+}
