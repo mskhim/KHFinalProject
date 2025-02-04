@@ -60,18 +60,18 @@ const RouterComponent = () => {
       <Route path="/eventCalendar" element={<EventCalendar />} />
       <Route path="/eventMap" element={<EventMap />} />
       <Route path="/eventList" element={<EventList />} />
-      <Route path="/eventRead/:id" element={<EventRead />} />
+      <Route path="/eventRead/:no" element={<EventRead />} />
 
       {/* ✅ 공지사항 관련 */}
       <Route path="/noticeList" element={<NoticeList />} />
-      <Route path="/noticeRead/:id" element={<NoticeRead />} />
+      <Route path="/noticeRead/:no" element={<NoticeRead />} />
 
       {/* ✅ QnA 관련 */}
       <Route path="/qnaList" element={<QnaList />} />
       <Route path="/qnaInsert" element={<QnaInsert />} />
-      <Route path="/qnaModify/:id" element={<QnaModify />} />
-      <Route path="/qnaRead/:id" element={<QnaRead />} />
-      <Route path="/qnaReInsert/:id" element={<QnaReInsert />} />
+      <Route path="/qnaModify/:no" element={<QnaModify />} />
+      <Route path="/qnaRead/:no" element={<QnaRead />} />
+      <Route path="/qnaReInsert/:no" element={<QnaReInsert />} />
 
       {/* ✅ 권한 없을 때 */}
       <Route path="/unauthorized" element={<Unauthorized />} />
