@@ -44,8 +44,7 @@ a {
 /* ✅ 공통 스타일 */
 .darkModeClass {
   border-radius: 5px;
-  border: 1px solid;
-  transition: background 0.3s, color 0.3s, border 0.3s;
+  transition: 0.3s;
   background: transparent;
 }
 
@@ -168,4 +167,48 @@ a {
 .dark-mode input[type='date']::-webkit-calendar-picker-indicator {
   filter: invert(1); /* 아이콘 색 반전 */
   cursor: pointer;
+}
+.light-mode.active,
+.light-mode-hover.active {
+  background-color: #333 !important;
+  color: white !important;
+}
+
+/* ✅ 다크 모드에서 .active */
+.dark-mode.active,
+.dark-mode-hover.active {
+  background-color: white !important;
+  color: #333 !important;
+}
+/* ✅ 다크 모드 스타일 */
+.dark-mode.custom-pagination .page-item.active .page-link {
+  background-color: white !important; /* 활성 페이지 - 흰색 */
+  border-color: white !important;
+  color: #333 !important; /* 텍스트 색상 - 검정 */
+}
+
+.dark-mode.custom-pagination .page-link {
+  color: white !important; /* 기본 페이지 텍스트 색상 - 흰색 */
+  background-color: #333 !important; /* 활성 페이지 - 흰색 */
+}
+
+.dark-mode.custom-pagination .page-item .page-link:hover {
+  background-color: #ddd !important; /* 마우스 오버 시 - 연한 회색 */
+  color: #333 !important;
+}
+
+/* ✅ 라이트 모드 스타일 */
+.light-mode.custom-pagination .page-item.active .page-link {
+  background-color: #333 !important; /* 활성 페이지 - 검정 */
+  border-color: #333 !important;
+  color: white !important; /* 텍스트 색상 - 흰색 */
+}
+
+.light-mode.custom-pagination .page-link {
+  color: #333 !important; /* 기본 페이지 텍스트 색상 - 검정 */
+}
+
+.light-mode.custom-pagination .page-item .page-link:hover {
+  background-color: #666 !important; /* 마우스 오버 시 - 어두운 회색 */
+  color: white !important;
 }

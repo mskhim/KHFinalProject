@@ -8,14 +8,15 @@ import {
   ButtonGroup,
   Button,
 } from 'react-bootstrap';
-import './EventListVisualWrap.css';
+import { ButtonRole } from '../../../components/ui';
+import './EventListViewWrap.css';
 import { Context } from '../../../Context';
 
 const EventListViewWrap = () => {
   // ✅ 현재 페이지 상태
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 5; // 전체 페이지 개수
-  const { getDarkModeHover } = useContext(Context);
+  const { getDarkModeHover, getDarkMode } = useContext(Context);
 
   // ✅ 정렬 상태
   const [sortOption, setSortOption] = useState('popular'); // "popular" | "date"
@@ -111,24 +112,22 @@ const EventListViewWrap = () => {
   };
 
   return (
-    <Container fluid className="EventListViewWrap-container py-4 px-4">
+    <Container className="EventListViewWrap-container py-4 px-4">
       {/* ✅ 정렬 버튼 (상단 오른쪽) */}
       <div className="d-flex justify-content-end mb-3">
         <ButtonGroup>
           <Button
-            variant="none"
-            className={`sort-button ${
+            className={`EventListVIewWrap-sort-button ${getDarkModeHover()} ${
               sortOption === 'popular' ? 'active' : ''
-            } ${getDarkModeHover()}`}
+            } `}
             onClick={() => handleSortChange('popular')}
           >
             인기순
           </Button>
           <Button
-            variant="none"
-            className={`sort-button ${
+            className={`EventListVIewWrap-sort-button ${getDarkModeHover()} ${
               sortOption === 'date' ? 'active' : ''
-            } ${getDarkModeHover()}`}
+            } `}
             onClick={() => handleSortChange('date')}
           >
             개최일순
@@ -140,7 +139,7 @@ const EventListViewWrap = () => {
       <Row className="g-4">
         {sortedEvents.map((event) => (
           <Col key={event.id} xs={12} md={6} lg={4}>
-            <Card className="EventListViewWrap-card">
+            <Card className={`EventListViewWrap-card ${getDarkModeHover()}`}>
               <Card.Img
                 variant="top"
                 src={event.img}
@@ -158,9 +157,17 @@ const EventListViewWrap = () => {
           </Col>
         ))}
       </Row>
-
+      <br />
+      <br />
+      <br />
+      <div className="d-flex justify-content-end">
+        <ButtonRole text="추가" role="manager" onClick={() => {}} />
+      </div>
       {/* ✅ 페이지네이션 */}
-      <Pagination className="justify-content-center mt-4">
+      <Pagination
+        className={`EventListViewWrap-custom-pagination justify-content-center mt-4 ${getDarkMode()}`}
+        variant="dark"
+      >
         <Pagination.Prev
           disabled={currentPage === 1}
           onClick={() => handlePageChange(currentPage - 1)}

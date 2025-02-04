@@ -13,10 +13,7 @@ const EventListVisualWrap = () => {
   ];
 
   return (
-    <Container
-      fluid
-      className="EventListVisualWrap-container py-3 px-5 px-md-5"
-    >
+    <Container className="EventListVisualWrap-container py-4 px-4">
       <div className="EventListVisualWrap-wrapper">
         {images.map((item, index) => (
           <div
