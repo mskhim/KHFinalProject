@@ -188,10 +188,10 @@ const Header = ({ page }) => {
                   align="end"
                   className="Header-user-dropdown"
                 >
-                  <NavDropdown.Item as={NavLink} to="/mypage">
+                  <NavDropdown.Item as={NavLink} to="/user/mypage">
                     마이페이지
                   </NavDropdown.Item>
-                  <NavDropdown.Item as={NavLink} to="/reservations">
+                  <NavDropdown.Item as={NavLink} to="/user/bookingList">
                     예매 내역 확인
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
@@ -237,7 +237,7 @@ const Header = ({ page }) => {
                       pill
                       bg="success"
                       className="Header-notification-badge Header-cart-icon"
-                      onClick={() => navigate('/userCart')}
+                      onClick={() => navigate('/user/userCart')}
                     >
                       {cartElement}
                     </Badge>
