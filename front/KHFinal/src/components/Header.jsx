@@ -188,7 +188,7 @@ const Header = ({ page }) => {
                   align="end"
                   className="Header-user-dropdown"
                 >
-                  <NavDropdown.Item as={NavLink} to="/user/mypage">
+                  <NavDropdown.Item as={NavLink} to="/user/userMypage">
                     마이페이지
                   </NavDropdown.Item>
                   <NavDropdown.Item as={NavLink} to="/user/bookingList">

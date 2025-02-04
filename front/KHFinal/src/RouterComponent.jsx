@@ -18,13 +18,12 @@ import {
 } from './page/qna';
 import {
   UserCart,
-  UserDelete,
   UserInsert,
   UserLoginPage,
   UserLoginSuccess,
   UserMypage,
   UserReservedList,
-  UserUpdate,
+  BookingList,
 } from './page/user';
 
 const RouterComponent = () => {
@@ -104,8 +103,7 @@ const RouterComponent = () => {
         <Route path="userCart" element={<UserCart />} />
         <Route path="userMypage" element={<UserMypage />} />
         <Route path="userReservedList" element={<UserReservedList />} />
-        <Route path="userUpdate" element={<UserUpdate />} />
-        <Route path="UserDelete" element={<UserDelete />} />
+        <Route path="BookingList" element={<BookingList />} />
       </Route>
     </Routes>
   );
