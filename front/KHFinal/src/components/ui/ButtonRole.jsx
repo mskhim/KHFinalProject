@@ -4,11 +4,13 @@ import { Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
 const ButtonRole = ({ text, role, onClick }) => {
-  const tokenRole = 'Role_1'; //추후 토큰에서 role값 추출
+  //text = 버튼 text, role = 버튼 보여줄 role(manager,admin), onClick = 버튼 클릭 시 실행할 함수
+  const [tokenRole, setTokenRole] = useState('Role_1'); // 추후 토큰에서 role값 추출
   const [jwtRole, setJwtRole] = useState(null);
   const [visible, setVisible] = useState(false);
   const { getDarkModeHover } = useContext(Context); // 다크 모드 상태 가져오기
   useEffect(() => {
+    setTokenRole('Role_1');
     if (tokenRole === 'Role_0') {
       setJwtRole('admin');
     }
@@ -18,7 +20,7 @@ const ButtonRole = ({ text, role, onClick }) => {
     if (role == jwtRole) {
       setVisible(true);
     }
-  }, [jwtRole, role]);
+  }, [jwtRole, role, tokenRole]);
   return (
     <Button
       onClick={onClick}
