@@ -72,6 +72,20 @@ a {
   color: #333;
 }
 
+/* ✅ 라이트 모드 스타일 div용*/
+.light-mode.div {
+  color: #333;
+  border-color: white;
+  border-color: #333;
+}
+
+/* ✅ 다크 모드 스타일 div용*/
+.dark-mode.div {
+  color: white;
+  background-color: #181818;
+  border-color: white;
+}
+
 /* ✅ 라이트 모드 글자 스타일 */
 .light-mode.span {
   color: #333;

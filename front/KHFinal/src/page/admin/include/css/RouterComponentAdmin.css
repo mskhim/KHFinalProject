@@ -1,11 +1,11 @@
 .admin-app-container {
   display: flex;
+  margin-left: 50px;
 }
 
 .admin-main-content {
   margin-left: 200px;
   width: calc(100%);
-  border: solid 1px black;
 }
 
 .admin-content {

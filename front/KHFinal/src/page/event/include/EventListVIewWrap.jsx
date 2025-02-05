@@ -10,7 +10,7 @@ import {
 } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { ButtonRole } from '../../../components/ui';
-import './EventListViewWrap.css';
+import './css/EventListViewWrap.css';
 import { Context } from '../../../Context';
 
 const EventListViewWrap = () => {

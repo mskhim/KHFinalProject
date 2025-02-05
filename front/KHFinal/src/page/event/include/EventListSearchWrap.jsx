@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { Context } from '../../../Context'; // ✅ 다크모드 Context 사용
-import './EventListSearchWrap.css';
+import './css/EventListSearchWrap.css';
 import { ButtonDarkMode } from '../../../components/ui';
 const EventListSearchWrap = ({ onSearch }) => {
   const { getDarkMode, getDarkModeHover } = useContext(Context); // ✅ 다크모드 여부

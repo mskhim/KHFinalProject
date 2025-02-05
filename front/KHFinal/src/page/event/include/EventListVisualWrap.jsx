@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Container } from 'react-bootstrap';
-import './EventListVisualWrap.css';
+import './css/EventListVisualWrap.css';
 
 const EventListVisualWrap = () => {
   const [activeIndex, setActiveIndex] = useState(0); // 기본 활성화된 이미지
