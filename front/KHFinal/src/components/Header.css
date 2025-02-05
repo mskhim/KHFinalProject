@@ -261,3 +261,11 @@ body.Header-dark-mode .Header-user-dropdown .Header-dropdown-item {
 body.Header-dark-mode .Header-user-dropdown .Header-dropdown-item:hover {
   background-color: #444 !important;
 }
+
+#Header-up-button {
+  position: fixed !important;
+  bottom: 20px; /* 화면 하단에서 20px 위 */
+  right: 20px; /* 화면 오른쪽에서 20px 왼쪽 */
+  cursor: pointer;
+  z-index: 9999 !important;
+}

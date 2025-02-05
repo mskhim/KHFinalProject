@@ -24,7 +24,8 @@ const Header = ({ page }) => {
   const [showFestivalNav, setShowFestivalNav] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [activeTab, setActiveTab] = useState('');
-  const { darkMode, setDarkMode, getDarkMode } = useContext(Context);
+  const { darkMode, setDarkMode, getDarkMode, getDarkModeHover } =
+    useContext(Context);
 
   useEffect(() => {
     page && setShowFestivalNav(true);
@@ -96,6 +97,16 @@ const Header = ({ page }) => {
 
   return (
     <>
+      <Button
+        id="Header-up-button"
+        className={`up-button ${getDarkModeHover()} select`}
+        onClick={() => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        variant="none"
+      >
+        UP
+      </Button>
       <Navbar
         expand="lg"
         className={`py-3 ${
@@ -225,25 +236,25 @@ const Header = ({ page }) => {
                   )}
                 </div>
               )}
-              {isAuthenticated && (
-                <div className="position-relative me-3">
-                  <FaCartPlus
-                    size={24}
-                    className={`${getDarkMode} ms-3 Header-cart-icon`}
-                    onClick={() => navigate('/userCart')}
-                  />
-                  {notifications > 0 && (
-                    <Badge
-                      pill
-                      bg="success"
-                      className="Header-notification-badge Header-cart-icon"
-                      onClick={() => navigate('/user/userCart')}
-                    >
-                      {cartElement}
-                    </Badge>
-                  )}
-                </div>
-              )}
+              {/* {isAuthenticated && ( */}
+              <div className="position-relative me-3">
+                <FaCartPlus
+                  size={24}
+                  className={`${getDarkMode} ms-3 Header-cart-icon`}
+                  onClick={() => navigate('/userCart')}
+                />
+                {notifications > 0 && (
+                  <Badge
+                    pill
+                    bg="success"
+                    className="Header-notification-badge Header-cart-icon"
+                    onClick={() => navigate('/user/userCart')}
+                  >
+                    {cartElement}
+                  </Badge>
+                )}
+              </div>
+              {/* )} */}
               <a
                 href="https://github.com/your-github-profile"
                 target="_blank"
