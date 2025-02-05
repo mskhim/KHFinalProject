@@ -141,7 +141,7 @@ const EventListViewWrap = () => {
       <Row className="g-4">
         {sortedEvents.map((event) => (
           <Col
-            key={event.id}
+            key={event.no}
             xs={12}
             md={6}
             lg={4}

@@ -56,7 +56,11 @@ const Main = () => {
 
       <Footer />
 
-      <div id="up-button" className="up-button">
+      <div
+        id="up-button"
+        className="up-button"
+        onClick={window.scrollTo({ top: 0, behavior: 'smooth' })}
+      >
         UP
       </div>
     </>
