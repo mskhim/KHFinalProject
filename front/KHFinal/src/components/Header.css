@@ -264,8 +264,8 @@ body.Header-dark-mode .Header-user-dropdown .Header-dropdown-item:hover {
 
 #Header-up-button {
   position: fixed !important;
-  bottom: 20px; /* 화면 하단에서 20px 위 */
-  right: 20px; /* 화면 오른쪽에서 20px 왼쪽 */
+  bottom: 50px; /* 화면 하단에서 20px 위 */
+  right: 50px; /* 화면 오른쪽에서 20px 왼쪽 */
   cursor: pointer;
   z-index: 9999 !important;
 }

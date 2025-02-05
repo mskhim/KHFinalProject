@@ -1,7 +1,4 @@
 /* 📌 전체 컨테이너 */
-.EventReadTitle-container {
-  padding: 40px;
-}
 
 /* 📌 메인 이미지 스타일 */
 .EventReadTitle-main-image {
@@ -51,32 +48,16 @@
   font-weight: bold;
 }
 
-/* 📌 장바구니 버튼 */
-.EventReadTitle-cart-btn {
-  margin-top: 20px;
+/* ✅ 메인 이미지 변경 시 fade-in 애니메이션 */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
 }
 
-/* 📌 다크 모드 스타일 */
-.dark-mode .EventReadTitle-container {
-  background-color: #222;
-  color: white;
-}
-
-.dark-mode .EventReadTitle-ticket-btn {
-  color: white;
-  border-color: white;
-}
-
-.dark-mode .EventReadTitle-ticket-btn:hover {
-  background-color: white;
-  color: black;
-}
-
-.dark-mode .EventReadTitle-cart-btn {
-  background-color: white;
-  color: black;
-}
-
-.dark-mode .EventReadTitle-cart-btn:hover {
-  background-color: #ddd;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
