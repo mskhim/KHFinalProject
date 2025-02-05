@@ -1,10 +1,11 @@
+.Footer-light-mode {
+  background-color: #ffffff; /* ✅ 원하는 색상으로 변경 */
+  color: #000000; /* ✅ 텍스트 색상 조정 */
+}
+
 .Footer-container-fluid {
   padding: 5rem;
   margin-top: 5rem;
-}
-
-.bg-light.Footer-container-fluid::before {
-  border-top: 65px solid #ededed; /* 화이트 모드일 때만 회색 경계 추가 */
 }
 
 .Footer-row {
@@ -19,11 +20,11 @@
   transition: color 0.3s ease-in-out;
 }
 
-.bg-light .Footer-col a {
-  color: #333; /* 화이트 모드 기본 글씨색 */
+.Footer-col a {
+  color: #080808; /* 화이트 모드 기본 글씨색 */
 }
 
-.bg-light .Footer-col a:hover {
+.Footer-col a:hover {
   color: #888; /* 화이트 모드에서 hover 시 회색 */
 }
 
@@ -45,7 +46,6 @@
 .Footer-copyRight img {
   width: 120px;
   height: 40px;
-  background-color: gray;
   margin-right: 3px;
 }
 

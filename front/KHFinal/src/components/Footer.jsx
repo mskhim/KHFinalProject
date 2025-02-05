@@ -8,7 +8,7 @@ const Footer = () => {
   return (
     <div
       className={`Footer-container-fluid p-5 my-5 ${
-        darkMode ? 'bg-dark text-white' : 'bg-light text-dark'
+        darkMode ? 'bg-dark text-white' : 'Footer-light-mode'
       }`}
     >
       <div className="row Footer-row">
