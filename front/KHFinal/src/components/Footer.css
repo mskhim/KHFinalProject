@@ -1,7 +1,65 @@
-footer {
-    padding: 10px 20px;
-    background-color: #003366;
-    color: white;
-    text-align: center;
-  }
-  
+/* footer 컨테이너 */
+.Footer-sns {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  border-bottom: 1px solid rgb(152, 152, 152);
+  padding-bottom: 30px;
+  margin-bottom: 10px;
+}
+
+.Footer-sns > a {
+  margin-right: 30px;
+  font-size: 20px;
+}
+
+.Footer-sns > a > img {
+  margin-right: 10px;
+  width: 50px;
+  border-radius: 50%;
+  background-color: gray;
+  transition: background-color 0.2s;
+}
+
+.Footer-sns > a {
+  text-decoration: none;
+  color: white;
+}
+
+.Footer-row a {
+  text-decoration: none;
+  color: white;
+}
+
+a:hover > img {
+  background-color: rgb(255, 255, 255);
+}
+
+.Footer-col > a {
+  color: gray;
+}
+
+.Footer-col:hover > a {
+  color: white;
+  transition: background-color 0.5s;
+}
+
+.Footer-copyRight {
+  padding-top: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+}
+
+.Footer-copyRight img {
+  width: 120px;
+  height: 40px;
+  background-color: gray;
+  margin-right: 3px;
+}
+
+.Footer-copyRight .Footer-webCertification {
+  width: 70px;
+}
