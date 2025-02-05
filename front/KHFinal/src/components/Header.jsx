@@ -159,53 +159,53 @@ const Header = ({ page }) => {
             </Nav>
 
             <div className="d-flex align-items-center">
-              {isAuthenticated ? (
-                <NavDropdown
-                  title={
-                    <span className="d-flex align-items-center Header-user-info">
-                      <BsPersonCircle
-                        size={24}
-                        className={`me-2 ${
-                          darkMode ? 'text-light' : 'text-dark'
-                        }`}
-                      />
-                      <span
-                        className={`Header-user-name ${
-                          darkMode ? 'text-light' : 'text-dark'
-                        }`}
-                      >
-                        {userName}
-                      </span>
-                      <BsChevronDown
-                        size={16}
-                        className={`ms-1 Header-dropdown-icon ${
-                          darkMode ? 'text-light' : 'text-dark'
-                        }`}
-                      />
+              {/* {isAuthenticated ? ( */}
+              <NavDropdown
+                title={
+                  <span className="d-flex align-items-center Header-user-info">
+                    <BsPersonCircle
+                      size={24}
+                      className={`me-2 ${
+                        darkMode ? 'text-light' : 'text-dark'
+                      }`}
+                    />
+                    <span
+                      className={`Header-user-name ${
+                        darkMode ? 'text-light' : 'text-dark'
+                      }`}
+                    >
+                      {userName}
                     </span>
-                  }
-                  id="Header-user-dropdown"
-                  align="end"
-                  className="Header-user-dropdown"
-                >
-                  <NavDropdown.Item as={NavLink} to="/user/userMypage">
-                    마이페이지
-                  </NavDropdown.Item>
-                  <NavDropdown.Item as={NavLink} to="/user/bookingList">
-                    예매 내역 확인
-                  </NavDropdown.Item>
-                  <NavDropdown.Divider />
-                  <NavDropdown.Item onClick={Logout}>로그아웃</NavDropdown.Item>
-                </NavDropdown>
-              ) : (
-                <Button
-                  variant={darkMode ? 'outline-light' : 'outline-dark'}
-                  onClick={handleLogin}
-                  className="me-3"
-                >
-                  로그인
-                </Button>
-              )}
+                    <BsChevronDown
+                      size={16}
+                      className={`ms-1 Header-dropdown-icon ${
+                        darkMode ? 'text-light' : 'text-dark'
+                      }`}
+                    />
+                  </span>
+                }
+                id="Header-user-dropdown"
+                align="end"
+                className="Header-user-dropdown"
+              >
+                <NavDropdown.Item as={NavLink} to="/user/userMypage">
+                  마이페이지
+                </NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/user/bookingList">
+                  예매 내역 확인
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item onClick={Logout}>로그아웃</NavDropdown.Item>
+              </NavDropdown>
+              {/* ) : ( */}
+              <Button
+                variant={darkMode ? 'outline-light' : 'outline-dark'}
+                onClick={handleLogin}
+                className="me-3"
+              >
+                로그인
+              </Button>
+              {/* )} */}
               {isAuthenticated && (
                 <div className="position-relative me-3">
                   <FaBell
