@@ -30,20 +30,20 @@ const Footer = () => {
           youtube
         </a>
       </div>
-      <div class="row Footer-row">
-        <div class="col Footer-col">
+      <div className="row Footer-row">
+        <div className="col Footer-col">
           <a href="#">개인정보처리방침</a>
         </div>
-        <div class="col Footer-col">
+        <div className="col Footer-col">
           <a href="#">이용약관</a>
         </div>
-        <div class="col Footer-col">
+        <div className="col Footer-col">
           <a href="#">위치기반서비스 이용약관</a>
         </div>
-        <div class="col Footer-col">
+        <div className="col Footer-col">
           <a href="#">저작권정책</a>
         </div>
-        <div class="col Footer-col">
+        <div className="col Footer-col">
           <a href="#">전자우편무단수집거부</a>
         </div>
       </div>
