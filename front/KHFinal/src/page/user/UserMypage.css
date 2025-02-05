@@ -1,22 +1,38 @@
-.MyPageMain-wrapper {
+.MyPageMain-container {
   display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers the content horizontally */
+  justify-content: flex-start;
+  padding: 20px;
 }
 
 .MyPageMain-header {
-  margin-left: 50px;
-  margin-bottom: 100px;
+  text-align: left; /* Align header to the left */
+  width: 100%;
+  margin-bottom: 30px;
+  font-size: 2rem;
+  padding-left: 100px; /* Push header text to the left */
+}
+
+.MyPageMain-wrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px; /* Sets a maximum width to ensure content doesn't stretch too much */
 }
 
 .MyPageMain-menu {
-  width: 200px;
-  border-top: 3.5px solid ;
-  border-bottom: 3.5px solid;
+  width: 220px;
   padding: 20px;
   box-sizing: border-box;
-  height: 430px;
-  /* position: fixed; */
-  margin-left: 100px;
+  border-top: 3.5px solid;
+  border-bottom: 3.5px solid;
   min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Makes sure menu items are spaced correctly */
+  height: auto; /* Adjust height to content */
+  max-height: 300px; /* Ensure it doesn't stretch more than needed */
 }
 
 .MyPageMain-menu ul {
@@ -25,11 +41,10 @@
 }
 
 .MyPageMain-menu li {
-  margin: 10px 0;
+  margin: 15px 0;
 }
 
 .MyPageMain-menu span {
-  text-decoration: none;
   font-weight: bold;
   display: block;
   padding: 10px;
@@ -50,12 +65,12 @@
   bottom: 5px;
   width: 0;
   height: 2px;
-  background-color:#252429;
+  background-color: #252429;
   transition: width 0.3s ease;
 }
 
 .MyPageMain-menu.dark-mode span::before {
-  background-color:white
+  background-color: white;
 }
 
 .MyPageMain-menu span:hover::before {
@@ -69,9 +84,11 @@
 
 /* 오른쪽 콘텐츠 */
 .MyPageMain-content {
-  margin-left: 370px;
+  margin-left: 270px;
   padding: 20px;
   width: calc(100% - 220px);
+  display: flex;
+  flex-direction: column;
 }
 
 .MyPageMain-section {
@@ -82,10 +99,41 @@
   display: block;
 }
 
+.card {
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 20px;
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+  padding: 15px 20px;
+  font-weight: bold;
+}
+
+.card-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.info-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.card p {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+/* 버튼 스타일 */
 .MyPageMain-button-container {
-  margin-left: 500px;
   margin-top: 40px;
-  margin-bottom: 40px;
 }
 
 .MyPageMain-button {
@@ -96,23 +144,86 @@
   border-radius: 5px;
   background-color: #252429;
   color: white;
+  width: 100%;
 }
 
 .MyPageMain-button:hover {
   background-color: #252429d8;
 }
 
-/* 프로필 정보 */
-.MyPageMain-profile-info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+/* 입력 필드 */
+.input-field {
+  width: 100%;
+  border-radius: 5px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
 }
 
-.MyPageMain-input {
-  margin-top: 5px;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+.input-field:focus {
+  border-color: #28a745;
+  outline: none;
+  box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+}
+
+.MyPageMain-section h2 {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: #495057;
+}
+
+/* 버튼 컨테이너 스타일 */
+.button-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
   width: 100%;
+  max-width: 500px;
+}
+
+button.btn-danger {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+}
+
+button.btn-danger:hover {
+  background-color: #c82333;
+}
+
+/* Ensure responsiveness */
+@media (max-width: 767px) {
+  .MyPageMain-wrapper {
+    flex-direction: column;
+  }
+  
+  .MyPageMain-menu {
+    margin-left: 0;
+    width: 100%;
+    padding: 10px;
+  }
+  
+  .MyPageMain-content {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  /* Align header to the center for small screens */
+  .MyPageMain-header {
+    text-align: center;
+    padding-left: 0;
+  }
+
+  /* Stack menu and content vertically on smaller screens */
+  .MyPageMain-menu {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .MyPageMain-content {
+    width: 100%;
+  }
+
+  .MyPageMain-menu li {
+    margin: 10px 0;
+  }
 }
