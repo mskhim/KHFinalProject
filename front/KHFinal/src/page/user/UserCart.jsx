@@ -134,7 +134,6 @@ function UserCart() {
                   </td>
                   <td>
                     <div className="Cart-festival-info">
-                      <img src={item.ticketImage} alt={item.festivalName} className="Cart-ticket-image" />
                       <div className="Cart-festival-text">
                         <h3>
                           <a href="#" className="Cart-festival-link">{item.festivalName}</a>
