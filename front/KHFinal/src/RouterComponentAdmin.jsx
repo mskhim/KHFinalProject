@@ -2,7 +2,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Header from "./page/admin/include/Header";
 import Aside from "./page/admin/include/Aside";
-import "./page/admin/include/RouterComponentAdmin.css";
+import "./page/admin/include/css/RouterComponentAdmin.css";
 import {
   AdminMain,
   ManagerManage,
