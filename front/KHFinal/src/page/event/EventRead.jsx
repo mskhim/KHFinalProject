@@ -10,7 +10,7 @@ import {
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { Context } from '../../Context'; // 다크모드 컨텍스트 적용
-import './EventRead.css'; // CSS 파일 추가
+import './css/EventRead.css'; // CSS 파일 추가
 
 const EventRead = () => {
   const [ticketCount, setTicketCount] = useState(1);
@@ -37,29 +37,31 @@ const EventRead = () => {
       <Container className={`py-5 EventReadTitle-container ${getDarkMode()}`}>
         <Row className="align-items-center">
           {/* 📌 좌측: 메인 이미지 + 서브 이미지 */}
-          <Col md={6} className="position-relative">
-            <Card className="border-0">
+          <Col md={8} className="position-relative mt-2">
+            <Card className="border-0 mt-2">
               <Card.Img
                 src={mainImage}
                 alt="Main Event"
                 className="img-fluid rounded EventReadTitle-main-image"
               />
             </Card>
-            {/* ㄴ자 형태의 서브 이미지 */}
-            <div className="position-absolute EventReadTitle-sub-images">
+
+            {/* ✅ 서브 이미지: w-100으로 너비 자동 조정 */}
+            <div className="d-flex w-100 justify-content-between mt-2">
               {subImages.map((img, index) => (
                 <img
                   key={index}
                   src={img}
                   alt={`Sub ${index + 1}`}
-                  className={`EventReadTitle-sub-image sub${index}`}
+                  className="EventReadTitle-sub-image flex-grow-1 mx-1"
+                  style={{ maxWidth: '20%', height: 'auto' }} // 각 이미지의 최대 너비 제한
                 />
               ))}
             </div>
           </Col>
 
           {/* 📌 우측: 축제 정보 + 예매 */}
-          <Col md={6} className="d-flex flex-column justify-content-center">
+          <Col md={4} className="d-flex flex-column justify-content-center">
             <h2 className="EventReadTitle-title">🎉 랜덤 축제 이벤트</h2>
             <p className="EventReadTitle-price">
               💰 티켓 가격: <strong>20,000원</strong>

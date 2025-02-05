@@ -9,7 +9,7 @@ import {
   Modal,
 } from 'react-bootstrap';
 import { Header, Footer } from '../../components';
-import './EventCalendar.css';
+import './css/EventCalendar.css';
 
 const EventCalendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date()); // 현재 날짜 상태
