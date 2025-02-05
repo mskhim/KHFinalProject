@@ -1,10 +1,10 @@
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
-import "./Notice.css";
-import { Link } from "react-router-dom";
-import { Context } from "../../Context";
-import { useContext, useState } from "react";
-import { Pagination } from "react-bootstrap";
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+import './Notice.css';
+import { Link } from 'react-router-dom';
+import { Context } from '../../Context';
+import { useContext, useState } from 'react';
+import { Pagination } from 'react-bootstrap';
 
 const NoticeList = () => {
   const { getDarkMode } = useContext(Context);

@@ -25,6 +25,7 @@ import {
   UserReservedList,
   BookingList,
 } from './page/user';
+import NotFound from './page/common/NotFound';
 
 const RouterComponent = () => {
   const location = useLocation(); // ✅ 현재 경로 가져오기
@@ -89,6 +90,7 @@ const RouterComponent = () => {
         <Route path="managerMain" element={<ManagerMain />} />
         <Route path="managerEventInsert" element={<ManagerEventInsert />} />
         <Route path="managerStats" element={<ManagerStats />} />
+        <Route path="*" element={<NotFound />} />
       </Route>
 
       {/* ✅ 유저 페이지 */}
@@ -104,7 +106,10 @@ const RouterComponent = () => {
         <Route path="userMypage" element={<UserMypage />} />
         <Route path="userReservedList" element={<UserReservedList />} />
         <Route path="BookingList" element={<BookingList />} />
+        <Route path="*" element={<NotFound />} />
       </Route>
+      {/* 🚨 존재하지 않는 /user/* 내부 URL이면 404 페이지로 이동 */}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };
