@@ -13,6 +13,8 @@ import { Context } from '../../Context'; // 다크모드 컨텍스트 적용
 import './css/EventRead.css'; // CSS 파일 추가
 import { useParams } from 'react-router-dom';
 import { use } from 'react';
+import ReviewSection from './include/ReivewSection';
+import MapSection from './include/MapSection';
 
 const EventRead = () => {
   let events = [
@@ -43,8 +45,8 @@ const EventRead = () => {
       TEL: '051-9876-5432',
       HOMEPAGE: 'https://www.biff.kr',
       ADRESS: '부산광역시 해운대구 수영강변대로 120',
-      LATITUDE: 35.168128,
-      LONGITUDE: 129.124788,
+      LATITUDE: 35.171165,
+      LONGITUDE: 129.127188,
     },
     {
       NO: 3,
@@ -150,9 +152,9 @@ const EventRead = () => {
             <div className="position-relative d-flex align-items-center">
               {/* 좌측 버튼 */}
               <Button
-                variant="light"
-                className="position-absolute start-0 z-3"
-                style={{ opacity: 0.7 }}
+                variant="none"
+                className={`position-absolute start-0 z-3 ${getDarkModeHover()} border`}
+                style={{ opacity: 0.9 }}
                 onClick={scrollLeft}
               >
                 ◀
@@ -267,6 +269,18 @@ const EventRead = () => {
                 🛒 장바구니 담기
               </Button>
             </div>
+          </Col>
+        </Row>
+        {/* 리뷰 창과 맵 */}
+        <Row>
+          <Col md={8}>
+            <ReviewSection />
+          </Col>
+          <Col md={4}>
+            <MapSection
+              LATITUDE={eventInfo.LATITUDE}
+              LONGITUDE={eventInfo.LONGITUDE}
+            />
           </Col>
         </Row>
       </Container>
