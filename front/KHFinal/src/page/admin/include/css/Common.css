@@ -1,22 +1,24 @@
-.admin-table,
-.admin-table tr {
+.admin-table table {
   width: 100%;
-  text-align: center;
   border-collapse: collapse;
 }
-.admin-table th,
-.admin-table td {
-  border: solid black 1.5px;
-  padding: 8px;
+
+.admin-table tbody {
+  display: inline-block;
+  width: 100%;
+  overflow-y: auto;
+  max-height: 700px;
 }
 
-.admin-button-section {
-  display: flex;
-  justify-content: right;
+.admin-table thead,
+.admin-table tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
 }
-.admin-button-section button {
-  height: 30px;
-  width: 50px;
-  margin-left: 5px;
-  margin-bottom: 5px;
+
+.admin-table input:not(.form-check-input) {
+  border: none;
+  outline: none;
+  background-color: inherit;
 }
