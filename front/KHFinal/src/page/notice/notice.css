@@ -64,6 +64,14 @@
   border-color: #373737;
 }
 
+.Notice-sort-select{
+  height: 40px;
+  font-size: 14px;
+  padding: 7px 14px;
+  border: 1px solid #ccc;
+  margin-left: 5px;
+} 
+
 .Notice-board-table {
   width: 100%;
   border-collapse: collapse;

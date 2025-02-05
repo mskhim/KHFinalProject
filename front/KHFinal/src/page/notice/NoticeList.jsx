@@ -60,6 +60,10 @@ const NoticeList = () => {
                   <button type="submit" className="Notice-btn Notice-btn-dark">
                     검색
                   </button>
+                  <select className="Notice-sort-select">
+                    <option value="date">오름차순</option>
+                    <option value="date">내림차순</option>
+                  </select>
                 </div>
               </form>
             </div>
