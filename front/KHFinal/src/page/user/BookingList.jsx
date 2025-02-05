@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import './BookingList.css';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import { Context } from '../../Context';
 
 function BookingList() {
   // Initialize states
@@ -13,6 +14,7 @@ function BookingList() {
     { id: 12346, date: '2025-01-25', status: '완료' },
   ]);
   const [canceledReservations, setCanceledReservations] = useState([]); // Track canceled reservations
+    const { getDarkMode, getDarkModeHover } = useContext(Context);
 
   // 메뉴 항목 클릭 시 호출되는 함수
   const showSection = (sectionId) => {
@@ -64,7 +66,6 @@ function BookingList() {
   return (
     <>
       <Header />
-
       <div className="BookingList-BookingList-container">
         <header>
           <h1>예매내역</h1>
@@ -72,29 +73,27 @@ function BookingList() {
 
         <div className="BookingList-BookingList-wrapper">
           {/* 왼쪽 메뉴 */}
-          <div className="BookingList-menu">
+          <div className={`BookingList-menu ${getDarkMode()}`}>
             <ul>
               <li>
-                <a
-                  href="#"
+                <span
                   className={
                     selectedSection === 'reservation-history' ? 'active' : ''
                   }
                   onClick={() => showSection('reservation-history')}
                 >
                   내 예매내역
-                </a>
+                </span>
               </li>
               <li>
-                <a
-                  href="#"
+                <span
                   className={
                     selectedSection === 'reservation-cancel' ? 'active' : ''
                   }
                   onClick={() => showSection('reservation-cancel')}
                 >
                   취소내역
-                </a>
+                </span>
               </li>
             </ul>
           </div>

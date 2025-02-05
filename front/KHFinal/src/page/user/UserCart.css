@@ -1,8 +1,8 @@
 /* 기본적인 레이아웃 */
 .Cart-header {
-  margin-top: 50px;
+  margin-top: auto;
   margin-left: 50px;
-  margin-bottom: 50px;
+  margin-bottom: 100px;
 }
 
 .Cart-wrapper {
@@ -14,6 +14,7 @@
   margin: 40px auto 0 auto;
   border-top: 3.5px solid #252429;
   border-bottom: 3.5px solid #252429;
+  margin-bottom: 100px;
 }
 
 .Cart-table {
@@ -69,7 +70,7 @@ thead {
 }
 
 .Cart-remove-btn {
-  background-color: #ffffff;
+  background-color: #f8f9fa;
   color: #acacac;
   text-decoration: underline;
   border: none;
@@ -79,7 +80,7 @@ thead {
 }
 
 .Cart-remove-btn:hover {
-  background-color: #ffffff;
+  background-color: #f8f9fa;
   color: rgb(255, 0, 0);
 }
 
