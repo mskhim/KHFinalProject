@@ -1,47 +1,49 @@
 import React from "react";
-import "./Aside.css";
-import { Link } from "react-router";
+import "./css/Aside.css";
+import { Link, NavLink } from "react-router";
+import { Navbar, Nav } from "react-bootstrap";
 
 const Aside = () => {
   return (
-    <div className="admin-aside-sidebar">
-      <div className="admin-aside-sidebar-brand">
+    <Navbar className="admin-aside" fixed="top">
+      <div className="admin-aside-brand">
         <h2>
-          <Link to="/admin/adminmain">VIVA FESTA</Link>
+          <NavLink to="/admin/adminmain" className="brand-link">
+            VIVA FESTA
+          </NavLink>
+          <hr />
         </h2>
       </div>
-      <nav className="admin-aside-nav-menu">
-        <ul>
-          <li>
-            <Link to="/admin/managermanage">매니저 관리</Link>
-          </li>
-          <li>
-            <Link to="/admin/usermanage">유저 관리</Link>
-          </li>
-          <li>
-            <Link to="/admin/festivalmanage">축제 관리</Link>
-          </li>
-          <li>
-            <Link to="/admin/reviewmanage">리뷰 관리</Link>
-          </li>
-          <li>
-            <Link to="/admin/qnamanage">Q&A 관리</Link>
-          </li>
-          <li>
-            <Link to="/admin/noticemanage">공지사항 관리</Link>
-          </li>
-          <li>
-            <Link to="/admin/bannermanage">배너 관리</Link>
-          </li>
-          <li>
-            <Link to="/admin/paymenthistorymanage">예매내역 관리</Link>
-          </li>
-          <li>
-            <Link to="/admin/stathistory">통계 내역</Link>
-          </li>
-        </ul>
-      </nav>
-    </div>
+      <Nav className="admin-aside-nav flex-column ">
+        <Nav.Link as={NavLink} to="/admin/managermanage">
+          매니저 관리
+        </Nav.Link>
+        <Nav.Link as={NavLink} to="/admin/usermanage">
+          유저 관리
+        </Nav.Link>
+        <Nav.Link as={NavLink} to="/admin/festivalmanage">
+          축제 관리
+        </Nav.Link>
+        <Nav.Link as={NavLink} to="/admin/reviewmanage">
+          리뷰 관리
+        </Nav.Link>
+        <Nav.Link as={NavLink} to="/admin/qnamanage">
+          Q&A 관리
+        </Nav.Link>
+        <Nav.Link as={NavLink} to="/admin/noticemanage">
+          공지사항 관리
+        </Nav.Link>
+        <Nav.Link as={NavLink} to="/admin/bannermanage">
+          배너 관리
+        </Nav.Link>
+        <Nav.Link as={NavLink} to="/admin/paymenthistorymanage">
+          예매내역 관리
+        </Nav.Link>
+        <Nav.Link as={NavLink} to="/admin/stathistory">
+          통계 내역
+        </Nav.Link>
+      </Nav>
+    </Navbar>
   );
 };
 
