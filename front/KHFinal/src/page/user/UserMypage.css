@@ -1,26 +1,22 @@
-/* 기본적인 레이아웃 */
-.MyPageMain-container {
-  font-family: Arial, sans-serif;
-}
-
 .MyPageMain-wrapper {
   display: flex;
 }
 
 .MyPageMain-header {
-  margin-top: 50px;
   margin-left: 50px;
-  margin-bottom: 50px;
+  margin-bottom: 100px;
 }
 
 .MyPageMain-menu {
   width: 200px;
-  border-top: 3.5px solid #252429;
-  border-bottom: 3.5px solid #252429;
+  border-top: 3.5px solid ;
+  border-bottom: 3.5px solid;
   padding: 20px;
   box-sizing: border-box;
   height: 430px;
-  position: fixed;
+  /* position: fixed; */
+  margin-left: 100px;
+  min-width: 200px;
 }
 
 .MyPageMain-menu ul {
@@ -32,39 +28,42 @@
   margin: 10px 0;
 }
 
-.MyPageMain-menu a {
+.MyPageMain-menu span {
   text-decoration: none;
-  color: #333;
   font-weight: bold;
   display: block;
   padding: 10px;
   border-radius: 5px;
   position: relative;
   transition: color 0.3s ease, padding-left 0.3s ease;
+  cursor: pointer;
 }
 
-.MyPageMain-menu a:hover {
-  color: #252429;
+.MyPageMain-menu span:hover {
   padding-left: 20px;
 }
 
-.MyPageMain-menu a::before {
+.MyPageMain-menu span::before {
   content: "";
   position: absolute;
   left: 0;
   bottom: 5px;
   width: 0;
   height: 2px;
-  background-color: #252429;
+  background-color:#252429;
   transition: width 0.3s ease;
 }
 
-.MyPageMain-menu a:hover::before {
+.MyPageMain-menu.dark-mode span::before {
+  background-color:white
+}
+
+.MyPageMain-menu span:hover::before {
   width: 100%;
 }
 
 /* 클릭한 항목에 밑줄 유지 */
-.MyPageMain-menu a.active::before {
+.MyPageMain-menu span.active::before {
   width: 100%;
 }
 
@@ -83,6 +82,12 @@
   display: block;
 }
 
+.MyPageMain-button-container {
+  margin-left: 500px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
 .MyPageMain-button {
   padding: 10px 20px;
   margin-top: 10px;
@@ -97,19 +102,11 @@
   background-color: #252429d8;
 }
 
-/* 프로필 이미지 스타일 */
+/* 프로필 정보 */
 .MyPageMain-profile-info {
   display: flex;
   flex-direction: column;
-  align-items: center;
-}
-
-.MyPageMain-profile-img {
-  border-radius: 50%;
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  margin-bottom: 20px;
+  align-items: flex-start;
 }
 
 .MyPageMain-input {

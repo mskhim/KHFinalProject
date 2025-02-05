@@ -1,26 +1,25 @@
-/* 기본적인 레이아웃 */
-.BookingList-container {
-  font-family: Arial, sans-serif;
-}
-
 .BookingList-wrapper {
   display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  max-width: 1200px;
+  margin: 40px auto 0 auto;
+  margin-bottom: 100px;
+  border: solid 1px red;
 }
 
 .BookingList-header {
   margin-top: 50px;
   margin-left: 50px;
-  margin-bottom: 50px;
 }
 
 .BookingList-menu {
   width: 200px;
-  border-top: 3.5px solid #252429;
-  border-bottom: 3.5px solid #252429;
+  border-top: 3.5px solid;
+  border-bottom: 3.5px solid;
   padding: 20px;
   box-sizing: border-box;
   height: 430px;
-  position: fixed;
   margin-left: 150px;
 }
 
@@ -33,9 +32,8 @@
   margin: 10px 0;
 }
 
-.BookingList-menu a {
+.BookingList-menu span {
   text-decoration: none;
-  color: #333;
   font-weight: bold;
   display: block;
   padding: 10px;
@@ -45,17 +43,16 @@
 }
 
 /* Hover effect */
-.BookingList-menu a:hover {
-  color: #252429; /* 텍스트 색상 변경 */
+.BookingList-menu span:hover {
   padding-left: 20px; /* 왼쪽 패딩을 추가하여 오른쪽으로 이동하는 느낌을 줌 */
 }
 
 /* 클릭된 항목에 밑줄 유지 */
-.BookingList-menu a.active::before {
+.BookingList-menu span.active::before {
   width: 100%;
 }
 
-.BookingList-menu a::before {
+.BookingList-menu span::before {
   content: "";
   position: absolute;
   left: 0;
@@ -66,13 +63,17 @@
   transition: width 0.3s ease;
 }
 
+.BookingList-menu.dark-mode span::before {
+  background-color:white
+}
+
 /* Hover 시 밑줄 효과 */
-.BookingList-menu a:hover::before {
+.BookingList-menu span:hover::before {
   width: 100%; /* hover 시 밑줄이 전면에 나타남 */
 }
 
 /* 클릭된 항목의 밑줄 유지 */
-.BookingList-menu a.active::before {
+.BookingList-menu span.active::before {
   width: 100%;
 }
 
@@ -86,6 +87,7 @@
 /* 각 섹션 */
 .BookingList-section {
   display: none;
+  border: solid 1px red;
 }
 
 .BookingList-section.active {
