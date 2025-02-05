@@ -14,7 +14,7 @@ function BookingList() {
     { id: 12346, date: '2025-01-25', status: '완료' },
   ]);
   const [canceledReservations, setCanceledReservations] = useState([]); // Track canceled reservations
-    const { getDarkMode, getDarkModeHover } = useContext(Context);
+  const { getDarkMode, getDarkModeHover } = useContext(Context);
 
   // 메뉴 항목 클릭 시 호출되는 함수
   const showSection = (sectionId) => {
@@ -67,7 +67,7 @@ function BookingList() {
     <>
       <Header />
       <div className="BookingList-BookingList-container">
-        <header>
+        <header className="BookingList-header">
           <h1>예매내역</h1>
         </header>
 
