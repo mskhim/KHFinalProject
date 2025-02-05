@@ -1,9 +1,11 @@
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import './UserMypage.css';
+import { Context } from "../../Context";
 
 function UserMypage() {
+  const { getDarkMode, getDarkModeHover } = useContext(Context);
   const [selectedSection, setSelectedSection] = useState('info-view');
   const [emailInput, setEmailInput] = useState('');  // 탈퇴 시 이메일 입력 상태
   const [isEmailInputVisible, setEmailInputVisible] = useState(false); // 이메일 입력창 표시 여부
@@ -70,16 +72,16 @@ function UserMypage() {
 
       <div className="MyPageMain-wrapper">
         {/* 왼쪽 메뉴 */}
-        <div className="MyPageMain-menu">
+        <div className={`MyPageMain-menu ${getDarkMode()}`}>
           <ul>
             <li>
-              <a href="#" className={selectedSection === 'info-view' ? 'active' : ''} onClick={() => showSection('info-view')}>내 정보 조회</a>
+              <span className={selectedSection === 'info-view' ? 'active' : ''} onClick={() => showSection('info-view')}>내 정보 조회</span>
             </li>
             <li>
-              <a href="#" className={selectedSection === 'info-edit' ? 'active' : ''} onClick={() => showSection('info-edit')}>내 정보 수정</a>
+              <span className={selectedSection === 'info-edit' ? 'active' : ''} onClick={() => showSection('info-edit')}>내 정보 수정</span>
             </li>
             <li>
-              <a href="#" className={selectedSection === 'account-delete' ? 'active' : ''} onClick={() => showSection('account-delete')}>회원 탈퇴</a>
+              <span className={selectedSection === 'account-delete' ? 'active' : ''} onClick={() => showSection('account-delete')}>회원 탈퇴</span>
             </li>
           </ul>
         </div>
@@ -90,7 +92,6 @@ function UserMypage() {
           <div className={`MyPageMain-section ${selectedSection === 'info-view' ? 'active' : ''}`} id="info-view">
             <h2>내 정보 조회</h2>
             <div className="MyPageMain-profile-info">
-              <img src={userInfo.profileImage} alt="Profile" className="MyPageMain-profile-img" />
               <p><strong>이름:</strong> {userInfo.name}</p>
               <p><strong>생년월일:</strong> {userInfo.birthdate}</p>
               <p><strong>성별:</strong> {userInfo.gender}</p>
@@ -98,14 +99,15 @@ function UserMypage() {
               <p><strong>전화번호:</strong> {userInfo.phone}</p>
               <p><strong>지역코드:</strong> {userInfo.regionCode}</p>
             </div>
-            <button className="MyPageMain-button" onClick={() => showSection('info-edit')}>정보 수정</button>
+            <div className="MyPageMain-button-container">
+              <button className="MyPageMain-button" onClick={() => showSection('info-edit')}>정보 수정</button>
+            </div>
           </div>
 
           {/* 내 정보 수정 섹션 */}
           <div className={`MyPageMain-section ${selectedSection === 'info-edit' ? 'active' : ''}`} id="info-edit">
             <h2>내 정보 수정</h2>
             <div className="MyPageMain-profile-info">
-              <img src={userInfo.profileImage} alt="Profile" className="MyPageMain-profile-img" />
               <div>
                 <label>이름:</label>
                 <p>{userInfo.name}</p>
@@ -142,30 +144,16 @@ function UserMypage() {
                   onChange={(e) => setEditedInfo({ ...editedInfo, regionCode: e.target.value })}
                 />
               </div>
-              <div>
-                <label>프로필 이미지:</label>
-                <input className="MyPageMain-input"
-                  type="file"
-                  onChange={(e) => {
-                    const reader = new FileReader();
-                    reader.onload = () => {
-                      setEditedInfo({ ...editedInfo, profileImage: reader.result });
-                    };
-                    if (e.target.files[0]) {
-                      reader.readAsDataURL(e.target.files[0]);
-                    }
-                  }}
-                />
-              </div>
             </div>
-            <button className="MyPageMain-button" onClick={handleEditSubmit}>수정 완료</button>
+            <div className="MyPageMain-button-container">
+              <button className="MyPageMain-button" onClick={handleEditSubmit}>수정 완료</button>
+            </div>
           </div>
 
           {/* 회원 탈퇴 섹션 */}
           <div className={`MyPageMain-section ${selectedSection === 'account-delete' ? 'active' : ''}`} id="account-delete">
             <h2>회원 탈퇴</h2>
             <div className="MyPageMain-profile-info">
-              <img src={userInfo.profileImage} alt="Profile" className="MyPageMain-profile-img" />
               <p><strong>이름:</strong> {userInfo.name}</p>
               <p><strong>이메일:</strong> {userInfo.email}</p>
               <p><strong>전화번호:</strong> {userInfo.phone}</p>
@@ -178,18 +166,21 @@ function UserMypage() {
                   value={emailInput}
                   onChange={(e) => setEmailInput(e.target.value)}
                 />
-                <button className="MyPageMain-button" onClick={handleEmailSubmit}>탈퇴하기</button>
+                <div className="MyPageMain-button-container">
+                  <button className="MyPageMain-button" onClick={handleEmailSubmit}>탈퇴하기</button>
+                </div>
               </div>
             ) : (
-              <button className="MyPageMain-button" onClick={handleAccountDelete}>탈퇴하기</button>
+              <div className="MyPageMain-button-container">
+                <button className="MyPageMain-button" onClick={handleAccountDelete}>탈퇴하기</button>
+              </div>
             )}
           </div>
         </div>
       </div>
     </div>
-<Footer />
-</>
-);
+    <Footer />
+  </>);
 }
 
 export default UserMypage;
