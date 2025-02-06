@@ -1,6 +1,6 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card';
-import './Announcement.css';
+import './css/Announcement.css';
 export default function Announcement() {
   return (
     <>

@@ -2,9 +2,9 @@ import React from 'react';
 import { Carousel } from 'react-bootstrap';
 
 // 로컬 이미지 파일 import
-import wallPaper001 from './wall_paper_001.jpg';
-import wallPaper002 from './wall_paper_002.jpg';
-import wallPaper003 from './wall_paper_003.jpg';
+import wallPaper001 from './include/wall_paper_001.jpg';
+import wallPaper002 from './include/wall_paper_002.jpg';
+import wallPaper003 from './include/wall_paper_003.jpg';
 
 function MainCarousel() {
   return (

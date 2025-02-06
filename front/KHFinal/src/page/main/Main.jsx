@@ -14,8 +14,8 @@ const Main = () => {
   return (
     <>
       <Header />
-      <MainCarousel />
-      <Container fluid>
+      <Container>
+        <MainCarousel />
         <Announcement />
         <Top4 />
         <StartFestival />
