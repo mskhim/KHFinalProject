@@ -1,25 +1,23 @@
-import React, { useState } from 'react';
-import './UserCart.css';
+import React, { useState, useEffect } from 'react';
+import './css/UserCart.css';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
-
 function UserCart() {
-  const [cartItems, setCartItems] = useState([
+  // 장바구니에 담긴 아이템들 초기 상태 설정
+  const [cartItems, setCartItems] = useState([  // 초기 장바구니 아이템들 설정
     {
       id: 1,
       festivalName: '축제01',
-      ticketImage: '/img/1010.jpg',
-      quantity: 2,
+      quantity: 2,  // 수량
       date: '2025-05-01',
       endDate: '2025-05-03',
       description: '이 축제는 다양한 문화 공연과 체험이 가득한 축제입니다!',
-      price: 50000,
+      price: 50000,  // 가격
     },
     {
       id: 2,
       festivalName: '축제02',
-      ticketImage: '/img/2020.jpg',
       quantity: 1,
       date: '2025-07-15',
       endDate: '2025-07-17',
@@ -29,7 +27,6 @@ function UserCart() {
     {
       id: 3,
       festivalName: '축제03',
-      ticketImage: '/img/1010.jpg',
       quantity: 3,
       date: '2025-08-10',
       endDate: '2025-08-12',
@@ -39,7 +36,6 @@ function UserCart() {
     {
       id: 4,
       festivalName: '축제04',
-      ticketImage: '/img/2020.jpg',
       quantity: 1,
       date: '2025-09-01',
       endDate: '2025-09-05',
@@ -48,148 +44,172 @@ function UserCart() {
     },
   ]);
 
-  const [selectedItems, setSelectedItems] = useState([]);
-  const [totalAmount, setTotalAmount] = useState(0);
+  // 선택된 아이템들을 저장하는 상태
+  const [selectedItems, setSelectedItems] = useState([]);  // 선택된 아이템들의 ID 저장
+  // 총 결제 금액을 저장하는 상태
+  const [totalAmount, setTotalAmount] = useState(0);  // 결제 금액 초기화
 
-  // 수량 변경 시 선택된 항목들만 기준으로 금액 계산
+  // 수량 변경 시 호출되는 함수
   const handleQuantityChange = (id, change) => {
     setCartItems(prevCartItems => {
+      // 장바구니 아이템 중에서 해당 id를 가진 아이템의 수량을 변경
       const updatedCart = prevCartItems.map(item =>
-        item.id === id ? { ...item, quantity: Math.max(item.quantity + change, 1) } : item
+        item.id === id ? { ...item, quantity: Math.max(item.quantity + change, 1) } : item  // 수량이 1 이하로 내려가지 않게 처리
       );
-      
-      // 수량 변경 후 선택된 항목들만 기준으로 총 금액을 계산
-      calculateTotalAmount(selectedItems);
+
+      // 변경된 장바구니 상태 반환
       return updatedCart;
     });
   };
 
+  // 아이템을 장바구니에서 삭제하는 함수
   const handleRemoveItem = (id) => {
+    // 해당 id를 가진 아이템을 장바구니에서 삭제
     const updatedCart = cartItems.filter(item => item.id !== id);
     setCartItems(updatedCart);
-    
-    // 항목 삭제 후 선택된 항목들만 기준으로 총 금액을 계산
-    calculateTotalAmount(selectedItems);
+
+    // 삭제된 아이템을 선택된 아이템 목록에서 제거
+    setSelectedItems(prevSelectedItems => prevSelectedItems.filter(itemId => itemId !== id));
+
+    // 삭제 후, 선택된 항목들의 총 금액을 다시 계산
+    calculateTotalAmount(selectedItems.filter(itemId => itemId !== id));  // 삭제된 항목을 제외하고 계산
   };
 
+  // 개별 아이템을 선택하거나 선택 해제하는 함수
   const handleSelectItem = (id) => {
     setSelectedItems(prev => {
+      // 선택된 항목 배열에서 해당 아이템 id가 있으면 제거하고, 없으면 추가
       const newSelected = prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id];
-      
-      // 선택된 항목들만 기준으로 총 금액을 계산
-      calculateTotalAmount(newSelected);
+
+      // 선택된 항목들에 대한 총 결제 금액 계산
       return newSelected;
     });
   };
 
+  // 모든 아이템을 선택하거나 선택 해제하는 함수
   const handleSelectAll = () => {
+    // 전체 선택 체크박스를 클릭했을 때, 모든 아이템을 선택하거나 선택 해제
     const newSelected = selectedItems.length === cartItems.length ? [] : cartItems.map(item => item.id);
-    setSelectedItems(newSelected);
-    calculateTotalAmount(newSelected);
+    setSelectedItems(newSelected);  // 선택된 아이템 목록 업데이트
   };
 
-  // 선택된 항목들만 기준으로 총 금액을 계산
+  // 선택된 항목들의 총 결제 금액을 계산하는 함수
   const calculateTotalAmount = (selected) => {
+    // 선택된 항목들에 대해서 가격 * 수량을 더하여 총 금액을 계산
     const total = selected.reduce((sum, id) => {
-      const item = cartItems.find(i => i.id === id);
-      return sum + item.price * item.quantity;
+      const item = cartItems.find(i => i.id === id);  // 해당 아이템을 찾기
+      return sum + item.price * item.quantity;  // 가격 * 수량을 더한 값을 반환
     }, 0);
+    
+    // 계산된 총 결제 금액을 상태에 업데이트
     setTotalAmount(total);
   };
+
+  // cartItems 또는 selectedItems가 변경될 때마다 총 결제 금액을 자동으로 계산
+  useEffect(() => {
+    calculateTotalAmount(selectedItems);  // selectedItems 변경될 때마다 총 금액 계산
+  }, [cartItems, selectedItems]);  // cartItems와 selectedItems가 변경될 때마다 실행
+
   return (
     <>
+      {/* Header 컴포넌트 */}
       <Header />
       <div className="Cart-container">
-      <header className="Cart-header">
-        <h1>장바구니</h1>
-      </header>
+        <header className="Cart-header">
+          <h1>장바구니</h1>
+        </header>
 
-      <div className="Cart-wrapper">
-        <table className="Cart-table">
-          <thead className='Cart-thead'>
-            <tr>
-              <th>
-                <input
-                  type="checkbox"
-                  checked={selectedItems.length === cartItems.length}
-                  onChange={handleSelectAll}
-                />
-              </th>
-              <th>상품명</th>
-              <th>가격</th>
-              <th>수량</th>
-              <th>삭제</th>
-            </tr>
-          </thead>
-          <tbody>
-            {cartItems.length > 0 ? (
-              cartItems.map(item => (
-                <tr key={item.id}>
-                  <td>
-                    <input
-                      type="checkbox"
-                      checked={selectedItems.includes(item.id)}
-                      onChange={() => handleSelectItem(item.id)}
-                    />
-                  </td>
-                  <td>
-                    <div className="Cart-festival-info">
-                      <div className="Cart-festival-text">
-                        <h3>
-                          <a href="#" className="Cart-festival-link">{item.festivalName}</a>
-                        </h3>
-                        <p className="Cart-festival-date">축제 일시 : {item.date} ~ {item.endDate}</p>
-                        <p className="Cart-festival-description">상세 설명 : {item.description}</p>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td>{item.price.toLocaleString()} 원</td>
-                  <td>
-                    <div className="Cart-item-quantity">
-                      <button
-                        className="Cart-quantity-btn"
-                        onClick={() => handleQuantityChange(item.id, -1)}
-                      >
-                        -
-                      </button>
-                      <span className="Cart-quantity-display">{item.quantity}</span>
-                      <button
-                        className="Cart-quantity-btn"
-                        onClick={() => handleQuantityChange(item.id, 1)}
-                      >
-                        +
-                      </button>
-                    </div>
-                  </td>
-                  <td>
-                    <button
-                      className="Cart-remove-btn"
-                      onClick={() => handleRemoveItem(item.id)}
-                    >
-                      삭제
-                    </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
+        <div className="Cart-wrapper">
+          <table className="Cart-table">
+            <thead className='Cart-thead'>
               <tr>
-                <td colSpan="5">장바구니에 항목이 없습니다.</td>
+                <th>
+                  {/* 전체 선택 체크박스 */}
+                  <input
+                    type="checkbox"
+                    checked={selectedItems.length === cartItems.length}  // 모든 항목이 선택되었을 때 체크박스 선택
+                    onChange={handleSelectAll}  // 체크박스 클릭 시 모든 항목 선택
+                  />
+                </th>
+                <th>상품명</th>
+                <th>가격</th>
+                <th>수량</th>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {cartItems.length > 0 ? (
+                cartItems.map(item => (
+                  <tr key={item.id}>
+                    <td>
+                      {/* 개별 항목 선택 체크박스 */}
+                      <input
+                        type="checkbox"
+                        checked={selectedItems.includes(item.id)}  // 해당 항목이 선택되었을 때 체크박스 선택
+                        onChange={() => handleSelectItem(item.id)}  // 항목 선택 시 해당 아이템만 선택/해제
+                      />
+                    </td>
+                    <td>
+                      <div className="Cart-festival-info">
+                        <div className="Cart-festival-text">
+                          <h3>
+                            <a href="#" className="Cart-festival-link">{item.festivalName}</a>
+                          </h3>
+                          <p className="Cart-festival-date">축제 일시 : {item.date} ~ {item.endDate}</p>
+                          <p className="Cart-festival-description">상세 설명 : {item.description}</p>
+                        </div>
+                      </div>
+                    </td>
 
-        <div className="Cart-summary">
-          <p>총 {selectedItems.length}개의 항목이 선택되었습니다.</p>
-          <p>총 결제 금액: {totalAmount.toLocaleString()} 원</p>
-          <button className="Cart-checkout-btn">결제하기</button>
+                    <td>{item.price.toLocaleString()} 원</td>
+                    <td>
+                      <div className="Cart-item-quantity">
+                        {/* 수량 조절 버튼 */}
+                        <button
+                          className="Cart-quantity-btn"
+                          onClick={() => handleQuantityChange(item.id, -1)}  // 수량 -1
+                        >
+                          -
+                        </button>
+                        <span className="Cart-quantity-display">{item.quantity}</span>
+                        <button
+                          className="Cart-quantity-btn"
+                          onClick={() => handleQuantityChange(item.id, 1)}  // 수량 +1
+                        >
+                          +
+                        </button>
+                      </div>
+                    </td>
+                    <td>
+                      {/* 아이템 삭제 버튼 */}
+                      <button
+                        className="Cart-remove-btn"
+                        onClick={() => handleRemoveItem(item.id)}  // 아이템 삭제
+                      >
+                        삭제
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5">장바구니에 항목이 없습니다.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+
+          <div className="Cart-summary">
+            <p>총 {selectedItems.length}개의 항목이 선택되었습니다.</p>
+            <p>총 결제 금액: {totalAmount.toLocaleString()} 원</p>
+            {/* 결제 버튼 */}
+            <button className="Cart-checkout-btn">결제하기</button>
+          </div>
         </div>
       </div>
-    </div>
+      {/* Footer 컴포넌트 */}
       <Footer />
     </>
   );
-};
+}
 
 export default UserCart;
