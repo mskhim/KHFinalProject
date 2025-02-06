@@ -1,7 +1,7 @@
 import React from 'react';
 import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
-import './StartFestival.css';
+import './css/StartFestival.css';
 
 function StartFestival() {
   const imageUrls = [
@@ -13,8 +13,12 @@ function StartFestival() {
   ];
 
   const items = imageUrls.map((url, index) => (
-    <div className="carousel-item" key={index}>
-      <img src={url} alt={`Item ${index + 1}`} className="carousel-image" />
+    <div className="carousel-item StartFestival-item" key={index}>
+      <img
+        src={url}
+        alt={`Item ${index + 1}`}
+        className="carousel-image StartFestival-image"
+      />
     </div>
   ));
 
@@ -27,7 +31,7 @@ function StartFestival() {
   return (
     <>
       <h3>&ensp;StartingSoon</h3>
-      <div className="carousel-container">
+      <div className="carousel-container StartFestival-container">
         <AliceCarousel
           mouseTracking
           items={items}

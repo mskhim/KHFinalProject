@@ -1,10 +1,16 @@
 import { Header, Footer } from '../../components';
+import { Container } from 'react-bootstrap';
+import EventMapKorea from './include/EventMapKorea';
+import EventMapList from './include/EventMapList';
 
 const EventMap = () => {
   return (
     <>
       <Header page="map" />
-      <h1>EventMap</h1>
+      <Container>
+        <EventMapKorea />
+        <EventMapList />
+      </Container>
       <Footer />
     </>
   );

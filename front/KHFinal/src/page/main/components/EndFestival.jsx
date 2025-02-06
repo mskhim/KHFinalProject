@@ -1,7 +1,7 @@
 import React from 'react';
 import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
-
+import './css/EndFestival.css';
 export default function EndFestival() {
   const imageUrls = [
     'https://picsum.photos/300/200?random=6',
@@ -12,8 +12,12 @@ export default function EndFestival() {
   ];
 
   const items = imageUrls.map((url, index) => (
-    <div className="carousel-item" key={index}>
-      <img src={url} alt={`Item ${index + 1}`} className="carousel-image" />
+    <div className="carousel-item EndFestival-item" key={index}>
+      <img
+        src={url}
+        alt={`Item ${index + 1}`}
+        className="carousel-image EndFestival-image"
+      />
     </div>
   ));
 
@@ -25,7 +29,7 @@ export default function EndFestival() {
   return (
     <>
       <h3>&ensp;EndingSoon</h3>
-      <div className="carousel-container">
+      <div className="carousel-container .EndFestival-container">
         <AliceCarousel
           mouseTracking
           items={items}
