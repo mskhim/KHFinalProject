@@ -75,7 +75,7 @@ a {
 /* ✅ 라이트 모드 스타일 div용*/
 .light-mode.div {
   color: #333;
-  border-color: white;
+  background-color: white;
   border-color: #333;
 }
 

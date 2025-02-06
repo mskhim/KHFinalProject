@@ -98,6 +98,70 @@ const EventRead = () => {
       LONGITUDE: 126.987654,
       rating: 4.5,
     },
+    {
+      NO: 6,
+      NAME: '담양 대나무 축제',
+      PLACE: '전남 담양 죽녹원',
+      START_DATE: '2025-05-01',
+      END_DATE: '2025-05-05',
+      CONTENT: '대나무의 고장 담양에서 펼쳐지는 자연 친화 축제',
+      GOVERNING: '전라남도 담양군청',
+      HOST: '담양군 관광협회',
+      TEL: '061-432-1098',
+      HOMEPAGE: 'https://www.bamboo.or.kr',
+      ADRESS: '전라남도 담양군 담양읍 죽녹원로 119',
+      LATITUDE: 35.321098,
+      LONGITUDE: 126.987654,
+      rating: 4.5,
+    },
+    {
+      NO: 7,
+      NAME: '담양 대나무 축제',
+      PLACE: '전남 담양 죽녹원',
+      START_DATE: '2025-05-01',
+      END_DATE: '2025-05-05',
+      CONTENT: '대나무의 고장 담양에서 펼쳐지는 자연 친화 축제',
+      GOVERNING: '전라남도 담양군청',
+      HOST: '담양군 관광협회',
+      TEL: '061-432-1098',
+      HOMEPAGE: 'https://www.bamboo.or.kr',
+      ADRESS: '전라남도 담양군 담양읍 죽녹원로 119',
+      LATITUDE: 35.321098,
+      LONGITUDE: 126.987654,
+      rating: 4.5,
+    },
+    {
+      NO: 8,
+      NAME: '담양 대나무 축제',
+      PLACE: '전남 담양 죽녹원',
+      START_DATE: '2025-05-01',
+      END_DATE: '2025-05-05',
+      CONTENT: '대나무의 고장 담양에서 펼쳐지는 자연 친화 축제',
+      GOVERNING: '전라남도 담양군청',
+      HOST: '담양군 관광협회',
+      TEL: '061-432-1098',
+      HOMEPAGE: 'https://www.bamboo.or.kr',
+      ADRESS: '전라남도 담양군 담양읍 죽녹원로 119',
+      LATITUDE: 35.321098,
+      LONGITUDE: 126.987654,
+      rating: 4.5,
+    },
+    {
+      NO: 9,
+      NAME: '담양 대나무 축제',
+      PLACE: '전남 담양 죽녹원',
+      START_DATE: '2025-05-01',
+      END_DATE: '2025-05-05',
+      CONTENT: '대나무의 고장 담양에서 펼쳐지는 자연 친화 축제',
+      GOVERNING: '전라남도 담양군청',
+      HOST: '담양군 관광협회',
+      TEL: '061-432-1098',
+      HOMEPAGE: 'https://www.bamboo.or.kr',
+      ADRESS: '전라남도 담양군 담양읍 죽녹원로 119',
+      LATITUDE: 35.321098,
+      LONGITUDE: 126.987654,
+      rating: 4.5,
+    },
   ];
   const param = useParams();
   const [eventInfo, setEventInfo] = useState({});
@@ -200,8 +264,8 @@ const EventRead = () => {
 
               {/* 우측 버튼 */}
               <Button
-                variant="light"
-                className="position-absolute end-0 z-3"
+                variant="none"
+                className={`position-absolute end-0 z-3 ${getDarkModeHover()} border button`}
                 style={{ opacity: 0.7 }}
                 onClick={scrollRight}
               >

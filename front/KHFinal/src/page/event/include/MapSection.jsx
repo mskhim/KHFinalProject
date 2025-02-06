@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 const MapSection = ({ LATITUDE, LONGITUDE }) => {
   useEffect(() => {
     const clientId = import.meta.env.VITE_APP_NAVER_MAPS_CLIENT_ID;
-    console.log('네이버 지도 API Key:', clientId); // 확인용
 
     const script = document.createElement('script');
     script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${clientId}`;
