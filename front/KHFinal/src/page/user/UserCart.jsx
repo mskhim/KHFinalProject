@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './UserCart.css';
+import './css/UserCart.css';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
@@ -9,7 +9,6 @@ function UserCart() {
     {
       id: 1,
       festivalName: '축제01',
-      ticketImage: '/img/1010.jpg',
       quantity: 2,
       date: '2025-05-01',
       endDate: '2025-05-03',
@@ -19,7 +18,6 @@ function UserCart() {
     {
       id: 2,
       festivalName: '축제02',
-      ticketImage: '/img/2020.jpg',
       quantity: 1,
       date: '2025-07-15',
       endDate: '2025-07-17',
@@ -29,7 +27,6 @@ function UserCart() {
     {
       id: 3,
       festivalName: '축제03',
-      ticketImage: '/img/1010.jpg',
       quantity: 3,
       date: '2025-08-10',
       endDate: '2025-08-12',
@@ -39,7 +36,6 @@ function UserCart() {
     {
       id: 4,
       festivalName: '축제04',
-      ticketImage: '/img/2020.jpg',
       quantity: 1,
       date: '2025-09-01',
       endDate: '2025-09-05',

@@ -1,42 +1,44 @@
-/* BookingList 컨테이너 */
 .BookingList-BookingList-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
-  padding: 20px;
+  padding: 20px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* 헤더 스타일 */
 .BookingList-header {
   text-align: left;
   width: 100%;
-  margin-bottom: 30px;
-  font-size: 2rem;
-  padding-left: 100px;
+  margin-top: 0;
+  margin-left: 0;
+  margin-bottom: 40px;
+  font-size: 2.5rem;
+  color: #252429;
 }
 
-/* 전체 래퍼 컨테이너 */
 .BookingList-BookingList-wrapper {
   display: flex;
   justify-content: space-between;
   width: 100%;
   max-width: 1200px;
+  margin: 0 auto;
+  gap: 30px;
 }
 
-/* 왼쪽 메뉴 스타일 */
 .BookingList-menu {
   width: 220px;
   padding: 20px;
   box-sizing: border-box;
-  border-top: 3.5px solid;
-  border-bottom: 3.5px solid;
+  border-top: 3.5px solid #ddd;
+  border-bottom: 3.5px solid #ddd;
   min-width: 200px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: auto;
-  max-height: 300px;
+  max-height: 500px;
 }
 
 .BookingList-menu ul {
@@ -45,25 +47,24 @@
 }
 
 .BookingList-menu li {
-  margin: 15px 0;
+  margin: 20px 0;
 }
 
 .BookingList-menu span {
   font-weight: bold;
   display: block;
-  padding: 10px;
+  padding: 12px 18px;
   border-radius: 5px;
   position: relative;
   transition: color 0.3s ease, padding-left 0.3s ease;
   cursor: pointer;
+  font-size: 1.1rem;
 }
 
-/* 메뉴 항목 hover 스타일 */
 .BookingList-menu span:hover {
-  padding-left: 20px;
+  padding-left: 25px;
 }
 
-/* 클릭한 메뉴 항목 밑줄 유지 */
 .BookingList-menu span::before {
   content: "";
   position: absolute;
@@ -87,16 +88,14 @@
   width: 100%;
 }
 
-/* 오른쪽 콘텐츠 영역 */
 .BookingList-content {
-  margin-left: 270px;
-  padding: 20px;
-  width: calc(100% - 220px);
+  margin-left: 90px;
+  padding: 20px 30px;
+  width: calc(100% - 90px);
   display: flex;
   flex-direction: column;
 }
 
-/* 예약 내역과 취소 내역 섹션 */
 .BookingList-section {
   display: none;
 }
@@ -105,7 +104,6 @@
   display: block;
 }
 
-/* 테이블 스타일 */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -119,45 +117,65 @@ th, td {
 }
 
 th {
-  background-color: #f2f2f2;
+  background-color: #f8f9fa;
+}
+
+/* 왼쪽 첫 번째 셀에 border 제거 */
+table th:first-child, table td:first-child {
+  border-left: none;
+}
+
+/* 오른쪽 마지막 셀에 border 제거 */
+table th:last-child, table td:last-child {
+  border-right: none;
 }
 
 td input[type="checkbox"] {
   transform: scale(1.5);
 }
 
-/* 버튼 스타일 */
+
 .BookingList-button {
-  padding: 10px 20px;
-  background-color: #252429;
-  color: white;
+  padding: 12px 25px;
+  margin-top: 30px;
+  cursor: pointer;
   border: none;
   border-radius: 5px;
-  margin-top: 20px;
-  cursor: pointer;
+  background-color: #252429;
+  color: white;
+  width: 100%;
+  font-size: 1.1rem;
 }
 
 .BookingList-button:hover {
   background-color: #252429d8;
 }
 
-/* 예약 취소 관련 섹션 */
 .BookingList-section h2 {
-  margin-bottom: 20px;
-  font-size: 1.5rem;
+  margin-bottom: 25px;
+  font-size: 1.8rem;
   color: #495057;
 }
 
+.BookingList-warning {
+  color: red;
+  text-align: right;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+
 /* 모바일 화면에서의 스타일 */
-@media (max-width: 767px) {
+@media (max-width: 1024px) {
   .BookingList-BookingList-wrapper {
     flex-direction: column;
+    gap: 20px;
   }
 
   .BookingList-menu {
-    margin-left: 0;
     width: 100%;
-    padding: 10px;
+    margin-left: 0;
+    margin-bottom: 25px;
   }
 
   .BookingList-content {
@@ -168,9 +186,43 @@ td input[type="checkbox"] {
   .BookingList-header {
     text-align: center;
     padding-left: 0;
+    margin-left: 0;
   }
 
   .BookingList-menu li {
-    margin: 10px 0;
+    margin: 15px 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .BookingList-BookingList-wrapper {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .BookingList-menu {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .BookingList-content {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .BookingList-menu li {
+    margin: 12px 0;
+  }
+
+  .BookingList-button {
+    margin-top: 20px;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  th, td {
+    padding: 10px;
   }
 }

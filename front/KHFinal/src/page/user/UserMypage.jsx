@@ -1,7 +1,7 @@
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import React, { useContext, useState } from 'react';
-import './UserMypage.css';
+import './css/UserMypage.css';
 import { Context } from "../../Context";
 
 function UserMypage() {
@@ -97,12 +97,9 @@ function UserMypage() {
           <div className="MyPageMain-content">
             {/* 내 정보 조회 섹션 */}
             <div className={`MyPageMain-section ${selectedSection === 'info-view' ? 'active' : ''}`} id="info-view">
-              <h2>내 정보 조회</h2>
-
               {/* 아이디 및 비밀번호 카드 */}
               {Object.keys(userInfo).length > 0 ? (
                 <div className="card">
-                  <div className="card-header">아이디 및 비밀번호</div>
                   <div className="card-body">
                     <div className="info-group">
                       {isEditable ? (
@@ -135,7 +132,6 @@ function UserMypage() {
               {/* 이메일, 이름, 생년월일, 성별, 휴대폰 번호, 지역 코드 카드 */}
               {Object.keys(userInfo).length > 0 ? (
                 <div className="card">
-                  <div className="card-header">개인 정보</div>
                   <div className="card-body">
                     <div className="info-group">
                       {isEditable ? (
@@ -233,16 +229,16 @@ function UserMypage() {
             {/* 회원 탈퇴 섹션 */}
             <div className={`MyPageMain-section ${selectedSection === 'account-delete' ? 'active' : ''}`} id="account-delete">
               <h2>회원 탈퇴</h2>
-              <div>
+              <div className="account-delete-container">
                 <p>회원 탈퇴를 원하시면 이메일을 입력해 주세요.</p>
                 <label>이메일을 입력하세요:</label>
-                <input
-                  type="email"
-                  value={emailInput}
-                  onChange={(e) => setEmailInput(e.target.value)}
-                  className={emailError ? 'error' : ''}
-                />
-                <div className="MyPageMain-button-container">
+                <div className="input-with-button">
+                  <input
+                    type="email"
+                    value={emailInput}
+                    onChange={(e) => setEmailInput(e.target.value)}
+                    className={emailError ? 'error' : ''}
+                  />
                   <button className="MyPageMain-button" onClick={handleEmailSubmit}>탈퇴하기</button>
                 </div>
               </div>
@@ -256,3 +252,4 @@ function UserMypage() {
 }
 
 export default UserMypage;
+
