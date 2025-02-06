@@ -32,6 +32,7 @@ const EventRead = () => {
       ADRESS: '서울특별시 영등포구 여의도동 84-3',
       LATITUDE: 37.523456,
       LONGITUDE: 126.923789,
+      rating: 4.5,
     },
     {
       NO: 2,
@@ -47,6 +48,7 @@ const EventRead = () => {
       ADRESS: '부산광역시 해운대구 수영강변대로 120',
       LATITUDE: 35.171165,
       LONGITUDE: 129.127188,
+      rating: 4.5,
     },
     {
       NO: 3,
@@ -62,6 +64,7 @@ const EventRead = () => {
       ADRESS: '경상남도 진주시 강남동 1-1',
       LATITUDE: 35.192834,
       LONGITUDE: 128.084728,
+      rating: 5,
     },
     {
       NO: 4,
@@ -77,6 +80,7 @@ const EventRead = () => {
       ADRESS: '강원도 화천군 화천읍 대이리 12-1',
       LATITUDE: 38.106437,
       LONGITUDE: 127.706932,
+      rating: 3.5,
     },
     {
       NO: 5,
@@ -92,6 +96,7 @@ const EventRead = () => {
       ADRESS: '전라남도 담양군 담양읍 죽녹원로 119',
       LATITUDE: 35.321098,
       LONGITUDE: 126.987654,
+      rating: 4.5,
     },
   ];
   const param = useParams();
@@ -274,7 +279,7 @@ const EventRead = () => {
         {/* 리뷰 창과 맵 */}
         <Row>
           <Col md={8}>
-            <ReviewSection />
+            <ReviewSection rating={eventInfo.rating} />
           </Col>
           <Col md={4}>
             <MapSection
