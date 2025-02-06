@@ -183,7 +183,7 @@ body.Header-dark-mode .Header-festival-nav-item.Header-active {
   bottom: -5px;
   width: 100%;
   height: 3px;
-  background-color: red;
+  background-color: black;
   border-radius: 3px;
   opacity: 1;
   transform: scaleX(1);

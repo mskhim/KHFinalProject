@@ -13,6 +13,7 @@ import { FaGithub, FaBell, FaMoon, FaSun, FaCartPlus } from 'react-icons/fa';
 import './Header.css';
 import { handleLogout, checkAuthStatus } from '../page/user/userApi';
 import { Context } from '../Context';
+import ScrollToTopButton from './ui/ScrollToTopButton';
 
 const Header = ({ page }) => {
   const navigate = useNavigate();
@@ -97,16 +98,7 @@ const Header = ({ page }) => {
 
   return (
     <>
-      <Button
-        id="Header-up-button"
-        className={`up-button ${getDarkModeHover()} select`}
-        onClick={() => {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }}
-        variant="none"
-      >
-        UP
-      </Button>
+      <ScrollToTopButton />
       <Navbar
         expand="lg"
         className={`py-3 ${
