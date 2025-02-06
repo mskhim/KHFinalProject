@@ -269,3 +269,6 @@ body.Header-dark-mode .Header-user-dropdown .Header-dropdown-item:hover {
   cursor: pointer;
   z-index: 9999 !important;
 }
+.Header-logo {
+  line-height: 100px;
+}

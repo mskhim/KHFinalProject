@@ -15,6 +15,7 @@ import { handleLogout, refreshAccessToken } from '../page/user/userApi';
 import { Context } from '../Context';
 import ScrollToTopButton from './ui/ScrollToTopButton';
 import TokenRemain from './ui/TokenRemain';
+import ViVaFesta from '../assets/ViVaFesta.png';
 const Header = ({ page }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -121,9 +122,14 @@ const Header = ({ page }) => {
           <Navbar.Brand
             as={NavLink}
             to="/"
-            className={darkMode ? 'text-light' : 'text-dark'}
+            className={`${darkMode ? 'text-light' : 'text-dark'} `}
           >
-            VIVAFESTA
+            <img
+              src={ViVaFesta}
+              alt="ViVaFesta"
+              className="Header-logo align-content-center pb-1"
+              height={20}
+            />
           </Navbar.Brand>
 
           <Navbar.Toggle aria-controls="navbarColor01" />
@@ -137,7 +143,7 @@ const Header = ({ page }) => {
               </Nav.Link>
               <NavDropdown
                 title={
-                  <span className={darkMode ? 'text-light' : 'text-dark'}>
+                  <span className={`${darkMode ? 'text-light' : 'text-dark'}`}>
                     고객지원{' '}
                     <BsChevronDown
                       size={16}
@@ -288,7 +294,9 @@ const Header = ({ page }) => {
       </Navbar>
 
       <div
-        className={`Header-festival-nav ${darkMode ? 'Header-dark-mode' : ''} ${
+        className={`Header-festival-nav ${
+          darkMode ? 'bg-dark text-light' : 'bg-white text-dark'
+        } ${
           showFestivalNav
             ? isAnimating
               ? 'Header-with-animation'
