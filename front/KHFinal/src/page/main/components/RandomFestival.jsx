@@ -1,6 +1,7 @@
 import React from 'react';
 import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
+import './css/RandomFestival.css';
 
 export default function RandomFestival() {
   const imageUrls = [
@@ -12,8 +13,12 @@ export default function RandomFestival() {
   ];
 
   const items = imageUrls.map((url, index) => (
-    <div className="carousel-item" key={index}>
-      <img src={url} alt={`Item ${index + 1}`} className="carousel-image" />
+    <div className="carousel-item RandomFestival-item" key={index}>
+      <img
+        src={url}
+        alt={`Item ${index + 1}`}
+        className="carousel-image RandomFestival-image"
+      />
     </div>
   ));
 
@@ -25,7 +30,7 @@ export default function RandomFestival() {
   return (
     <>
       <h3>&ensp;Random</h3>
-      <div className="carousel-container">
+      <div className="carousel-container RandomFestival-container">
         <AliceCarousel
           mouseTracking
           items={items}

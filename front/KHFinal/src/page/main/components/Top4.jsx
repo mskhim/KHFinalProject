@@ -1,6 +1,6 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card';
-import './Top4.css';
+import './css/Top4.css';
 import { useNavigate } from 'react-router-dom';
 
 export default function Top4() {
