@@ -1,8 +1,9 @@
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useRef, useEffect } from 'react';
 import './css/UserMypage.css';
 import { Context } from "../../Context";
+import { Container } from 'react-bootstrap';
 
 function UserMypage() {
   const { getDarkMode, getDarkModeHover } = useContext(Context);
@@ -22,6 +23,12 @@ function UserMypage() {
   });
 
   const [formData, setFormData] = useState(userInfo); // Copy of userInfo for edit
+
+  // 아이디 input에 대한 참조 추가
+  const idInputRef = useRef(null);
+
+  // 이메일 입력창에 대한 참조 추가
+  const emailInputRef = useRef(null);
 
   // 메뉴 항목 클릭 시 호출되는 함수
   const showSection = (sectionId) => {
@@ -72,6 +79,20 @@ function UserMypage() {
     toggleEdit(); // Disable editing
   };
 
+  // 아이디 입력창에 자동으로 포커스를 맞추기 위한 useEffect
+  useEffect(() => {
+    if (isEditable) {
+      idInputRef.current?.focus();  // 수정 모드일 때 아이디 input에 focus
+    }
+  }, [isEditable]);  // isEditable 상태가 변할 때마다 실행
+
+  // 이메일 입력창에 자동으로 포커스를 맞추기 위한 useEffect
+  useEffect(() => {
+    if (selectedSection === 'account-delete') {
+      emailInputRef.current?.focus();  // 회원 탈퇴 페이지일 때 이메일 input에 focus
+    }
+  }, [selectedSection]);  // selectedSection 상태가 변경될 때마다 실행
+
   return (
     <>
       <Header />
@@ -94,130 +115,149 @@ function UserMypage() {
           </div>
 
           {/* 오른쪽 콘텐츠 */}
-          <div className="MyPageMain-content">
+          <Container className="MyPageMain-content w-50">
             {/* 내 정보 조회 섹션 */}
             <div className={`MyPageMain-section ${selectedSection === 'info-view' ? 'active' : ''}`} id="info-view">
               {/* 아이디 및 비밀번호 카드 */}
               {Object.keys(userInfo).length > 0 ? (
-                <div className="card">
-                  <div className="card-body">
-                    <div className="info-group">
-                      {isEditable ? (
-                        <input
-                          type="text"
-                          name="id"
-                          value={formData.id}
-                          onChange={handleInputChange}
-                          className="input-field"
-                        />
-                      ) : (
-                        <p>{formData.id}</p>
-                      )}
-                      {isEditable ? (
-                        <input
-                          type="password"
-                          name="password"
-                          value={formData.password}
-                          onChange={handleInputChange}
-                          className="input-field"
-                        />
-                      ) : (
-                        <p>{formData.password}</p>
-                      )}
+                <div className="MyPageMain-card pb-3">
+                  <div className="MyPageMain-card-body">
+                    <div className="MyPageMain-info-group">
+                      <div className="MyPageMain-input-group">
+                        <label htmlFor="id" className="MyPageMain-input-label">아이디</label>
+                        {isEditable ? (
+                          <input
+                            ref={idInputRef}  // 아이디 input에 ref 연결
+                            type="text"
+                            name="id"
+                            value={formData.id}
+                            onChange={handleInputChange}
+                            className="MyPageMain-input-field"
+                          />
+                        ) : (
+                          <p>{formData.id}</p>
+                        )}
+                      </div>
+
+                      <div className="MyPageMain-input-group">
+                        <label htmlFor="password" className="MyPageMain-input-label">비밀번호</label>
+                        {isEditable ? (
+                          <input
+                            type="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleInputChange}
+                            className="MyPageMain-input-field"
+                          />
+                        ) : (
+                          <p>{formData.password}</p>
+                        )}
+                      </div>
+
+                      <div className="MyPageMain-input-group">
+                        <label htmlFor="email" className="MyPageMain-input-label">이메일</label>
+                        {isEditable ? (
+                          <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            className="MyPageMain-input-field"
+                          />
+                        ) : (
+                          <p>{formData.email}</p>
+                        )}
+                      </div>
+
+                      <div className="MyPageMain-input-group">
+                        <label htmlFor="name" className="MyPageMain-input-label">이름</label>
+                        {isEditable ? (
+                          <input
+                            type="text"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            className="MyPageMain-input-field"
+                          />
+                        ) : (
+                          <p>{formData.name}</p>
+                        )}
+                      </div>
+
+                      <div className="MyPageMain-input-group">
+                        <label htmlFor="birthDate" className="MyPageMain-input-label">생년월일</label>
+                        {isEditable ? (
+                          <input
+                            type="date"
+                            name="birthDate"
+                            value={formData.birthDate}
+                            onChange={handleInputChange}
+                            className="MyPageMain-input-field"
+                          />
+                        ) : (
+                          <p>{formData.birthDate}</p>
+                        )}
+                      </div>
+
+                      <div className="MyPageMain-input-group">
+                        <label htmlFor="gender" className="MyPageMain-input-label">성별</label>
+                        {isEditable ? (
+                          <input
+                            type="text"
+                            name="gender"
+                            value={formData.gender}
+                            onChange={handleInputChange}
+                            className="MyPageMain-input-field"
+                          />
+                        ) : (
+                          <p>{formData.gender}</p>
+                        )}
+                      </div>
+
+                      <div className="MyPageMain-input-group">
+                        <label htmlFor="phone" className="MyPageMain-input-label">휴대폰 번호</label>
+                        {isEditable ? (
+                          <input
+                            type="tel"
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleInputChange}
+                            className="MyPageMain-input-field"
+                          />
+                        ) : (
+                          <p>{formData.phone}</p>
+                        )}
+                      </div>
+
+                      <div className="MyPageMain-input-group">
+                        <label htmlFor="regionCode" className="MyPageMain-input-label">지역</label>
+                        {isEditable ? (
+                          <input
+                            type="text"
+                            name="regionCode"
+                            value={formData.regionCode}
+                            onChange={handleInputChange}
+                            className="MyPageMain-input-field"
+                          />
+                        ) : (
+                          <p>{formData.regionCode}</p>
+                        )}
+                      </div>
+
                     </div>
                   </div>
                 </div>
               ) : null}
 
-              {/* 이메일, 이름, 생년월일, 성별, 휴대폰 번호, 지역 코드 카드 */}
-              {Object.keys(userInfo).length > 0 ? (
-                <div className="card">
-                  <div className="card-body">
-                    <div className="info-group">
-                      {isEditable ? (
-                        <input
-                          type="email"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleInputChange}
-                          className="input-field"
-                        />
-                      ) : (
-                        <p>{formData.email}</p>
-                      )}
-
-                      {isEditable ? (
-                        <input
-                          type="text"
-                          name="name"
-                          value={formData.name}
-                          onChange={handleInputChange}
-                          className="input-field"
-                        />
-                      ) : (
-                        <p>{formData.name}</p>
-                      )}
-
-                      {isEditable ? (
-                        <input
-                          type="date"
-                          name="birthDate"
-                          value={formData.birthDate}
-                          onChange={handleInputChange}
-                          className="input-field"
-                        />
-                      ) : (
-                        <p>{formData.birthDate}</p>
-                      )}
-
-                      {isEditable ? (
-                        <input
-                          type="text"
-                          name="gender"
-                          value={formData.gender}
-                          onChange={handleInputChange}
-                          className="input-field"
-                        />
-                      ) : (
-                        <p>{formData.gender}</p>
-                      )}
-
-                      {isEditable ? (
-                        <input
-                          type="tel"
-                          name="phone"
-                          value={formData.phone}
-                          onChange={handleInputChange}
-                          className="input-field"
-                        />
-                      ) : (
-                        <p>{formData.phone}</p>
-                      )}
-
-                      {isEditable ? (
-                        <input
-                          type="text"
-                          name="regionCode"
-                          value={formData.regionCode}
-                          onChange={handleInputChange}
-                          className="input-field"
-                        />
-                      ) : (
-                        <p>{formData.regionCode}</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ) : null}
-
-              <div className="button-container">
+              <div className="MyPageMain-button-container">
                 {Object.keys(userInfo).length > 0 ? (
                   <>
-                    <button className="MyPageMain-button" onClick={isEditable ? handleSave : toggleEdit}>
+                    <button className={`MyPageMain-button ${isEditable ?'w-50': 'w-100'}`}
+                    onClick={isEditable ? handleSave : toggleEdit}>
                       {isEditable ? '완료' : '수정하기'}
                     </button>
                     {isEditable && (
-                      <button className="MyPageMain-button" onClick={handleCancel}>취소</button>
+                      <button className="MyPageMain-button w-50" onClick={handleCancel}>취소</button>
                     )}
                   </>
                 ) : (
@@ -229,21 +269,24 @@ function UserMypage() {
             {/* 회원 탈퇴 섹션 */}
             <div className={`MyPageMain-section ${selectedSection === 'account-delete' ? 'active' : ''}`} id="account-delete">
               <h2>회원 탈퇴</h2>
-              <div className="account-delete-container">
-                <p>회원 탈퇴를 원하시면 이메일을 입력해 주세요.</p>
-                <label>이메일을 입력하세요:</label>
-                <div className="input-with-button">
+              <div className="MyPageMain-account-delete-container">
+                <div className="MyPageMain-input-with-button">
+                  <label htmlFor="email-input">탈퇴를 위한 이메일 입력</label>
+                  <div className='d-flex align-items-center mt-3'>
                   <input
+                    ref={emailInputRef}  // 이메일 input에 ref 연결
+                    id="email-input"
                     type="email"
                     value={emailInput}
                     onChange={(e) => setEmailInput(e.target.value)}
-                    className={emailError ? 'error' : ''}
+                    className="MyPageMain-input-field border border-1 mt-0 me-3"
                   />
                   <button className="MyPageMain-button" onClick={handleEmailSubmit}>탈퇴하기</button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </Container>
         </div>
       </div>
       <Footer />
@@ -252,4 +295,3 @@ function UserMypage() {
 }
 
 export default UserMypage;
-

@@ -1,3 +1,48 @@
+/* 공통 Input 스타일 */
+.MyPageMain-input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.MyPageMain-input-field {
+  width: 90%; /* 이메일 입력의 너비를 90%로 줄임 */
+  border: none; /* 기본 테두리 제거 */
+  border-radius: 5px;
+  padding: 8px 15px;
+  font-size: 1rem;
+  height: 40px; /* 기본 높이 40px */
+  background-color: transparent; /* 배경색을 투명하게 설정 */
+  color: inherit; /* 텍스트 색상을 부모의 색상으로 상속받도록 설정 */
+}
+
+.MyPageMain-input-with-button input {
+  margin-top: 20px;
+}
+
+.MyPageMain-input-with-button {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* 입력창과 버튼 간 간격 */
+  position: relative;
+  width: 100%;
+}
+
+.MyPageMain-input-with-button label {
+  position: absolute;
+  top: -20px; /* 입력창 위로 올리기 */
+  left: 0;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333; /* 레이블 색상 */
+}
+
+.MyPageMain-input-with-button input:focus {
+  border-color: #28a745;
+  outline: none;
+  box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+}
+
 .MyPageMain-container {
   display: flex;
   flex-direction: column;
@@ -39,8 +84,8 @@
   justify-content: space-between;
   height: auto;
   max-height: 500px; /* 메뉴 높이를 늘려서 스크롤을 방지 */
+  border-radius: 0px !important;
 }
-
 
 .MyPageMain-menu ul {
   list-style-type: none;
@@ -105,175 +150,76 @@
   display: block;
 }
 
-.card {
+.MyPageMain-card {
   border-radius: 10px;
   border: 1px solid #ddd;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 600px;
   margin-bottom: 30px; /* 카드 간격을 넉넉히 */
+  background-color: none;
 }
 
-.card-header {
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #ddd;
-  padding: 20px 25px;
-  font-weight: bold;
-  font-size: 1.2rem;
-}
-
-.card-body {
+.MyPageMain-card-body {
   padding: 20px;
   display: flex;
   flex-direction: column;
 }
 
-.info-group {
+.MyPageMain-info-group {
   display: flex;
   flex-direction: column;
 }
 
-.info-group > * {
+.MyPageMain-info-group > * {
   margin-bottom: 15px; /* 항목 간 간격 */
-  padding-bottom: 10px; /* 항목 내 여백 */
-  border-bottom: 1px solid #ddd; /* 각 항목 사이에 선 추가 */
+  border-bottom: 1px solid; /* 각 항목 사이에 선 추가 */
 }
 
-.info-group > *:last-child {
-  margin-bottom: -15px; /* 마지막 항목의 여백을 없앰 */
-  border-bottom: none; /* 마지막 항목은 선 없앰 */
+.MyPageMain-info-group > *:last-child {
+  margin-bottom: -20px; /* 마지막 항목의 여백을 없앰 */
 }
 
-.card p {
+.MyPageMain-card p {
   font-size: 0.95rem;
-  color: #6c757d;
 }
 
 .MyPageMain-button-container {
   margin-top: 50px; /* 버튼 간격을 좀 더 넉넉히 */
+  display: flex;
+  gap: 20px; /* 버튼 간의 간격 */
 }
 
 .MyPageMain-button {
   padding: 12px 25px;
-  margin-top: 15px;
   cursor: pointer;
   border: none;
   border-radius: 5px;
   background-color: #252429;
   color: white;
-  width: 100%;
-  font-size: 1.1rem; /* 버튼 텍스트 크기 키움 */
+  min-width: 120px; /* 최소 너비 설정 */
+  font-size: 1.1rem;
+  height: 40px; /* 버튼 높이를 40px로 동일하게 설정 */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .MyPageMain-button:hover {
   background-color: #252429d8;
 }
 
-/* 기존 input-height 수정 */
-.input-field {
-  width: 100%;
-  border-radius: 5px;
-  padding: 8px 15px;  /* 높이를 줄여서 8px로 변경 */
-  border: 1px solid #ccc;
-  font-size: 1rem;
-  height: 40px;  /* 높이를 약간 줄여서 40px로 설정 */
-}
-
-.input-with-button input {
-  width: 50%; /* 입력 필드 너비 조정 */
-  padding: 10px 15px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
-  height: 40px; /* 높이를 40px로 설정 */
-}
-
-.input-with-button button {
-  width: 20%; /* 버튼 너비 조정 */
-  padding: 10px 20px;
-  height: 40px; /* 버튼 높이를 40px로 설정 */
-  border-radius: 5px;
-  background-color: #252429;
-  color: white;
-  font-size: 1.1rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* 완료, 취소 버튼 간격 */
-.button-container {
-  margin-top: 30px;
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 600px;
-  gap: 10px;  /* 버튼 간격을 10px로 설정 */
-}
-
-
-.input-field:focus {
-  border-color: #28a745;
-  outline: none;
-  box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
-}
-
 .MyPageMain-section h2 {
   margin-bottom: 25px;
   font-size: 1.8rem; /* 섹션 제목 글자 크기 키움 */
-  color: #495057;
 }
 
-.account-delete-container {
-  margin-top: 20px;
-}
 
-/* 기존 코드 생략 */
-
-/* .input-with-button 수정: 버튼과 입력창이 동일한 높이로 나란히 배치 */
-.input-with-button {
-  display: flex;
-  align-items: center;
-  gap: 10px; /* 입력창과 버튼 간 간격 */
-}
-
-.input-with-button input {
-  width: 50%; /* 입력 필드 너비 조정 */
-  padding: 10px 15px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
-  height: 50px; /* 높이를 50px로 설정 */
-  margin-top: 15px;
-}
-
-.input-with-button button {
-  width: 20%; /* 버튼 너비 조정 */
-  padding: 10px 20px;
-  height: 50px; /* 버튼 높이를 50px로 설정 */
-  border-radius: 5px;
-  background-color: #252429;
-  color: white;
-  font-size: 1.1rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.input-with-button button:hover {
-  background-color: #252429d8;
-}
-
-.input-with-button input:focus {
+.MyPageMain-input-field:focus {
   border-color: #28a745;
   outline: none;
   box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+  width: 100%;
 }
-
-/* 기존 코드 생략 */
-
 
 @media (max-width: 1024px) {
   .MyPageMain-wrapper {
@@ -328,9 +274,11 @@
 
   .MyPageMain-button-container {
     margin-top: 30px;
+    justify-content: center; /* 버튼을 가운데 정렬 */
+    width: 100%;
   }
 
-  .card {
+  .MyPageMain-card {
     max-width: 100%;
     margin-bottom: 25px;
   }

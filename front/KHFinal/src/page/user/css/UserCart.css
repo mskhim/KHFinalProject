@@ -21,7 +21,7 @@
   border-collapse: collapse;
 }
 
-thead {
+.Cart-thead {
   border-top: 3.5px solid;
   border-bottom: 3.5px solid;
 }
