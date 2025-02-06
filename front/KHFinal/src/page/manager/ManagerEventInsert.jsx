@@ -5,7 +5,7 @@ const ManagerMain = () => {
   return (
     <>
       <Header />
-      <h1>ManagerMain</h1>
+      <h1>ManagerInsert</h1>
       <Footer />
     </>
   );

@@ -11,10 +11,11 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { Context } from '../../Context'; // 다크모드 컨텍스트 적용
 import './css/EventRead.css'; // CSS 파일 추가
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import { use } from 'react';
 import ReviewSection from './include/ReivewSection';
 import MapSection from './include/MapSection';
+import { ButtonDarkMode } from '../../components/ui';
 
 const EventRead = () => {
   let events = [
@@ -98,6 +99,70 @@ const EventRead = () => {
       LONGITUDE: 126.987654,
       rating: 4.5,
     },
+    {
+      NO: 6,
+      NAME: '담양 대나무 축제',
+      PLACE: '전남 담양 죽녹원',
+      START_DATE: '2025-05-01',
+      END_DATE: '2025-05-05',
+      CONTENT: '대나무의 고장 담양에서 펼쳐지는 자연 친화 축제',
+      GOVERNING: '전라남도 담양군청',
+      HOST: '담양군 관광협회',
+      TEL: '061-432-1098',
+      HOMEPAGE: 'https://www.bamboo.or.kr',
+      ADRESS: '전라남도 담양군 담양읍 죽녹원로 119',
+      LATITUDE: 35.321098,
+      LONGITUDE: 126.987654,
+      rating: 4.5,
+    },
+    {
+      NO: 7,
+      NAME: '담양 대나무 축제',
+      PLACE: '전남 담양 죽녹원',
+      START_DATE: '2025-05-01',
+      END_DATE: '2025-05-05',
+      CONTENT: '대나무의 고장 담양에서 펼쳐지는 자연 친화 축제',
+      GOVERNING: '전라남도 담양군청',
+      HOST: '담양군 관광협회',
+      TEL: '061-432-1098',
+      HOMEPAGE: 'https://www.bamboo.or.kr',
+      ADRESS: '전라남도 담양군 담양읍 죽녹원로 119',
+      LATITUDE: 35.321098,
+      LONGITUDE: 126.987654,
+      rating: 4.5,
+    },
+    {
+      NO: 8,
+      NAME: '담양 대나무 축제',
+      PLACE: '전남 담양 죽녹원',
+      START_DATE: '2025-05-01',
+      END_DATE: '2025-05-05',
+      CONTENT: '대나무의 고장 담양에서 펼쳐지는 자연 친화 축제',
+      GOVERNING: '전라남도 담양군청',
+      HOST: '담양군 관광협회',
+      TEL: '061-432-1098',
+      HOMEPAGE: 'https://www.bamboo.or.kr',
+      ADRESS: '전라남도 담양군 담양읍 죽녹원로 119',
+      LATITUDE: 35.321098,
+      LONGITUDE: 126.987654,
+      rating: 4.5,
+    },
+    {
+      NO: 9,
+      NAME: '담양 대나무 축제',
+      PLACE: '전남 담양 죽녹원',
+      START_DATE: '2025-05-01',
+      END_DATE: '2025-05-05',
+      CONTENT: '대나무의 고장 담양에서 펼쳐지는 자연 친화 축제',
+      GOVERNING: '전라남도 담양군청',
+      HOST: '담양군 관광협회',
+      TEL: '061-432-1098',
+      HOMEPAGE: 'https://www.bamboo.or.kr',
+      ADRESS: '전라남도 담양군 담양읍 죽녹원로 119',
+      LATITUDE: 35.321098,
+      LONGITUDE: 126.987654,
+      rating: 4.5,
+    },
   ];
   const param = useParams();
   const [eventInfo, setEventInfo] = useState({});
@@ -140,7 +205,7 @@ const EventRead = () => {
 
   return (
     <>
-      <Header />
+      <Header page="list" />
       <Container className={`EventReadTitle-container ${getDarkMode()}`}>
         <Row className="align-items-center">
           {/* 📌 좌측: 메인 이미지 + 서브 이미지 */}
@@ -200,8 +265,8 @@ const EventRead = () => {
 
               {/* 우측 버튼 */}
               <Button
-                variant="light"
-                className="position-absolute end-0 z-3"
+                variant="none"
+                className={`position-absolute end-0 z-3 ${getDarkModeHover()} border button`}
                 style={{ opacity: 0.7 }}
                 onClick={scrollRight}
               >
@@ -212,7 +277,8 @@ const EventRead = () => {
 
           {/* 📌 우측: 축제 정보 + 예매 */}
           <Col md={4} className="d-flex flex-column justify-content-center p-4">
-            <h2 className="EventReadTitle-title">{eventInfo.NAME}</h2>
+            {' '}
+            <h2 className="EventReadTitle-title me-5">{eventInfo.NAME}</h2>
             <p className="EventReadTitle-location">
               <strong>장소:</strong> {eventInfo.PLACE}
             </p>
@@ -240,7 +306,6 @@ const EventRead = () => {
                 {eventInfo.HOMEPAGE}
               </a>
             </p>
-
             {/* 🎟 티켓 수량 선택 */}
             <div className={`border p-3 rounded mb-3 ${getDarkMode()} div`}>
               <p className={`mb-2 ${getDarkMode()} span`}>

@@ -18,8 +18,6 @@ const UserLoginSuccess = () => {
         data = await handleKakaoCallback(code);
       }
 
-      console.log(`${provider} 사용자 정보:`, data);
-
       if (!data.isRegistered) {
         alert('회원가입이 필요합니다. 회원가입 페이지로 이동합니다.');
         sessionStorage.setItem('user', JSON.stringify(data.user)); // ✅ 세션 스토리지에 사용자 정보 저장
