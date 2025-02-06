@@ -30,11 +30,11 @@ const NoticeRead = () => {
 
   const [noticeRead, setNoticeRead] = useState({});
   const param = useParams();
-  //const param = {no: '1'};
 
   useEffect(() => {
     setNoticeRead(noticeDB.find((item) => item.no === parseInt(param.no)));
   }, [param]);
+
   return (
     <>
       <Header />
@@ -50,7 +50,7 @@ const NoticeRead = () => {
             {/* 목록으로 버튼 */}
             <div className="NoticeRead-btn-wrap">
               <Link to="/NoticeList">
-                <button className="NoticeRead-btn Notice-btn-dark">
+                <button className="NoticeRead-btn NoticeRead-btn-dark">
                   목록으로
                 </button>
               </Link>
@@ -58,17 +58,20 @@ const NoticeRead = () => {
 
             {/* 게시글 테이블 */}
             <table className="NoticeRead-board-table">
-              <tr>
-                <td colSpan="2" className="NoticeRead-view-title">
-                  {noticeRead.title}
-                </td>
-              </tr>
-              <tr>
-                <td colSpan="2" className="NoticeRead-view-content">
-                  <p>{noticeRead.content}</p>
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td colSpan="2" className="NoticeRead-view-title">
+                    {noticeRead.title}
+                  </td>
+                </tr>
+                <tr>
+                  <td colSpan="2" className="NoticeRead-view-content">
+                    <p>{noticeRead.content}</p>
+                  </td>
+                </tr>
+              </tbody>
             </table>
+
             {/* 등록일 */}
             <div className="NoticeRead-meta">
               <span className="NoticeRead-date">등록일: {noticeRead.date}</span>

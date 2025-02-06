@@ -1,20 +1,29 @@
 /* ============================================
    공지사항 상세 페이지 스타일
    ============================================ */
-   .NoticeRead-board-view {
-    padding: 10px 0;
-    position: relative;
+   .NoticeRead-notice {
+    max-width: 1100px; 
+    margin: 0 auto; 
+    padding: 20px 0; 
+    min-height: 300px; 
+}
+
+/* 공지사항 제목 */
+.NoticeRead-page-title {
+    text-align: center;
+    margin-bottom: 15px;
 }
 
 .NoticeRead-page-title h3 {
-    font-size: 28px;
+    font-size: 24px;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
-.NoticeRead-page-title h3 a {
-    text-decoration: none;
-    color: inherit;
+/* 공지사항 컨테이너 크기 조정 */
+.NoticeRead-container {
+    max-width: 1100px;
+    margin: 0 auto;
 }
 
 /* 목록으로 버튼 스타일 */
@@ -27,8 +36,8 @@
 
 /* 공통 버튼 스타일 */
 .NoticeRead-btn {
-    padding: 10px 20px;
-    font-size: 16px;
+    padding: 8px 18px;
+    font-size: 14px;
     border: none;
     cursor: pointer;
     transition: background 0.3s;
@@ -38,7 +47,6 @@
 .NoticeRead-btn-dark {
     background: #555;
     color: #fff;
-    
 }
 
 .NoticeRead-btn-dark:hover {
@@ -51,39 +59,36 @@
     border-collapse: collapse;
 }
 
-.NoticeRead-board-table th {
-    display: none;
-}
-
+/* 테이블 크기 조정 */
 .NoticeRead-board-table td {
-    padding: 15px;
+    padding: 12px;
     border-bottom: 1px solid #ccc;
     text-align: center;
 }
 
 /* 제목 스타일 */
 .NoticeRead-view-title {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
-    padding: 20px;
+    padding: 15px;
     text-align: center;
 }
 
 /* 게시글 내용 */
 .NoticeRead-view-content {
-    min-height: 300px;
-    padding: 30px;
-    font-size: 16px;
-    line-height: 1.2;
-    margin : 10px
+    min-height: 500px; 
+    padding: 20px;
+    font-size: 15px;
+    line-height: 1.4;
+    margin: 5px;
 }
 
 /* 등록일 및 버튼 컨테이너 */
 .NoticeRead-meta {
     display: flex;
-    justify-content: space-between;
+    justify-content: right;
     align-items: center;
-    padding: 20px;
-    font-size: 14px;
+    padding: 15px;
+    font-size: 13px;
     color: #888;
 }

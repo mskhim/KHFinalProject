@@ -1,7 +1,7 @@
 /* 공지사항 제목 */
 .Notice-title-container {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   width: 100%;
   padding: 10px 100px;
   margin-top: 10px;
@@ -12,6 +12,7 @@
   color: #333333;
   font-weight: 600;
   margin: 0;
+  text-align: center;
 }
 
 /* 검색창 정렬 유지 */
@@ -64,14 +65,29 @@
   border-color: #373737;
 }
 
-.Notice-sort-select{
+.Notice-sort-select {
   height: 40px;
   font-size: 14px;
   padding: 7px 14px;
   border: 1px solid #ccc;
   margin-left: 5px;
-} 
+}
 
+/* 공지사항 전체 */
+.Notice-notice {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px 0;
+  min-height: 300px; 
+}
+
+/* 공지사항 컨테이너 */
+.Notice-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* 컨텐츠 테이블 */
 .Notice-board-table {
   width: 100%;
   border-collapse: collapse;
@@ -123,6 +139,6 @@
   text-decoration: none;
 }
 
-.Notice-td-title a:hover{
+.Notice-td-title a:hover {
   color: #9c9c9c;
 }
