@@ -17,7 +17,7 @@ public class JwtUtil {
     @Value("${jwt.secret}") // application.properties에서 비밀키 읽기
     private String secretKey;
 
-    private static final long ACCESS_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60; // 60분 (1시간)
+    private static final long ACCESS_TOKEN_EXPIRATION_TIME = 1000 * 60 * 15; // 15분 (15분)
     private static final long REFRESH_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 7; // 7일
 
     // ================== JWT 관련 ==================
@@ -43,10 +43,7 @@ public class JwtUtil {
         return Jwts.builder()
                 .setSubject("refreshToken")
                 .claim("id", user.getId())
-                .claim("role", "ROLE_" + user.getRole())
                 .claim("provider", user.getProvider())
-                .claim("phone", user.getPhone())
-                .claim("gender", String.valueOf(user.getGender()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION_TIME))    
                 .signWith(SignatureAlgorithm.HS256, secretKey)

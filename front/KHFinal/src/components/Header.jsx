@@ -11,39 +11,42 @@ import {
 import { BsPersonCircle, BsChevronDown } from 'react-icons/bs';
 import { FaGithub, FaBell, FaMoon, FaSun, FaCartPlus } from 'react-icons/fa';
 import './Header.css';
-import { handleLogout, checkAuthStatus } from '../page/user/userApi';
+import { handleLogout, refreshAccessToken } from '../page/user/userApi';
 import { Context } from '../Context';
 import ScrollToTopButton from './ui/ScrollToTopButton';
-
+import TokenRemain from './ui/TokenRemain';
 const Header = ({ page }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userName, setUserName] = useState('사용자');
   const [notifications, setNotifications] = useState(3);
   const [cartElement, setCartElement] = useState(2);
   const [showFestivalNav, setShowFestivalNav] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [activeTab, setActiveTab] = useState('');
-  const { darkMode, setDarkMode, getDarkMode, getDarkModeHover } =
-    useContext(Context);
+  const {
+    darkMode,
+    setDarkMode,
+    isAuthenticated,
+    userNickname,
+    logout,
+    tokenExpiration,
+    extendToken,
+    getDarkMode,
+  } = useContext(Context);
 
   useEffect(() => {
     page && setShowFestivalNav(true);
     setActiveTab(page);
     setDarkMode(sessionStorage.getItem('darkMode') === 'true');
     document.body.classList.toggle('Header-dark-mode', darkMode);
-    checkAuthStatus().then((data) => {
-      setIsAuthenticated(data.authenticated);
-      if (data.authenticated && data.userName) {
-        setUserName(data.userName);
-      }
-    });
+    setUserName(userNickname);
   }, [page, darkMode, setDarkMode]);
 
   const Logout = () => {
     handleLogout().then(() => {
-      setIsAuthenticated(false);
+      logout();
+      navigate('/');
     });
   };
 
@@ -52,7 +55,6 @@ const Header = ({ page }) => {
   };
 
   const toggleDarkMode = () => {
-    // ✅ 모든 요소의 transition을 비활성화 (즉시 적용)
     const disableTransitions = () => {
       const style = document.createElement('style');
       style.innerHTML = `
@@ -76,7 +78,6 @@ const Header = ({ page }) => {
 
     setDarkMode((prev) => {
       const newDarkMode = !prev;
-
       // ✅ 애니메이션 비활성화
       disableTransitions();
 
@@ -94,6 +95,13 @@ const Header = ({ page }) => {
   const toggleFestivalNav = () => {
     setIsAnimating(true);
     setShowFestivalNav((prev) => !prev);
+  };
+
+  //토큰연장
+  const handleExtendToken = () => {
+    refreshAccessToken().then((res) => {
+      extendToken();
+    });
   };
 
   return (
@@ -163,6 +171,7 @@ const Header = ({ page }) => {
 
             <div className="d-flex align-items-center">
               {/* {isAuthenticated ? ( */}
+
               <NavDropdown
                 title={
                   <span className="d-flex align-items-center Header-user-info">
@@ -200,6 +209,10 @@ const Header = ({ page }) => {
                 <NavDropdown.Divider />
                 <NavDropdown.Item onClick={Logout}>로그아웃</NavDropdown.Item>
               </NavDropdown>
+              <TokenRemain
+                initialExpiration={tokenExpiration}
+                onExtend={handleExtendToken}
+              />
               {/* ) : ( */}
               <Button
                 variant={darkMode ? 'outline-light' : 'outline-dark'}

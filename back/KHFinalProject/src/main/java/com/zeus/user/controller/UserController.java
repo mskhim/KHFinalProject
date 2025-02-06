@@ -65,35 +65,35 @@ public class UserController {
 		return ResponseEntity.ok(service.getNaverAuthUrl());
 	}
 
-	// ✅ 네이버 콜백 처리 (회원가입이 필요할 경우 JWT를 저장하지 않음)
+	//  네이버 콜백 처리 (회원가입이 필요할 경우 JWT를 저장하지 않음)
 	@GetMapping("/naver/callback")
 	public ResponseEntity<Map<String, Object>> callback(@RequestParam String code, @RequestParam String state,HttpServletResponse response) {
 
 	    log.info("🔹 네이버 엑세스 토큰 생성 시작");
 	    String accessToken = service.getNaverAccessToken(code, state);
-	    log.info("✅ 네이버 엑세스 토큰 생성 완료");
+	    log.info(" 네이버 엑세스 토큰 생성 완료");
 
-	    // ✅ 네이버 API를 호출하여 사용자 정보 가져오기
+	    //  네이버 API를 호출하여 사용자 정보 가져오기
 	    String userInfo = service.getNaverUserInfo(accessToken);
 	    User user = parseNaverUserInfo(userInfo);
 
-	    // ✅ 사용자 등록 여부 확인
+	    //  사용자 등록 여부 확인
 	    boolean isRegistered = service.checkRegist(user);
 
-	    // ✅ 신규 사용자라면 회원가입 필요 메시지 반환 (JWT 저장 X)
+	    //  신규 사용자라면 회원가입 필요 메시지 반환 (JWT 저장 X)
 	    if (isRegistered) {
 	        return ResponseEntity.ok(Map.of(
 	            "isRegistered", false,
-	            "user", user, // ✅ 회원가입 화면에서 사용할 정보 제공
+	            "user", user, //  회원가입 화면에서 사용할 정보 제공
 	            "message", "회원가입 필요"
 	        ));
 	    }
 
-	    // ✅ 기존 회원이라면 JWT 생성 및 쿠키에 저장
+	    //  기존 회원이라면 JWT 생성 및 쿠키에 저장
 	    String jwtAccessToken = JwtUtil.createAccessToken(user);
 	    String refreshToken = JwtUtil.createRefreshToken(user);
 
-	    // ✅ 쿠키에 JWT 저장
+	    //  쿠키에 JWT 저장
 	    addJwtCookie(response, "jwt", jwtAccessToken, 60 * 15); // 15분 유지
 	    addJwtCookie(response, "refresh_token", refreshToken, 60 * 60 * 24 * 7); // 7일 유지
 
@@ -115,9 +115,9 @@ public class UserController {
 
 	    log.info("🔹 카카오 엑세스 토큰 생성 시작");
 	    String accessToken = service.getKakaoAccessToken(code);
-	    log.info("✅ 카카오 엑세스 토큰 생성 완료");
+	    log.info(" 카카오 엑세스 토큰 생성 완료");
 
-	    // ✅ 카카오 API를 호출하여 사용자 정보 가져오기
+	    //  카카오 API를 호출하여 사용자 정보 가져오기
 	    String userInfo = service.getKakaoUserInfo(accessToken);
 	    User user = parseKakaoUserInfo(userInfo);
 
@@ -125,23 +125,23 @@ public class UserController {
 	        return ResponseEntity.status(500).body(Map.of("error", "Failed to parse user info"));
 	    }
 
-	    // ✅ 사용자 등록 여부 확인
+	    //  사용자 등록 여부 확인
 	    boolean isRegistered = service.checkRegist(user);
 	    
-	    // ✅ 신규 사용자라면 회원가입 필요 메시지 반환 (JWT 저장 X)
+	    //  신규 사용자라면 회원가입 필요 메시지 반환 (JWT 저장 X)
 	    if (isRegistered) {
 	        return ResponseEntity.ok(Map.of(
 	            "isRegistered", false,
-	            "user", user, // ✅ 회원가입 화면에서 사용할 정보 제공
+	            "user", user, //  회원가입 화면에서 사용할 정보 제공
 	            "message", "회원가입 필요"
 	        ));
 	    } 
 
-	    // ✅ 기존 회원이라면 JWT 생성 및 쿠키에 저장
+	    //  기존 회원이라면 JWT 생성 및 쿠키에 저장
 	    String jwtAccessToken = JwtUtil.createAccessToken(user);
 	    String refreshToken = JwtUtil.createRefreshToken(user);
 
-	    // ✅ 쿠키에 JWT 저장
+	    //  쿠키에 JWT 저장
 	    addJwtCookie(response, "jwt", jwtAccessToken, 60 * 15); // 15분 유지
 	    addJwtCookie(response, "refresh_token", refreshToken, 60 * 60 * 24 * 7); // 7일 유지
 
@@ -154,7 +154,7 @@ public class UserController {
 	public ResponseEntity<Map<String, Object>> login(@RequestBody User user, HttpServletResponse response) {
 	    log.info("🔹 /login 요청 - 유저 ID: {}", user.getId());
 
-	    // ✅ DB에서 사용자 확인
+	    //  DB에서 사용자 확인
 	    User user2 = service.getUserByIdAndProvider(user);
 
 	    if (user2 == null) {
@@ -164,41 +164,41 @@ public class UserController {
 	        ));
 	    }
 	    deleteJwtCookie(response, "refresh_token"); // 리프레시 토큰 삭제
-	    // ✅ JWT 생성 (액세스 토큰 & 리프레시 토큰)
+	    //  JWT 생성 (액세스 토큰 & 리프레시 토큰)
 	    String accessToken = JwtUtil.createAccessToken(user2);
 	    String refreshToken = JwtUtil.createRefreshToken(user2);
 
-	    log.info("✅ JWT 생성 완료");
+	    log.info(" JWT 생성 완료");
 
-	    // ✅ JWT를 HttpOnly 쿠키에 저장
+	    //  JWT를 HttpOnly 쿠키에 저장
 	    addJwtCookie(response, "jwt", accessToken, 60 * 15); // 15분 유지
 	    addJwtCookie(response, "refresh_token", refreshToken, 60 * 60 * 24 * 7); // 7일 유지
 
 	    return ResponseEntity.ok(Map.of("success", true, "message", "로그인 성공!"));
 	}
 
-	// ✅ 로그아웃 API (JWT 및 리프레시 토큰 삭제)
+	//  로그아웃 API (JWT 및 리프레시 토큰 삭제)
 	@PostMapping("/logout")
 	public ResponseEntity<Map<String, Object>> logout(HttpServletResponse response) {
 	    log.info("🔹 로그아웃 요청");
 
-	    // ✅ 쿠키 삭제 (만료 시간 0으로 설정)
+	    //  쿠키 삭제 (만료 시간 0으로 설정)
 	    deleteJwtCookie(response, "jwt"); // 액세스 토큰 삭제
 	    deleteJwtCookie(response, "refresh_token"); // 리프레시 토큰 삭제
 
 	    return ResponseEntity.ok(Map.of("success", true, "message", "로그아웃 완료"));
 	}
 
-	// ✅ JWT 쿠키 검사 (로그인 상태 확인)
+	//  JWT 쿠키 검사 (로그인 상태 확인)
 	@GetMapping("/check-auth")
 	public ResponseEntity<Map<String, Object>> checkAuth(
-	        @CookieValue(name = "jwt", required = false) String jwtToken) { // ✅ 쿠키에서 JWT 가져오기
+	        @CookieValue(name = "jwt", required = false) String jwtToken) { //  쿠키에서 JWT 가져오기
 
 	    if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken)) {
 	        return ResponseEntity.ok(Map.of("authenticated", false, "message", "JWT가 없거나 만료됨"));
 	    }
 
-	    // ✅ JWT가 유효하면 사용자 정보 반환
+	    //  JWT가 유효하면 사용자 정보 반환
 	    String userId = JwtUtil.validateToken(jwtToken).get("id", String.class);
 	    String provider = JwtUtil.validateToken(jwtToken).get("provider", String.class);
 	    User user = new User();
@@ -212,7 +212,7 @@ public class UserController {
 	        "user", user
 	    ));
 	}
-	// ✅ 리프레시 토큰을 이용한 JWT 갱신 API
+	//  리프레시 토큰을 이용한 JWT 갱신 API
 	@PostMapping("/refresh-token")
 	public ResponseEntity<Map<String, Object>> refreshToken(
 	    @CookieValue(name = "refresh_token", required = false) String refreshToken,
@@ -222,7 +222,7 @@ public class UserController {
 	        return ResponseEntity.status(401).body(Map.of("error", "유효하지 않거나 만료된 리프레시 토큰"));
 	    }
 
-	    // ✅ 리프레시 토큰을 검증하고 새로운 액세스 토큰 생성
+	    //  리프레시 토큰을 검증하고 새로운 액세스 토큰 생성
 	    String userId = JwtUtil.validateToken(refreshToken).get("id", String.class);
 	    String provider = JwtUtil.validateToken(refreshToken).get("provider", String.class);
 	    User user = new User();
@@ -235,14 +235,14 @@ public class UserController {
 	        return ResponseEntity.status(403).body(Map.of("error", "유효하지 않은 리프레시 토큰 또는 탈퇴한 사용자"));
 	    }
 	    String newAccessToken = JwtUtil.createAccessToken(dbUser);
-	    // ✅ 새로운 JWT를 HttpOnly 쿠키에 저장
+	    //  새로운 JWT를 HttpOnly 쿠키에 저장
 	    addJwtCookie(response, "jwt", newAccessToken, 60 * 15); // 15분 유지
 
 	    return ResponseEntity.ok(Map.of("success", true, "message", "액세스 토큰 갱신 완료"));
 	}
 
 	
-	// ✅ JWT 쿠키 삭제 메소드
+	//  JWT 쿠키 삭제 메소드
 	private void deleteJwtCookie(HttpServletResponse response, String name) {
 	    Cookie cookie = new Cookie(name, "");
 	    cookie.setHttpOnly(true);
@@ -254,7 +254,7 @@ public class UserController {
 
 	
 
-	// ✅ 공통 메소드: JWT를 HttpOnly 쿠키에 저장
+	//  공통 메소드: JWT를 HttpOnly 쿠키에 저장
 	private void addJwtCookie(HttpServletResponse response, String name, String token, int maxAge) {
 		Cookie cookie = new Cookie(name, token);
 		cookie.setHttpOnly(true);
@@ -265,7 +265,7 @@ public class UserController {
 		response.addCookie(cookie);
 	}
 
-	// ✅ 네이버 사용자 정보를 User 객체로 변환하는 메소드
+	//  네이버 사용자 정보를 User 객체로 변환하는 메소드
 	private User parseNaverUserInfo(String userInfo) {
 	    try {
 	        ObjectMapper objectMapper = new ObjectMapper();
@@ -278,9 +278,9 @@ public class UserController {
 	            user.setProvider("naver");
 	            user.setPhone(responseNode.get("mobile").asText());
 	            user.setGender(responseNode.get("gender").asText().charAt(0));
-	            user.setEmail(responseNode.has("email") ? responseNode.get("email").asText() : ""); // ✅ 이메일 추가
+	            user.setEmail(responseNode.has("email") ? responseNode.get("email").asText() : ""); //  이메일 추가
 
-	            // ✅ 생년월일 변환
+	            //  생년월일 변환
 	            user.setBirth(LocalDate.parse(
 	                    responseNode.get("birthyear").asText() + "-" + responseNode.get("birthday").asText(),
 	                    DateTimeFormatter.ofPattern("yyyy-MM-dd")));
@@ -294,26 +294,26 @@ public class UserController {
 	    return null;
 	}
 
-	// ✅ 카카오 사용자 정보를 User 객체로 변환하는 메소드
+	//  카카오 사용자 정보를 User 객체로 변환하는 메소드
 	private User parseKakaoUserInfo(String userInfo) {
 	    try {
 	        ObjectMapper objectMapper = new ObjectMapper();
 	        JsonNode rootNode = objectMapper.readTree(userInfo);
 	        User user = new User();
 
-	        // ✅ 사용자 고유 ID
+	        //  사용자 고유 ID
 	        user.setId(rootNode.get("id").asText());
 	        user.setProvider("kakao");
 
-	        // ✅ kakao_account에서 추가 정보 추출
+	        //  kakao_account에서 추가 정보 추출
 	        JsonNode accountNode = rootNode.get("kakao_account");
 	        if (accountNode != null) {
 	            user.setName(accountNode.has("name") ? accountNode.get("name").asText() : ""); 
 	            user.setPhone(accountNode.has("phone_number") ? accountNode.get("phone_number").asText().replace("+82 10-", "010-") : ""); 
 	            user.setGender(accountNode.has("gender") && accountNode.get("gender").asText().equals("male") ? 'M' : 'F'); 
-	            user.setEmail(accountNode.has("email") ? accountNode.get("email").asText() : ""); // ✅ 이메일 추가
+	            user.setEmail(accountNode.has("email") ? accountNode.get("email").asText() : ""); //  이메일 추가
 
-	            // ✅ 생년월일 변환
+	            //  생년월일 변환
 	            if (accountNode.has("birthyear") && accountNode.has("birthday")) {
 	                String birthyear = accountNode.get("birthyear").asText();
 	                String birthday = accountNode.get("birthday").asText();
