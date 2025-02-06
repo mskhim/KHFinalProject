@@ -15,7 +15,6 @@
   margin-left: 0;
   margin-bottom: 40px;
   font-size: 2.5rem;
-  color: #252429;
 }
 
 .BookingList-BookingList-wrapper {
@@ -31,8 +30,8 @@
   width: 220px;
   padding: 20px;
   box-sizing: border-box;
-  border-top: 3.5px solid #ddd;
-  border-bottom: 3.5px solid #ddd;
+  border-top: 3.5px solid;
+  border-bottom: 3.5px solid;
   min-width: 200px;
   display: flex;
   flex-direction: column;
@@ -111,13 +110,9 @@ table {
 }
 
 th, td {
-  border: 1px solid #ddd;
+  border: 1px solid;
   padding: 12px;
   text-align: center;
-}
-
-th {
-  background-color: #f8f9fa;
 }
 
 /* 왼쪽 첫 번째 셀에 border 제거 */
@@ -154,7 +149,6 @@ td input[type="checkbox"] {
 .BookingList-section h2 {
   margin-bottom: 25px;
   font-size: 1.8rem;
-  color: #495057;
 }
 
 .BookingList-warning {

@@ -15,7 +15,6 @@
   margin-left: 0; /* 왼쪽 여백 제거 */
   margin-bottom: 40px; /* 하단 여백을 40px로 설정 */
   font-size: 2.5rem; /* 헤더 글자 크기 키움 */
-  color: #252429;
 }
 
 .MyPageMain-wrapper {
@@ -32,8 +31,8 @@
   width: 220px; /* 메뉴 너비를 220px로 설정 */
   padding: 20px;
   box-sizing: border-box;
-  border-top: 3.5px solid #ddd;
-  border-bottom: 3.5px solid #ddd;
+  border-top: 3.5px solid;
+  border-bottom: 3.5px solid;
   min-width: 200px;
   display: flex;
   flex-direction: column;
