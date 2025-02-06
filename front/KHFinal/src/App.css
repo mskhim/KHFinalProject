@@ -236,3 +236,6 @@ a {
   background-color: #666 !important; /* 마우스 오버 시 - 어두운 회색 */
   color: white !important;
 }
+html {
+  scroll-behavior: auto !important;
+}

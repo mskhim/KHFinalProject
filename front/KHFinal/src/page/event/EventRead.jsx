@@ -11,10 +11,11 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { Context } from '../../Context'; // 다크모드 컨텍스트 적용
 import './css/EventRead.css'; // CSS 파일 추가
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import { use } from 'react';
 import ReviewSection from './include/ReivewSection';
 import MapSection from './include/MapSection';
+import { ButtonDarkMode } from '../../components/ui';
 
 const EventRead = () => {
   let events = [
@@ -204,7 +205,7 @@ const EventRead = () => {
 
   return (
     <>
-      <Header />
+      <Header page="list" />
       <Container className={`EventReadTitle-container ${getDarkMode()}`}>
         <Row className="align-items-center">
           {/* 📌 좌측: 메인 이미지 + 서브 이미지 */}
@@ -276,7 +277,8 @@ const EventRead = () => {
 
           {/* 📌 우측: 축제 정보 + 예매 */}
           <Col md={4} className="d-flex flex-column justify-content-center p-4">
-            <h2 className="EventReadTitle-title">{eventInfo.NAME}</h2>
+            {' '}
+            <h2 className="EventReadTitle-title me-5">{eventInfo.NAME}</h2>
             <p className="EventReadTitle-location">
               <strong>장소:</strong> {eventInfo.PLACE}
             </p>
@@ -304,7 +306,6 @@ const EventRead = () => {
                 {eventInfo.HOMEPAGE}
               </a>
             </p>
-
             {/* 🎟 티켓 수량 선택 */}
             <div className={`border p-3 rounded mb-3 ${getDarkMode()} div`}>
               <p className={`mb-2 ${getDarkMode()} span`}>

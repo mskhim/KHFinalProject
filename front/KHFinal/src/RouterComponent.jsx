@@ -30,6 +30,9 @@ import NotFound from './page/common/NotFound';
 const RouterComponent = () => {
   const location = useLocation(); // ✅ 현재 경로 가져오기
   useEffect(() => {
+    if (location.pathname !== '/eventList') {
+      window.scrollTo(0, 0);
+    }
     if (
       location.pathname !== '/userLoginPage' &&
       location.pathname !== '/userInsert' &&
