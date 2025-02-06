@@ -2,6 +2,31 @@ import { useContext, useState } from 'react';
 import { Form, Button, Row, Col, Pagination } from 'react-bootstrap';
 import { ButtonDarkMode } from '../../../components/ui';
 import { Context } from '../../../Context';
+
+// ⭐ 별점 컴포넌트 (평균 별점을 시각화)
+const StarRating = ({ rating }) => {
+  const totalStars = 5;
+  return (
+    <div className="d-flex align-items-center">
+      {Array.from({ length: totalStars }).map((_, index) => (
+        <span
+          key={index}
+          style={{
+            fontSize: '1.5rem',
+            color: index < rating ? 'gold' : '#ddd', // 평균 별점 이하만 골드 색상 적용
+            marginRight: '3px',
+          }}
+        >
+          ★
+        </span>
+      ))}
+      <span style={{ marginLeft: '5px', fontSize: '1.2rem' }}>
+        {rating.toFixed(1)} / 5.0
+      </span>
+    </div>
+  );
+};
+
 const ReviewSection = () => {
   const { getDarkMode } = useContext(Context);
   const mockReviews = [
@@ -47,40 +72,12 @@ const ReviewSection = () => {
       content: '불꽃놀이가 환상적이었습니다!',
       date: '2025-10-01',
     },
-    {
-      id: 7,
-      name: '이수진',
-      rating: 4,
-      content: '친구들과 좋은 추억 만들었어요.',
-      date: '2025-09-30',
-    },
-    {
-      id: 8,
-      name: '박영호',
-      rating: 5,
-      content: '다시 가고 싶어요!',
-      date: '2025-09-29',
-    },
-    {
-      id: 9,
-      name: '최민석',
-      rating: 2,
-      content: '생각보다 별로였어요.',
-      date: '2025-09-28',
-    },
-    {
-      id: 10,
-      name: '정윤아',
-      rating: 3,
-      content: '평범한 축제였어요.',
-      date: '2025-09-27',
-    },
-  ]; // 목업 데이터 (10개)
+  ];
 
-  const [reviews, setReviews] = useState(mockReviews); // 리뷰 데이터 상태 관리
-  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 상태
-  const reviewsPerPage = 5; // 한 페이지당 5개 리뷰 표시
-  const totalPages = Math.ceil(reviews.length / reviewsPerPage); // 총 페이지 수 계산
+  const [reviews, setReviews] = useState(mockReviews);
+  const [currentPage, setCurrentPage] = useState(1);
+  const reviewsPerPage = 5;
+  const totalPages = Math.ceil(reviews.length / reviewsPerPage);
 
   const [newReview, setNewReview] = useState({
     name: '',
@@ -88,14 +85,20 @@ const ReviewSection = () => {
     content: '',
   });
 
+  // ✅ 평균 별점 계산 함수
+  const getAverageRating = () => {
+    if (reviews.length === 0) return 0;
+    const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+    return totalRating / reviews.length;
+  };
+
   // 현재 페이지에 해당하는 리뷰 가져오기
   const getCurrentPageReviews = () => {
     const startIndex = (currentPage - 1) * reviewsPerPage;
-    const endIndex = startIndex + reviewsPerPage;
-    return reviews.slice(startIndex, endIndex);
+    return reviews.slice(startIndex, startIndex + reviewsPerPage);
   };
 
-  // 리뷰 추가 (목업 데이터 기반)
+  // 리뷰 추가
   const addReview = () => {
     if (!newReview.name || !newReview.content) {
       alert('이름과 리뷰 내용을 입력해주세요!');
@@ -107,17 +110,24 @@ const ReviewSection = () => {
       name: newReview.name,
       rating: newReview.rating,
       content: newReview.content,
-      date: new Date().toISOString().split('T')[0], // 현재 날짜
+      date: new Date().toISOString().split('T')[0],
     };
 
-    setReviews([newEntry, ...reviews]); // 새 리뷰를 맨 앞에 추가
-    setNewReview({ name: '', rating: 5, content: '' }); // 입력 필드 초기화
-    setCurrentPage(1); // 최신 리뷰를 보기 위해 첫 페이지로 이동
+    setReviews([newEntry, ...reviews]);
+    setNewReview({ name: '', rating: 5, content: '' });
+    setCurrentPage(1);
   };
 
   return (
     <div className="review-section p-3 border rounded">
       <h3>Review</h3>
+
+      {/* ⭐ 평균 별점 표시 */}
+      <div className="mb-3">
+        <strong>전체 리뷰 평균:</strong>{' '}
+        <StarRating rating={getAverageRating()} />
+      </div>
+
       <Form>
         <Row className="mb-2">
           <Col md={3}>
@@ -127,11 +137,11 @@ const ReviewSection = () => {
                 setNewReview({ ...newReview, rating: Number(e.target.value) })
               }
             >
-              <option value={5}>⭐⭐⭐⭐⭐ </option>
-              <option value={4}>⭐⭐⭐⭐ </option>
-              <option value={3}>⭐⭐⭐ </option>
-              <option value={2}>⭐⭐ </option>
-              <option value={1}>⭐ </option>
+              <option value={5}>⭐⭐⭐⭐⭐</option>
+              <option value={4}>⭐⭐⭐⭐</option>
+              <option value={3}>⭐⭐⭐</option>
+              <option value={2}>⭐⭐</option>
+              <option value={1}>⭐</option>
             </Form.Select>
           </Col>
         </Row>
@@ -167,7 +177,7 @@ const ReviewSection = () => {
 
       {/* 페이지네이션 */}
       <Pagination
-        className={`justify-content-center mt-3 custom-pagination ${getDarkMode()}`}
+        className={`justify-content-center mt-3 ${getDarkMode()} custom-pagination`}
       >
         <Pagination.Prev
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
