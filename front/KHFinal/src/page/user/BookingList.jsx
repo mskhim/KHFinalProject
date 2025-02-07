@@ -102,12 +102,12 @@ function BookingList() {
   return (
     <>
       <Header />
-      <div className="BookingList-BookingList-container">
+      <div className="BookingList-container">
         <header className="BookingList-header">
           <h1>예매내역</h1>
         </header>
 
-        <div className="BookingList-BookingList-wrapper">
+        <div className="BookingList-wrapper">
           {/* 왼쪽 메뉴 */}
           <div className={`BookingList-menu ${getDarkMode()}`}>
             <ul>
@@ -140,15 +140,15 @@ function BookingList() {
               {reservations.length === 0 ? (
                 <p>예매 내역이 없습니다.</p>
               ) : (
-                <table>
+                <table className='BookingList-table'>
                   <thead>
                     <tr>
-                      <th>예약번호</th>
-                      <th>예매일</th>
-                      <th>축제명</th>
-                      <th>인원</th>
-                      <th>사용 기한</th>
-                      <th>선택</th>
+                      <th className='BookingList-th'>예약번호</th>
+                      <th className='BookingList-th'>예매일</th>
+                      <th className='BookingList-th'>축제명</th>
+                      <th className='BookingList-th'>인원</th>
+                      <th className='BookingList-th'>사용 기한</th>
+                      <th className='BookingList-th'>선택</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -156,12 +156,12 @@ function BookingList() {
                       const isExpired = new Date(reservation.expiration) < new Date();
                       return (
                         <tr key={reservation.id}>
-                          <td>{reservation.id}</td>
-                          <td>{reservation.date}</td>
-                          <td>{reservation.festival}</td>
-                          <td>{reservation.people}</td>
-                          <td>{reservation.expiration}</td>
-                          <td>
+                          <td className='BookingList-td'>{reservation.id}</td>
+                          <td className='BookingList-td'>{reservation.date}</td>
+                          <td className='BookingList-td'>{reservation.festival}</td>
+                          <td className='BookingList-td'>{reservation.people}</td>
+                          <td className='BookingList-td'>{reservation.expiration}</td>
+                          <td className='BookingList-td'>
                             <input
                               type="checkbox"
                               onChange={() => handleReservationSelect(reservation.id)}
@@ -192,26 +192,26 @@ function BookingList() {
             >
               <h2>예매 취소</h2>
               {canceledReservations.length > 0 ? (
-                <table>
+                <table className='BookingList-table'>
                   <thead>
                     <tr>
-                      <th>예약번호</th>
-                      <th>예매일</th>
-                      <th>축제명</th>
-                      <th>인원</th>
-                      <th>사용 기한</th>
-                      <th>상태</th>
+                      <th className='BookingList-th'>예약번호</th>
+                      <th className='BookingList-th'>예매일</th>
+                      <th className='BookingList-th'>축제명</th>
+                      <th className='BookingList-th'>인원</th>
+                      <th className='BookingList-th'>사용 기한</th>
+                      <th className='BookingList-th'>상태</th>
                     </tr>
                   </thead>
                   <tbody>
                     {canceledReservations.map((reservation) => (
-                      <tr key={reservation.id}>
-                        <td>{reservation.id}</td>
-                        <td>{reservation.date}</td>
-                        <td>{reservation.festival}</td>
-                        <td>{reservation.people}</td>
-                        <td>{reservation.expiration}</td>
-                        <td>{reservation.status}</td>
+                      <tr className='BookingList-tr' key={reservation.id}>
+                        <td className='BookingList-td'>{reservation.id}</td>
+                        <td className='BookingList-td'>{reservation.date}</td>
+                        <td className='BookingList-td'>{reservation.festival}</td>
+                        <td className='BookingList-td'>{reservation.people}</td>
+                        <td className='BookingList-td'>{reservation.expiration}</td>
+                        <td className='BookingList-td'>{reservation.status}</td>
                       </tr>
                     ))}
                   </tbody>
