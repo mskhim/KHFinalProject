@@ -1,0 +1,18 @@
+.RandomFestival-container {
+  max-width: 100%;
+  margin: auto;
+}
+
+.RandomFestival-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.RandomFestival-image {
+  width: 100%;
+  height: 200px; /* 원하는 높이 설정 */
+  object-fit: cover;
+  border-radius: 10px;
+}

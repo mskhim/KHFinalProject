@@ -12,7 +12,6 @@
   width: 900px;
   max-width: 1200px;
   margin: 40px auto 0 auto;
-  border-top: 3.5px solid #252429;
   border-bottom: 3.5px solid #252429;
   margin-bottom: 100px;
 }
@@ -22,30 +21,35 @@
   border-collapse: collapse;
 }
 
-thead {
-  border-bottom: 3.5px solid #252429;
+.Cart-thead {
+  border-top: 3.5px solid;
+  border-bottom: 3.5px solid;
 }
 
 .Cart-table th,
 .Cart-table td {
   padding: 12px 15px;
   text-align: left;
-  border-bottom: 1px solid #252429;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid;
 }
 
 .Cart-table th {
   font-weight: bold;
+  text-align: center;
 }
 
-.Cart-ticket-image {
-  width: 50px;
-  height: 50px;
-  object-fit: cover;
-  margin-right: 10px;
+.Cart-table td:nth-child(3),
+.Cart-table td:nth-child(4),
+.Cart-table td:nth-child(5) {
+  text-align: center;
 }
 
+/* 수량 td의 내용도 가운데 정렬 */
 .Cart-item-quantity {
   display: flex;
+  justify-content: center;
   align-items: center;
 }
 
@@ -62,7 +66,6 @@ thead {
   cursor: pointer;
   border-radius: 5px;
   margin: 0 5px;
-  color: black;
 }
 
 .Cart-quantity-btn:hover {
@@ -70,18 +73,17 @@ thead {
 }
 
 .Cart-remove-btn {
-  background-color: #f8f9fa;
-  color: #acacac;
   text-decoration: underline;
   border: none;
   border-radius: 0;
   padding: 5px;
   cursor: pointer;
+  background-color: transparent; /* 배경색 제거 */
+  color: inherit; /* 텍스트 색상 기본값으로 설정 */
 }
 
 .Cart-remove-btn:hover {
-  background-color: #f8f9fa;
-  color: rgb(255, 0, 0);
+  color: rgb(255, 0, 0); /* 호버 시 빨간색으로 변경 */
 }
 
 .Cart-summary {
@@ -111,10 +113,6 @@ thead {
   align-items: flex-start;
 }
 
-.Cart-festival-info img {
-  cursor: pointer;
-}
-
 .Cart-ticket-image {
   width: 50px;
   height: 50px;
@@ -140,13 +138,12 @@ thead {
   margin: 3px 0;
 }
 
-/* Remove the hover effects and text-decoration for the links */
 .Cart-festival-link {
-  text-decoration: none; /* No underline */
-  color: inherit; /* Keep the text color as it is */
+  text-decoration: none;
+  color: inherit;
 }
 
 .Cart-festival-link:hover {
-  text-decoration: underline; /* Ensure no underline appears */
-  color: inherit; /* Keep the same text color */
+  text-decoration: underline;
+  color: inherit;
 }

@@ -72,6 +72,20 @@ a {
   color: #333;
 }
 
+/* ✅ 라이트 모드 스타일 div용*/
+.light-mode.div {
+  color: #333;
+  background-color: white;
+  border-color: #333;
+}
+
+/* ✅ 다크 모드 스타일 div용*/
+.dark-mode.div {
+  color: white;
+  background-color: #181818;
+  border-color: white;
+}
+
 /* ✅ 라이트 모드 글자 스타일 */
 .light-mode.span {
   color: #333;
@@ -221,4 +235,7 @@ a {
 .light-mode.custom-pagination .page-item .page-link:hover {
   background-color: #666 !important; /* 마우스 오버 시 - 어두운 회색 */
   color: white !important;
+}
+html {
+  scroll-behavior: auto !important;
 }

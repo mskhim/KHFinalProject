@@ -173,7 +173,7 @@ const EventListViewWrap = () => {
           text="추가 forManager"
           role="manager"
           onClick={() => {
-            navigate('/managerEventInsert');
+            navigate('/manager/managerEventInsert');
           }}
         />
       </div>

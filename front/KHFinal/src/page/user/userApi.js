@@ -151,7 +151,7 @@ export const refreshAccessToken = async () => {
 };
 
 /**
- * API 요청 시 JWT 자동 포함
+ * API 요청 시 JWT 자동 연장
  */
 export const fetchWithAuth = async (url, options = {}) => {
   const response = await fetch(url, {
@@ -192,7 +192,7 @@ export const checkAuthStatus = async () => {
 };
 
 /**
- * jwt 쿠키에 저장 되어있는지 확인하는 메소드
+ * jwt의 id와 provider로 db에 정보 가져오는 메소드
  */
 
 export const getUserIdProvider = async () => {

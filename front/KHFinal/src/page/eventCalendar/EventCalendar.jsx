@@ -10,6 +10,8 @@ import {
 } from 'react-bootstrap';
 import { Header, Footer } from '../../components';
 import './css/EventCalendar.css';
+import ButtonDarkMode from '../../components/ui/ButtonDarkMode';
+import EventListViewWrap from './include/EventListVIewWrap';
 
 const EventCalendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date()); // 현재 날짜 상태
@@ -89,9 +91,7 @@ const EventCalendar = () => {
         {/* 월 이동 버튼 */}
         <Row className="justify-content-center mb-3">
           <Col xs="auto">
-            <Button variant="outline-primary" onClick={() => changeMonth(-1)}>
-              &lt;
-            </Button>
+            <ButtonDarkMode text="&lt;" onClick={() => changeMonth(-1)} />
           </Col>
           <Col xs="auto">
             <h2 className="month-title">
@@ -102,15 +102,13 @@ const EventCalendar = () => {
             </h2>
           </Col>
           <Col xs="auto">
-            <Button variant="outline-primary" onClick={() => changeMonth(1)}>
-              &gt;
-            </Button>
+            <ButtonDarkMode text="&gt;" onClick={() => changeMonth(1)} />
           </Col>
         </Row>
 
         {/* 달력 테이블 */}
         <Row className="justify-content-center">
-          <Col md={10}>
+          <Col md={7}>
             <Table bordered hover striped className="calendar-table">
               <thead>
                 <tr>
@@ -127,27 +125,8 @@ const EventCalendar = () => {
             </Table>
           </Col>
         </Row>
-
-        {/* 축제 정보 모달 */}
-        {selectedFestival && (
-          <Modal show onHide={() => setSelectedFestival(null)} centered>
-            <Modal.Header closeButton>
-              <Modal.Title>축제 정보</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <h5>{selectedFestival.name}</h5>
-              <p>{selectedFestival.date}</p>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button
-                variant="secondary"
-                onClick={() => setSelectedFestival(null)}
-              >
-                닫기
-              </Button>
-            </Modal.Footer>
-          </Modal>
-        )}
+        {/* 축제 리스트 출력 */}
+        <EventListViewWrap />
       </Container>
       <Footer />
     </>

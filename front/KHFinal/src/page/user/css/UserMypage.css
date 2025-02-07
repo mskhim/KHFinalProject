@@ -1,0 +1,285 @@
+/* 공통 Input 스타일 */
+.MyPageMain-input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.MyPageMain-input-field {
+  width: 90%; /* 이메일 입력의 너비를 90%로 줄임 */
+  border: none; /* 기본 테두리 제거 */
+  border-radius: 5px;
+  padding: 8px 15px;
+  font-size: 1rem;
+  height: 40px; /* 기본 높이 40px */
+  background-color: transparent; /* 배경색을 투명하게 설정 */
+  color: inherit; /* 텍스트 색상을 부모의 색상으로 상속받도록 설정 */
+}
+
+.MyPageMain-input-with-button input {
+  margin-top: 20px;
+}
+
+.MyPageMain-input-with-button {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* 입력창과 버튼 간 간격 */
+  position: relative;
+  width: 100%;
+}
+
+.MyPageMain-input-with-button label {
+  position: absolute;
+  top: -20px; /* 입력창 위로 올리기 */
+  left: 0;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333; /* 레이블 색상 */
+}
+
+.MyPageMain-input-with-button input:focus {
+  border-color: #28a745;
+  outline: none;
+  box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+}
+
+.MyPageMain-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 20px 40px; /* 좌우 패딩을 조금 더 넉넉히 */
+  max-width: 1200px;
+  margin: 0 auto; /* 중앙 정렬 */
+}
+
+.MyPageMain-header {
+  text-align: left;
+  width: 100%;
+  margin-top: 0;
+  margin-left: 0; /* 왼쪽 여백 제거 */
+  margin-bottom: 40px; /* 하단 여백을 40px로 설정 */
+  font-size: 2.5rem; /* 헤더 글자 크기 키움 */
+}
+
+.MyPageMain-wrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: flex-start;
+  gap: 30px; /* 메뉴와 콘텐츠 간격 */
+}
+
+.MyPageMain-menu {
+  width: 220px; /* 메뉴 너비를 220px로 설정 */
+  padding: 20px;
+  box-sizing: border-box;
+  border-top: 3.5px solid;
+  border-bottom: 3.5px solid;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: auto;
+  max-height: 500px; /* 메뉴 높이를 늘려서 스크롤을 방지 */
+  border-radius: 0px !important;
+}
+
+.MyPageMain-menu ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.MyPageMain-menu li {
+  margin: 20px 0; /* 메뉴 항목 간격을 20px로 설정 */
+}
+
+.MyPageMain-menu span {
+  font-weight: bold;
+  display: block;
+  padding: 12px 18px;
+  border-radius: 5px;
+  position: relative;
+  transition: color 0.3s ease, padding-left 0.3s ease;
+  cursor: pointer;
+  font-size: 1.1rem; /* 메뉴 텍스트 크기 조정 */
+}
+
+.MyPageMain-menu span:hover {
+  padding-left: 25px;
+}
+
+.MyPageMain-menu span::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 5px;
+  width: 0;
+  height: 2px;
+  background-color: #252429;
+  transition: width 0.3s ease;
+}
+
+.MyPageMain-menu.dark-mode span::before {
+  background-color: white;
+}
+
+.MyPageMain-menu span:hover::before {
+  width: 100%;
+}
+
+.MyPageMain-menu span.active::before {
+  width: 100%;
+}
+
+.MyPageMain-content {
+  margin-left: 90px; /* 메뉴와 콘텐츠 간격을 좁히기 위해 margin-left를 90px로 설정 */
+  padding: 20px 30px;
+  width: calc(100% - 90px); /* 메뉴 너비를 제외한 콘텐츠 너비 설정 */
+  display: flex;
+  flex-direction: column;
+}
+
+.MyPageMain-section {
+  display: none;
+}
+
+.MyPageMain-section.active {
+  display: block;
+}
+
+.MyPageMain-card {
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  margin-bottom: 30px; /* 카드 간격을 넉넉히 */
+  background-color: none;
+}
+
+.MyPageMain-card-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.MyPageMain-info-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.MyPageMain-info-group > * {
+  margin-bottom: 15px; /* 항목 간 간격 */
+  border-bottom: 1px solid; /* 각 항목 사이에 선 추가 */
+}
+
+.MyPageMain-info-group > *:last-child {
+  margin-bottom: -20px; /* 마지막 항목의 여백을 없앰 */
+}
+
+.MyPageMain-card p {
+  font-size: 0.95rem;
+}
+
+.MyPageMain-button-container {
+  margin-top: 50px; /* 버튼 간격을 좀 더 넉넉히 */
+  display: flex;
+  gap: 20px; /* 버튼 간의 간격 */
+}
+
+.MyPageMain-button {
+  padding: 12px 25px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: #252429;
+  color: white;
+  min-width: 120px; /* 최소 너비 설정 */
+  font-size: 1.1rem;
+  height: 40px; /* 버튼 높이를 40px로 동일하게 설정 */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.MyPageMain-button:hover {
+  background-color: #252429d8;
+}
+
+.MyPageMain-section h2 {
+  margin-bottom: 25px;
+  font-size: 1.8rem; /* 섹션 제목 글자 크기 키움 */
+}
+
+
+.MyPageMain-input-field:focus {
+  border-color: #28a745;
+  outline: none;
+  box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+  width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .MyPageMain-wrapper {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .MyPageMain-menu {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .MyPageMain-content {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .MyPageMain-header {
+    text-align: center;
+    padding-left: 0;
+    margin-left: 0;
+  }
+
+  .MyPageMain-menu {
+    margin-bottom: 25px;
+  }
+
+  .MyPageMain-menu li {
+    margin: 15px 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .MyPageMain-wrapper {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .MyPageMain-menu {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .MyPageMain-content {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .MyPageMain-menu li {
+    margin: 12px 0;
+  }
+
+  .MyPageMain-button-container {
+    margin-top: 30px;
+    justify-content: center; /* 버튼을 가운데 정렬 */
+    width: 100%;
+  }
+
+  .MyPageMain-card {
+    max-width: 100%;
+    margin-bottom: 25px;
+  }
+}

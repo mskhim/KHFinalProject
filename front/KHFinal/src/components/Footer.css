@@ -1,49 +1,39 @@
-/* footer 컨테이너 */
-.Footer-sns {
+.Footer-light-mode {
+  background-color: #ffffff; /* ✅ 원하는 색상으로 변경 */
+  color: #000000; /* ✅ 텍스트 색상 조정 */
+}
+
+.Footer-container-fluid {
+  padding: 5rem;
+  margin-top: 5rem;
+}
+
+.Footer-row {
   display: flex;
   justify-content: center;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  border-bottom: 1px solid rgb(152, 152, 152);
-  padding-bottom: 30px;
-  margin-bottom: 10px;
+  gap: 2rem;
 }
 
-.Footer-sns > a {
-  margin-right: 30px;
-  font-size: 20px;
-}
-
-.Footer-sns > a > img {
-  margin-right: 10px;
-  width: 50px;
-  border-radius: 50%;
-  background-color: gray;
-  transition: background-color 0.2s;
-}
-
-.Footer-sns > a {
+.Footer-col a {
   text-decoration: none;
-  color: white;
+  font-weight: bold;
+  transition: color 0.3s ease-in-out;
 }
 
-.Footer-row a {
-  text-decoration: none;
-  color: white;
+.Footer-col a {
+  color: #080808; /* 화이트 모드 기본 글씨색 */
 }
 
-a:hover > img {
-  background-color: rgb(255, 255, 255);
+.Footer-col a:hover {
+  color: #888; /* 화이트 모드에서 hover 시 회색 */
 }
 
-.Footer-col > a {
-  color: gray;
+.bg-dark .Footer-col a {
+  color: #fff; /* 다크 모드 기본 글씨색 */
 }
 
-.Footer-col:hover > a {
-  color: white;
-  transition: background-color 0.5s;
+.bg-dark .Footer-col a:hover {
+  color: #bbb; /* 다크 모드에서 hover 시 연한 회색 */
 }
 
 .Footer-copyRight {
@@ -56,7 +46,6 @@ a:hover > img {
 .Footer-copyRight img {
   width: 120px;
   height: 40px;
-  background-color: gray;
   margin-right: 3px;
 }
 
