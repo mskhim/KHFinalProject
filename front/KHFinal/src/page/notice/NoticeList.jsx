@@ -4,7 +4,7 @@ import "./notice.css";
 import { Link } from "react-router-dom";
 import { Context } from "../../Context";
 import { useContext, useState } from "react";
-import { Pagination } from "react-bootstrap";
+import { Container, Pagination } from "react-bootstrap";
 
 const NoticeList = () => {
   const notice = [
@@ -37,14 +37,14 @@ const NoticeList = () => {
 
   return (
     <>
-      <Header />
+      <Header className="Notice-header" />
       <section className="Notice-notice">
-        {/* 공지사항 제목을 번호 위로 이동 */}
+        {/* 공지사항 제목 */}
         <div className="Notice-title-container">
           <h3 className={`Notice-title ${getDarkMode()}`}>공지사항</h3>
         </div>
 
-        {/* 검색창을 유지하면서 정렬 */}
+        {/* 검색창 */}
         <div className="Notice-header">
           <div className="Notice-board-search">
             <div className="Notice-search-window">
@@ -123,7 +123,7 @@ const NoticeList = () => {
           onClick={() => handlePageChange(currentPage + 1)}
         />
       </Pagination>
-      <Footer />
+      <Footer className="Notice-footer" />
     </>
   );
 };
