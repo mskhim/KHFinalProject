@@ -1,4 +1,10 @@
 /* ✅ 헤더 컨테이너 */
+.Header-navbar-all {
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #ddd;
+}
+.Header-navbar-all-active {
+}
 #Header-headerContainer {
   z-index: 3;
 }
@@ -271,4 +277,7 @@ body.Header-dark-mode .Header-user-dropdown .Header-dropdown-item:hover {
 }
 .Header-logo {
   line-height: 100px;
+}
+.Header-top-line {
+  z-index: 1051;
 }
