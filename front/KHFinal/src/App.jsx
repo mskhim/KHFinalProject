@@ -4,6 +4,9 @@ import RouterComponent from './RouterComponent';
 import { Provider } from './Context';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+import { Chart, registerables } from 'chart.js';
+
+Chart.register(...registerables);
 
 function App() {
   return (
