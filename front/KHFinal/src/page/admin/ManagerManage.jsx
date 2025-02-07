@@ -8,7 +8,7 @@ const ManagerManage = () => {
   const [items, setItems] = useState([
     {
       no: 1,
-      nickname: "서울",
+      name: "서울",
       id: "seoul",
       pwd: 1234,
       phone: "010-1111-1111",
@@ -16,7 +16,7 @@ const ManagerManage = () => {
     },
     {
       no: 2,
-      nickname: "경기도",
+      name: "경기도",
       id: "gyeonggi",
       pwd: 1234,
       phone: "010-2222-2222",
@@ -24,87 +24,7 @@ const ManagerManage = () => {
     },
     {
       no: 3,
-      nickname: "인천",
-      id: "incheon",
-      pwd: 1234,
-      phone: "010-3333-3333",
-      reg_date: "2025-02-05",
-    },
-    {
-      no: 3,
-      nickname: "인천",
-      id: "incheon",
-      pwd: 1234,
-      phone: "010-3333-3333",
-      reg_date: "2025-02-05",
-    },
-    {
-      no: 3,
-      nickname: "인천",
-      id: "incheon",
-      pwd: 1234,
-      phone: "010-3333-3333",
-      reg_date: "2025-02-05",
-    },
-    {
-      no: 3,
-      nickname: "인천",
-      id: "incheon",
-      pwd: 1234,
-      phone: "010-3333-3333",
-      reg_date: "2025-02-05",
-    },
-    {
-      no: 3,
-      nickname: "인천",
-      id: "incheon",
-      pwd: 1234,
-      phone: "010-3333-3333",
-      reg_date: "2025-02-05",
-    },
-    {
-      no: 3,
-      nickname: "인천",
-      id: "incheon",
-      pwd: 1234,
-      phone: "010-3333-3333",
-      reg_date: "2025-02-05",
-    },
-    {
-      no: 3,
-      nickname: "인천",
-      id: "incheon",
-      pwd: 1234,
-      phone: "010-3333-3333",
-      reg_date: "2025-02-05",
-    },
-    {
-      no: 3,
-      nickname: "인천",
-      id: "incheon",
-      pwd: 1234,
-      phone: "010-3333-3333",
-      reg_date: "2025-02-05",
-    },
-    {
-      no: 3,
-      nickname: "인천",
-      id: "incheon",
-      pwd: 1234,
-      phone: "010-3333-3333",
-      reg_date: "2025-02-05",
-    },
-    {
-      no: 3,
-      nickname: "인천",
-      id: "incheon",
-      pwd: 1234,
-      phone: "010-3333-3333",
-      reg_date: "2025-02-05",
-    },
-    {
-      no: 3,
-      nickname: "인천",
+      name: "인천",
       id: "incheon",
       pwd: 1234,
       phone: "010-3333-3333",
@@ -164,11 +84,11 @@ const ManagerManage = () => {
 
   // 검색어에 따라 필터링된 아이템
   const filteredItems = items.filter((item) =>
-    item.nickname.toLowerCase().includes(searchTerm.toLowerCase())
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <Container className="text-center">
+    <Container className="admin-page text-center">
       <div className="justify-content-end d-flex mb-3">
         <Form.Control
           type="text"
@@ -181,15 +101,19 @@ const ManagerManage = () => {
         <Button className="btn btn-danger">삭제</Button>
       </div>
 
-      <Table bordered hover responsive className="admin-table">
+      <Table bordered hover responsive className="admin-table table">
         <thead>
           <tr>
-            <th className="text-bg-primary text-center">
+            <th
+              className="text-bg-primary text-center"
+              style={{ width: "90px" }}
+            >
               <Form.Check checked={selectAll} onChange={handleSelectAll} />
             </th>
             <th
               className="text-bg-primary text-center"
               onClick={() => handleSort("no")}
+              style={{ width: "90px" }}
             >
               NO
               {thName === "no" &&
@@ -197,39 +121,61 @@ const ManagerManage = () => {
             </th>
             <th
               className="text-bg-primary text-center"
-              onClick={() => handleSort("nickname")}
+              onClick={() => handleSort("name")}
+              style={{ width: "200px" }}
             >
               담당자
-              {thName === "nickname" &&
+              {thName === "name" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
               className="text-bg-primary text-center"
               onClick={() => handleSort("id")}
+              style={{ width: "200px" }}
             >
               아이디
               {thName === "id" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
-            <th className="text-bg-primary text-center">비밀번호</th>
-            <th className="text-bg-primary text-center">전화번호</th>
+            <th
+              className="text-bg-primary text-center"
+              style={{ width: "200px" }}
+            >
+              비밀번호
+            </th>
+            <th
+              className="text-bg-primary text-center"
+              style={{ width: "200px" }}
+            >
+              전화번호
+            </th>
             <th
               className="text-bg-primary text-center"
               onClick={() => handleSort("reg_date")}
+              style={{ width: "200px" }}
             >
               계정 생성일
               {thName === "reg_date" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
-            <th className="text-bg-primary text-center">추가/수정</th>
+            <th
+              className="text-bg-primary text-center"
+              style={{ width: "110px" }}
+            >
+              추가/수정
+            </th>
           </tr>
         </thead>
         <tbody>
           {/* 입력 가능한 빈 행 */}
           <tr>
-            <td className="text-center">신규 추가</td>
-            <td className="text-center">-</td>
-            <td>
+            <td className="text-center" style={{ width: "90px" }}>
+              신규 추가
+            </td>
+            <td className="text-center" style={{ width: "90px" }}>
+              -
+            </td>
+            <td style={{ width: "200px" }}>
               <Form.Control
                 className="admin-table-td text-center"
                 type="text"
@@ -237,7 +183,7 @@ const ManagerManage = () => {
                 style={{ border: "none" }}
               />
             </td>
-            <td>
+            <td style={{ width: "200px" }}>
               <Form.Control
                 className="admin-table-td text-center"
                 type="text"
@@ -245,7 +191,7 @@ const ManagerManage = () => {
                 style={{ border: "none" }}
               />
             </td>
-            <td>
+            <td style={{ width: "200px" }}>
               <Form.Control
                 className="admin-table-td text-center"
                 type="text"
@@ -253,7 +199,7 @@ const ManagerManage = () => {
                 style={{ border: "none" }}
               />
             </td>
-            <td>
+            <td style={{ width: "200px" }}>
               <Form.Control
                 className="admin-table-td text-center"
                 type="text"
@@ -261,14 +207,14 @@ const ManagerManage = () => {
                 style={{ border: "none" }}
               />
             </td>
-            <td>
+            <td style={{ width: "200px" }}>
               <Form.Control
                 className="admin-table-td text-center"
                 type="date"
                 style={{ border: "none" }}
               />
             </td>
-            <td>
+            <td style={{ width: "93px" }}>
               <Button className="btn btn-primary me-2">추가</Button>
             </td>
           </tr>
@@ -276,7 +222,7 @@ const ManagerManage = () => {
           {/* 데이터 행 */}
           {filteredItems.map((data) => (
             <tr key={data.id}>
-              <td className="text-center">
+              <td className="text-center" style={{ width: "90px" }}>
                 <Form.Check
                   checked={data.checked}
                   onChange={() =>
@@ -284,16 +230,18 @@ const ManagerManage = () => {
                   }
                 />
               </td>
-              <td className="text-center">{data.no}</td>
-              <td>
+              <td className="text-center" style={{ width: "90px" }}>
+                {data.no}
+              </td>
+              <td style={{ width: "200px" }}>
                 <Form.Control
                   className="admin-table-td text-center"
                   type="text"
-                  value={data.nickname}
+                  value={data.name}
                   style={{ border: "none" }}
                 />
               </td>
-              <td>
+              <td style={{ width: "200px" }}>
                 <Form.Control
                   className="admin-table-td text-center"
                   type="text"
@@ -301,7 +249,7 @@ const ManagerManage = () => {
                   style={{ border: "none" }}
                 />
               </td>
-              <td>
+              <td style={{ width: "200px" }}>
                 <Form.Control
                   className="admin-table-td text-center"
                   type="text"
@@ -309,7 +257,7 @@ const ManagerManage = () => {
                   style={{ border: "none" }}
                 />
               </td>
-              <td>
+              <td style={{ width: "200px" }}>
                 <Form.Control
                   className="admin-table-td text-center"
                   type="text"
@@ -317,7 +265,7 @@ const ManagerManage = () => {
                   style={{ border: "none" }}
                 />
               </td>
-              <td>
+              <td style={{ width: "200px" }}>
                 <Form.Control
                   className="admin-table-td text-center"
                   type="date"
@@ -325,7 +273,7 @@ const ManagerManage = () => {
                   style={{ border: "none" }}
                 />
               </td>
-              <td>
+              <td style={{ width: "93px" }}>
                 <Button className="btn btn-primary me-2">수정</Button>
               </td>
             </tr>
