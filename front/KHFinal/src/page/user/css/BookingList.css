@@ -90,8 +90,8 @@
 }
 
 .BookingList-content {
-  margin-left: 220px; /* Adjusted to the width of the menu */
-  padding: 20px 30px;
+  margin-left: 90px;
+  padding: 0px 30px;
   width: calc(100% - 220px); /* Adjusted for the fixed menu width */
   display: flex;
   flex-direction: column;
@@ -101,6 +101,14 @@
   display: none;
 }
 
+.BookingList-section #BookingList-cancle
+{
+  display: flex;
+  justify-content: center; /* 수평 중앙 정렬 */
+  align-items: center;     /* 세로 중앙 정렬 */
+  margin: 100px auto;               /* 기본 여백 제거 */
+}
+
 .BookingList-section.active {
   display: block;
 }
@@ -108,7 +116,6 @@
 .BookingList-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
 }
 
 .BookingList-th,
@@ -118,14 +125,21 @@
   text-align: center;
 }
 
+.BookingList-tr {
+  border: solid 3.5px;
+  border-left: none;
+  border-right: none;
+}
+
 /* 왼쪽 첫 번째 셀에 border 제거 */
-table th:first-child,
-table td:first-child {
+.BookingList-table th:first-child,
+.BookingList-table td:first-child {
   border-left: none;
 }
 
 /* 오른쪽 마지막 셀에 border 제거 */
-table th:last-child, table td:last-child {
+.BookingList-table th:last-child,
+.BookingList-table td:last-child {
   border-right: none;
 }
 
@@ -174,10 +188,6 @@ table th:last-child, table td:last-child {
     margin-bottom: 25px;
   }
 
-  .BookingList-content {
-    margin-left: 0;
-    width: 100%;
-  }
 
   .BookingList-header {
     text-align: center;
@@ -199,11 +209,6 @@ table th:last-child, table td:last-child {
   .BookingList-menu {
     width: 100%;
     margin-bottom: 15px;
-  }
-
-  .BookingList-content {
-    width: 100%;
-    margin-left: 0;
   }
 
   .BookingList-menu li {

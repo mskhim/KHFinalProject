@@ -200,7 +200,7 @@ function UserCart() {
 
           <div className="Cart-summary">
             <p>총 {selectedItems.length}개의 항목이 선택되었습니다.</p>
-            <p>총 결제 금액: {totalAmount.toLocaleString()} 원</p>
+            <p>총 결제 금액 : {totalAmount.toLocaleString()} 원</p>
             {/* 결제 버튼 */}
             <button className="Cart-checkout-btn">결제하기</button>
           </div>

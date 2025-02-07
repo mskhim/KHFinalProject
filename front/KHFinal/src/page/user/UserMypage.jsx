@@ -314,12 +314,13 @@ function UserMypage() {
                       {isEditable ? '완료' : '수정하기'}
                     </Button>
                     {isEditable && (
-                      <button
-                        className="MyPageMain-button w-50"
+                      <Button
+                        variant="none"
+                        className={`${getDarkModeHover()} w-50`}
                         onClick={handleCancel}
                       >
                         취소
-                      </button>
+                      </Button>
                     )}
                   </>
                 ) : (
@@ -348,12 +349,13 @@ function UserMypage() {
                       onChange={(e) => setEmailInput(e.target.value)}
                       className="MyPageMain-input-field border border-1 mt-0 me-3"
                     />
-                    <button
-                      className="MyPageMain-button"
+                    <Button
+                      variant="none"
+                      className={`${getDarkModeHover()} w-50`}
                       onClick={handleEmailSubmit}
                     >
                       탈퇴하기
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </div>
