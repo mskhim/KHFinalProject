@@ -32,6 +32,16 @@ const festivalsMockData = {
         () => Math.floor(Math.random() * 1000) + 100
       ),
     },
+    ratingData: {
+      labels: Array.from(
+        { length: 7 },
+        (_, i) => `${1 + 10 * i}세 ~ ${10 + 10 * i}세`
+      ),
+      values: Array.from(
+        { length: 7 },
+        () => Math.floor(Math.random() * 5) + 1
+      ),
+    },
   },
   2: {
     name: '부산 바다축제',
@@ -60,6 +70,16 @@ const festivalsMockData = {
         () => Math.floor(Math.random() * 1000) + 100
       ),
     },
+    ratingData: {
+      labels: Array.from(
+        { length: 7 },
+        (_, i) => `${1 + 10 * i}세 ~ ${10 + 10 * i}세`
+      ),
+      values: Array.from(
+        { length: 7 },
+        () => Math.floor(Math.random() * 5) + 1
+      ),
+    },
   },
   3: {
     name: '대구 치맥축제',
@@ -86,6 +106,16 @@ const festivalsMockData = {
       values: Array.from(
         { length: 10 },
         () => Math.floor(Math.random() * 1000) + 100
+      ),
+    },
+    ratingData: {
+      labels: Array.from(
+        { length: 7 },
+        (_, i) => `${1 + 10 * i}세 ~ ${10 + 10 * i}세`
+      ),
+      values: Array.from(
+        { length: 7 },
+        () => Math.floor(Math.random() * 5) + 1
       ),
     },
   },
@@ -117,6 +147,13 @@ const festivalsMockData = {
       ),
     },
   },
+  ratingData: {
+    labels: Array.from(
+      { length: 7 },
+      (_, i) => `${1 + 10 * i}세 ~ ${10 + 10 * i}세`
+    ),
+    values: Array.from({ length: 7 }, () => Math.floor(Math.random() * 5) + 1),
+  },
 };
 
 const festivals = Object.keys(festivalsMockData).map((id) => ({
@@ -128,6 +165,7 @@ const ManagerStats = () => {
   const [selectedFestival, setSelectedFestival] = useState(festivals[0].id);
   const [regionData, setRegionData] = useState({ labels: [], values: [] });
   const [bookingData, setBookingData] = useState({ labels: [], values: [] });
+  const [ratingData, setRatingData] = useState({ labels: [], values: [] });
 
   useEffect(() => {
     fetchStatistics(selectedFestival);
@@ -139,6 +177,7 @@ const ManagerStats = () => {
     if (selectedData) {
       setRegionData(selectedData.regionData);
       setBookingData(selectedData.bookingData);
+      setRatingData(selectedData.ratingData);
     }
   };
 
@@ -165,7 +204,7 @@ const ManagerStats = () => {
         {/* 통계 차트 */}
         <Row>
           {/* 지역별 이용 수 (Bar Chart) */}
-          <Col md={6}>
+          <Col md={4}>
             <div className="chart-container">
               <h5 className="text-center">지역별 이용 수</h5>
               <Bar
@@ -185,8 +224,29 @@ const ManagerStats = () => {
               />
             </div>
           </Col>
+          {/* 연령대별 평균 평점 (Bar Chart) */}
+          <Col md={4}>
+            <div className="chart-container">
+              <h5 className="text-center">연령대별 평균 평점</h5>
+              <Bar
+                data={{
+                  labels: ratingData.labels,
+                  datasets: [
+                    {
+                      label: '평점',
+                      data: ratingData.values,
+                      backgroundColor: 'rgba(218, 218, 84, 0.6)',
+                      borderColor: 'rgb(192, 192, 75)',
+                      borderWidth: 1,
+                    },
+                  ],
+                }}
+                options={{ responsive: true, maintainAspectRatio: false }}
+              />
+            </div>
+          </Col>
           {/* 일정별 예매 수량 (Line Chart) */}
-          <Col md={6}>
+          <Col md={4}>
             <div className="chart-container">
               <h5 className="text-center">예매 수량 (일정별)</h5>
               <Line
@@ -218,14 +278,12 @@ const ManagerStats = () => {
           </Col>
           <Col md={4}>
             <div className="stat-card">
-              <h4>평균 예매율</h4>
+              <h4>평균 평점</h4>
               <p>
                 {(
-                  (bookingData.values?.reduce((acc, val) => acc + val, 0) /
-                    10) *
-                  100
+                  ratingData.values?.reduce((acc, val) => acc + val, 0) / 7
                 ).toFixed(2)}
-                %
+                점
               </p>
             </div>
           </Col>
