@@ -173,6 +173,13 @@ const Header = ({ page }) => {
                   공지사항
                 </NavDropdown.Item>
               </NavDropdown>
+              <Nav.Link
+                as={NavLink}
+                to="/manager/managerStats"
+                className={`${darkMode ? 'text-light' : 'text-dark'}`}
+              >
+                통계
+              </Nav.Link>
             </Nav>
 
             <div className="d-flex align-items-center">

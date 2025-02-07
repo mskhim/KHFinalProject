@@ -9,7 +9,7 @@ const ButtonDarkMode = ({ text, onClick }) => {
   return (
     <Button
       onClick={onClick}
-      className={`ButtonDarkMode   ${getDarkModeHover()}`}
+      className={` ${getDarkModeHover()}`}
       variant="none"
     >
       {text}

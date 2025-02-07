@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Container,
   Row,
@@ -12,12 +12,12 @@ import { Header, Footer } from '../../components';
 import './css/EventCalendar.css';
 import ButtonDarkMode from '../../components/ui/ButtonDarkMode';
 import EventListViewWrap from './include/EventListVIewWrap';
-
+import { Context } from '../../Context';
 const EventCalendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date()); // 현재 날짜 상태
   const [selectedFestival, setSelectedFestival] = useState(null); // 선택된 축제 정보
   const [selectDate, setSelectDate] = useState(null); // 선택된 날짜
-
+  const { getDarkModeHover, darkMode } = useContext(Context);
   // 월 이동 함수
   const changeMonth = (offset) => {
     const newDate = new Date(currentDate);
@@ -87,47 +87,58 @@ const EventCalendar = () => {
   return (
     <>
       <Header page="cal" />
-      <Container className="calendar-container text-center mt-4 p-4">
-        {/* 월 이동 버튼 */}
-        <Row className="justify-content-center mb-3">
-          <Col xs="auto">
-            <ButtonDarkMode text="&lt;" onClick={() => changeMonth(-1)} />
-          </Col>
-          <Col xs="auto">
-            <h2 className="month-title">
-              {currentDate.toLocaleString('default', {
-                year: 'numeric',
-                month: 'long',
-              })}
-            </h2>
-          </Col>
-          <Col xs="auto">
-            <ButtonDarkMode text="&gt;" onClick={() => changeMonth(1)} />
-          </Col>
-        </Row>
+      <div className="d-flex justify-content-center">
+        <Container className="calendar-container mt-4 p-4 mx-auto">
+          <Row className=" mb-3 col-12">
+            <Col className="justify-content-between">
+              <h3>월별 축제 </h3>
+            </Col>
+          </Row>
+          {/* 월 이동 버튼 */}
+          <Row className="justify-content-between mb-3 col-12">
+            <Col className="col-6">
+              <span className="month-title">
+                {currentDate.toLocaleString('default', {
+                  year: 'numeric',
+                  month: 'long',
+                })}
+              </span>
+            </Col>
+            <Col className="text-end">
+              <ButtonDarkMode text="&lt;" onClick={() => changeMonth(-1)} />
+              <span className="mx-3"></span>
+              <ButtonDarkMode text="&gt;" onClick={() => changeMonth(1)} />
+            </Col>
+          </Row>
 
-        {/* 달력 테이블 */}
-        <Row className="justify-content-center">
-          <Col md={7}>
-            <Table bordered hover striped className="calendar-table">
-              <thead>
-                <tr>
-                  <th className="text-danger">일</th>
-                  <th>월</th>
-                  <th>화</th>
-                  <th>수</th>
-                  <th>목</th>
-                  <th>금</th>
-                  <th className="text-primary">토</th>
-                </tr>
-              </thead>
-              <tbody>{renderCalendar()}</tbody>
-            </Table>
-          </Col>
-        </Row>
-        {/* 축제 리스트 출력 */}
-        <EventListViewWrap />
-      </Container>
+          {/* 달력 테이블 */}
+          <Row className="justify-content-center col-12">
+            <Col>
+              <Table
+                bordered
+                hover
+                striped
+                className={`calendar-table ${darkMode ? 'table-dark' : ''}`}
+              >
+                <thead>
+                  <tr>
+                    <th className="text-danger">일</th>
+                    <th>월</th>
+                    <th>화</th>
+                    <th>수</th>
+                    <th>목</th>
+                    <th>금</th>
+                    <th className="text-primary">토</th>
+                  </tr>
+                </thead>
+                <tbody>{renderCalendar()}</tbody>
+              </Table>
+            </Col>
+          </Row>
+          {/* 축제 리스트 출력 */}
+          <EventListViewWrap />
+        </Container>
+      </div>
       <Footer />
     </>
   );

@@ -107,12 +107,16 @@ const UserManage = () => {
       <Table bordered hover responsive className="admin-table">
         <thead>
           <tr>
-            <th className="text-bg-primary text-center">
+            <th
+              className="text-bg-primary text-center "
+              style={{ width: "90px" }}
+            >
               <Form.Check checked={selectAll} onChange={handleSelectAll} />
             </th>
             <th
               className="text-bg-primary text-center"
               onClick={() => handleSort("no")}
+              style={{ width: "90px" }}
             >
               NO
               {thName === "no" &&
@@ -121,6 +125,7 @@ const UserManage = () => {
             <th
               className="text-bg-primary text-center"
               onClick={() => handleSort("id")}
+              style={{ width: "200px" }}
             >
               아이디
               {thName === "id" &&
@@ -129,16 +134,28 @@ const UserManage = () => {
             <th
               className="text-bg-primary text-center"
               onClick={() => handleSort("provider")}
+              style={{ width: "200px" }}
             >
               로그인유형
               {thName === "provider" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
-            <th className="text-bg-primary text-center">전화번호</th>
-            <th className="text-bg-primary text-center">생년월일</th>
+            <th
+              className="text-bg-primary text-center"
+              style={{ width: "200px" }}
+            >
+              전화번호
+            </th>
+            <th
+              className="text-bg-primary text-center"
+              style={{ width: "200px" }}
+            >
+              생년월일
+            </th>
             <th
               className="text-bg-primary text-center"
               onClick={() => handleSort("region")}
+              style={{ width: "135px" }}
             >
               지역
               {thName === "region" &&
@@ -147,6 +164,7 @@ const UserManage = () => {
             <th
               className="text-bg-primary text-center"
               onClick={() => handleSort("reg_date")}
+              style={{ width: "180px" }}
             >
               계정 생성일
               {thName === "reg_date" &&
@@ -158,7 +176,7 @@ const UserManage = () => {
           {/* 데이터 행 */}
           {filteredItems.map((data) => (
             <tr key={data.id}>
-              <td className="text-center">
+              <td className="text-center" style={{ width: "90px" }}>
                 <Form.Check
                   checked={data.checked}
                   onChange={() =>
@@ -166,13 +184,13 @@ const UserManage = () => {
                   }
                 />
               </td>
-              <td className="text-center">{data.no}</td>
-              <td>{data.id}</td>
-              <td>{data.provider}</td>
-              <td>{data.phone}</td>
-              <td>{data.birth}</td>
-              <td>{data.region}</td>
-              <td>{data.reg_date}</td>
+              <td style={{ width: "90px" }}>{data.no}</td>
+              <td style={{ width: "200px" }}>{data.id}</td>
+              <td style={{ width: "200px" }}>{data.provider}</td>
+              <td style={{ width: "200px" }}>{data.phone}</td>
+              <td style={{ width: "200px" }}>{data.birth}</td>
+              <td style={{ width: "135px" }}>{data.region}</td>
+              <td style={{ width: "164px" }}>{data.reg_date}</td>
             </tr>
           ))}
         </tbody>

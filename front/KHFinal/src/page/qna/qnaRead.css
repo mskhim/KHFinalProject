@@ -1,0 +1,194 @@
+/* ============================================
+   Q&A 상세 페이지 스타일
+   ============================================ */
+   .QNARead-notice {
+    max-width: 1100px; 
+    margin: 0 auto; 
+    padding: 20px 0; 
+    min-height: 300px; 
+}
+
+/* Q&A 제목 */
+.QNARead-page-title {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.QNARead-page-title h3 {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* Q&A 컨테이너 크기 조정 */
+.QNARead-container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* 목록으로 버튼 스타일 */
+.QNARead-btn-wrap {
+    display: flex;
+    justify-content: right;
+    margin-bottom: 20px;
+    padding-right: 20px;
+}
+
+/* 공통 버튼 스타일 */
+.QNARead-btn {
+    padding: 8px 18px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    margin: 3px;
+    transition: background 0.3s;
+}
+
+/* 목록으로 버튼 스타일 */
+.QNARead-btn-dark {
+    background: #555;
+    color: #fff;
+}
+
+.QNARead-btn-dark:hover {
+    background: #373737;
+}
+
+/* 게시글 테이블 */
+.QNARead-board-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* 테이블 크기 조정 */
+.QNARead-board-table td {
+    padding: 12px;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+}
+
+/* 제목 스타일 */
+.QNARead-view-title {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 15px;
+    text-align: center;
+}
+
+/* 게시글 내용 */
+.QNARead-view-content {
+    min-height: 500px; 
+    padding: 20px;
+    font-size: 15px;
+    line-height: 1.4;
+    margin: 5px;
+}
+
+/* 등록일 및 버튼 컨테이너 */
+.QNARead-meta {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    padding: 15px;
+    font-size: 13px;
+    color: #888;
+}
+
+/* ============================================
+   댓글 및 답글 스타일 추가
+   ============================================ */
+
+/* 댓글 섹션 전체 스타일 */
+.QNARead-comments-section {
+    max-width: 1100px;
+    margin: 20px auto;
+    padding: 15px;
+    border-top: 2px solid #333;
+}
+
+/* 댓글 입력 창 */
+.QNARead-comment-input {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.QNARead-comment-input textarea {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    resize: none;
+}
+
+.QNARead-comment-btn {
+    padding: 10px 15px;
+    font-size: 14px;
+    border: none;
+    background: #555;
+    color: white;
+    cursor: pointer;
+}
+
+.QNARead-comment-btn:hover {
+    background: #373737;
+}
+
+/* 댓글 목록 */
+.QNARead-comment-list {
+    margin-top: 15px;
+}
+
+.QNARead-comment {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.QNARead-reply-toggle {
+    cursor: pointer;
+    padding: 3px 7px;
+    background: #555;
+    font-size: 13px;
+    color: white;
+}
+
+.QNARead-reply-toggle:hover {
+    background: #373737;
+}
+
+/* 답글 입력 창 (초기에는 숨김) */
+.QNARead-reply-input {
+    display: none;
+    gap: 10px;
+    margin-top: 10px;
+    margin-left: 20px;
+}
+
+.QNARead-reply-input.show {
+    display: flex;
+}
+
+.QNARead-reply-input textarea {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    resize: none;
+}
+
+.QNARead-reply-btn {
+    padding: 8px 12px;
+    font-size: 12px;
+    border: none;
+    background: #555;
+    color: white;
+    cursor: pointer;
+}
+
+.QNARead-reply-btn:hover {
+    background: #373737;
+}
