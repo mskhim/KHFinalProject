@@ -9,6 +9,7 @@ const QNARead = () => {
     {
       no: 1,
       title: "[Q&A] 질문 내용 1",
+      file: "첨부파일1.jpg",
       content:
         "안녕하세요. 첫 번째 질문의 내용입니다. 답변을 기다리고 있습니다.",
       date: "2024.02.06",
@@ -16,12 +17,14 @@ const QNARead = () => {
     {
       no: 2,
       title: "Q&A 질문 내용 2",
+      file: "첨부파일2.jpg",
       content: "이곳은 두 번째 질문의 내용입니다. 다양한 의견을 기다립니다.",
       date: "2024.02.05",
     },
     {
       no: 3,
       title: "Q&A 질문 내용 3",
+      file: "첨부파일3.jpg",
       content: "세 번째 질문입니다. 자세한 답변을 부탁드립니다.",
       date: "2024.02.04",
     },
@@ -94,7 +97,7 @@ const QNARead = () => {
 
             {/* 댓글 섹션 */}
             <div className="QNARead-comments-section">
-              <h4>댓글</h4>
+              <h4>답변</h4>
 
               {/* 댓글 입력 */}
               <div className="QNARead-comment-input">

@@ -54,6 +54,8 @@ const QnaInsert = () => {
             onChange={handleChange}
             required
           />
+          {/* 파일첨부 */}
+          <input className="form-control" type="file" id="formFile"></input>
 
           {/* 버튼 */}
           <div className="QNAInsert-btn-wrap">
