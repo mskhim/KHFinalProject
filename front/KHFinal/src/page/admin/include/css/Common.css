@@ -1,12 +1,12 @@
 .admin-table table {
   width: 100%;
   border-collapse: collapse;
+  display: block;
 }
 
 .admin-table tbody {
   display: inline-block;
-  width: 100%;
-  overflow-y: auto;
+  overflow-y: scroll;
   max-height: 700px;
 }
 
@@ -15,6 +15,8 @@
   display: table;
   width: 100%;
   table-layout: fixed;
+  overflow-wrap: break-word;
+  text-wrap-style: pretty;
 }
 
 .admin-table input:not(.form-check-input) {
