@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { ButtonRole } from '../../../components/ui';
 import './css/EventMapList.css';
 import { Context } from '../../../Context';
+import EventMapKorea from './EventMapKorea';
 
 const EventMapList = () => {
   const navigate = useNavigate();
@@ -36,6 +37,8 @@ const EventMapList = () => {
       period: '2024.10.05',
       img: 'https://picsum.photos/400/250?random=1',
       popularity: 5,
+      LATITUDE: 37.523456,
+      LONGITUDE: 126.923789,
     },
     {
       no: 2,
@@ -43,6 +46,8 @@ const EventMapList = () => {
       period: '2024.09.01',
       img: 'https://picsum.photos/400/250?random=2',
       popularity: 8,
+      LATITUDE: 35.171165,
+      LONGITUDE: 129.127188,
     },
     {
       no: 3,
@@ -50,6 +55,8 @@ const EventMapList = () => {
       period: '2024.11.15',
       img: 'https://picsum.photos/400/250?random=3',
       popularity: 3,
+      LATITUDE: 33.287986,
+      LONGITUDE: 126.607553,
     },
     {
       no: 4,
@@ -57,6 +64,8 @@ const EventMapList = () => {
       period: '2024.06.01',
       img: 'https://picsum.photos/400/250?random=4',
       popularity: 7,
+      LATITUDE: 37.872957,
+      LONGITUDE: 127.700242,
     },
     {
       no: 5,
@@ -64,6 +73,8 @@ const EventMapList = () => {
       period: '2024.10.10',
       img: 'https://picsum.photos/400/250?random=5',
       popularity: 6,
+      LATITUDE: 36.560413,
+      LONGITUDE: 128.731783,
     },
     {
       no: 6,
@@ -71,6 +82,8 @@ const EventMapList = () => {
       period: '2024.10.03',
       img: 'https://picsum.photos/400/250?random=6',
       popularity: 9,
+      LATITUDE: 35.189177,
+      LONGITUDE: 128.077957,
     },
     {
       no: 7,
@@ -78,6 +91,8 @@ const EventMapList = () => {
       period: '2024.05.20',
       img: 'https://picsum.photos/400/250?random=7',
       popularity: 4,
+      LATITUDE: 35.818694,
+      LONGITUDE: 127.150616,
     },
     {
       no: 8,
@@ -85,6 +100,8 @@ const EventMapList = () => {
       period: '2024.06.10',
       img: 'https://picsum.photos/400/250?random=8',
       popularity: 10,
+      LATITUDE: 37.748377,
+      LONGITUDE: 128.894795,
     },
     {
       no: 9,
@@ -92,6 +109,8 @@ const EventMapList = () => {
       period: '2024.07.24',
       img: 'https://picsum.photos/400/250?random=9',
       popularity: 2,
+      LATITUDE: 35.848571,
+      LONGITUDE: 128.558209,
     },
   ];
 
@@ -115,6 +134,7 @@ const EventMapList = () => {
 
   return (
     <Container className="EventListViewWrap-container py-4 px-4">
+      <EventMapKorea events={events} /> {/* ✅ 지도에 이벤트 데이터 전달 */}
       {/* ✅ 정렬 버튼 (상단 오른쪽) */}
       <div className="d-flex justify-content-end mb-3">
         <ButtonGroup>
