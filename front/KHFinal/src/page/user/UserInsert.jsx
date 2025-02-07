@@ -1,6 +1,10 @@
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { handleRegister } from './userApi';
+import { Container } from 'react-bootstrap';
+import './css/UserInsert.css';
 
 const UserInsert = () => {
   const navigate = useNavigate();
@@ -65,77 +69,105 @@ const UserInsert = () => {
   if (!formData) return <p>Loading...</p>; // ✅ `formData`가 `null`이면 로딩 표시
 
   return (
-    <div>
-      <h1>회원가입 페이지</h1>
-      <form onSubmit={handleSubmit}>
-        {/* Hidden 필드 */}
-        <input type="hidden" name="id" value={formData.id} />
-        <input type="hidden" name="provider" value={formData.provider} />
-        <input type="hidden" name="role" value="2" />
+    <>
+      <Header />
+      <div className="UserInsert-container">
+        <header className="UserInsert-header">
+          <h1>회원가입</h1>
+        </header>
 
-        <label>
-          이름:
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          이메일:
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          전화번호:
-          <input
-            type="tel"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          성별:
-          <select name="gender" value={formData.gender} onChange={handleChange}>
-            <option value="">선택 없음</option>
-            <option value="M">남성</option>
-            <option value="F">여성</option>
-          </select>
-        </label>
-        <br />
-        <label>
-          생년월일:
-          <input
-            type="date"
-            name="birth"
-            value={formData.birth}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          지역 코드:
-          <input
-            type="number"
-            name="region"
-            value={formData.region}
-            onChange={handleChange}
-            placeholder="지역 코드를 입력하세요"
-          />
-        </label>
-        <br />
-        <button type="submit">회원가입 완료</button>
-      </form>
-    </div>
+        <form className="UserInsert-form-group" onSubmit={handleSubmit}>
+          {/* UserInsert-wrapper를 flex로 설정하여 내부 요소들을 수직 및 수평 중앙 정렬 */}
+          <div className="UserInsert-wrapper d-flex flex-column align-items-center justify-content-center">
+            <Container className="UserInsert-content d-flex flex-column align-items-center justify-content-center">
+                <div className="UserInsert-form-group-div">
+                  <input type="hidden" name="id" value={formData.id} />
+                  <input type="hidden" name="provider" value={formData.provider} />
+                  <input type="hidden" name="role" value="2" />
+
+                  {/* 이름 입력 필드 */}
+                  <div className="UserInsert-input-group">
+                    <label htmlFor="name">이름</label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      className="UserInsert-input-field"
+                    />
+                  </div>
+
+                  {/* 이메일 입력 필드 */}
+                  <div className="UserInsert-input-group">
+                    <label htmlFor="email">이메일</label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="UserInsert-input-field"
+                    />
+                  </div>
+
+                  {/* 전화번호 입력 필드 */}
+                  <div className="UserInsert-input-group">
+                    <label htmlFor="phone">전화번호</label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className="UserInsert-input-field"
+                    />
+                  </div>
+
+                  {/* 성별 입력 필드 */}
+                  <div className="UserInsert-input-group">
+                    <label htmlFor="gender">성별</label>
+                    <select name="gender" value={formData.gender} onChange={handleChange} className="UserInsert-input-field">
+                      <option value="">선택 없음</option>
+                      <option value="M">남성</option>
+                      <option value="F">여성</option>
+                    </select>
+                  </div>
+
+                  {/* 생년월일 입력 필드 */}
+                  <div className="UserInsert-input-group">
+                    <label htmlFor="birth">생년월일</label>
+                    <input
+                      type="date"
+                      name="birth"
+                      value={formData.birth}
+                      onChange={handleChange}
+                      className="UserInsert-input-field"
+                    />
+                  </div>
+
+                  {/* 지역 코드 입력 필드 */}
+                  <div className="UserInsert-input-group">
+                    <label htmlFor="region">지역 코드</label>
+                    <input
+                      type="number"
+                      name="region"
+                      value={formData.region}
+                      onChange={handleChange}
+                      className="UserInsert-input-field"
+                      placeholder="지역 코드를 입력하세요"
+                    />
+                  </div>
+                </div>
+            </Container>
+                {/* 버튼 컨테이너: 수직 중앙 정렬을 위한 설정 */}
+                <div className="UserInsert-button-container d-flex justify-content-center mt-4">
+                  <button type="submit" className="UserInsert-button">
+                    회원 가입하기
+                  </button>
+                </div>
+              </div>
+        </form>
+      </div>
+      <Footer />
+    </>
   );
 };
 

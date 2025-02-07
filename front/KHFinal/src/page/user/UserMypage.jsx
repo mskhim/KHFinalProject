@@ -157,7 +157,6 @@ function UserMypage() {
                           <p>{formData.id}</p>
                         )}
                       </div>
-
                       <div className="MyPageMain-input-group">
                         <label
                           htmlFor="password"

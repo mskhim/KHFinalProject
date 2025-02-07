@@ -1,0 +1,317 @@
+/* 공통 Input 스타일 */
+.UserInsert-input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.UserInsert-input-group label
+{
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.UserInsert-input-field {
+  width: 90%;
+  border: none;
+  
+  border-bottom: 2px solid; /* 아래쪽에만 2px 두께의 줄 추가 (색상은 #000 검정색) */
+  outline: none; /* 포커스 시 주변에 나타나는 외곽선 제거 */
+  padding: 5px 0; /* 위아래 패딩만 주어 줄의 높이가 설정되도록 */
+  width: 100%; /* 입력 필드의 넓이 설정 */
+
+  padding: 8px 15px;
+  font-size: 1rem;
+  height: 40px;
+  background-color: transparent;
+  color: inherit;
+}
+
+.UserInsert-input-with-button input {
+  margin-top: 20px;
+}
+
+.UserInsert-input-with-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  width: 100%;
+}
+
+.UserInsert-input-with-button label {
+  position: absolute;
+  top: -20px;
+  left: 0;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.UserInsert-input-with-button input:focus {
+  border-color: #28a745;
+  outline: none;
+  box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+}
+
+.UserInsert-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 20px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.UserInsert-header {
+  text-align: left;
+  width: 100%;
+  margin-top: 0;
+  margin-left: 0;
+  margin-bottom: 40px;
+  font-size: 2.5rem;
+}
+
+.UserInsert-wrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: flex-start;
+  gap: 30px;
+}
+
+.UserInsert-menu {
+  width: 220px;
+  padding: 20px;
+  box-sizing: border-box;
+  border-top: 3.5px solid;
+  border-bottom: 3.5px solid;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: auto;
+  max-height: 500px;
+  border-radius: 0px !important;
+}
+
+.UserInsert-menu ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.UserInsert-menu li {
+  margin: 20px 0;
+}
+
+.UserInsert-menu span {
+  font-weight: bold;
+  display: block;
+  padding: 12px 18px;
+  border-radius: 5px;
+  position: relative;
+  transition: color 0.3s ease, padding-left 0.3s ease;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+.UserInsert-menu span:hover {
+  padding-left: 25px;
+}
+
+.UserInsert-menu span::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 5px;
+  width: 0;
+  height: 2px;
+  background-color: #252429;
+  transition: width 0.3s ease;
+}
+
+.UserInsert-menu.dark-mode span::before {
+  background-color: white;
+}
+
+.UserInsert-menu span:hover::before {
+  width: 100%;
+}
+
+.UserInsert-menu span.active::before {
+  width: 100%;
+}
+
+.UserInsert-content {
+  display: flex;
+  align-items: center;      /* 수직 중앙 정렬 */
+  width: 50%; /* 컨테이너 너비를 50%로 설정 */
+  margin: 0 auto; /* 중앙 정렬 */
+  padding: 40px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.UserInsert-form-group
+{
+  width: 100%;
+}
+
+.UserInsert-form-group-div
+{
+  width: 100%;
+}
+
+.UserInsert-div-input {
+  border: none; /* 기본 테두리 없애기 */
+  border-bottom: 2px solid #000; /* 하단에만 solid border 추가 */
+  background-color: transparent; /* 배경을 투명하게 */
+  outline: none; /* 포커스 시 나타나는 외곽선 제거 */
+  width: 100%; /* 원하는 너비 설정 */
+  padding: 5px 0; /* 상하 패딩 설정 */
+}
+
+.UserInsert-div-input:focus {
+  border-bottom: 2px solid #007bff; /* 포커스 시 bottom border 색상 변경 */
+}
+
+
+.UserInsert-section {
+  display: none;
+}
+
+.UserInsert-section.active {
+  display: block;
+}
+
+.UserInsert-card {
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  margin-bottom: 30px;
+  background-color: none;
+}
+
+.UserInsert-card-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.UserInsert-info-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.UserInsert-info-group > * {
+  margin-bottom: 15px;
+  border-bottom: 1px solid;
+}
+
+.UserInsert-info-group > *:last-child {
+  margin-bottom: -20px;
+}
+
+.UserInsert-card p {
+  font-size: 0.95rem;
+}
+
+.UserInsert-button-container {
+  margin-top: 50px;
+  display: flex;
+  gap: 20px;
+}
+
+.UserInsert-button {
+  padding: 12px 25px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: #252429;
+  color: white;
+  min-width: 120px;
+  font-size: 1.1rem;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.UserInsert-button:hover {
+  background-color: #252429d8;
+}
+
+.UserInsert-section h2 {
+  margin-bottom: 25px;
+  font-size: 1.8rem;
+}
+
+.UserInsert-input-field:focus {
+  border-color: #28a745;
+  outline: none;
+  box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+  width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .UserInsert-wrapper {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .UserInsert-menu {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .UserInsert-header {
+    text-align: center;
+    padding-left: 0;
+    margin-left: 0;
+  }
+
+  .UserInsert-menu {
+    margin-bottom: 25px;
+  }
+
+  .UserInsert-menu li {
+    margin: 15px 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .UserInsert-wrapper {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .UserInsert-menu {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .UserInsert-menu li {
+    margin: 12px 0;
+  }
+
+  .UserInsert-button-container {
+    margin-top: 30px;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .UserInsert-card {
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    margin-bottom: 30px; /* 카드 간격을 넉넉히 */
+    background-color: none;
+  }
+}
