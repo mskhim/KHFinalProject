@@ -138,7 +138,6 @@ function UserMypage() {
                           <p>{formData.id}</p>
                         )}
                       </div>
-
                       <div className="MyPageMain-input-group">
                         <label htmlFor="password" className="MyPageMain-input-label">비밀번호</label>
                         {isEditable ? (

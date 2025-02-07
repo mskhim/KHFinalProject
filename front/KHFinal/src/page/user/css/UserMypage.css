@@ -1,8 +1,17 @@
 /* 공통 Input 스타일 */
-.MyPageMain-input-group {
+.MyPageMain-input-group
+{
+  font-size: 1rem;
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
+}
+
+.MyPageMain-input-group label
+{
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
 .MyPageMain-input-field {
@@ -160,7 +169,7 @@
 }
 
 .MyPageMain-card-body {
-  padding: 20px;
+  padding: 40px;
   display: flex;
   flex-direction: column;
 }
@@ -171,7 +180,7 @@
 }
 
 .MyPageMain-info-group > * {
-  margin-bottom: 15px; /* 항목 간 간격 */
+  margin-bottom: 10px; /* 항목 간 간격 */
   border-bottom: 1px solid; /* 각 항목 사이에 선 추가 */
 }
 
