@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import EventMapSection from './EventMapSection';
-
-
+import { Button } from 'react-bootstrap';
+import { Context } from '../../../Context';
 export default function EventMapKorea({events}) {
+  const {
+    darkMode
+  } = useContext(Context);
   // 8도 지역 좌표 데이터
   const regions = [
     { name: '서울', LATITUDE: 37.5665, LONGITUDE: 126.978, zoom: 11 },
@@ -14,6 +17,7 @@ export default function EventMapKorea({events}) {
     { name: '전남', LATITUDE: 34.8679, LONGITUDE: 126.991, zoom: 9 },
     { name: '경북', LATITUDE: 36.4919, LONGITUDE: 128.8889, zoom: 9 },
     { name: '경남', LATITUDE: 35.4606, LONGITUDE: 128.2132, zoom: 9 },
+    { name: '제주', LATITUDE: 33.369849, LONGITUDE: 126.529120, zoom: 10 },
   ];
 
   const [clickEvent, setClickEvent] = useState(regions[0]);
@@ -22,13 +26,14 @@ export default function EventMapKorea({events}) {
       {/* 지역 선택 버튼 */}
       <div className="button-container">
         {regions.map((region) => (
-          <button
+          <Button
+            variant={darkMode ? 'outline-light' : 'outline-dark'}
             key={region.name}
             onClick={() => setClickEvent(region)}
             className="region-button"
           >
             {region.name}
-          </button>
+          </Button>
         ))}
       </div>
       <EventMapSection
