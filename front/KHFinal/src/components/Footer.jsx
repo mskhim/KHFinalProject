@@ -2,7 +2,10 @@ import React, { useContext } from 'react';
 import { Container } from 'react-bootstrap';
 import './Footer.css';
 import { Context } from '../Context';
-
+import CultureSportTour from '../assets/CultureSportTour.png';
+import KoreaTourOrg from '../assets/KoreaTourOrg.png';
+import tourAPI from '../assets/tourAPI.png';
+import webCertification from '../assets/webCertification.png';
 const Footer = () => {
   const { darkMode } = useContext(Context);
   return (
@@ -37,20 +40,20 @@ const Footer = () => {
         <p>&copy;한국관광공사</p>
         <div>
           <a href="#">
-            <img src="src/components/image/tourAPI.png" alt="#" />
+            <img src={tourAPI }alt="#" />
           </a>
           <a href="#">
             <img
-              src="src/components/image/webCertification.png"
+              src={webCertification}
               alt="#"
               className="Footer-webCertification"
             />
           </a>
           <a href="#">
-            <img src="src/components/image/KoreaTourOrg.png" alt="#" />
+            <img src={KoreaTourOrg} alt="#" />
           </a>
           <a href="#">
-            <img src="src/components/image/CultureSportTour.png" alt="#" />
+            <img src={CultureSportTour} alt="#" />
           </a>
         </div>
       </div>

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import EventMapSection from './EventMapSection';
 
-export default function EventMapKorea({ events }) {
+
+export default function EventMapKorea({events}) {
   // 8도 지역 좌표 데이터
   const regions = [
     { name: '서울', LATITUDE: 37.5665, LONGITUDE: 126.978, zoom: 11 },
@@ -34,7 +35,7 @@ export default function EventMapKorea({ events }) {
         LATITUDE={clickEvent.LATITUDE}
         LONGITUDE={clickEvent.LONGITUDE}
         ZOOM={clickEvent.zoom} // 지역별 줌 값 전달
-        events={events} //이벤트 목록 전달
+        events= {events}
       />
     </>
   );

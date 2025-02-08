@@ -1,8 +1,10 @@
 import { useEffect, useRef } from 'react';
 
-const EventMapSection = ({ LATITUDE, LONGITUDE, ZOOM, events }) => {
-  const mapRef = useRef(null); // 기존 지도 저장
 
+const EventMapSection = ({ LATITUDE, LONGITUDE, ZOOM, events}) => {
+  const mapRef = useRef(null); // 기존 지도 저장
+ // ✅ 스프링부트에서 가져오는 9개 데이터 (현재 페이지 기준)
+ 
   useEffect(() => {
     const clientId = import.meta.env.VITE_APP_NAVER_MAPS_CLIENT_ID;
 
