@@ -262,7 +262,7 @@ const Header = ({ page }) => {
                   <FaCartPlus
                     size={24}
                     className={`${getDarkMode} ms-3 Header-cart-icon`}
-                    onClick={() => navigate('/userCart')}
+                    onClick={() => navigate('/user/userCart')}
                   />
                   {notifications > 0 && (
                     <Badge
