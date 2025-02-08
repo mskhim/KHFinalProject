@@ -310,7 +310,7 @@ public class UserController {
 	        if (accountNode != null) {
 	            user.setName(accountNode.has("name") ? accountNode.get("name").asText() : ""); 
 	            user.setPhone(accountNode.has("phone_number") ? accountNode.get("phone_number").asText().replace("+82 10-", "010-") : ""); 
-	            user.setGender(accountNode.has("gender") && accountNode.get("gender").asText().equals("male") ? 'M' : 'F'); 
+	            user.setGender(""+ (accountNode.has("gender") && accountNode.get("gender").asText().equals("male") ? 'M' : 'F')); 
 	            user.setEmail(accountNode.has("email") ? accountNode.get("email").asText() : ""); //  이메일 추가
 
 	            //  생년월일 변환
