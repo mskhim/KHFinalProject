@@ -277,7 +277,7 @@ public class UserController {
 	            user.setName(responseNode.get("name").asText());
 	            user.setProvider("naver");
 	            user.setPhone(responseNode.get("mobile").asText());
-	            user.setGender(responseNode.get("gender").asText().charAt(0));
+	            user.setGender((responseNode.get("gender").asText().charAt(0))+"");
 	            user.setEmail(responseNode.has("email") ? responseNode.get("email").asText() : ""); //  이메일 추가
 
 	            //  생년월일 변환
