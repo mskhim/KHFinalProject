@@ -3,6 +3,7 @@ import './css/BookingList.css';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { Context } from '../../Context';
+import { Button } from 'react-bootstrap';
 
 function BookingList() {
   // Initialize states
@@ -116,7 +117,7 @@ function BookingList() {
                   className={selectedSection === 'reservation-history' ? 'active' : ''}
                   onClick={() => showSection('reservation-history')}
                 >
-                  내 예매내역
+                  내 예매 내역
                 </span>
               </li>
               <li>
@@ -124,7 +125,7 @@ function BookingList() {
                   className={selectedSection === 'reservation-cancel' ? 'active' : ''}
                   onClick={() => showSection('reservation-cancel')}
                 >
-                  취소내역
+                  취소 내역
                 </span>
               </li>
             </ul>
@@ -136,13 +137,12 @@ function BookingList() {
               className={`BookingList-section ${selectedSection === 'reservation-history' ? 'active' : ''}`}
               id="reservation-history"
             >
-              <h2>내 예매내역</h2>
               {reservations.length === 0 ? (
                 <p>예매 내역이 없습니다.</p>
               ) : (
                 <table className='BookingList-table'>
                   <thead>
-                    <tr>
+                    <tr className='BookingList-tr'>
                       <th className='BookingList-th'>예약번호</th>
                       <th className='BookingList-th'>예매일</th>
                       <th className='BookingList-th'>축제명</th>
@@ -175,26 +175,26 @@ function BookingList() {
                   </tbody>
                 </table>
               )}
-              <button
-                className="BookingList-button"
-                onClick={handleCancelReservations}
-              >
-                예매 취소
-              </button>
               <p className="BookingList-warning">
                 ※ 예매 취소는 예매일로 부터 24시간 이내에만 가능합니다.
               </p>
+              <Button
+                variant="none"
+                className={`${getDarkModeHover()} mt-3 w-100`}
+                onClick={handleCancelReservations}
+              >
+                예매 취소
+              </Button>
             </div>
 
             <div
               className={`BookingList-section ${selectedSection === 'reservation-cancel' ? 'active' : ''}`}
               id="reservation-cancel"
             >
-              <h2>예매 취소</h2>
               {canceledReservations.length > 0 ? (
                 <table className='BookingList-table'>
                   <thead>
-                    <tr>
+                    <tr className='BookingList-tr'>
                       <th className='BookingList-th'>예약번호</th>
                       <th className='BookingList-th'>예매일</th>
                       <th className='BookingList-th'>축제명</th>
@@ -205,7 +205,7 @@ function BookingList() {
                   </thead>
                   <tbody>
                     {canceledReservations.map((reservation) => (
-                      <tr className='BookingList-tr' key={reservation.id}>
+                      <tr key={reservation.id}>
                         <td className='BookingList-td'>{reservation.id}</td>
                         <td className='BookingList-td'>{reservation.date}</td>
                         <td className='BookingList-td'>{reservation.festival}</td>
@@ -217,7 +217,8 @@ function BookingList() {
                   </tbody>
                 </table>
               ) : (
-                <p>취소된 예매가 없습니다.</p>
+                
+                <p id='BookingList-cancle'>취소 내역이 존재하지 않습니다.</p>
               )}
             </div>
           </div>

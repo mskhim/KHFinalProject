@@ -1,23 +1,23 @@
 /* 기본적인 레이아웃 */
 .Cart-header {
   margin-top: auto;
-  margin-left: 50px;
-  margin-bottom: 100px;
+  margin-left: 4vw;  /* 여백을 조금 더 줄여 5vw에서 4vw로 */
+  margin-bottom: 8vw; /* 하단 여백을 10vw에서 8vw로 줄임 */
 }
 
 .Cart-wrapper {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  width: 900px;
-  max-width: 1200px;
-  margin: 40px auto 0 auto;
+  width: 75vw; /* 80vw에서 75vw로 조금 줄임 */
+  max-width: 1100px; /* 최대 너비를 1200px에서 1100px로 조금 줄임 */
+  margin: 4vw auto 0 auto; /* 자동 중앙 정렬과 여백을 5vw에서 4vw로 줄임 */
   border-bottom: 3.5px solid #252429;
-  margin-bottom: 100px;
+  margin-bottom: 8vw; /* 하단 여백을 10vw에서 8vw로 줄임 */
 }
 
 .Cart-table {
-  width: 900px;
+  width: 100%; /* 부모 요소에 맞춰 100%로 설정 */
   border-collapse: collapse;
 }
 
@@ -28,7 +28,7 @@
 
 .Cart-table th,
 .Cart-table td {
-  padding: 12px 15px;
+  padding: 1em 1.2em; /* 여백을 1.1em 1.4em에서 1em 1.2em으로 줄임 */
   text-align: left;
   border-left: none;
   border-right: none;
@@ -56,16 +56,16 @@
 .Cart-quantity-btn {
   background-color: #f4f4f4;
   border: 1px solid #ccc;
-  width: 30px;
-  height: 30px;
-  font-size: 18px;
+  width: 1.8vw;  /* 화면 너비에 비례한 크기, 2vw에서 약간 줄임 */
+  height: 1.8vw; /* 화면 너비에 비례한 크기, 2vw에서 약간 줄임 */
+  font-size: 1.1em; /* 폰트 크기를 1.2em에서 약간 줄임 */
   font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   border-radius: 5px;
-  margin: 0 5px;
+  margin: 0 0.4vw; /* 마진을 0.5vw에서 약간 줄임 */
 }
 
 .Cart-quantity-btn:hover {
@@ -76,7 +76,7 @@
   text-decoration: underline;
   border: none;
   border-radius: 0;
-  padding: 5px;
+  padding: 0.45em; /* 여백을 0.5em에서 약간 줄임 */
   cursor: pointer;
   background-color: transparent; /* 배경색 제거 */
   color: inherit; /* 텍스트 색상 기본값으로 설정 */
@@ -89,19 +89,19 @@
 .Cart-summary {
   width: 100%;
   border-top: 1px solid #f4f4f4;
-  padding-top: 20px;
+  padding-top: 1.8vw; /* 패딩을 2vw에서 약간 줄임 */
   text-align: center;
 }
 
 .Cart-checkout-btn {
-  width: 200px;
-  padding: 15px;
+  width: 18vw;  /* 화면 너비에 비례한 크기, 20vw에서 약간 줄임 */
+  padding: 1.4em; /* 여백을 1.5em에서 약간 줄임 */
   background-color: #252429;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-bottom: 20px;
+  margin-bottom: 2vw; /* 하단 여백을 5vw에서 약간 줄임 */
 }
 
 .Cart-checkout-btn:hover {
@@ -114,10 +114,10 @@
 }
 
 .Cart-ticket-image {
-  width: 50px;
-  height: 50px;
+  width: 9.5vw; /* 화면 너비에 비례한 크기, 10vw에서 약간 줄임 */
+  height: 9.5vw; /* 화면 너비에 비례한 크기, 10vw에서 약간 줄임 */
   object-fit: cover;
-  margin-right: 15px;
+  margin-right: 1.8vw; /* 마진을 2vw에서 약간 줄임 */
 }
 
 .Cart-festival-text {
@@ -127,15 +127,15 @@
 
 .Cart-festival-text h3 {
   margin: 0;
-  font-size: 16px;
+  font-size: 1.1em; /* 폰트 크기를 1.2em에서 약간 줄임 */
   font-weight: bold;
 }
 
 .Cart-festival-date,
 .Cart-festival-description {
-  font-size: 12px;
+  font-size: 0.85em; /* 폰트 크기를 0.9em에서 약간 줄임 */
   color: #777;
-  margin: 3px 0;
+  margin: 0.4vw 0; /* 마진을 0.5vw에서 약간 줄임 */
 }
 
 .Cart-festival-link {
@@ -146,4 +146,17 @@
 .Cart-festival-link:hover {
   text-decoration: underline;
   color: inherit;
+}
+
+/* tr 간격 줄이기 */
+.Cart-table tr {
+  margin-bottom: 0.4vw; /* tr 간격을 줄임, 기본 여백이 적용되지 않음 */
+}
+
+/* 체크박스 정렬 */
+.Cart-table td input[type="checkbox"] {
+  display: flex;
+  align-items: center; /* 세로 중앙 정렬 */
+  justify-content: center; /* 가로 중앙 정렬 */
+  margin: 0 auto; /* 자동으로 가로 정렬 */
 }
