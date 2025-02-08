@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import Loading from '../page/Loading';
-import { UserInsertCommon } from '../page/user';
+import { UserFind, UserInsertCommon } from '../page/user';
 
 const Main = lazy(() => import('../page/main/Main'));
 const EventList = lazy(() => import('../page/event/EventList'));
@@ -162,10 +162,10 @@ const root = createBrowserRouter([
     ),
   },
   {
-    path: '/userInsertCommon',
+    path: '/userFind',
     element: (
       <Suspense fallback={<Loading />}>
-        <UserInsertCommon />
+        <UserFind />
       </Suspense>
     ),
   },

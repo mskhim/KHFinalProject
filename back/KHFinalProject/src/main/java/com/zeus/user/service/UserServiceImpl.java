@@ -11,11 +11,11 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zeus.common.config.JwtUtil;
 import com.zeus.user.domain.User;
 import com.zeus.user.mapper.UserMapper;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -23,7 +23,10 @@ import lombok.extern.slf4j.Slf4j;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper mapper;
-
+    
+    @Autowired
+    private JwtUtil JwtUtil;
+    
     @Value("${naver.client-id}")
     private String naverClientId;
 
@@ -53,6 +56,8 @@ public class UserServiceImpl implements UserService {
     public User getUserByIdAndProvider(User user) {
         return mapper.findUserByIdAndProvider(user);
     }
+    
+    
     @Override
     public boolean insert(User user) {
         try {
@@ -64,10 +69,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean checkRegist(User user) {
+    public User checkRegist(User user) {
         try {
-            int count = mapper.checkRegist(user);
-            return count == 0; // 중복이 없으면 true 등록이 안되어있다면 true
+        	User userCheck= mapper.findUserByIdAndProvider(user);
+            return userCheck; // 중복됐으면 false 중복이 아니며true
+        } catch (Exception e) {
+            log.error("User CheckRegist Error: {}", e.getMessage());
+            throw new RuntimeException("중복 체크 실패", e);
+        }
+    }
+    
+    @Override
+    public User checkLogin(User user) {
+        try {
+        	User userLogin= mapper.checkLogin(user);
+            return userLogin; // 중복됐으면 false 중복이 아니며true
         } catch (Exception e) {
             log.error("User CheckRegist Error: {}", e.getMessage());
             throw new RuntimeException("중복 체크 실패", e);
@@ -81,11 +97,7 @@ public class UserServiceImpl implements UserService {
     public User getUserByAccessToken(String accessToken) {
         try {
             // JWT 토큰 검증
-            Claims claims = Jwts.parser()
-                    .setSigningKey(secretKey) // JWT 서명 검증을 위한 시크릿 키
-                    .parseClaimsJws(accessToken)
-                    .getBody();
-
+            Claims claims = JwtUtil.validateToken(accessToken);
             // 토큰에서 사용자 정보 추출
             String userId = claims.get("id", String.class);
             String provider = claims.get("provider", String.class);

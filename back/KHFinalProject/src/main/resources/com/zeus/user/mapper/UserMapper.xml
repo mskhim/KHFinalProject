@@ -25,11 +25,11 @@
 		)
 	</insert>
 
-	<!-- 아이디와 계정 제공자 중복 체크 -->
-	<select id="checkRegist" parameterType="User" resultType="int">
-		SELECT COUNT(*)
+	<!-- 아이디, 제공자, 비밀번호를 토대로 로그인 확인-->
+	<select id="checkLogin" parameterType="User" resultType="User">
+		SELECT *
 		FROM USER_ACCOUNT
-		WHERE ID = #{id} AND PROVIDER = #{provider}  
+		WHERE ID = #{id} AND PROVIDER = #{provider} AND PWD = #{pwd}   
 	</select>
 	<!-- 아이디와 계정 제공자 로그인확인 -->
 	<select id="findUserByIdAndProvider" parameterType="User"

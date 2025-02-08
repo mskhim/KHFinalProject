@@ -4,8 +4,9 @@ import com.zeus.user.domain.User;
 
 public interface UserService {
 	//유저 기능
-	User getUserByIdAndProvider(User user);//로그인 확인
-	boolean checkRegist(User user);
+	User getUserByIdAndProvider(User user);//아이디 ,provider로 유저정보 가져오
+	User checkRegist(User user);
+	User checkLogin(User user);
 	boolean insert(User user);
 	public User getUserByAccessToken(String accessToken);
     // 네이버 로그인

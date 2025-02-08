@@ -6,3 +6,4 @@ export { default as UserMypage } from './UserMypage';
 export { default as UserReservedList } from './UserReservedList';
 export { default as BookingList } from './BookingList';
 export { default as UserInsertCommon } from './UserInsertCommon';
+export { default as UserFind } from './UserFind';

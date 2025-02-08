@@ -78,7 +78,10 @@ public class UserController {
 	    User user = parseNaverUserInfo(userInfo);
 
 	    //  사용자 등록 여부 확인
-	    boolean isRegistered = service.checkRegist(user);
+	    boolean isRegistered = false;
+	    if(service.checkRegist(user)==null) {
+	    	isRegistered=true;
+	    }
 
 	    //  신규 사용자라면 회원가입 필요 메시지 반환 (JWT 저장 X)
 	    if (isRegistered) {
@@ -126,8 +129,10 @@ public class UserController {
 	    }
 
 	    //  사용자 등록 여부 확인
-	    boolean isRegistered = service.checkRegist(user);
-	    
+	    boolean isRegistered = false;
+	    if(service.checkRegist(user)==null) {
+	    	isRegistered=true;
+	    }
 	    //  신규 사용자라면 회원가입 필요 메시지 반환 (JWT 저장 X)
 	    if (isRegistered) {
 	        return ResponseEntity.ok(Map.of(
@@ -152,11 +157,13 @@ public class UserController {
 	// 로그인 처리
 	@PostMapping("/login")
 	public ResponseEntity<Map<String, Object>> login(@RequestBody User user, HttpServletResponse response) {
-	    log.info("🔹 /login 요청 - 유저 ID: {}", user.getId());
-
+	    
+		if(user.getPwd()==null) {
+			user.setPwd("default_password");
+		}	
+		log.info("🔹 /login 요청 - 유저 ID: {}", user.getId());
 	    //  DB에서 사용자 확인
-	    User user2 = service.getUserByIdAndProvider(user);
-
+	    User user2 = service.checkLogin(user);
 	    if (user2 == null) {
 	        return ResponseEntity.status(404).body(Map.of(
 	            "success", false,
@@ -167,7 +174,6 @@ public class UserController {
 	    //  JWT 생성 (액세스 토큰 & 리프레시 토큰)
 	    String accessToken = JwtUtil.createAccessToken(user2);
 	    String refreshToken = JwtUtil.createRefreshToken(user2);
-
 	    log.info(" JWT 생성 완료");
 
 	    //  JWT를 HttpOnly 쿠키에 저장
@@ -181,7 +187,6 @@ public class UserController {
 	@PostMapping("/logout")
 	public ResponseEntity<Map<String, Object>> logout(HttpServletResponse response) {
 	    log.info("🔹 로그아웃 요청");
-
 	    //  쿠키 삭제 (만료 시간 0으로 설정)
 	    deleteJwtCookie(response, "jwt"); // 액세스 토큰 삭제
 	    deleteJwtCookie(response, "refresh_token"); // 리프레시 토큰 삭제
@@ -221,7 +226,6 @@ public class UserController {
 	    if (refreshToken == null || JwtUtil.isTokenExpired(refreshToken)) {
 	        return ResponseEntity.status(401).body(Map.of("error", "유효하지 않거나 만료된 리프레시 토큰"));
 	    }
-
 	    //  리프레시 토큰을 검증하고 새로운 액세스 토큰 생성
 	    String userId = JwtUtil.validateToken(refreshToken).get("id", String.class);
 	    String provider = JwtUtil.validateToken(refreshToken).get("provider", String.class);
@@ -241,7 +245,7 @@ public class UserController {
 	    return ResponseEntity.ok(Map.of("success", true, "message", "액세스 토큰 갱신 완료"));
 	}
 
-	
+	//--------------------------------------------------api메소드가 아닌 컨트롤러용 메소드
 	//  JWT 쿠키 삭제 메소드
 	private void deleteJwtCookie(HttpServletResponse response, String name) {
 	    Cookie cookie = new Cookie(name, "");
@@ -251,8 +255,6 @@ public class UserController {
 	    cookie.setMaxAge(0); // 즉시 삭제
 	    response.addCookie(cookie);
 	}
-
-	
 
 	//  공통 메소드: JWT를 HttpOnly 쿠키에 저장
 	private void addJwtCookie(HttpServletResponse response, String name, String token, int maxAge) {
