@@ -1,4 +1,4 @@
-* {
+/* * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -10,7 +10,7 @@
   }
   
   .banner {
-    height: 300px;
+    height: 500px;
     background-color: #cccccc;
     display: flex;
     justify-content: center;
@@ -53,4 +53,4 @@
     color: white;
     cursor: pointer;
   }
-  
+   */
