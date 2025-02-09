@@ -20,5 +20,5 @@ public class User {
     private LocalDate birth;  // 생년월일 (DATE)
     private String region;    // 지역 (VARCHAR2(20))
     private String provider;  // 계정 제공자 (VARCHAR2(20))
-    private String nickname;     // API 암호화 키 (VARCHAR2(500))
+    private String nickname;     // 
 }

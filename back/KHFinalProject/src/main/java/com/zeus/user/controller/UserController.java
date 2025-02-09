@@ -81,6 +81,7 @@ public class UserController {
 	    boolean isRegistered = false;
 	    if(service.checkRegist(user)==null) {
 	    	isRegistered=true;
+	    	
 	    }
 
 	    //  신규 사용자라면 회원가입 필요 메시지 반환 (JWT 저장 X)
@@ -91,7 +92,7 @@ public class UserController {
 	            "message", "회원가입 필요"
 	        ));
 	    }
-
+	    user=service.checkRegist(user);
 	    //  기존 회원이라면 JWT 생성 및 쿠키에 저장
 	    String jwtAccessToken = JwtUtil.createAccessToken(user);
 	    String refreshToken = JwtUtil.createRefreshToken(user);
@@ -141,7 +142,7 @@ public class UserController {
 	            "message", "회원가입 필요"
 	        ));
 	    } 
-
+	    user=service.checkRegist(user);
 	    //  기존 회원이라면 JWT 생성 및 쿠키에 저장
 	    String jwtAccessToken = JwtUtil.createAccessToken(user);
 	    String refreshToken = JwtUtil.createRefreshToken(user);

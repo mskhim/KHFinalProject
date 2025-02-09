@@ -8,7 +8,7 @@
 	<!-- User 데이터 삽입 -->
 	<insert id="insert" parameterType="User">
 		INSERT INTO USER_ACCOUNT (
-		NO, ID, PWD,NAME,EMAIL, PHONE, GENDER, REG_DATE, ROLE, BIRTH, REGION, PROVIDER
+		NO, ID, PWD,NAME,EMAIL, PHONE, GENDER, REG_DATE, ROLE, BIRTH, REGION, PROVIDER,NICKNAME
 		) VALUES (
 		SEQ_NO.NEXTVAL,
 		#{id},
@@ -21,7 +21,8 @@
 		#{role},
 		#{birth},
 		#{region},
-		#{provider}
+		#{provider},
+		#{nickname}
 		)
 	</insert>
 
