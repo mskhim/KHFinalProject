@@ -166,11 +166,6 @@ const UserLoginPage = () => {
             <UserFind type="pwd" />
           )}
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            닫기
-          </Button>
-        </Modal.Footer>
       </Modal>
       <Footer />
     </>

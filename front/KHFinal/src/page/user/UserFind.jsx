@@ -1,6 +1,7 @@
 import { useState, useContext } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { Context } from '../../Context';
+import { ButtonDarkMode } from '../../components/ui';
 
 // 난수 비밀번호 생성 함수
 const generateRandomPassword = () => {
@@ -52,9 +53,14 @@ const UserFind = ({ type }) => {
               onChange={(e) => setEmail(e.target.value)}
             />
           </Form.Group>
-          <Button variant="primary" onClick={handleFindId}>
-            아이디 찾기
-          </Button>
+
+          <div className="text-end mt-5">
+            <ButtonDarkMode
+              text="아이디 찾기"
+              onClick={handleFindId}
+              width={'w-100'}
+            />
+          </div>
         </>
       ) : (
         // ✅ 비밀번호 찾기 UI
@@ -77,9 +83,13 @@ const UserFind = ({ type }) => {
               onChange={(e) => setEmail(e.target.value)}
             />
           </Form.Group>
-          <Button variant="danger" onClick={handleFindPassword}>
-            비밀번호 찾기
-          </Button>
+          <div className="text-end mt-5">
+            <ButtonDarkMode
+              text="비밀번호 찾기"
+              onClick={handleFindPassword}
+              width={'w-100'}
+            />
+          </div>
         </>
       )}
       {/* 결과 메시지 출력 */}
