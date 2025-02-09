@@ -1,5 +1,5 @@
 import { Header, Footer } from '../../components';
-import { Container } from 'react-bootstrap';
+
 import EventMapKorea from './include/EventMapKorea';
 import EventMapList from './include/EventMapList';
 import { useEffect, useState } from 'react';
@@ -99,10 +99,10 @@ const EventMap = () => {
   return (
     <>
       <Header page="map" />
-      <Container>
+
         <EventMapKorea events={events}/>
         <EventMapList events={events}/>
-      </Container>
+
       <Footer />
     </>
   );

@@ -1,7 +1,10 @@
 import React, { useState, useContext } from 'react';
 import EventMapSection from './EventMapSection';
-import { Button } from 'react-bootstrap';
+import { Button, Container } from 'react-bootstrap';
 import { Context } from '../../../Context';
+import './css/EventMapKorea.css';
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
 export default function EventMapKorea({events}) {
   const {
     darkMode
@@ -23,25 +26,30 @@ export default function EventMapKorea({events}) {
   const [clickEvent, setClickEvent] = useState(regions[0]);
   return (
     <>
+      <Container className='EventMapKorea-container'>
       {/* 지역 선택 버튼 */}
-      <div className="button-container">
+      <div className="button-container p-1 ">
         {regions.map((region) => (
           <Button
             variant={darkMode ? 'outline-light' : 'outline-dark'}
+            size='lg'
             key={region.name}
             onClick={() => setClickEvent(region)}
-            className="region-button"
+            className="EventMapKorea-button-container"
           >
             {region.name}
           </Button>
         ))}
       </div>
+      <div className="EventMapKorea-mapSection">
       <EventMapSection
         LATITUDE={clickEvent.LATITUDE}
         LONGITUDE={clickEvent.LONGITUDE}
         ZOOM={clickEvent.zoom} // 지역별 줌 값 전달
         events= {events}
       />
+      </div>
+      </Container>
     </>
   );
 }
