@@ -19,6 +19,8 @@ const EventMapSection = ({ LATITUDE, LONGITUDE, ZOOM, events }) => {
           mapRef.current = new window.naver.maps.Map('naver-map', {
             center: new window.naver.maps.LatLng(LATITUDE, LONGITUDE),
             zoom: ZOOM ?? 9,
+            disableDoubleClickZoom: true, // 더블 클릭 줌 비활성화
+            scrollWheel: false, // 마우스 휠 줌 비활성화
           });
 
           // ✅ 인포윈도우 생성 (마커 클릭 시 표시할 정보창)
