@@ -1,7 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import Loading from '../page/Loading';
-import { UserFind, UserInsertCommon } from '../page/user';
 
 const Main = lazy(() => import('../page/main/Main'));
 const EventList = lazy(() => import('../page/event/EventList'));
@@ -19,10 +18,8 @@ const QnaReInsert = lazy(() => import('../page/qna/QnaReInsert'));
 const UserLoginPage = lazy(() => import('../page/user/UserLoginPage'));
 const UserLoginSuccess = lazy(() => import('../page/user/UserLoginSuccess'));
 const UserInsert = lazy(() => import('../page/user/UserInsert'));
-const UserCart = lazy(() => import('../page/user/UserCart'));
-const UserMypage = lazy(() => import('../page/user/UserMypage'));
-const UserReservedList = lazy(() => import('../page/user/UserReservedList'));
-const BookingList = lazy(() => import('../page/user/BookingList'));
+const UserInsertCommon = lazy(() => import('../page/user/UserInsertCommon'));
+const UserFind = lazy(() => import('../page/user/UserFind'));
 
 const Unauthorized = lazy(() => import('../components/Unauthorized'));
 const NotFound = lazy(() => import('../page/common/NotFound'));
@@ -166,6 +163,14 @@ const root = createBrowserRouter([
     element: (
       <Suspense fallback={<Loading />}>
         <UserFind />
+      </Suspense>
+    ),
+  },
+  {
+    path: '/UserInsertCommon',
+    element: (
+      <Suspense fallback={<Loading />}>
+        <UserInsertCommon />
       </Suspense>
     ),
   },
