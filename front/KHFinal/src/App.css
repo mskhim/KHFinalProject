@@ -239,3 +239,44 @@ a {
 html {
   scroll-behavior: auto !important;
 }
+
+button.dark-mode-hover {
+  background-color: white;
+  color: #333;
+}
+
+button.light-mode-hover {
+  background-color: #333;
+  color: white;
+}
+button.light-mode-hover:hover {
+  background-color: #616161;
+  color: white;
+  border-color: #9c9c9c;
+}
+
+button.dark-mode-hover:hover {
+  background-color: #333;
+  color: white;
+  border-color: white;
+}
+
+.ButtonGroup.dark-mode-hover {
+  background-color: #333;
+  color: white;
+}
+
+.ButtonGroup.light-mode-hover {
+  background-color: white;
+  color: #333;
+}
+.ButtonGroup.light-mode-hover:hover {
+  background-color: #e0e0e0;
+  color: black;
+}
+
+.ButtonGroup.dark-mode-hover:hover {
+  background-color: #616161;
+  color: white;
+  border-color: #9c9c9c;
+}

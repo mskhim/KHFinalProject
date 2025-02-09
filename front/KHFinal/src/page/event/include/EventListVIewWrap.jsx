@@ -119,18 +119,20 @@ const EventListViewWrap = () => {
       <div className="d-flex justify-content-end mb-3">
         <ButtonGroup>
           <Button
-            className={`EventListVIewWrap-sort-button ${getDarkModeHover()} ${
+            className={`EventListVIewWrap-sort-button ${getDarkModeHover()} ButtonGroup ${
               sortOption === 'popular' ? 'active' : ''
             } `}
             onClick={() => handleSortChange('popular')}
+            variant="none"
           >
             인기순
           </Button>
           <Button
-            className={`EventListVIewWrap-sort-button ${getDarkModeHover()} ${
+            className={`EventListVIewWrap-sort-button ${getDarkModeHover()} ButtonGroup ${
               sortOption === 'date' ? 'active' : ''
             } `}
             onClick={() => handleSortChange('date')}
+            variant="none"
           >
             개최일순
           </Button>

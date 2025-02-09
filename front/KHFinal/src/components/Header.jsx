@@ -16,6 +16,7 @@ import { Context } from '../Context';
 import ScrollToTopButton from './ui/ScrollToTopButton';
 import TokenRemain from './ui/TokenRemain';
 import ViVaFesta from '../assets/ViVaFesta.png';
+import { ButtonDarkMode } from './ui';
 const Header = ({ page }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -112,7 +113,7 @@ const Header = ({ page }) => {
         <Navbar
           expand="lg"
           className={`py-3 ${
-            darkMode ? 'bg-dark text-light' : 'bg-white text-dark'
+            darkMode ? 'bg-dark text-light dark-mode' : 'bg-white text-dark'
           } Header-navbar-all${showFestivalNav ? '-active' : ''}`} // ✅ 축제 네비게이션 활성화 여부에 따라 클래스 추가
         >
           <Container
@@ -230,13 +231,9 @@ const Header = ({ page }) => {
                   onExtend={handleExtendToken}
                 />
                 {/* ) : ( */}
-                <Button
-                  variant={darkMode ? 'outline-light' : 'outline-dark'}
-                  onClick={handleLogin}
-                  className="me-3"
-                >
-                  로그인
-                </Button>
+                <div className="me-2">
+                  <ButtonDarkMode text="로그인" onClick={handleLogin} />
+                </div>
                 {/* )} */}
                 {isAuthenticated && (
                   <div className="position-relative me-3">
