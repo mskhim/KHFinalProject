@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { Context } from '../../Context';
 import './css/UserCart.css';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
@@ -43,6 +44,8 @@ function UserCart() {
       price: 60000,
     },
   ]);
+
+  const { getDarkMode, getDarkModeHover } = useContext(Context);
 
   // 선택된 아이템들을 저장하는 상태
   const [selectedItems, setSelectedItems] = useState([]);  // 선택된 아이템들의 ID 저장
@@ -114,14 +117,14 @@ function UserCart() {
     <>
       {/* Header 컴포넌트 */}
       <Header />
-      <div className="Cart-container">
-        <header className="Cart-header">
+      <div className={`Cart-container ${getDarkMode()}`}>
+        <header className={`Cart-header ${getDarkMode()}`}>
           <h1>장바구니</h1>
         </header>
 
-        <div className="Cart-wrapper">
-          <table className="Cart-table">
-            <thead className='Cart-thead'>
+        <div className={`Cart-wrapper ${getDarkMode()}`}>
+          <table className={`Cart-table ${getDarkMode()}`}>
+            <thead className={`Cart-thead ${getDarkMode()}`}>
               <tr>
                 <th>
                   {/* 전체 선택 체크박스 */}
@@ -134,12 +137,13 @@ function UserCart() {
                 <th>상품명</th>
                 <th>가격</th>
                 <th>수량</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
               {cartItems.length > 0 ? (
                 cartItems.map(item => (
-                  <tr key={item.id}>
+                  <tr key={item.id} className={getDarkMode()}>
                     <td>
                       {/* 개별 항목 선택 체크박스 */}
                       <input
@@ -152,27 +156,27 @@ function UserCart() {
                       <div className="Cart-festival-info">
                         <div className="Cart-festival-text">
                           <h3>
-                            <a href="#" className="Cart-festival-link">{item.festivalName}</a>
+                            <a href="#" className={`Cart-festival-link ${getDarkMode()}`}>{item.festivalName}</a>
                           </h3>
-                          <p className="Cart-festival-date">축제 일시 : {item.date} ~ {item.endDate}</p>
-                          <p className="Cart-festival-description">상세 설명 : {item.description}</p>
+                          <p className={`Cart-festival-date ${getDarkMode()}`}>축제 일시 : {item.date} ~ {item.endDate}</p>
+                          <p className={`Cart-festival-description ${getDarkMode()}`}>상세 설명 : {item.description}</p>
                         </div>
                       </div>
                     </td>
 
-                    <td>{item.price.toLocaleString()} 원</td>
+                    <td className={getDarkMode()}>{item.price.toLocaleString()} 원</td>
                     <td>
                       <div className="Cart-item-quantity">
                         {/* 수량 조절 버튼 */}
                         <button
-                          className="Cart-quantity-btn"
+                          className={`Cart-quantity-btn ${getDarkModeHover()}`}
                           onClick={() => handleQuantityChange(item.id, -1)}  // 수량 -1
                         >
                           -
                         </button>
                         <span className="Cart-quantity-display">{item.quantity}</span>
                         <button
-                          className="Cart-quantity-btn"
+                          className={`Cart-quantity-btn ${getDarkModeHover()}`}
                           onClick={() => handleQuantityChange(item.id, 1)}  // 수량 +1
                         >
                           +
@@ -182,7 +186,7 @@ function UserCart() {
                     <td>
                       {/* 아이템 삭제 버튼 */}
                       <button
-                        className="Cart-remove-btn"
+                        className={`Cart-remove-btn ${getDarkMode()}`}
                         onClick={() => handleRemoveItem(item.id)}  // 아이템 삭제
                       >
                         삭제
@@ -198,11 +202,11 @@ function UserCart() {
             </tbody>
           </table>
 
-          <div className="Cart-summary">
-            <p>총 {selectedItems.length}개의 항목이 선택되었습니다.</p>
-            <p>총 결제 금액 : {totalAmount.toLocaleString()} 원</p>
+          <div className={`Cart-summary ${getDarkMode()}`}>
+            <p className={getDarkMode()}>총 {selectedItems.length}개의 항목이 선택되었습니다.</p>
+            <p className={getDarkMode()}>총 결제 금액 : {totalAmount.toLocaleString()} 원</p>
             {/* 결제 버튼 */}
-            <button className="Cart-checkout-btn">결제하기</button>
+            <button className={`Cart-checkout-btn ${getDarkModeHover()}`}>결제하기</button>
           </div>
         </div>
       </div>

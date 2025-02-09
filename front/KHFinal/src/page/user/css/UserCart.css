@@ -14,16 +14,25 @@
   margin: 3vw auto 0 auto; /* 자동 중앙 정렬과 여백을 3.5vw에서 3vw로 줄임 */
   border-bottom: 2.5px solid #252429; /* 두께를 줄임 */
   margin-bottom: 6vw; /* 하단 여백을 7vw에서 6vw로 줄임 */
+  background-color: white;
+  border-radius: 10px;  /* wrapper의 모서리를 둥글게 설정 */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);  /* wrapper에 그림자 추가 */
+  overflow: hidden; /* wrapper 내에서 자식 요소가 넘치지 않게 처리 */
 }
 
 .Cart-table {
   width: 100%; /* 부모 요소에 맞춰 100%로 설정 */
-  border-collapse: collapse;
+  border-collapse: separate; /* border-collapse를 separate로 변경하여 테이블 셀 사이의 간격을 유지 */
+  border-spacing: 0; /* 셀 간격을 없애기 위해 설정 */
+  border-radius: 10px; /* 테이블 모서리 둥글게 설정 */
 }
 
 .Cart-thead {
   border-top: 2.5px solid; /* 두께를 줄임 */
   border-bottom: 2.5px solid; /* 두께를 줄임 */
+  background-color: #f1f1f1;  /* thead에 그레이 계열 색상 적용 */
+  border-top-left-radius: 10px;  /* 왼쪽 상단 모서리 둥글게 */
+  border-top-right-radius: 10px; /* 오른쪽 상단 모서리 둥글게 */
 }
 
 .Cart-table th,
@@ -113,13 +122,6 @@
   align-items: flex-start;
 }
 
-.Cart-ticket-image {
-  width: 8.5vw; /* 화면 너비에 비례한 크기, 9vw에서 약간 줄임 */
-  height: 8.5vw; /* 화면 너비에 비례한 크기, 9vw에서 약간 줄임 */
-  object-fit: cover;
-  margin-right: 1.4vw; /* 마진을 1.6vw에서 약간 줄임 */
-}
-
 .Cart-festival-text {
   display: flex;
   flex-direction: column;
@@ -159,4 +161,9 @@
   align-items: center; /* 세로 중앙 정렬 */
   justify-content: center; /* 가로 중앙 정렬 */
   margin: 0 auto; /* 자동으로 가로 정렬 */
+}
+
+.Cart-summary.dark-mode {
+  color: #fff !important;  /* 텍스트 색상 강제로 지정 */
+  background-color: #222222 !important;  /* 배경색 강제로 지정 */
 }

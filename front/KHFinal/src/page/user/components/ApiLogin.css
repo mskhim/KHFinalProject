@@ -21,3 +21,52 @@
 .login-button:hover {
   transform: scale(1.05); /* 살짝 확대 */
 }
+
+/**********************************************/
+
+
+/* 버튼을 감싸는 컨테이너 */
+.social-login-button-container {
+  text-align: center;
+  width: 80%;
+}
+
+/* 공통 버튼 스타일 */
+.social-login-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.social-login-button span {
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+/* 네이버 로그인 버튼 스타일 */
+.naver-button {
+  background-color: #03c75a; /* 네이버 그린 */
+  color: white;
+}
+
+.naver-button:hover {
+  background-color: #1a9e00; /* 다크 그린 */
+}
+
+/* 카카오 로그인 버튼 스타일 */
+.kakao-button {
+  background-color: #fee500; /* 카카오 옐로우 */
+  color: #3c1e1e; /* 카카오 텍스트 색상 */
+}
+
+.kakao-button:hover {
+  background-color: #fbd100; /* 다크 옐로우 */
+}
+
