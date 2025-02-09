@@ -280,3 +280,14 @@ button.dark-mode-hover:hover {
   color: white;
   border-color: #9c9c9c;
 }
+.form-container.dark-mode {
+  background-color: #333;
+  color: white;
+  box-shadow: 0 4px 8px rgba(233, 233, 233, 0.1);
+}
+
+.form-container.light-mode {
+  background-color: white;
+  color: #333;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

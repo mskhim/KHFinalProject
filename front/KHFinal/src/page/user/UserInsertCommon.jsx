@@ -1,14 +1,15 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { handleRegister } from './userApi';
 import { Container } from 'react-bootstrap';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import './css/UserInsert.css';
+import { Context } from '../../Context';
 
 const UserInsert = () => {
   const navigate = useNavigate();
-
+  const { getDarkMode } = useContext(Context);
   // ✅ **초기 상태값을 명확히 설정**
   const [formData, setFormData] = useState({
     id: '', // 아이디 (소셜 로그인 등으로 자동 생성될 가능성 있음)
@@ -47,13 +48,15 @@ const UserInsert = () => {
   return (
     <>
       <Header />
-      <div className="UserInsert-container">
+      <div className={`UserInsert-container`}>
         <header className="UserInsert-header">
           <h1>회원가입</h1>
         </header>
-        <form className="UserInsert-form-group" onSubmit={handleSubmit}>
+        <form className={`UserInsert-form-group`} onSubmit={handleSubmit}>
           <div className="UserInsert-wrapper d-flex flex-column align-items-center justify-content-center">
-            <Container className="UserInsert-content d-flex flex-column align-items-center justify-content-center">
+            <Container
+              className={`UserInsert-content d-flex flex-column align-items-center justify-content-center ${getDarkMode()} form-container`}
+            >
               <div className="UserInsert-form-group-div">
                 {/* 숨겨진 필드 (id, provider, role, apiid) */}
                 <input type="hidden" name="id" value={formData.id} />

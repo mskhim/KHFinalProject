@@ -115,7 +115,9 @@ function UserMypage() {
               </li>
               <li>
                 <span
-                  className={selectedSection === 'account-delete' ? 'active' : ''}
+                  className={
+                    selectedSection === 'account-delete' ? 'active' : ''
+                  }
                   onClick={() => showSection('account-delete')}
                 >
                   회원 탈퇴
@@ -130,17 +132,24 @@ function UserMypage() {
             {selectedSection !== 'account-delete' && (
               <>
                 <h3>내 정보</h3>
-                <p className="MyPageMain-subtext">아이디 / 비밀번호 / 연락처 정보 등 내 프로필을 확인하고 관리합니다.</p>
+                <p className="MyPageMain-subtext">
+                  아이디 / 비밀번호 / 연락처 정보 등 내 프로필을 확인하고
+                  관리합니다.
+                </p>
               </>
             )}
             <div
-              className={`MyPageMain-section ${selectedSection === 'info-view' ? 'active' : ''}`}
+              className={`MyPageMain-section ${
+                selectedSection === 'info-view' ? 'active' : ''
+              }`}
               id="info-view"
             >
               {/* 내 정보 카드 */}
               {Object.keys(userInfo).length > 0 ? (
                 <div className="MyPageMain-card pb-3">
-                  <div className="MyPageMain-card-body">
+                  <div
+                    className={`MyPageMain-card-body ${getDarkMode()} form-container`}
+                  >
                     <div className="MyPageMain-info-group">
                       <div className="MyPageMain-input-group">
                         <label htmlFor="id" className="MyPageMain-input-label">
@@ -160,7 +169,10 @@ function UserMypage() {
                         )}
                       </div>
                       <div className="MyPageMain-input-group">
-                        <label htmlFor="password" className="MyPageMain-input-label">
+                        <label
+                          htmlFor="password"
+                          className="MyPageMain-input-label"
+                        >
                           비밀번호
                         </label>
                         {isEditable ? (
@@ -177,7 +189,10 @@ function UserMypage() {
                       </div>
 
                       <div className="MyPageMain-input-group">
-                        <label htmlFor="email" className="MyPageMain-input-label">
+                        <label
+                          htmlFor="email"
+                          className="MyPageMain-input-label"
+                        >
                           이메일
                         </label>
                         {isEditable ? (
@@ -194,7 +209,10 @@ function UserMypage() {
                       </div>
 
                       <div className="MyPageMain-input-group">
-                        <label htmlFor="name" className="MyPageMain-input-label">
+                        <label
+                          htmlFor="name"
+                          className="MyPageMain-input-label"
+                        >
                           이름
                         </label>
                         {isEditable ? (
@@ -211,7 +229,10 @@ function UserMypage() {
                       </div>
 
                       <div className="MyPageMain-input-group">
-                        <label htmlFor="birthDate" className="MyPageMain-input-label">
+                        <label
+                          htmlFor="birthDate"
+                          className="MyPageMain-input-label"
+                        >
                           생년월일
                         </label>
                         {isEditable ? (
@@ -228,7 +249,10 @@ function UserMypage() {
                       </div>
 
                       <div className="MyPageMain-input-group">
-                        <label htmlFor="gender" className="MyPageMain-input-label">
+                        <label
+                          htmlFor="gender"
+                          className="MyPageMain-input-label"
+                        >
                           성별
                         </label>
                         {isEditable ? (
@@ -245,7 +269,10 @@ function UserMypage() {
                       </div>
 
                       <div className="MyPageMain-input-group">
-                        <label htmlFor="phone" className="MyPageMain-input-label">
+                        <label
+                          htmlFor="phone"
+                          className="MyPageMain-input-label"
+                        >
                           휴대폰 번호
                         </label>
                         {isEditable ? (
@@ -262,7 +289,10 @@ function UserMypage() {
                       </div>
 
                       <div className="MyPageMain-input-group">
-                        <label htmlFor="regionCode" className="MyPageMain-input-label">
+                        <label
+                          htmlFor="regionCode"
+                          className="MyPageMain-input-label"
+                        >
                           지역
                         </label>
                         {isEditable ? (
@@ -287,7 +317,9 @@ function UserMypage() {
                   <>
                     <Button
                       variant="none"
-                      className={`${getDarkModeHover()} ${isEditable ? 'w-50' : 'w-100'}`}
+                      className={`${getDarkModeHover()} ${
+                        isEditable ? 'w-50' : 'w-100'
+                      }`}
                       onClick={isEditable ? handleSave : toggleEdit}
                     >
                       {isEditable ? '완료' : '수정하기'}
@@ -310,7 +342,9 @@ function UserMypage() {
 
             {/* 회원 탈퇴 섹션 */}
             <div
-              className={`MyPageMain-section ${selectedSection === 'account-delete' ? 'active' : ''}`}
+              className={`MyPageMain-section ${
+                selectedSection === 'account-delete' ? 'active' : ''
+              }`}
               id="account-delete"
             >
               <h2>회원 탈퇴</h2>

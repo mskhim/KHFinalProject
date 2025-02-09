@@ -1,5 +1,5 @@
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { handleRegister } from './userApi';
@@ -74,18 +74,18 @@ const UserInsert = () => {
   const handleNicknameCheck = () => {
     // 중복 확인 로직 (예시: 서버에서 확인 후 상태 업데이트)
     const nickname = formData.nickname.trim();
-    if (nickname === "") {
-      alert("닉네임을 입력해주세요.");
+    if (nickname === '') {
+      alert('닉네임을 입력해주세요.');
       return;
     }
 
     // 예시: 닉네임이 "test"일 때 중복 처리
-    if (nickname === "test") {
+    if (nickname === 'test') {
       setNicknameValid(false);
-      alert("중복된 닉네임입니다.");
+      alert('중복된 닉네임입니다.');
     } else {
       setNicknameValid(true);
-      alert("사용 가능한 닉네임입니다.");
+      alert('사용 가능한 닉네임입니다.');
     }
   };
 
@@ -102,10 +102,16 @@ const UserInsert = () => {
         <form className="UserInsert-form-group" onSubmit={handleSubmit}>
           {/* UserInsert-wrapper를 flex로 설정하여 내부 요소들을 수직 및 수평 중앙 정렬 */}
           <div className="UserInsert-wrapper d-flex flex-column align-items-center justify-content-center">
-            <Container className="UserInsert-content d-flex flex-column align-items-center justify-content-center">
+            <Container
+              className={`UserInsert-content d-flex flex-column align-items-center justify-content-center ${getDarkMode()} form-container`}
+            >
               <div className="UserInsert-form-group-div">
                 <input type="hidden" name="id" value={formData.id} />
-                <input type="hidden" name="provider" value={formData.provider} />
+                <input
+                  type="hidden"
+                  name="provider"
+                  value={formData.provider}
+                />
                 <input type="hidden" name="role" value="2" />
 
                 {/* 이름 입력 필드 */}
@@ -170,7 +176,12 @@ const UserInsert = () => {
                 {/* 성별 입력 필드 */}
                 <div className="UserInsert-input-group">
                   <label htmlFor="gender">성별</label>
-                  <select name="gender" value={formData.gender} onChange={handleChange} className="UserInsert-input-field">
+                  <select
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleChange}
+                    className="UserInsert-input-field"
+                  >
                     <option value="">선택 없음</option>
                     <option value="M">남성</option>
                     <option value="F">여성</option>
@@ -206,9 +217,11 @@ const UserInsert = () => {
 
             {/* 버튼 컨테이너: 수직 중앙 정렬을 위한 설정 */}
             <div className="UserInsert-button-container d-flex justify-content-center mt-4 w-100">
-              <Button type="submit"
+              <Button
+                type="submit"
                 variant="none"
-                className={`${getDarkModeHover()} w-50`}>
+                className={`${getDarkModeHover()} w-50`}
+              >
                 회원 가입하기
               </Button>
             </div>
