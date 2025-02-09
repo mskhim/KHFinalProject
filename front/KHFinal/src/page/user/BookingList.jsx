@@ -103,7 +103,7 @@ function BookingList() {
   return (
     <>
       <Header />
-      <div className="BookingList-container">
+      <div className={`BookingList-container ${getDarkMode()}`}> {/* 다크모드를 적용 */}
         <header className="BookingList-header">
           <h1>예매내역</h1>
         </header>
@@ -132,7 +132,7 @@ function BookingList() {
           </div>
 
           {/* 오른쪽 콘텐츠 */}
-          <div className="BookingList-content">
+          <div className={`BookingList-content ${getDarkMode()}`}> {/* 다크모드를 적용 */}
             <div
               className={`BookingList-section ${selectedSection === 'reservation-history' ? 'active' : ''}`}
               id="reservation-history"
@@ -217,7 +217,6 @@ function BookingList() {
                   </tbody>
                 </table>
               ) : (
-                
                 <p id='BookingList-cancle'>취소 내역이 존재하지 않습니다.</p>
               )}
             </div>

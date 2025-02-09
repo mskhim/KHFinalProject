@@ -82,7 +82,7 @@ const UserInsert = () => {
     // 예시: 닉네임이 "test"일 때 중복 처리
     if (nickname === 'test') {
       setNicknameValid(false);
-      alert('중복된 닉네임입니다.');
+      alert('이미 사용중인 닉네임입니다.');
     } else {
       setNicknameValid(true);
       alert('사용 가능한 닉네임입니다.');
@@ -200,17 +200,27 @@ const UserInsert = () => {
                   />
                 </div>
 
-                {/* 지역 코드 입력 필드 */}
+                {/* 지역 코드 입력 필드를 select로 변경 */}
                 <div className="UserInsert-input-group">
-                  <label htmlFor="region">지역 코드</label>
-                  <input
-                    type="number"
+                  <label htmlFor="region">지역</label>
+                  <select
                     name="region"
                     value={formData.region}
                     onChange={handleChange}
                     className="UserInsert-input-field"
-                    placeholder="지역 코드를 입력하세요"
-                  />
+                  >
+                    <option value="">선택 없음</option>
+                    <option value="서울">서울</option>
+                    <option value="경기">경기</option>
+                    <option value="강원">강원</option>
+                    <option value="충북">충북</option>
+                    <option value="충남">충남</option>
+                    <option value="전북">전북</option>
+                    <option value="전남">전남</option>
+                    <option value="경북">경북</option>
+                    <option value="경남">경남</option>
+                    <option value="제주">제주</option>
+                  </select>
                 </div>
               </div>
             </Container>

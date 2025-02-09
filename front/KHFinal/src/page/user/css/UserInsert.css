@@ -1,3 +1,4 @@
+/* 기존 입력 필드 스타일 수정 */
 .UserInsert-input-group {
   width: 100%; /* 넓이를 100%로 설정하여 닉네임 입력 필드가 올바르게 표시되도록 */
 }
@@ -11,7 +12,7 @@
 .UserInsert-input-field {
   width: 100%;
   border: none;
-  border-bottom: 2px solid;
+  border-bottom: 2px solid #ddd; /* 기본적으로 밝은 색의 테두리 설정 */
   outline: none;
   padding: 5px 0;
   font-size: 1rem;
@@ -19,8 +20,18 @@
   background-color: transparent;
   color: inherit;
   margin-bottom: 5px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* 부드러운 효과 추가 */
 }
 
+/* Focus 및 Hover 스타일 */
+.UserInsert-input-field:focus {
+  border-color: #28a745; /* 포커스 시 테두리 색상 */
+  box-shadow: 0 0 5px rgba(40, 167, 69, 0.5); /* 포커스 시 그림자 추가 */
+}
+
+.UserInsert-input-field:hover {
+  border-color: #007bff; /* Hover 시 테두리 색상 변경 */
+}
 
 /* 닉네임 입력 필드와 중복 확인 버튼을 나란히 배치하는 스타일 */
 .UserInsert-input-with-button {
@@ -163,13 +174,6 @@
 .UserInsert-section h2 {
   margin-bottom: 25px;
   font-size: 1.8rem;
-}
-
-.UserInsert-input-field:focus {
-  border-color: #28a745;
-  outline: none;
-  box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
-  width: 100%;
 }
 
 @media (max-width: 1024px) {

@@ -1,0 +1,14 @@
+/* placeholder의 폰트 크기 줄이기 */
+.UserInsert-input-field::placeholder {
+  font-size: 0.6rem !important; /* 기본 폰트 크기보다 더 작게 */
+}
+
+/* 성공 메시지(초록색)의 폰트 크기 줄이기 */
+.UserInsertCommon-text-success {
+  font-size: 0.4rem !important; /* 기본 폰트 크기보다 더 작게 */
+}
+
+/* 오류 메시지(빨간색)의 폰트 크기 줄이기 */
+.UserInsertCommon-text-danger {
+  font-size: 0.4rem !important; /* 기본 폰트 크기보다 더 작게 */
+}
