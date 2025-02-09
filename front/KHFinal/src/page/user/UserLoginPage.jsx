@@ -150,7 +150,12 @@ const UserLoginPage = () => {
         </div>
       </div>
       {/* 모달 (팝업창) */}
-      <Modal show={showFindModal} onHide={handleClose} centered>
+      <Modal
+        show={showFindModal}
+        onHide={handleClose}
+        centered
+        className={`${getDarkMode()}`}
+      >
         <Modal.Header closeButton>
           <Modal.Title>{modalContent}</Modal.Title>
         </Modal.Header>

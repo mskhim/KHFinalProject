@@ -291,3 +291,15 @@ button.dark-mode-hover:hover {
   color: #333;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+/* ✅ 모달 다크/라이트 모드 */
+.modal.dark-mode .modal-content {
+  background-color: #333;
+  color: white;
+  border: 1px solid #555;
+}
+
+.modal.light-mode .modal-content {
+  background-color: white;
+  color: #333;
+  border: 1px solid #ddd;
+}
