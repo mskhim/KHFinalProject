@@ -3,11 +3,13 @@ import Card from 'react-bootstrap/Card';
 import { Button } from 'react-bootstrap';
 import './css/Announcement.css';
 import { Context } from '../../../Context';
+import { useNavigate } from 'react-router-dom';
 
 export default function Announcement() {
   const {
-    darkMode, getDarkMode
+    darkMode
   } = useContext(Context);
+  const navigate = useNavigate();
   return (
     <>
       <div className="Announcement">
@@ -23,6 +25,7 @@ export default function Announcement() {
             <div className='Announcement-button'>
             <Button variant={darkMode ? "dark-mode custom-inverted-dark-button" : 'outline-dark '}
                   className={darkMode ? "dark-mode custom-inverted-dark-button" : 'outline-dark '} 
+                  onClick={() => navigate('/noticeList')}
                   >목록</Button>
             </div>
           </Card.Body>

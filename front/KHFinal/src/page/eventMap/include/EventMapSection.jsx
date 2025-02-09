@@ -1,13 +1,14 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useContext } from 'react';
 import mapMark from '../../../assets/mapMark.png'
+import { Context } from "../../../Context"
 
 const EventMapSection = ({ LATITUDE, LONGITUDE, ZOOM, events }) => {
   const mapRef = useRef(null); // 기존 지도 저장
   const infoWindowRef = useRef(null); // 인포윈도우 저장
+  const { darkMode } = useContext(Context); // 다크모드 상태 가져오기
 
   useEffect(() => {
     const clientId = import.meta.env.VITE_APP_NAVER_MAPS_CLIENT_ID;
-
     const script = document.createElement('script');
     script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${clientId}`;
     script.async = true;
@@ -18,6 +19,8 @@ const EventMapSection = ({ LATITUDE, LONGITUDE, ZOOM, events }) => {
           mapRef.current = new window.naver.maps.Map('naver-map', {
             center: new window.naver.maps.LatLng(LATITUDE, LONGITUDE),
             zoom: ZOOM ?? 9,
+            disableDoubleClickZoom: true, // 더블 클릭 줌 비활성화
+            scrollWheel: false, // 마우스 휠 줌 비활성화
           });
 
           // ✅ 인포윈도우 생성 (마커 클릭 시 표시할 정보창)
@@ -58,7 +61,8 @@ const EventMapSection = ({ LATITUDE, LONGITUDE, ZOOM, events }) => {
         if (mapRef.current && infoWindowRef.current) {
           window.naver.maps.Event.addListener(marker, "click", () => {
             infoWindowRef.current.setContent(`
-              <div style="padding:10px; min-width:200px; text-align:center;">
+              <div style="padding:10px; min-width:200px; text-align:center; background-color: ${darkMode ? "#ffffff" : "#ffffff"}; /* ✅ 배경색 변경 */
+                  color: ${darkMode ? "#000" : "#000"}; /* ✅ 글씨 색 변경 */ ">
                 <h4 style="margin:0;">${event.title}</h4>
                 <p style="margin:5px 0;">${event.description ?? "설명 없음"}</p>
               </div>

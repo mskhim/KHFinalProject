@@ -1,28 +1,12 @@
-.EventMapKorea-map-container {
-    position: relative;
-    width: 100%;
-    height: 400px;
-  }
+.EventMapKorea-mapSection {
+  max-width: 1300px;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
   
-  .EventMapKorea-button-container {
-    position: absolute;
-    top: 10px; /* ✅ 지도 위에 고정 */
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000; /* ✅ 지도보다 위에 위치 */
-    display: flex;
-    gap: 10px;
-    background: rgba(255, 255, 255, 0.8); /* ✅ 버튼 배경 투명도 조정 */
-    padding: 10px;
-    border-radius: 10px;
-  }
-  
-  .EventMapKorea-region-button {
-    background-color: white;
-    border: 1px solid #ccc;
-    padding: 8px 12px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-weight: bold;
-  }
-  
+.EventMapKorea-button-container {
+  margin-top: 20px;
+  margin-right: 5px;
+}
