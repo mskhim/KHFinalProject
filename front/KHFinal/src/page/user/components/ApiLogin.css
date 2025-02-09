@@ -6,6 +6,7 @@
   justify-content: center;
   gap: 20px; /* 버튼 간격 */
   margin-top: 50px; /* 위쪽 여백 */
+  max-width: 500px;
 }
 
 /* 로그인 버튼 스타일 */

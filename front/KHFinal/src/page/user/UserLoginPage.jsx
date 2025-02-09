@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import ApiLogin from './components/ApiLogin';
 import { checkAuthStatus } from './userApi.js'; // ✅ 로그인 상태 확인 API 호출
 import { Context } from '../../Context';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Modal, Nav } from 'react-bootstrap';
 import './css/UserLoginPage.css';
 
 const UserLoginPage = () => {
@@ -15,6 +15,8 @@ const UserLoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const [showFindModal, setShowFindModal] = useState(false);
+  const [modalContent, setModalContent] = useState('');
 
   useEffect(() => {
     checkAuthStatus()
@@ -26,6 +28,15 @@ const UserLoginPage = () => {
       })
       .finally(() => setIsLoading(false)); // ✅ 로딩 완료
   }, [navigate]);
+
+  // 모달 열기
+  const handleShow = (type) => {
+    setModalContent(type);
+    setShowFindModal(true);
+  };
+
+  // 모달 닫기
+  const handleClose = () => setShowFindModal(false);
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
@@ -44,7 +55,7 @@ const UserLoginPage = () => {
       <Header />
 
       {/* 로그인 폼 */}
-      <div className="UserLoginPage-form-container">
+      <div className="UserLoginPage-form-container p-5">
         <Form onSubmit={handleLoginSubmit}>
           {/* 아이디 입력 */}
           <Form.Floating className="mb-3">
@@ -90,13 +101,39 @@ const UserLoginPage = () => {
               로그인
             </Button>
           </div>
-          
-        {/* 아이디 찾기, 비밀번호 찾기, 회원가입 링크 추가 */}
-        <div className="text-center mt-3">
-          <a href="/find-id" className="mx-2">아이디 찾기</a> | 
-          <a href="/find-password" className="mx-2">비밀번호 찾기</a> | 
-          <a href="/signup" className="mx-2">회원가입</a>
-        </div>
+
+          {/* 아이디 찾기, 비밀번호 찾기, 회원가입 링크 추가 */}
+          {/* 네비게이션 바 */}
+          <div className="text-center mt-3">
+            <Nav className="justify-content-center align-items-center">
+              <Nav.Item>
+                <Nav.Link
+                  onClick={() => handleShow('아이디 찾기')}
+                  className="mx-2"
+                >
+                  아이디 찾기
+                </Nav.Link>
+              </Nav.Item>
+              <span>|</span>
+              <Nav.Item>
+                <Nav.Link
+                  onClick={() => handleShow('비밀번호 찾기')}
+                  className="mx-2"
+                >
+                  비밀번호 찾기
+                </Nav.Link>
+              </Nav.Item>
+              <span>|</span>
+              <Nav.Item>
+                <Nav.Link
+                  onClick={() => navigate('/userInsertCommon')}
+                  className="mx-2"
+                >
+                  회원가입
+                </Nav.Link>
+              </Nav.Item>
+            </Nav>
+          </div>
         </Form>
 
         {/* 외부 API 로그인 */}
@@ -104,7 +141,24 @@ const UserLoginPage = () => {
           <ApiLogin /> {/* 외부 API 로그인 컴포넌트 */}
         </div>
       </div>
-
+      {/* 모달 (팝업창) */}
+      <Modal show={showFindModal} onHide={handleClose} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>{modalContent}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {modalContent === '아이디 찾기' ? (
+            <p>여기에 아이디 찾기 UI를 넣으세요.</p>
+          ) : (
+            <p>여기에 비밀번호 찾기 UI를 넣으세요.</p>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            닫기
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <Footer />
     </>
   );
