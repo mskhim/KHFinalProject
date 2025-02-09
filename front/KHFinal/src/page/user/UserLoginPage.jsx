@@ -5,15 +5,16 @@ import { useNavigate } from 'react-router-dom';
 import ApiLogin from './components/ApiLogin';
 import { checkAuthStatus } from './userApi.js'; // ✅ 로그인 상태 확인 API 호출
 import { Context } from '../../Context';
-import { Button } from 'react-bootstrap';
-
-
-
+import { Button, Form } from 'react-bootstrap';
+import './css/UserLoginPage.css';
 
 const UserLoginPage = () => {
   const { getDarkMode, getDarkModeHover } = useContext(Context);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
 
   useEffect(() => {
     checkAuthStatus()
@@ -26,56 +27,86 @@ const UserLoginPage = () => {
       .finally(() => setIsLoading(false)); // ✅ 로딩 완료
   }, [navigate]);
 
+  const handleLoginSubmit = (e) => {
+    e.preventDefault();
+    // 로그인 처리 로직
+    console.log('아이디:', email);
+    console.log('비밀번호:', password);
+    console.log('로그인 상태 유지:', rememberMe);
+  };
+
   if (isLoading) {
     return <div>로딩 중...</div>;
   }
 
   return (
-<>
-  <Header />
-  <div className="UserLoginPage-container">
-    <h1 className="UserLoginPage-header">로그인</h1>
+    <>
+      <Header />
 
-    <div className="UserLoginPage-form-container">
-      {/* 아이디 입력 영역 */}
-      <div className="UserLoginPage-input-group">
-        <label htmlFor="id">아이디</label>
-        <input
-          type="text"
-          id="id"
-          className="UserLoginPage-input-field"
-          placeholder="아이디"
-        />
+      {/* 로그인 폼 */}
+      <div className="UserLoginPage-form-container">
+        <Form onSubmit={handleLoginSubmit}>
+          {/* 아이디 입력 */}
+          <Form.Floating className="mb-3">
+            <Form.Control
+              id="email"
+              type="email"
+              placeholder="이메일을 입력하세요"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <Form.Label htmlFor="email">아이디</Form.Label>
+          </Form.Floating>
+
+          {/* 비밀번호 입력 */}
+          <Form.Floating className="mb-3">
+            <Form.Control
+              id="password"
+              type="password"
+              placeholder="비밀번호를 입력하세요"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Form.Label htmlFor="password">비밀번호</Form.Label>
+          </Form.Floating>
+
+          {/* 로그인 상태 유지 체크박스 */}
+          <Form.Check
+            type="checkbox"
+            id="rememberMe"
+            label="로그인 상태 유지"
+            checked={rememberMe}
+            onChange={(e) => setRememberMe(e.target.checked)}
+            className="mb-3"
+          />
+
+          {/* 로그인 버튼 */}
+          <div className="UserLoginPage-button-container">
+            <Button
+              variant="none"
+              className={`${getDarkModeHover()} w-100`}
+              type="submit"
+            >
+              로그인
+            </Button>
+          </div>
+          
+        {/* 아이디 찾기, 비밀번호 찾기, 회원가입 링크 추가 */}
+        <div className="text-center mt-3">
+          <a href="/find-id" className="mx-2">아이디 찾기</a> | 
+          <a href="/find-password" className="mx-2">비밀번호 찾기</a> | 
+          <a href="/signup" className="mx-2">회원가입</a>
+        </div>
+        </Form>
+
+        {/* 외부 API 로그인 */}
+        <div className="UserLoginPage-api-container">
+          <ApiLogin /> {/* 외부 API 로그인 컴포넌트 */}
+        </div>
       </div>
 
-      {/* 비밀번호 입력 영역 */}
-      <div className="UserLoginPage-input-group">
-        <label htmlFor="password">비밀번호</label>
-        <input
-          type="password"
-          id="password"
-          className="UserLoginPage-input-field"
-          placeholder="비밀번호"
-        />
-      </div>
-      </div>
-
-      {/* 로그인 버튼 */}
-      <div className="UserLoginPage-button-container">
-        <Button 
-        variant="none"
-        className={`${getDarkModeHover()} w-100`}>로그인
-        </Button>
-      </div>
-
-      {/* 외부 API 로그인 */}
-      <div className="UserLoginPage-api-container">
-        <ApiLogin /> {/* 외부 API 로그인 컴포넌트 */}
-      </div>  
-  </div>
-  <Footer />
-</>
-
+      <Footer />
+    </>
   );
 };
 
