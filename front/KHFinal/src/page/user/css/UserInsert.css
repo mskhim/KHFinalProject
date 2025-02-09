@@ -1,58 +1,48 @@
-/* 공통 Input 스타일 */
 .UserInsert-input-group {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
+  width: 100%; /* 넓이를 100%로 설정하여 닉네임 입력 필드가 올바르게 표시되도록 */
 }
 
-.UserInsert-input-group label
-{
+.UserInsert-input-group label {
   font-size: 1rem;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-top: 10px;
 }
 
 .UserInsert-input-field {
-  width: 90%;
+  width: 100%;
   border: none;
-  
-  border-bottom: 2px solid; /* 아래쪽에만 2px 두께의 줄 추가 (색상은 #000 검정색) */
-  outline: none; /* 포커스 시 주변에 나타나는 외곽선 제거 */
-  padding: 5px 0; /* 위아래 패딩만 주어 줄의 높이가 설정되도록 */
-  width: 100%; /* 입력 필드의 넓이 설정 */
-
-  padding: 8px 15px;
+  border-bottom: 2px solid;
+  outline: none;
+  padding: 5px 0;
   font-size: 1rem;
   height: 40px;
   background-color: transparent;
   color: inherit;
+  margin-bottom: 5px;
 }
 
-.UserInsert-input-with-button input {
-  margin-top: 20px;
-}
 
+/* 닉네임 입력 필드와 중복 확인 버튼을 나란히 배치하는 스타일 */
 .UserInsert-input-with-button {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 10px;
-  position: relative;
+  gap: 10px; /* 입력 필드와 버튼 간의 간격 */
   width: 100%;
 }
 
 .UserInsert-input-with-button label {
-  position: absolute;
-  top: -20px;
-  left: 0;
   font-size: 1rem;
   font-weight: bold;
-  color: #333;
+  margin-right: 10px;
+  white-space: nowrap; /* 줄바꿈 방지 */
 }
 
-.UserInsert-input-with-button input:focus {
-  border-color: #28a745;
-  outline: none;
-  box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+.UserInsert-button-container {
+  margin-top: 50px;
+  display: flex;
+  gap: 20px;
+  width: 100%;
 }
 
 .UserInsert-container {
@@ -66,12 +56,9 @@
 }
 
 .UserInsert-header {
-  text-align: left;
-  width: 100%;
-  margin-top: 0;
-  margin-left: 0;
-  margin-bottom: 40px;
-  font-size: 2.5rem;
+  margin-top: auto;
+  margin-left: 7vw;  /* 여백을 3.5vw에서 3vw로 줄임 */
+  margin-bottom: 5vw; /* 하단 여백을 7vw에서 6vw로 줄임 */
 }
 
 .UserInsert-wrapper {
@@ -81,69 +68,7 @@
   max-width: 1200px;
   margin: 0 auto;
   align-items: flex-start;
-  gap: 30px;
-}
-
-.UserInsert-menu {
-  width: 220px;
-  padding: 20px;
-  box-sizing: border-box;
-  border-top: 3.5px solid;
-  border-bottom: 3.5px solid;
-  min-width: 200px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: auto;
-  max-height: 500px;
-  border-radius: 0px !important;
-}
-
-.UserInsert-menu ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-.UserInsert-menu li {
-  margin: 20px 0;
-}
-
-.UserInsert-menu span {
-  font-weight: bold;
-  display: block;
-  padding: 12px 18px;
-  border-radius: 5px;
-  position: relative;
-  transition: color 0.3s ease, padding-left 0.3s ease;
-  cursor: pointer;
-  font-size: 1.1rem;
-}
-
-.UserInsert-menu span:hover {
-  padding-left: 25px;
-}
-
-.UserInsert-menu span::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 5px;
-  width: 0;
-  height: 2px;
-  background-color: #252429;
-  transition: width 0.3s ease;
-}
-
-.UserInsert-menu.dark-mode span::before {
-  background-color: white;
-}
-
-.UserInsert-menu span:hover::before {
-  width: 100%;
-}
-
-.UserInsert-menu span.active::before {
-  width: 100%;
+  gap: 10px;
 }
 
 .UserInsert-content {
@@ -157,13 +82,11 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.UserInsert-form-group
-{
+.UserInsert-form-group {
   width: 100%;
 }
 
-.UserInsert-form-group-div
-{
+.UserInsert-form-group-div {
   width: 100%;
 }
 
@@ -175,11 +98,6 @@
   width: 100%; /* 원하는 너비 설정 */
   padding: 5px 0; /* 상하 패딩 설정 */
 }
-
-.UserInsert-div-input:focus {
-  border-bottom: 2px solid #007bff; /* 포커스 시 bottom border 색상 변경 */
-}
-
 
 .UserInsert-section {
   display: none;
@@ -222,12 +140,6 @@
   font-size: 0.95rem;
 }
 
-.UserInsert-button-container {
-  margin-top: 50px;
-  display: flex;
-  gap: 20px;
-}
-
 .UserInsert-button {
   padding: 12px 25px;
   cursor: pointer;
@@ -243,8 +155,9 @@
   justify-content: center;
 }
 
-.UserInsert-button:hover {
-  background-color: #252429d8;
+.UserInsert-button:focus {
+  outline: none; /* 포커스 시 외곽선 제거 */
+  border: none;  /* 포커스 시 테두리 제거 */
 }
 
 .UserInsert-section h2 {
@@ -265,23 +178,10 @@
     gap: 20px;
   }
 
-  .UserInsert-menu {
-    width: 100%;
-    margin-left: 0;
-  }
-
   .UserInsert-header {
     text-align: center;
     padding-left: 0;
     margin-left: 0;
-  }
-
-  .UserInsert-menu {
-    margin-bottom: 25px;
-  }
-
-  .UserInsert-menu li {
-    margin: 15px 0;
   }
 }
 
@@ -289,15 +189,6 @@
   .UserInsert-wrapper {
     flex-direction: column;
     gap: 15px;
-  }
-
-  .UserInsert-menu {
-    width: 100%;
-    margin-bottom: 15px;
-  }
-
-  .UserInsert-menu li {
-    margin: 12px 0;
   }
 
   .UserInsert-button-container {

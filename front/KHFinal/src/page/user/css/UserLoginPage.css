@@ -1,143 +1,45 @@
-/* UserLoginPage 스타일 */
-.UserLoginPage-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 40px 20px;
-  max-width: 100%; /* 최대 너비 100%로 설정 */
-  margin: 0 auto;
-  box-sizing: border-box; /* 여백이 요소 크기에 포함되도록 설정 */
-}
+/* UserLoginPage.css */
 
-.UserLoginPage-header {
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin-bottom: 30px;
-  text-align: center;
-  width: 100%;
-}
-
+/* 전체 로그인 페이지 카드 스타일 */
 .UserLoginPage-form-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 500px; /* 최대 너비 설정 */
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.UserLoginPage-input-group {
-  font-size: 1rem;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
-  width: 100%;
+/* 부트스트랩의 floating label 스타일을 위한 추가 클래스 */
+.UserLoginPage-form-container .form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
 }
 
-.UserLoginPage-input-group label {
-  font-size: 1rem;
-  font-weight: bold;
-  margin-bottom: 10px;
+.UserLoginPage-form-container .form-floating {
+  margin-bottom: 1rem;
 }
 
-.UserLoginPage-input-field {
-  width: 100%;
-  border: none;
+.UserLoginPage-form-container .form-floating label {
+  color: #495057;
+}
+
+/* 체크박스 스타일 */
+.UserLoginPage-form-container .form-check-label {
+  color: #495057;
+  font-size: 0.875rem;
+}
+
+/* 로그인 버튼 */
+.UserLoginPage-button-container .btn {
   border-radius: 5px;
-  padding: 10px 15px;
+  padding: 10px;
   font-size: 1rem;
-  height: 40px;
-  background-color: transparent;
-  color: inherit;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* 기본적인 입력 필드 그림자 */
-}
-
-.UserLoginPage-input-field:focus {
-  border-color: #28a745;
-  outline: none;
-  box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
-}
-
-.UserLoginPage-button-container {
-  margin-top: 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 100%;
-  max-width: 500px; /* 버튼 영역 최대 너비 */
-}
-
-.UserLoginPage-button {
-  padding: 12px 25px;
-  cursor: pointer;
-  border: none;
-  border-radius: 5px;
-  background-color: #252429;
-  color: white;
-  font-size: 1.1rem;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   transition: background-color 0.3s;
-  width: 100%; /* 버튼을 너비 100%로 설정 */
 }
 
-.UserLoginPage-button:hover {
-  background-color: #252429d8;
-}
 
+/* 외부 API 로그인 컨테이너 */
 .UserLoginPage-api-container {
   margin-top: 20px;
-  width: 100%;
-  max-width: 500px;
-}
-
-/* .UserLoginPage-button-container.dark-mode span::before {
-  background-color: white;
-} */
-
-
-@media (max-width: 1024px) {
-  .UserLoginPage-container {
-    padding: 20px;
-  }
-
-  .UserLoginPage-header {
-    font-size: 2.2rem;
-    margin-bottom: 20px;
-  }
-
-  .UserLoginPage-form-container {
-    width: 100%;
-    max-width: 90%; /* 입력 폼 너비를 90%로 설정 */
-  }
-
-  .UserLoginPage-input-group {
-    max-width: 100%;
-  }
-
-  .UserLoginPage-button-container {
-    max-width: 100%;
-  }
-}
-
-@media (max-width: 767px) {
-  .UserLoginPage-header {
-    font-size: 1.8rem; /* 더 작은 화면에서는 글자 크기 줄이기 */
-    margin-bottom: 15px;
-  }
-
-  .UserLoginPage-form-container {
-    max-width: 95%; /* 모바일에서는 폼의 너비를 95%로 설정 */
-  }
-
-  .UserLoginPage-button-container {
-    margin-top: 20px;
-    gap: 15px;
-    max-width: 95%; /* 버튼 너비를 95%로 설정 */
-  }
-
-  .UserLoginPage-button {
-    padding: 12px 20px; /* 모바일에서 버튼 크기 조정 */
-  }
 }

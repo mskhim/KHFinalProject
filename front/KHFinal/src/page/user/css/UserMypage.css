@@ -1,14 +1,12 @@
 /* 공통 Input 스타일 */
-.MyPageMain-input-group
-{
+.MyPageMain-input-group {
   font-size: 1rem;
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
 }
 
-.MyPageMain-input-group label
-{
+.MyPageMain-input-group label {
   font-size: 1rem;
   font-weight: bold;
   margin-bottom: 10px;
@@ -82,7 +80,7 @@
 }
 
 .MyPageMain-menu {
-  width: 220px; /* 메뉴 너비를 220px로 설정 */
+  width: 200px; /* 메뉴 너비를 220px로 설정 */
   padding: 20px;
   box-sizing: border-box;
   border-top: 3.5px solid;
@@ -102,13 +100,13 @@
 }
 
 .MyPageMain-menu li {
-  margin: 20px 0; /* 메뉴 항목 간격을 20px로 설정 */
+  margin: 10px 0px;
 }
 
 .MyPageMain-menu span {
   font-weight: bold;
-  display: block;
-  padding: 12px 18px;
+  display: inline-block; /* 텍스트 너비에 맞게 확장되도록 inline-block 사용 */
+  padding: 10px;
   border-radius: 5px;
   position: relative;
   transition: color 0.3s ease, padding-left 0.3s ease;
@@ -117,7 +115,7 @@
 }
 
 .MyPageMain-menu span:hover {
-  padding-left: 25px;
+  padding-left: 5px;
 }
 
 .MyPageMain-menu span::before {
@@ -136,7 +134,7 @@
 }
 
 .MyPageMain-menu span:hover::before {
-  width: 100%;
+  width: 100%; /* Underline will expand to the width of the text */
 }
 
 .MyPageMain-menu span.active::before {
@@ -145,7 +143,7 @@
 
 .MyPageMain-content {
   margin-left: 90px; /* 메뉴와 콘텐츠 간격을 좁히기 위해 margin-left를 90px로 설정 */
-  padding: 20px 30px;
+  padding: 0px 30px;
   width: calc(100% - 90px); /* 메뉴 너비를 제외한 콘텐츠 너비 설정 */
   display: flex;
   flex-direction: column;
@@ -222,7 +220,6 @@
   font-size: 1.8rem; /* 섹션 제목 글자 크기 키움 */
 }
 
-
 .MyPageMain-input-field:focus {
   border-color: #28a745;
   outline: none;
@@ -270,11 +267,6 @@
   .MyPageMain-menu {
     width: 100%;
     margin-bottom: 15px;
-  }
-
-  .MyPageMain-content {
-    width: 100%;
-    margin-left: 0;
   }
 
   .MyPageMain-menu li {
