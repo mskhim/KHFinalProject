@@ -34,6 +34,45 @@ public class UserController {
 	@Autowired
 	private JwtUtil JwtUtil;
 
+	//아이디찾기
+		@GetMapping("/findCommonUserIdByEmail")
+		public ResponseEntity<?> findCommonUserIdByEmail(@RequestParam String email) {
+			User user = new User();
+			user.setEmail(email);
+			user.setProvider("naver");
+			user = service.findCommonUserByEmail(user);
+			 if (user != null) {
+			        return ResponseEntity.ok(Map.of("user",user));
+			    } else {
+			        return ResponseEntity.status(404).body("❌ 해당 이메일로 가입된 계정이 없습니다.");
+			    }
+			}
+	
+		//아이디와 이메일로 확인
+		@GetMapping("/findCommonUserPwdByEmail")
+		public ResponseEntity<?> findCommonUserPwdByEmail(@RequestParam String email,@RequestParam String id) {
+			User user = new User();
+			user.setId(id);
+			user.setEmail(email);
+			user.setProvider("naver");
+			user = service.findCommonUserByEmailAndId(user);
+			 if (user != null) {
+			        return ResponseEntity.ok(Map.of("user",user));
+			    } else {
+			        return ResponseEntity.status(404).body("❌ 해당 이메일로 가입된 계정이 없습니다.");
+			    }
+			}
+		//아이디와 임시비릴번호를 받아서 업데이트
+		@PostMapping("/updateRandomPwdById")
+		public ResponseEntity<?> updatePwdById(@RequestBody User user) {
+			user.setProvider("naver");
+			boolean flag = service.updateRandomPwdById(user);
+			 if (flag) {
+			        return ResponseEntity.ok(Map.of("flag",flag));
+			    } else {
+			        return ResponseEntity.status(404).body("❌ 해당 이메일로 가입된 계정이 없습니다.");
+			    }
+			}
 	// 회원가입 처리
 	@PostMapping("/insert")
 	public ResponseEntity<?> insert(@RequestBody User user) {

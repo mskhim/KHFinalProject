@@ -2,7 +2,13 @@ import { useState, useContext } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { Context } from '../../Context';
 import { ButtonDarkMode } from '../../components/ui';
-
+import {
+  getCommonUserIdByEmail,
+  sendIdByEmail,
+  getCommonUserPwdByEmail,
+  sendPwdByEmail,
+  updateRandomPwdById,
+} from './userApi';
 // 난수 비밀번호 생성 함수
 const generateRandomPassword = () => {
   const chars =
@@ -15,27 +21,27 @@ const generateRandomPassword = () => {
 };
 
 const UserFind = ({ type }) => {
-  const { getDarkMode } = useContext(Context);
   const [email, setEmail] = useState('');
   const [userId, setUserId] = useState('');
   const [message, setMessage] = useState('');
 
   // 아이디 찾기 (목업)
-  const handleFindId = () => {
-    if (email === 'test@example.com') {
-      setMessage('회원님의 아이디는 "testuser123" 입니다.');
-    } else {
-      setMessage('해당 이메일로 가입된 아이디가 없습니다.');
+  const handleFindId = async () => {
+    const data = await getCommonUserIdByEmail(email);
+    if (data !== null) {
+      await sendIdByEmail(email, data.id);
+      alert('📨 이메일로 아이디를 발송했습니다.');
     }
   };
 
-  // 비밀번호 찾기 (목업)
-  const handleFindPassword = () => {
-    if (userId === 'testuser123' && email === 'test@example.com') {
-      const newPassword = generateRandomPassword();
-      setMessage(`새로운 임시 비밀번호: ${newPassword}`);
-    } else {
-      setMessage('입력한 정보가 올바르지 않습니다.');
+  // 임시 비밀번호 발급
+  const handleFindPassword = async () => {
+    const data = await getCommonUserPwdByEmail(email, userId);
+    if (data !== null) {
+      const randomPwd = generateRandomPassword();
+      (await updateRandomPwdById(userId, randomPwd)) &&
+        (await sendPwdByEmail(email, randomPwd));
+      alert('📨 이메일로 임시 비밀번호를 발송했습니다.');
     }
   };
 

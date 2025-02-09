@@ -192,25 +192,111 @@ export const checkAuthStatus = async () => {
 };
 
 /**
- * jwt의 id와 provider로 db에 정보 가져오는 메소드
+ * 이메일을 받아서 일반회원가입 User를 가져오는 API, 아이디만 가져올것
  */
-
-export const getUserIdProvider = async () => {
+export const getCommonUserIdByEmail = async (email) => {
   try {
-    const response = await fetch('http://localhost:8080/user/check-auth', {
-      method: 'GET',
-      credentials: 'include', // ✅ 쿠키 자동 포함
-    });
+    const response = await fetch(
+      `http://localhost:8080/user/findCommonUserIdByEmail?email=${email}`,
+      {
+        method: 'GET',
+        credentials: 'include', // ✅ JWT 쿠키 포함
+      }
+    );
 
     if (!response.ok) {
-      console.warn('JWT가 없거나 만료됨. 로그아웃 처리');
-      return { authenticated: false };
+      alert('❌ 해당 이메일로 가입된 계정이 없습니다.');
+      return null;
     }
 
     const data = await response.json();
-    return data; // { authenticated: true, user: {...} }
+    return data.user; // { id, username, email, role, ... }
   } catch (error) {
-    console.error('인증 상태 확인 실패:', error);
-    return { authenticated: false };
+    console.error('이메일 기반 사용자 조회 실패:', error);
+    return null;
+  }
+};
+/**
+ * 이메일과 아이디를 받아서 아이디를 이메일로 전송하는 API
+ */
+export const sendIdByEmail = async (email, id) => {
+  try {
+    const response = await fetch('http://localhost:8080/email/sendUserId', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: email, id: id }),
+    });
+
+    const result = await response.text();
+    console.log(result);
+  } catch (error) {
+    console.error('❌ 이메일 전송 실패:', error);
+  }
+};
+/**
+ * 이메일과 아이디를 받아서 일반회원가입 User를 가져오는 API
+ */
+export const getCommonUserPwdByEmail = async (email, id) => {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/user/findCommonUserPwdByEmail?email=${email}&id=${id}`,
+      {
+        method: 'GET',
+        credentials: 'include', // ✅ JWT 쿠키 포함
+      }
+    );
+
+    if (!response.ok) {
+      alert('❌ 해당 이메일 또는 아이디로 가입된 계정이 없습니다.');
+      return null;
+    }
+
+    const data = await response.json();
+    return data.user;
+  } catch (error) {
+    console.error('이메일 기반 사용자 조회 실패:', error);
+    return null;
+  }
+};
+/**
+ * 아이디와 임시비밀번호 를 받아서 db에 저장된 비밀번호를 변경하는 API
+ */
+export const updateRandomPwdById = async (id, pwd) => {
+  try {
+    const response = await fetch(
+      'http://localhost:8080/user/updateRandomPwdById',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: id, pwd: pwd }),
+      }
+    );
+    const data = await response.json();
+    console.log(data);
+    return data.flag;
+  } catch (error) {
+    console.error('❌ 이메일 전송 실패:', error);
+  }
+};
+/**
+ * 이메일을 받아서 임시 비밀번호를 이메일로 전송하는 API
+ */
+export const sendPwdByEmail = async (email, pwd) => {
+  try {
+    const response = await fetch('http://localhost:8080/email/sendUserPwd', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: email, pwd: pwd }),
+    });
+    const result = await response.text();
+    console.log(result);
+  } catch (error) {
+    console.error('❌ 이메일 전송 실패:', error);
   }
 };

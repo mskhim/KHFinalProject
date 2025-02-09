@@ -9,6 +9,9 @@ public interface UserService {
 	User checkLogin(User user);
 	boolean insert(User user);
 	public User getUserByAccessToken(String accessToken);
+	User findCommonUserByEmail(User user);
+	User findCommonUserByEmailAndId(User user);
+	boolean updateRandomPwdById(User user);
     // 네이버 로그인
     String getNaverAuthUrl(); // 네이버 로그인 인증 URL 생성
     String getNaverAccessToken(String code, String state); // 네이버 Access Token 요청
