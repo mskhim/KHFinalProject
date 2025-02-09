@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { handleRegister } from './userApi';
-import { Container } from 'react-bootstrap';
+import { Button, Container } from 'react-bootstrap';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import './css/UserInsert.css';
@@ -9,25 +9,66 @@ import { Context } from '../../Context';
 
 const UserInsert = () => {
   const navigate = useNavigate();
-  const { getDarkMode } = useContext(Context);
-  // ✅ **초기 상태값을 명확히 설정**
+  const { getDarkMode, getDarkModeHover } = useContext(Context);
   const [formData, setFormData] = useState({
-    id: '', // 아이디 (소셜 로그인 등으로 자동 생성될 가능성 있음)
-    pwd: '', // 비밀번호 (선택적으로 입력될 수도 있음)
-    phone: '', // 전화번호
-    provider: '', // 제공자 (네이버, 카카오 등)
-    name: '', // 이름
-    email: '', // 이메일
-    role: '2', // 기본값 2 (일반 사용자)
-    gender: '', // 성별 ('M' or 'F')
-    birth: '', // 생년월일 (YYYY-MM-DD)
-    region: '', // 지역
-    apiid: '', // API 인증 ID (소셜 로그인 시 필요할 수도 있음)
+    id: '',
+    pwd: '',
+    confirmPwd: '',
+    phone: '',
+    provider: '',
+    name: '',
+    email: '',
+    role: '2',
+    gender: '',
+    birth: '',
+    region: '',
+    apiid: '',
+    nickname: '',
   });
 
-  // 제출 핸들러
+  const [nicknameValid, setNicknameValid] = useState(false);
+  const [passwordError, setPasswordError] = useState(''); // 비밀번호 불일치 오류 메시지 상태
+  const [passwordSuccess, setPasswordSuccess] = useState(''); // 비밀번호 일치 메시지 상태
+
+  const handleNicknameCheck = () => {
+    const nickname = formData.nickname.trim();
+    if (nickname === '') {
+      alert('닉네임을 입력해주세요.');
+      return;
+    }
+
+    if (nickname === 'test') {
+      setNicknameValid(false);
+      alert('이미 사용중인 닉네임입니다.');
+    } else {
+      setNicknameValid(true);
+      alert('사용 가능한 닉네임입니다.');
+    }
+  };
+
+  // 비밀번호 변경 시 일치 여부 확인
+  const handlePasswordChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    if (name === 'confirmPwd') {
+      if (value !== formData.pwd) {
+        setPasswordError('비밀번호가 일치하지 않습니다.');
+        setPasswordSuccess('');
+      } else {
+        setPasswordError('');
+        setPasswordSuccess('비밀번호가 일치합니다.');
+      }
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (passwordError) {
+      alert('비밀번호가 일치하지 않습니다.');
+      return;
+    }
+
     try {
       await handleRegister(formData);
       const preLoginUrl = sessionStorage.getItem('preLoginUrl') || '/';
@@ -39,7 +80,6 @@ const UserInsert = () => {
     }
   };
 
-  // 입력값 변경 핸들러
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -60,11 +100,7 @@ const UserInsert = () => {
               <div className="UserInsert-form-group-div">
                 {/* 숨겨진 필드 (id, provider, role, apiid) */}
                 <input type="hidden" name="id" value={formData.id} />
-                <input
-                  type="hidden"
-                  name="provider"
-                  value={formData.provider}
-                />
+                <input type="hidden" name="provider" value={formData.provider} />
                 <input type="hidden" name="role" value={formData.role} />
                 <input type="hidden" name="apiid" value={formData.apiid} />
 
@@ -81,6 +117,30 @@ const UserInsert = () => {
                   />
                 </div>
 
+                {/* 닉네임 입력 필드 및 중복 확인 버튼 */}
+                <div className="UserInsert-input-group d-flex flex-row align-items-center">
+                  <div className="w-75">
+                    <label htmlFor="nickname">닉네임</label>
+                    <input
+                      type="text"
+                      name="nickname"
+                      value={formData.nickname}
+                      onChange={handleChange}
+                      className="UserInsert-input-field w-100"
+                      required
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    onClick={handleNicknameCheck}
+                    variant="none"
+                    className={`${getDarkModeHover()} ml-2 w-10`}
+                    style={{ marginTop: '25px', marginLeft: '20px' }}
+                  >
+                    중복 확인
+                  </Button>
+                </div>
+
                 {/* 비밀번호 입력 필드 (선택 사항) */}
                 <div className="UserInsert-input-group">
                   <label htmlFor="pwd">비밀번호</label>
@@ -90,9 +150,28 @@ const UserInsert = () => {
                     value={formData.pwd}
                     onChange={handleChange}
                     className="UserInsert-input-field"
-                    placeholder="비밀번호를 입력하세요"
+                    placeholder="비밀번호를 입력해주세요"
                     required
                   />
+                </div>
+
+                {/* 비밀번호 확인 입력 필드 */}
+                <div className="UserInsert-input-group">
+                  <label htmlFor="confirmPwd">비밀번호 확인</label>
+                  <input
+                    type="password"
+                    name="confirmPwd"
+                    value={formData.confirmPwd}
+                    onChange={handlePasswordChange}
+                    className="UserInsert-input-field"
+                    placeholder="비밀번호를 다시 입력해주세요"
+                    required
+                  />
+                  {/* 비밀번호 일치 시 초록색 메시지 출력 */}
+                  {passwordError && <p className="UserInsertCommon-text-danger">{passwordError}</p>}
+                  {passwordSuccess && (
+                    <p className="UserInsertCommon-text-success">{passwordSuccess}</p>
+                  )}
                 </div>
 
                 {/* 이메일 입력 필드 */}
@@ -150,26 +229,38 @@ const UserInsert = () => {
                   />
                 </div>
 
-                {/* 지역 코드 입력 필드 */}
+                {/* 지역 코드 입력 필드를 select로 변경 */}
                 <div className="UserInsert-input-group">
                   <label htmlFor="region">지역</label>
-                  <input
-                    type="text"
+                  <select
                     name="region"
                     value={formData.region}
                     onChange={handleChange}
                     className="UserInsert-input-field"
-                    placeholder="지역을 입력하세요"
-                    required
-                  />
+                  >
+                    <option value="">선택 없음</option>
+                    <option value="서울">서울</option>
+                    <option value="경기">경기</option>
+                    <option value="강원">강원</option>
+                    <option value="충북">충북</option>
+                    <option value="충남">충남</option>
+                    <option value="전북">전북</option>
+                    <option value="전남">전남</option>
+                    <option value="경북">경북</option>
+                    <option value="경남">경남</option>
+                    <option value="제주">제주</option>
+                  </select>
                 </div>
               </div>
             </Container>
-            {/* 버튼 컨테이너 */}
-            <div className="UserInsert-button-container d-flex justify-content-center mt-4">
-              <button type="submit" className="UserInsert-button">
+            <div className="UserInsert-button-container d-flex justify-content-center mt-4 w-100">
+              <Button
+                type="submit"
+                variant="none"
+                className={`${getDarkModeHover()} w-50`}
+              >
                 회원 가입하기
-              </button>
+              </Button>
             </div>
           </div>
         </form>

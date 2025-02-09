@@ -1,5 +1,7 @@
 import React from 'react';
 import { getNaverAuthUrl, getKakaoAuthUrl } from '../userApi'; // 네이버와 카카오 API URL 가져오기
+import btn_kakao from './btn_kakao.svg'; // 카카오 로그인 버튼 이미지 추가
+import btn_naver from './btn_naver.svg'; // 네이버 로그인 버튼 이미지 추가
 import BtnNaverLogin from './btnNaverLogin.png';
 import BtnKakaoLogin from './btnKakaoLogin.png'; // 카카오 로그인 버튼 이미지 추가
 import './ApiLogin.css'; // 스타일 파일 추가
@@ -27,18 +29,27 @@ function ApiLogin() {
 
   return (
     <div className="api-login-container">
-      <img
-        src={BtnNaverLogin}
-        alt="네이버 로그인 버튼"
-        className="login-button"
-        onClick={handleNaverLogin}
-      />
-      <img
-        src={BtnKakaoLogin}
-        alt="카카오 로그인 버튼"
-        className="login-button"
-        onClick={handleKakaoLogin}
-      />
+      <div className="social-login-button-container">
+        <button 
+        className="social-login-button naver-button"
+        onClick={handleNaverLogin}>
+          <img src={btn_naver} alt="Naver Logo" className="social-login-icon"
+          style={{ width: '35px', height: 'auto' }}
+          />
+          <span>네이버 로그인</span>
+        </button>
+      </div>
+
+      <div className="social-login-button-container">
+        <button
+        className="social-login-button kakao-button"
+        onClick={handleKakaoLogin}>
+          <img src={btn_kakao} alt="Kakao Logo" className="social-login-icon"
+          style={{ width: '35px', height: 'auto' }}
+          />
+          <span>카카오 로그인</span>
+        </button>
+      </div>
     </div>
   );
 }
