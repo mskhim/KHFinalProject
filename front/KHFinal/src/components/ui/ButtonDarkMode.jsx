@@ -21,6 +21,7 @@ const ButtonDarkMode = ({ text, onClick, width }) => {
 ButtonDarkMode.propTypes = {
   text: PropTypes.string.isRequired, // 버튼에 표시될 텍스트
   onClick: PropTypes.func.isRequired, // 버튼 클릭 시 실행할 함수
+  className: PropTypes.string,
 };
 
 export default ButtonDarkMode;
