@@ -338,10 +338,10 @@ public class UserController {
 	        return ResponseEntity.ok(Map.of("authenticated", false, "message", "JWT가 없거나 만료됨"));
 	    }
 		
-	    //  JWT가 유효하면 사용자 정보 반환
+	    // JWT가 유효하면 사용자 정보 반환
 	    String userId = JwtUtil.validateToken(jwtToken).get("id", String.class);
 	    String provider = JwtUtil.validateToken(jwtToken).get("provider", String.class);
-	    String role = JwtUtil.validateToken(jwtToken).get("role", String.class);
+	    // String role = JwtUtil.validateToken(jwtToken).get("role", String.class);
 	    User user = new User();
 	    user.setId(userId);
 	    user.setProvider(provider);

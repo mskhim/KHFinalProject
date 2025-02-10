@@ -4,6 +4,7 @@ import React, { useContext, useState, useRef, useEffect } from 'react';
 import './css/UserMypage.css';
 import { Context } from '../../Context';
 import { Button, Container } from 'react-bootstrap';
+import { getUserData } from './userApi';
 
 function UserMypage() {
   const { getDarkMode, getDarkModeHover } = useContext(Context);
@@ -21,6 +22,16 @@ function UserMypage() {
     phone: '010-1234-5678',
     regionCode: '서울',
   });
+
+ 
+
+  useEffect(() => {
+    const getData = async()=>{
+      return await getUserData();
+    }
+    console.log(getData());
+    setUserInfo(getData());
+  }, []);
 
   const [formData, setFormData] = useState(userInfo); // Copy of userInfo for edit
 
