@@ -237,7 +237,7 @@ const ManagerManage = () => {
                 <Form.Control
                   className="admin-table-td text-center"
                   type="text"
-                  value={data.name}
+                  defaultValue={data.name}
                   style={{ border: "none" }}
                 />
               </td>
@@ -245,7 +245,7 @@ const ManagerManage = () => {
                 <Form.Control
                   className="admin-table-td text-center"
                   type="text"
-                  value={data.id}
+                  defaultValue={data.id}
                   style={{ border: "none" }}
                 />
               </td>
@@ -253,7 +253,7 @@ const ManagerManage = () => {
                 <Form.Control
                   className="admin-table-td text-center"
                   type="text"
-                  value={data.pwd}
+                  defaultValue={data.pwd}
                   style={{ border: "none" }}
                 />
               </td>
@@ -261,7 +261,7 @@ const ManagerManage = () => {
                 <Form.Control
                   className="admin-table-td text-center"
                   type="text"
-                  value={data.phone}
+                  defaultValue={data.phone}
                   style={{ border: "none" }}
                 />
               </td>
@@ -269,7 +269,7 @@ const ManagerManage = () => {
                 <Form.Control
                   className="admin-table-td text-center"
                   type="date"
-                  value={data.reg_date}
+                  defaultValue={data.reg_date}
                   style={{ border: "none" }}
                 />
               </td>
