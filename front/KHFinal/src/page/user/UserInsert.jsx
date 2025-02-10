@@ -48,10 +48,9 @@ const UserInsert = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (nicknameCheck === false || emailCheck === false) {
-      alert('중복 확인을 해주세요.');
+      alert('중복 확인이 필요합니다.');
       return;
     }
-
     try {
       await handleRegister(formData); // ✅ 회원가입 API 호출
       const preLoginUrl = sessionStorage.getItem('preLoginUrl') || '/';
