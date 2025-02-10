@@ -39,7 +39,8 @@ const UserLoginPage = () => {
   // 모달 닫기
   const handleClose = () => setShowFindModal(false);
 
-  const handleLoginSubmit = async () => {
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
     const response = await handleLogin(id, 'common', password);
     const flag = response.success;
     if (flag) {

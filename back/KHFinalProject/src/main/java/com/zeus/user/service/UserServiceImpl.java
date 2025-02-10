@@ -6,6 +6,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -51,6 +53,18 @@ public class UserServiceImpl implements UserService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    @Override
+    public String encodePassword(String rawPassword) {
+        return passwordEncoder.encode(rawPassword); // ✅ 비밀번호 해싱
+    }
+    @Override
+    public boolean matchPassword(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword); // ✅ 비밀번호 비교
+    }
+    
+    
     // ================== UserMapper 메서드 추가 ==================
     @Override
     public User getUserByIdAndProvider(User user) {
@@ -61,6 +75,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean insert(User user) {
         try {
+        	String encodePwd = encodePassword(user.getPwd());
+        	user.setPwd(encodePwd);
             return mapper.insert(user);
         } catch (Exception e) {
             log.error("User Insert Error: {}", e.getMessage());
@@ -72,22 +88,35 @@ public class UserServiceImpl implements UserService {
     public User checkRegist(User user) {
         try {
         	User userCheck= mapper.findUserByIdAndProvider(user);
-            return userCheck; // 중복됐으면 false 중복이 아니며true
+            return userCheck; // 중복됐으면 false 중복이 아니면 true
         } catch (Exception e) {
             log.error("User CheckRegist Error: {}", e.getMessage());
             throw new RuntimeException("중복 체크 실패", e);
         }
     }
     
+    //로그인 체크, id와 provider로 user 정보를 가져와헤싱해서 로그인확인
+    //provider가 common 이라면 헤싱해서 로그인 이외에는 api 로그인이므로 id와 provider만 일치하는지 확인
     @Override
     public User checkLogin(User user) {
+    	if(user.getProvider().equals("common")) {
         try {
         	User userLogin= mapper.checkLogin(user);
-            return userLogin; // 중복됐으면 false 중복이 아니면true
+        	if(userLogin ==null) { 
+        		return null;}
+        	boolean flag = matchPassword(user.getPwd(), userLogin.getPwd());
+        	if(flag) {
+        		return userLogin; // 중복됐으면 false 중복이 아니면true
+        	}
+        	else {return null;}
+        	
         } catch (Exception e) {
             log.error("User CheckRegist Error: {}", e.getMessage());
-            throw new RuntimeException("중복 체크 실패", e);
-        }
+            throw new RuntimeException("로그인 실패", e);
+        }}
+    	else {
+    		return mapper.checkLogin(user);
+    	}
     }
 
     

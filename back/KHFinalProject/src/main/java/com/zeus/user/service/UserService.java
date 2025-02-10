@@ -23,5 +23,7 @@ public interface UserService {
     String getKakaoAccessToken(String code); // 카카오 Access Token 요청
     String getKakaoUserInfo(String accessToken); // 카카오 사용자 정보 요청
     
-
+    //비밀버호 해싱관련
+    public String encodePassword(String rawPassword);
+    public boolean matchPassword(String rawPassword, String encodedPassword);
 }
