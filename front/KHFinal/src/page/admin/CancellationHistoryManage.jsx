@@ -3,7 +3,7 @@ import { Container, Table, Form, Button } from "react-bootstrap";
 import "./include/css/Common.css";
 import { BsSortDown, BsSortUp } from "react-icons/bs";
 
-const PaymentHistoryManage = () => {
+const CancellationHistoryManage = () => {
   // 객체 배열 변수
   const [items, setItems] = useState([
     {
@@ -168,4 +168,4 @@ const PaymentHistoryManage = () => {
   );
 };
 
-export default PaymentHistoryManage;
+export default CancellationHistoryManage;

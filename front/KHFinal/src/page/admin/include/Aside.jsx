@@ -2,6 +2,7 @@ import React from "react";
 import "./css/Aside.css";
 import { Link, NavLink } from "react-router";
 import { Navbar, Nav } from "react-bootstrap";
+import ViVaFesta from "../../../assets/vivafesta.png";
 
 const Aside = () => {
   return (
@@ -9,7 +10,12 @@ const Aside = () => {
       <div className="admin-aside-brand">
         <h2>
           <NavLink to="/admin/adminmain" className="brand-link">
-            VIVA FESTA
+            <img
+              src={ViVaFesta}
+              alt="ViVaFesta"
+              className="Header-logo align-content-center pb-1"
+              height={20}
+            />
           </NavLink>
           <hr />
         </h2>
@@ -38,6 +44,9 @@ const Aside = () => {
         </Nav.Link>
         <Nav.Link as={NavLink} to="/admin/paymenthistorymanage">
           예매내역 관리
+        </Nav.Link>
+        <Nav.Link as={NavLink} to="/admin/cancellationhistorymanage">
+          취소내역 관리
         </Nav.Link>
         <Nav.Link as={NavLink} to="/admin/stathistory">
           통계 내역

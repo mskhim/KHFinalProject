@@ -193,12 +193,12 @@ const FestivalManage = () => {
         <tbody>
           {/* 데이터 행 */}
           {filteredItems.map((data) => (
-            <tr key={data.id}>
+            <tr key={data.no}>
               <td className="text-center" style={{ width: "90px" }}>
                 <Form.Check
                   checked={data.checked}
                   onChange={() =>
-                    handleCheckboxChange(data.id) && handleSelectAll()
+                    handleCheckboxChange(data.no) && handleSelectAll()
                   }
                 />
               </td>
