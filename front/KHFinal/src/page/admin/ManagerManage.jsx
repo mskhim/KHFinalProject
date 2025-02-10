@@ -1,7 +1,21 @@
 import React, { useState } from "react";
-import { Container, Table, Form, Button } from "react-bootstrap";
+import {
+  Container,
+  Table,
+  Form,
+  Button,
+  Modal,
+  Dropdown,
+  DropdownButton,
+} from "react-bootstrap";
 import "./include/css/Common.css";
-import { BsSortDown, BsSortUp } from "react-icons/bs";
+import {
+  BsSortDown,
+  BsSortUp,
+  BsChevronCompactDown,
+  BsChevronCompactUp,
+} from "react-icons/bs";
+import PermissionModal from "./PermissionModal"; // 권한 추가 모달 컴포넌트 임포트
 
 const ManagerManage = () => {
   // 객체 배열 변수
@@ -13,6 +27,7 @@ const ManagerManage = () => {
       pwd: 1234,
       phone: "010-1111-1111",
       reg_date: "2025-02-05",
+      permissions: ["2025 해돋이 행사"],
     },
     {
       no: 2,
@@ -21,6 +36,7 @@ const ManagerManage = () => {
       pwd: 1234,
       phone: "010-2222-2222",
       reg_date: "2025-02-05",
+      permissions: ["천을산 해맞이"],
     },
     {
       no: 3,
@@ -29,8 +45,39 @@ const ManagerManage = () => {
       pwd: 1234,
       phone: "010-3333-3333",
       reg_date: "2025-02-05",
+      permissions: ["해돋이행사"],
     },
   ]);
+  const [showPermission, setShowPermission] = useState({});
+  const [showModal, setShowModal] = useState(false);
+  const [currentRow, setCurrentRow] = useState(null);
+  const [newPermission, setNewPermission] = useState("");
+
+  const handleTogglePermission = (index) => {
+    setShowPermission((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
+  };
+
+  const handleShowModal = (index) => {
+    setCurrentRow(index);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setNewPermission("");
+  };
+
+  const handleAddPermission = (permission) => {
+    if (permission && currentRow !== null) {
+      const updatedItems = [...items];
+      updatedItems[currentRow].permissions.push(permission);
+      setItems(updatedItems);
+      handleCloseModal();
+    }
+  };
 
   // 정렬할 컬럼 이름
   const [thName, setthName] = useState("");
@@ -106,14 +153,14 @@ const ManagerManage = () => {
           <tr>
             <th
               className="text-bg-primary text-center"
-              style={{ width: "90px" }}
+              style={{ width: "80px" }}
             >
               <Form.Check checked={selectAll} onChange={handleSelectAll} />
             </th>
             <th
               className="text-bg-primary text-center"
               onClick={() => handleSort("no")}
-              style={{ width: "90px" }}
+              style={{ width: "80px" }}
             >
               NO
               {thName === "no" &&
@@ -122,7 +169,7 @@ const ManagerManage = () => {
             <th
               className="text-bg-primary text-center"
               onClick={() => handleSort("name")}
-              style={{ width: "200px" }}
+              style={{ width: "170px" }}
             >
               담당자
               {thName === "name" &&
@@ -131,7 +178,7 @@ const ManagerManage = () => {
             <th
               className="text-bg-primary text-center"
               onClick={() => handleSort("id")}
-              style={{ width: "200px" }}
+              style={{ width: "160px" }}
             >
               아이디
               {thName === "id" &&
@@ -139,24 +186,30 @@ const ManagerManage = () => {
             </th>
             <th
               className="text-bg-primary text-center"
-              style={{ width: "200px" }}
+              style={{ width: "160px" }}
             >
               비밀번호
             </th>
             <th
               className="text-bg-primary text-center"
-              style={{ width: "200px" }}
+              style={{ width: "160px" }}
             >
               전화번호
             </th>
             <th
               className="text-bg-primary text-center"
               onClick={() => handleSort("reg_date")}
-              style={{ width: "200px" }}
+              style={{ width: "160px" }}
             >
               계정 생성일
               {thName === "reg_date" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
+            </th>
+            <th
+              className="text-bg-primary text-center"
+              style={{ width: "210px" }}
+            >
+              축제 권한
             </th>
             <th
               className="text-bg-primary text-center"
@@ -169,13 +222,13 @@ const ManagerManage = () => {
         <tbody>
           {/* 입력 가능한 빈 행 */}
           <tr>
-            <td className="text-center" style={{ width: "90px" }}>
+            <td className="text-center" style={{ width: "80px" }}>
               신규 추가
             </td>
-            <td className="text-center" style={{ width: "90px" }}>
+            <td className="text-center" style={{ width: "80px" }}>
               -
             </td>
-            <td style={{ width: "200px" }}>
+            <td style={{ width: "170px" }}>
               <Form.Control
                 className="admin-table-td text-center"
                 type="text"
@@ -183,7 +236,7 @@ const ManagerManage = () => {
                 style={{ border: "none" }}
               />
             </td>
-            <td style={{ width: "200px" }}>
+            <td style={{ width: "160px" }}>
               <Form.Control
                 className="admin-table-td text-center"
                 type="text"
@@ -191,7 +244,7 @@ const ManagerManage = () => {
                 style={{ border: "none" }}
               />
             </td>
-            <td style={{ width: "200px" }}>
+            <td style={{ width: "160px" }}>
               <Form.Control
                 className="admin-table-td text-center"
                 type="text"
@@ -199,7 +252,7 @@ const ManagerManage = () => {
                 style={{ border: "none" }}
               />
             </td>
-            <td style={{ width: "200px" }}>
+            <td style={{ width: "160px" }}>
               <Form.Control
                 className="admin-table-td text-center"
                 type="text"
@@ -207,22 +260,34 @@ const ManagerManage = () => {
                 style={{ border: "none" }}
               />
             </td>
-            <td style={{ width: "200px" }}>
+            <td style={{ width: "160px" }}>
               <Form.Control
                 className="admin-table-td text-center"
                 type="date"
                 style={{ border: "none" }}
               />
             </td>
-            <td style={{ width: "93px" }}>
+            <td
+              className="d-flex justify-content-end"
+              style={{ width: "210px" }}
+            >
+              <DropdownButton title="권한 목록"></DropdownButton>
+              <Button
+                className="btn btn-primary me-2"
+                onClick={() => handleShowModal()}
+              >
+                권한 추가
+              </Button>
+            </td>
+            <td style={{ width: "95px" }}>
               <Button className="btn btn-primary me-2">추가</Button>
             </td>
           </tr>
 
           {/* 데이터 행 */}
-          {filteredItems.map((data) => (
+          {filteredItems.map((data, index) => (
             <tr key={data.id}>
-              <td className="text-center" style={{ width: "90px" }}>
+              <td className="text-center" style={{ width: "80px" }}>
                 <Form.Check
                   checked={data.checked}
                   onChange={() =>
@@ -230,10 +295,10 @@ const ManagerManage = () => {
                   }
                 />
               </td>
-              <td className="text-center" style={{ width: "90px" }}>
+              <td className="text-center" style={{ width: "80px" }}>
                 {data.no}
               </td>
-              <td style={{ width: "200px" }}>
+              <td style={{ width: "170px" }}>
                 <Form.Control
                   className="admin-table-td text-center"
                   type="text"
@@ -241,7 +306,7 @@ const ManagerManage = () => {
                   style={{ border: "none" }}
                 />
               </td>
-              <td style={{ width: "200px" }}>
+              <td style={{ width: "160px" }}>
                 <Form.Control
                   className="admin-table-td text-center"
                   type="text"
@@ -249,7 +314,7 @@ const ManagerManage = () => {
                   style={{ border: "none" }}
                 />
               </td>
-              <td style={{ width: "200px" }}>
+              <td style={{ width: "160px" }}>
                 <Form.Control
                   className="admin-table-td text-center"
                   type="text"
@@ -257,7 +322,7 @@ const ManagerManage = () => {
                   style={{ border: "none" }}
                 />
               </td>
-              <td style={{ width: "200px" }}>
+              <td style={{ width: "160px" }}>
                 <Form.Control
                   className="admin-table-td text-center"
                   type="text"
@@ -265,13 +330,33 @@ const ManagerManage = () => {
                   style={{ border: "none" }}
                 />
               </td>
-              <td style={{ width: "200px" }}>
+              <td style={{ width: "160px" }}>
                 <Form.Control
                   className="admin-table-td text-center"
                   type="date"
                   defaultValue={data.reg_date}
                   style={{ border: "none" }}
                 />
+              </td>
+              <td
+                className="d-flex justify-content-end"
+                style={{ width: "210px" }}
+              >
+                <DropdownButton
+                  id={`dropdown-${index}`}
+                  title="권한 목록"
+                  onClick={() => handleTogglePermission(index)}
+                >
+                  {data.permissions.map((permission, idx) => (
+                    <Dropdown.Item key={idx}>{permission}</Dropdown.Item>
+                  ))}
+                </DropdownButton>
+                <Button
+                  className="btn btn-primary me-2"
+                  onClick={() => handleShowModal(index)}
+                >
+                  권한추가
+                </Button>
               </td>
               <td style={{ width: "93px" }}>
                 <Button className="btn btn-primary me-2">수정</Button>
@@ -280,6 +365,11 @@ const ManagerManage = () => {
           ))}
         </tbody>
       </Table>
+      <PermissionModal
+        show={showModal}
+        onHide={handleCloseModal}
+        onAddPermission={handleAddPermission}
+      />
     </Container>
   );
 };
