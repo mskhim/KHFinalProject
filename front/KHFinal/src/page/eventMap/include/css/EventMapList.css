@@ -86,10 +86,6 @@
   color: white !important; /* 텍스트 색상 - 흰색 */
 }
 
-.light-mode.EventListViewWrap-custom-pagination .page-link {
-  color: #333 !important; /* 기본 페이지 텍스트 색상 - 검정 */
-}
-
 .light-mode.EventListViewWrap-custom-pagination .page-item .page-link:hover {
   background-color: #666 !important; /* 마우스 오버 시 - 어두운 회색 */
   color: white !important;
