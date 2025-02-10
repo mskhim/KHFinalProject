@@ -15,24 +15,21 @@
   border-bottom: 2.5px solid #252429; /* 두께를 줄임 */
   margin-bottom: 6vw; /* 하단 여백을 7vw에서 6vw로 줄임 */
   background-color: white;
-  border-radius: 10px;  /* wrapper의 모서리를 둥글게 설정 */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);  /* wrapper에 그림자 추가 */
   overflow: hidden; /* wrapper 내에서 자식 요소가 넘치지 않게 처리 */
+  border-radius: 0px;
 }
 
 .Cart-table {
   width: 100%; /* 부모 요소에 맞춰 100%로 설정 */
   border-collapse: separate; /* border-collapse를 separate로 변경하여 테이블 셀 사이의 간격을 유지 */
   border-spacing: 0; /* 셀 간격을 없애기 위해 설정 */
-  border-radius: 10px; /* 테이블 모서리 둥글게 설정 */
 }
 
 .Cart-thead {
   border-top: 2.5px solid; /* 두께를 줄임 */
   border-bottom: 2.5px solid; /* 두께를 줄임 */
   background-color: #f1f1f1;  /* thead에 그레이 계열 색상 적용 */
-  border-top-left-radius: 10px;  /* 왼쪽 상단 모서리 둥글게 */
-  border-top-right-radius: 10px; /* 오른쪽 상단 모서리 둥글게 */
 }
 
 .Cart-table th,

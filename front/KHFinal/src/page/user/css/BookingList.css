@@ -94,20 +94,21 @@
   width: 65vw; /* 70vw에서 65vw로 변경 */
   max-width: 900px; /* 최대 너비 900px로 변경 */
   margin: 0px auto; /* 중앙 정렬 및 여백 설정 */
-  border-bottom: 2.5px solid #252429; /* 두께를 줄여서 테이블과 비슷한 스타일로 설정 */
   margin-bottom: 6vw; /* 하단 여백 줄임 */
-  background-color: white;
-  border-radius: 10px; /* 콘텐츠 wrapper의 모서리를 둥글게 설정 */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
   overflow: hidden; /* 콘텐츠가 넘치지 않도록 설정 */
   display: flex;
   flex-direction: column;
   height: 100%; /* 높이를 100%로 설정하여 메뉴와 높이를 동일하게 설정 */
+  padding: 25px; /* 콘텐츠 영역에 여백 추가 */
+  background-color: #fff; /* 기본 배경색을 흰색으로 설정 */
+  box-shadow: 8px 8px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px; /* 둥근 모서리 */
 }
 
 .BookingList-content.dark-mode {
-  background-color: #1e1e1e;
+  background-color: #333; /* 다크모드 배경색 */
   color: white;
+  box-shadow: 8px 8px 10px rgba(255, 255, 255, 0.2); /* 다크모드에서 그림자 색을 밝게 */
 }
 
 .BookingList-section {
@@ -129,7 +130,8 @@
   width: 100%;
   border-collapse: separate; /* 테이블 셀 간격을 유지 */
   border-spacing: 0; /* 셀 간격을 없애기 위해 설정 */
-  border-radius: 10px; /* 테이블 모서리 둥글게 설정 */
+  border-bottom: 2.5px solid;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
 }
 
 .BookingList-th,
@@ -182,6 +184,6 @@
 .BookingList-warning {
   color: red;
   text-align: right;
-  font-size: 14px;
-  margin-top: 10px;
+  font-size: 12px;
+  margin-top: 5px;
 }

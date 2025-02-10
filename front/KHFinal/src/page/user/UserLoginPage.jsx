@@ -125,15 +125,14 @@ const UserLoginPage = () => {
         비밀번호 찾기
       </Nav.Link>
     </Nav.Item>
-    <span>|</span>
-    <Nav.Item>
-      <Nav.Link
-        onClick={() => navigate('/userInsertCommon')}
-        className={`mx-2 UserLoginPage-nav-link-hover ${darkMode ? 'text-light dark-mode' : 'text-dark'}`}
-      >
-        회원가입
-      </Nav.Link>
-    </Nav.Item>
+      <span>|</span>
+      <Nav.Item>
+        <Nav.Link
+          onClick={() => navigate('/userInsertCommon')}
+          className={`mx-2 UserLoginPage-nav-link-hover ${darkMode ? 'text-light dark-mode' : 'text-dark'}`}>
+          회원가입
+        </Nav.Link>
+      </Nav.Item>
   </Nav>
 </div>
 
