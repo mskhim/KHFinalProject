@@ -93,7 +93,7 @@
 .BookingList-content {
   width: 65vw; /* 70vw에서 65vw로 변경 */
   max-width: 900px; /* 최대 너비 900px로 변경 */
-  margin: 0px auto; /* 중앙 정렬 및 여백 설정 */
+  margin: 0px auto 0px 30px; /* 중앙 정렬 및 여백 설정 */
   margin-bottom: 6vw; /* 하단 여백 줄임 */
   overflow: hidden; /* 콘텐츠가 넘치지 않도록 설정 */
   display: flex;
