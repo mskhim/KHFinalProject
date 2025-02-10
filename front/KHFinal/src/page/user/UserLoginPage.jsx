@@ -113,6 +113,7 @@ const UserLoginPage = () => {
             </Button>
           </div>
 
+<<<<<<< HEAD
           {/* 아이디 찾기, 비밀번호 찾기, 회원가입 링크 추가 */}
           {/* 네비게이션 바 */}
           <div className="text-center mt-3">
@@ -151,6 +152,40 @@ const UserLoginPage = () => {
               </Nav.Item>
             </Nav>
           </div>
+=======
+         {/* 아이디 찾기, 비밀번호 찾기, 회원가입 링크 추가 */}
+{/* 네비게이션 바 */}
+<div className="text-center mt-3">
+  <Nav className="justify-content-center align-items-center">
+    <Nav.Item>
+      <Nav.Link
+        onClick={() => handleShow('아이디 찾기')}
+        className={`mx-2 UserLoginPage-nav-link-hover ${darkMode ? 'text-light dark-mode' : 'text-dark'}`}
+      >
+        아이디 찾기
+      </Nav.Link>
+    </Nav.Item>
+    <span>|</span>
+    <Nav.Item>
+      <Nav.Link
+        onClick={() => handleShow('비밀번호 찾기')}
+        className={`mx-2 UserLoginPage-nav-link-hover ${darkMode ? 'text-light dark-mode' : 'text-dark'}`}
+      >
+        비밀번호 찾기
+      </Nav.Link>
+    </Nav.Item>
+      <span>|</span>
+      <Nav.Item>
+        <Nav.Link
+          onClick={() => navigate('/userInsertCommon')}
+          className={`mx-2 UserLoginPage-nav-link-hover ${darkMode ? 'text-light dark-mode' : 'text-dark'}`}>
+          회원가입
+        </Nav.Link>
+      </Nav.Item>
+  </Nav>
+</div>
+
+>>>>>>> feature/sohyun
         </Form>
 
         {/* 외부 API 로그인 */}
