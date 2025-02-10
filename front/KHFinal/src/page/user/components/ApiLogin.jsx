@@ -2,8 +2,6 @@ import React from 'react';
 import { getNaverAuthUrl, getKakaoAuthUrl } from '../userApi'; // 네이버와 카카오 API URL 가져오기
 import btn_kakao from './btn_kakao.svg'; // 카카오 로그인 버튼 이미지 추가
 import btn_naver from './btn_naver.svg'; // 네이버 로그인 버튼 이미지 추가
-import BtnNaverLogin from './btnNaverLogin.png';
-import BtnKakaoLogin from './btnKakaoLogin.png'; // 카카오 로그인 버튼 이미지 추가
 import './ApiLogin.css'; // 스타일 파일 추가
 
 function ApiLogin() {

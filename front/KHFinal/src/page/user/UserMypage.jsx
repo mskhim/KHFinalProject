@@ -146,7 +146,7 @@ function UserMypage() {
             >
               {/* 내 정보 카드 */}
               {Object.keys(userInfo).length > 0 ? (
-                <div className="MyPageMain-card pb-3">
+                <div className="MyPageMain-card">
                   <div
                     className={`MyPageMain-card-body ${getDarkMode()} form-container`}
                   >
