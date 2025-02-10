@@ -263,7 +263,7 @@ public class UserController {
 	    //  JWT를 HttpOnly 쿠키에 저장
 	    addJwtCookie(response, "jwt", accessToken, 60 * 15); // 15분 유지
 	    addJwtCookie(response, "refresh_token", refreshToken, 60 * 60 * 24 * 7); // 7일 유지
-	    log.info(user2.getNickname());
+	    log.info(accessToken);
 	    return ResponseEntity.ok(Map.of("success", true, "message", "로그인 성공!","nickname",user2.getNickname()));
 	}
 
@@ -280,8 +280,7 @@ public class UserController {
 
 	//  JWT 쿠키 검사 (로그인 상태 확인)
 	@GetMapping("/check-auth")
-	public ResponseEntity<Map<String, Object>> checkAuth(
-	        @CookieValue(name = "jwt", required = false) String jwtToken) { //  쿠키에서 JWT 가져오기
+	public ResponseEntity<Map<String, Object>> checkAuth(@CookieValue(name = "jwt", required = false) String jwtToken) { //  쿠키에서 JWT 가져오기
 
 	    if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken)) {
 	        return ResponseEntity.ok(Map.of("authenticated", false, "message", "JWT가 없거나 만료됨"));
@@ -301,6 +300,7 @@ public class UserController {
 	        "user", user
 	    ));
 	}
+	
 	//  리프레시 토큰을 이용한 JWT 갱신 API
 	@PostMapping("/refresh-token")
 	public ResponseEntity<Map<String, Object>> refreshToken(
@@ -329,6 +329,30 @@ public class UserController {
 	    return ResponseEntity.ok(Map.of("success", true, "message", "액세스 토큰 갱신 완료"));
 	}
 
+	
+	//  JWT 쿠키 검사 (로그인 상태 확인)
+	@GetMapping("/getUserData")
+	public ResponseEntity<Map<String, Object>> getUserData(@CookieValue(name = "jwt", required = false) String jwtToken) { //  쿠키에서 JWT 가져오기
+	    
+		if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken)) {
+	        return ResponseEntity.ok(Map.of("authenticated", false, "message", "JWT가 없거나 만료됨"));
+	    }
+		
+	    //  JWT가 유효하면 사용자 정보 반환
+	    String userId = JwtUtil.validateToken(jwtToken).get("id", String.class);
+	    String provider = JwtUtil.validateToken(jwtToken).get("provider", String.class);
+	    String role = JwtUtil.validateToken(jwtToken).get("role", String.class);
+	    User user = new User();
+	    user.setId(userId);
+	    user.setProvider(provider);
+	    user = service.getUserByIdAndProvider(user);
+	    return ResponseEntity.ok(Map.of(
+	        "authenticated", true,
+	        "message", "JWT 유효",
+	        "user", user
+	    ));
+	}
+	
 	//--------------------------------------------------api메소드가 아닌 컨트롤러용 메소드
 	//  JWT 쿠키 삭제 메소드
 	private void deleteJwtCookie(HttpServletResponse response, String name) {
