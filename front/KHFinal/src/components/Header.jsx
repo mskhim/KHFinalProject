@@ -46,10 +46,7 @@ const Header = ({ page }) => {
   }, [page, darkMode, userNickname]);
 
   const Logout = () => {
-    handleLogout().then(() => {
-      logout();
-      navigate('/');
-    });
+    logout();
   };
 
   const handleLogin = () => {

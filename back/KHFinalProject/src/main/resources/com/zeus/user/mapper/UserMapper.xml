@@ -38,14 +38,12 @@
 		SELECT * FROM USER_ACCOUNT
 		WHERE ID = #{id} AND PROVIDER = #{provider}  
 	</select>
-	
 		<!-- 이메일과 제공자로 가입 유무 확인 -->
 	<select id="findUserByEmail" parameterType="User"
 		resultType="User">
 		SELECT * FROM USER_ACCOUNT
 		WHERE EMAIL = #{email} AND PROVIDER = #{provider}  
 	</select>
-	
 		<!-- 이메일과 제공자, 아이디로 가입 유무 확인 -->
 	<select id="findUserByEmailAndId" parameterType="User"
 		resultType="User">
@@ -57,10 +55,22 @@
 		UPDATE USER_ACCOUNT SET PWD = #{pwd}
 		WHERE ID = #{id} AND PROVIDER = #{provider}  
 	</update>
-		<!-- 닉네임을 받아서 중복확인 -->
-	<select id="checkNickName" parameterType="User"
-		resultType="User">
-		SELECT * FROM USER_ACCOUNT
-		WHERE NICKNAME = #{nickname}  
-	</select>
+
+<select id="checkUserExists" parameterType="User" resultType="User">
+    SELECT * FROM USER_ACCOUNT
+    <where>
+        <trim prefixOverrides="AND">
+            <if test="id != null">
+                AND ID = #{id}
+            </if>
+            <if test="email != null">
+                AND EMAIL = #{email}
+            </if>
+            <if test="nickname != null">
+                AND NICKNAME = #{nickname}
+            </if>
+        </trim>
+    </where>
+</select>
+
 </mapper>

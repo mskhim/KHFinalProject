@@ -1,11 +1,12 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { handleRegister } from './userApi';
+import { checkEmail, checkId, checkNickName, handleRegister } from './userApi';
 import { Button, Container } from 'react-bootstrap';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import './css/UserInsert.css';
 import { Context } from '../../Context';
+import { use } from 'react';
 
 const UserInsert = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ const UserInsert = () => {
     pwd: '',
     confirmPwd: '',
     phone: '',
-    provider: '',
+    provider: 'common',
     name: '',
     email: '',
     role: '2',
@@ -25,24 +26,75 @@ const UserInsert = () => {
     apiid: '',
     nickname: '',
   });
-
-  const [nicknameValid, setNicknameValid] = useState(false);
+  const [nicknameCheck, setNicknameCheck] = useState(false);
+  const [idCheck, setIdCheck] = useState(false);
+  const [pwdCheck, setPwdCheck] = useState(false);
+  const [emailCheck, setEmailCheck] = useState(false);
   const [passwordError, setPasswordError] = useState(''); // 비밀번호 불일치 오류 메시지 상태
+  const [passwordLengthError, setPasswordLengthError] = useState(''); // 비밀번호 길이 오류 메시지 상태로 변경
   const [passwordSuccess, setPasswordSuccess] = useState(''); // 비밀번호 일치 메시지 상태
 
-  const handleNicknameCheck = () => {
+  // 닉네임 중복 확인 핸들러
+  const handleNicknameCheck = async () => {
     const nickname = formData.nickname.trim();
     if (nickname === '') {
       alert('닉네임을 입력해주세요.');
       return;
     }
-
-    if (nickname === 'test') {
-      setNicknameValid(false);
+    if (nickname.length < 3) {
+      alert('닉네임은 최소 3글자 이상이어야 합니다.');
+      return;
+    }
+    const flag = await checkNickName(nickname); // ✅ 닉네임 중복 확인 API 호출
+    if (!flag) {
+      setNicknameCheck(false); // ✅ 중복 확인 실패 시 제출 불가능 상태로 변경
       alert('이미 사용중인 닉네임입니다.');
     } else {
-      setNicknameValid(true);
       alert('사용 가능한 닉네임입니다.');
+      setNicknameCheck(true); // ✅ 중복 확인 성공 시 제출 가능 상태로 변경
+    }
+  };
+
+  // 아이디 중복 확인 핸들러
+  const handleIdCheck = async () => {
+    const id = formData.id.trim();
+    if (id === '') {
+      alert('아이디를 입력해주세요.');
+      return;
+    }
+    if (id.length < 6) {
+      alert('아이디는 최소 6글자 이상이어야 합니다.');
+      return;
+    }
+    const flag = await checkId(id); // ✅ 닉네임 중복 확인 API 호출
+    if (!flag) {
+      setIdCheck(false); // ✅ 중복 확인 실패 시 제출 불가능 상태로 변경
+      alert('이미 사용중인 아이디입니다.');
+    } else {
+      alert('사용 가능한 아이디입니다.');
+      setIdCheck(true); // ✅ 중복 확인 성공 시 제출 가능 상태로 변경
+    }
+  };
+
+  // 이메일 중복 확인 핸들러
+  const handleEmailCheck = async () => {
+    const email = formData.email.trim();
+    if (email === '') {
+      alert('이메일을 입력해주세요.');
+      return;
+    }
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+      alert('올바른 이메일 형식을 입력해주세요.');
+      return;
+    }
+    const flag = await checkEmail(email); // ✅ 이메일 중복 확인 API 호출
+    if (!flag) {
+      setEmailCheck(false); // ✅ 중복 확인 실패 시 제출 불가능 상태로 변경
+      alert('이미 사용중인 이메일입니다.');
+    } else {
+      setEmailCheck(true); // ✅ 중복 확인 성공 시 제출 가능 상태로 변경
+      alert('사용 가능한 이메일입니다.');
     }
   };
 
@@ -50,27 +102,40 @@ const UserInsert = () => {
   const handlePasswordChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-
+    // 비밀번호 길이 검사 (8자리 이상)
+    if (name === 'pwd' && value.length < 8) {
+      setPasswordLengthError('비밀번호는 8자리 이상이어야 합니다.');
+      setPwdCheck(false);
+      return; // 추가 검사를 막기 위해 return
+    } else {
+      setPasswordLengthError('');
+    }
     if (name === 'confirmPwd') {
       if (value !== formData.pwd) {
         setPasswordError('비밀번호가 일치하지 않습니다.');
         setPasswordSuccess('');
+        setPwdCheck(false);
       } else {
         setPasswordError('');
         setPasswordSuccess('비밀번호가 일치합니다.');
+        setPwdCheck(true);
       }
     }
   };
 
+  // 제출 핸들러
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (passwordError) {
+    if (idCheck === false || nicknameCheck === false || emailCheck === false) {
+      alert('중복 확인이 필요합니다.');
+      return;
+    }
+    if (pwdCheck === false) {
       alert('비밀번호가 일치하지 않습니다.');
       return;
     }
-
     try {
-      await handleRegister(formData);
+      await handleRegister(formData); // ✅ 회원가입 API 호출
       const preLoginUrl = sessionStorage.getItem('preLoginUrl') || '/';
       navigate(preLoginUrl);
       sessionStorage.removeItem('preLoginUrl');
@@ -84,6 +149,15 @@ const UserInsert = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+  useEffect(() => {
+    setIdCheck(false);
+  }, [formData.id]);
+  useEffect(() => {
+    setNicknameCheck(false);
+  }, [formData.nickname]);
+  useEffect(() => {
+    setEmailCheck(false);
+  }, [formData.email]);
 
   return (
     <>
@@ -98,47 +172,46 @@ const UserInsert = () => {
               className={`UserInsert-content d-flex flex-column align-items-center justify-content-center ${getDarkMode()} form-container`}
             >
               <div className="UserInsert-form-group-div">
-                {/* 숨겨진 필드 (id, provider, role, apiid) */}
-                <input type="hidden" name="id" value={formData.id} />
-                <input type="hidden" name="provider" value={formData.provider} />
-                <input type="hidden" name="role" value={formData.role} />
-                <input type="hidden" name="apiid" value={formData.apiid} />
-
-                {/* 이름 입력 필드 */}
-                <div className="UserInsert-input-group">
-                  <label htmlFor="name">이름</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="UserInsert-input-field"
-                    required
-                  />
-                </div>
-
-                {/* 닉네임 입력 필드 및 중복 확인 버튼 */}
+                {/* 아이디 입력 필드 및 중복 확인 버튼 */}
                 <div className="UserInsert-input-group d-flex flex-row align-items-center">
                   <div className="w-75">
-                    <label htmlFor="nickname">닉네임</label>
+                    <label htmlFor="nickname">아이디</label>
                     <input
                       type="text"
-                      name="nickname"
-                      value={formData.nickname}
+                      name="id"
+                      value={formData.id}
                       onChange={handleChange}
                       className="UserInsert-input-field w-100"
                       required
                     />
                   </div>
-                  <Button
-                    type="button"
-                    onClick={handleNicknameCheck}
-                    variant="none"
-                    className={`${getDarkModeHover()} ml-2 w-10`}
-                    style={{ marginTop: '25px', marginLeft: '20px' }}
-                  >
-                    중복 확인
-                  </Button>
+                  {!idCheck ? (
+                    <Button
+                      type="button"
+                      onClick={handleIdCheck}
+                      variant="none"
+                      className={`${getDarkModeHover()} ml-2 w-20`}
+                      style={{ marginTop: '25px', marginLeft: '20px' }}
+                    >
+                      중복확인
+                    </Button>
+                  ) : (
+                    <Button
+                      type="button"
+                      variant="none"
+                      className="ml-2 w-10"
+                      style={{
+                        marginTop: '25px',
+                        marginLeft: '20px',
+                        backgroundColor: 'gray', // 비활성화 스타일 추가
+                        color: 'white',
+                        cursor: 'default', // 마우스 커서를 기본으로 설정
+                      }}
+                      disabled
+                    >
+                      확인완료
+                    </Button>
+                  )}
                 </div>
 
                 {/* 비밀번호 입력 필드 (선택 사항) */}
@@ -148,11 +221,15 @@ const UserInsert = () => {
                     type="password"
                     name="pwd"
                     value={formData.pwd}
-                    onChange={handleChange}
+                    onChange={handlePasswordChange}
                     className="UserInsert-input-field"
                     placeholder="비밀번호를 입력해주세요"
                     required
                   />
+                  {/* 비밀번호 길이 확인 메시지 출력 */}
+                  <p className="UserInsertCommon-text-danger">
+                    {passwordLengthError}
+                  </p>
                 </div>
 
                 {/* 비밀번호 확인 입력 필드 */}
@@ -168,25 +245,113 @@ const UserInsert = () => {
                     required
                   />
                   {/* 비밀번호 일치 시 초록색 메시지 출력 */}
-                  {passwordError && <p className="UserInsertCommon-text-danger">{passwordError}</p>}
+                  {passwordError && (
+                    <p className="UserInsertCommon-text-danger">
+                      {passwordError}
+                    </p>
+                  )}
                   {passwordSuccess && (
-                    <p className="UserInsertCommon-text-success">{passwordSuccess}</p>
+                    <p className="UserInsertCommon-text-success">
+                      {passwordSuccess}
+                    </p>
                   )}
                 </div>
 
-                {/* 이메일 입력 필드 */}
+                {/* 이름 입력 필드 */}
                 <div className="UserInsert-input-group">
-                  <label htmlFor="email">이메일</label>
+                  <label htmlFor="name">이름</label>
                   <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
+                    type="text"
+                    name="name"
+                    value={formData.name}
                     onChange={handleChange}
                     className="UserInsert-input-field"
                     required
                   />
                 </div>
+                {/* 닉네임 입력 필드 및 중복 확인 버튼 */}
+                <div className="UserInsert-input-group d-flex flex-row align-items-center">
+                  <div className="w-75">
+                    <label htmlFor="nickname">닉네임</label>
+                    <input
+                      type="text"
+                      name="nickname"
+                      value={formData.nickname}
+                      onChange={handleChange}
+                      className="UserInsert-input-field w-100"
+                      required
+                    />
+                  </div>
 
+                  {!nicknameCheck ? (
+                    <Button
+                      type="button"
+                      onClick={handleNicknameCheck}
+                      variant="none"
+                      className={`${getDarkModeHover()} ml-2 w-10`}
+                      style={{ marginTop: '25px', marginLeft: '20px' }}
+                    >
+                      중복확인
+                    </Button>
+                  ) : (
+                    <Button
+                      type="button"
+                      variant="none"
+                      className="ml-2 w-10"
+                      style={{
+                        marginTop: '25px',
+                        marginLeft: '20px',
+                        backgroundColor: 'gray', // 비활성화 스타일 추가
+                        color: 'white',
+                        cursor: 'default', // 마우스 커서를 기본으로 설정
+                      }}
+                      disabled
+                    >
+                      확인완료
+                    </Button>
+                  )}
+                </div>
+                {/* 이메일 입력 필드 */}
+                <div className="UserInsert-input-group d-flex flex-row align-items-center">
+                  <div className="UserInsert-input-group w-75">
+                    <label htmlFor="email">이메일</label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="UserInsert-input-field"
+                      required
+                    />
+                  </div>
+                  {!emailCheck ? (
+                    <Button
+                      type="button"
+                      onClick={handleEmailCheck}
+                      variant="none"
+                      className={`${getDarkModeHover()} ml-2 w-10`}
+                      style={{ marginTop: '25px', marginLeft: '20px' }}
+                    >
+                      중복확인
+                    </Button>
+                  ) : (
+                    <Button
+                      type="button"
+                      variant="none"
+                      className="ml-2 w-10"
+                      style={{
+                        marginTop: '25px',
+                        marginLeft: '20px',
+                        backgroundColor: 'gray', // 비활성화 스타일 추가
+                        color: 'white',
+                        cursor: 'default', // 마우스 커서를 기본으로 설정
+                      }}
+                      disabled
+                    >
+                      확인완료
+                    </Button>
+                  )}
+                </div>
                 {/* 전화번호 입력 필드 */}
                 <div className="UserInsert-input-group">
                   <label htmlFor="phone">전화번호</label>

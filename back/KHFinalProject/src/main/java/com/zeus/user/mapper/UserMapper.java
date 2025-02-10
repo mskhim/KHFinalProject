@@ -10,6 +10,6 @@ public interface UserMapper {
 	public User findUserByEmail(User user);
 	public User findUserByEmailAndId(User user);
 	public boolean updateRandomPwdById(User user);
-	public User checkNickName(User user);
+	public User checkUserExists(User user);
 	
 }

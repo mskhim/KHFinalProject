@@ -224,16 +224,17 @@ public class UserServiceImpl implements UserService {
 		return flag;
 	}
 
-	//닉네임을 받아서 DB에서 중복확인
+	//user안에 id, nickname, email 셋중 하나의 값만 있을때 사용가능한 중복체크 메소드
 	@Override
-	public User checkNickName(User user) {
-		if(mapper.checkNickName(user)==null) {
+	public User checkUserExists(User user) {
+		if(mapper.checkUserExists(user)==null) {
 			return null;
 		}
 		User chekckUser = new User();
 		return chekckUser;
 	}
 
+	
 
 }
 

@@ -75,7 +75,6 @@ export const handleRegister = async (formData) => {
     });
 
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
     const data = await response.json();
     alert('회원가입이 완료되었습니다. 이전페이지로 이동합니다.');
     return data;
@@ -89,7 +88,7 @@ export const handleRegister = async (formData) => {
 /**
  * 로그인 처리 (JWT는 HttpOnly 쿠키에 저장되므로 따로 저장하지 않음)
  */
-export const handleLogin = async (id, provider) => {
+export const handleLogin = async (id, provider, pwd) => {
   console.log('🚀 로그인 요청:', id, provider);
   try {
     const response = await fetch('http://localhost:8080/user/login', {
@@ -99,7 +98,8 @@ export const handleLogin = async (id, provider) => {
       },
       credentials: 'include', // ✅ 쿠키 자동 포함
       body: JSON.stringify({
-        id: String(id),
+        id: id,
+        pwd: pwd,
         provider: provider || '',
       }),
     });
@@ -110,7 +110,7 @@ export const handleLogin = async (id, provider) => {
     } else {
       alert(data.message);
     }
-    return data.success;
+    return data;
   } catch (error) {
     console.error('로그인 요청 실패:', error);
     return false;
@@ -128,7 +128,6 @@ export const handleLogout = async () => {
     });
 
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
     alert('로그아웃 되었습니다.');
   } catch (error) {
     console.error('로그아웃 요청 실패:', error);
@@ -315,13 +314,61 @@ export const checkNickName = async (nickname) => {
       }
     );
     const data = await response.json();
-    alert(data.success);
     if (data.success) {
       return true;
     } else {
       return false;
     }
   } catch (error) {
-    console.error('❌ 이메일 전송 실패:', error);
+    console.error('❌ api 호출 실패:', error);
+  }
+};
+
+/**
+ * 아이디 중복확인 API
+ */
+export const checkId = async (id) => {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/user/checkId?id=${id}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    const data = await response.json();
+    if (data.success) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error('❌ api 호출 실패:', error);
+  }
+};
+/**
+ * 이메일 중복확인 API
+ */
+export const checkEmail = async (email) => {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/user/checkEmail?email=${email}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    const data = await response.json();
+    if (data.success) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error('❌ api 호출 실패:', error);
   }
 };

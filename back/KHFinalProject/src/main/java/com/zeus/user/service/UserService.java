@@ -7,7 +7,7 @@ public interface UserService {
 	User getUserByIdAndProvider(User user);//아이디 ,provider로 유저정보 가져오
 	User checkRegist(User user);
 	User checkLogin(User user);
-	User checkNickName(User user);
+	User checkUserExists(User user);
 	boolean insert(User user);
 	public User getUserByAccessToken(String accessToken);
 	User findCommonUserByEmail(User user);

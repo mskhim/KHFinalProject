@@ -25,9 +25,10 @@ const UserLoginSuccess = () => {
         navigate('/userInsert');
       } else {
         const userId = data.user.id;
-        const flag = await handleLogin(userId, provider); // ✅ JWT는 쿠키에 자동 저장됨
+        const response = await handleLogin(userId, provider); // ✅ JWT는 쿠키에 자동 저장됨
+        const flag = response.success;
         if (flag) {
-          login(data.nickname); // ✅ 로그인 상태로 변경
+          login(response.nickname); // ✅ 로그인 상태로 변경
           // ✅ 로그인 성공 후, 이전 페이지로 이동
           const preLoginUrl = sessionStorage.getItem('preLoginUrl') || '/';
           navigate(preLoginUrl);
@@ -39,6 +40,7 @@ const UserLoginSuccess = () => {
     } catch (error) {
       console.error(`${provider} 콜백 처리 실패:`, error);
       alert('로그인 처리 중 오류가 발생했습니다.');
+      navigate('/userLoginPage');
     }
   };
 

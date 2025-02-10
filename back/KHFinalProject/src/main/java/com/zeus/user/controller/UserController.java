@@ -34,13 +34,12 @@ public class UserController {
 	@Autowired
 	private JwtUtil JwtUtil;
 
-	
-	//닉네임 중복확인
-	@GetMapping("/checkNickName")
-	public ResponseEntity<?> checkNickName(@RequestParam String nickname) {
+	//아이디 중복확인
+	@GetMapping("/checkId")
+	public ResponseEntity<?> checkId(@RequestParam String id) {
 		User user = new User();
-		user.setNickname(nickname);
-		user = service.checkNickName(user);
+		user.setId(id);
+		user = service.checkUserExists(user);
 		 if (user == null) {
 			 log.info("중복없음");
 		        return ResponseEntity.ok(Map.of("success",true));
@@ -49,6 +48,36 @@ public class UserController {
 		    	return ResponseEntity.ok(Map.of("success",false));
 		    }
 		}
+	//닉네임 중복확인
+	@GetMapping("/checkNickName")
+	public ResponseEntity<?> checkNickName(@RequestParam String nickname) {
+		User user = new User();
+		user.setNickname(nickname);
+		user = service.checkUserExists(user);
+		 if (user == null) {
+			 log.info("중복없음");
+		        return ResponseEntity.ok(Map.of("success",true));
+		    } else {
+		    	log.info("중복있음");
+		    	return ResponseEntity.ok(Map.of("success",false));
+		    }
+		}
+	
+	//이메일 중복확인
+	@GetMapping("/checkEmail")
+	public ResponseEntity<?> checkEmail(@RequestParam String email) {
+		User user = new User();
+		user.setEmail(email);
+		user = service.checkUserExists(user);
+		 if (user == null) {
+			 log.info("중복없음");
+		        return ResponseEntity.ok(Map.of("success",true));
+		    } else {
+		    	log.info("중복있음");
+		    	return ResponseEntity.ok(Map.of("success",false));
+		    }
+		}
+	
 	
 	//아이디찾기
 		@GetMapping("/findCommonUserIdByEmail")
@@ -94,15 +123,16 @@ public class UserController {
 	public ResponseEntity<?> insert(@RequestBody User user) {
 		log.info(user + "");
 		try {
-			if (user.getId() == null) {
-				user.setId("default_id"); // 기본값 설정
-			}
 			if (user.getPwd() == null) {
 				user.setPwd("default_password");
 			}
-			log.info(user.getRole()+"");
+			if(user.getProvider()==null||user.getProvider()=="") {
+				user.setProvider("common");
+			}
+			if(user.getRole()==0) {
+				user.setRole(2);	
+			}
 			boolean isInserted = service.insert(user);
-
 			if (isInserted) {
 				return ResponseEntity.ok(Map.of("success", true, "message", "회원가입이 완료되었습니다."));
 			} else {
@@ -213,11 +243,9 @@ public class UserController {
 	// 로그인 처리
 	@PostMapping("/login")
 	public ResponseEntity<Map<String, Object>> login(@RequestBody User user, HttpServletResponse response) {
-	    
 		if(user.getPwd()==null) {
 			user.setPwd("default_password");
 		}	
-		log.info("🔹 /login 요청 - 유저 ID: {}", user.getId());
 	    //  DB에서 사용자 확인
 	    User user2 = service.checkLogin(user);
 	    if (user2 == null) {
@@ -235,8 +263,8 @@ public class UserController {
 	    //  JWT를 HttpOnly 쿠키에 저장
 	    addJwtCookie(response, "jwt", accessToken, 60 * 15); // 15분 유지
 	    addJwtCookie(response, "refresh_token", refreshToken, 60 * 60 * 24 * 7); // 7일 유지
-
-	    return ResponseEntity.ok(Map.of("success", true, "message", "로그인 성공!"));
+	    log.info(user2.getNickname());
+	    return ResponseEntity.ok(Map.of("success", true, "message", "로그인 성공!","nickname",user2.getNickname()));
 	}
 
 	//  로그아웃 API (JWT 및 리프레시 토큰 삭제)
