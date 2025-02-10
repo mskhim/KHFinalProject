@@ -23,6 +23,25 @@
   color: inherit; /* 텍스트 색상을 부모의 색상으로 상속받도록 설정 */
 }
 
+.MyPageMain-input-field {
+  width: 100%; /* Ensures all input fields take up the full width */
+  box-sizing: border-box; /* Ensures padding doesn't affect the width */
+}
+
+.MyPageMain-input-group {
+  margin-bottom: 15px;
+}
+
+.MyPageMain-card-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.MyPageMain-card-body input[type="date"] {
+  width: 100%; /* Ensures the date input takes the full width as well */
+}
+
+
 .MyPageMain-input-with-button input {
   margin-top: 20px;
 }
@@ -35,6 +54,18 @@
   width: 100%;
 }
 
+.MyPageMain-input-with-button input {
+  width: 80%; /* input의 너비 고정 */
+  margin-top: 20px;
+}
+
+.MyPageMain-input-with-button button {
+  width: 20%; /* 버튼의 너비 고정 */
+  min-width: 120px; /* 버튼의 최소 너비 고정 */
+  max-width: 120px; /* 버튼의 최소 너비 고정 */
+  height: 40px; /* 버튼 높이 고정 */
+}
+
 .MyPageMain-input-with-button label {
   position: absolute;
   top: -20px; /* 입력창 위로 올리기 */
@@ -44,9 +75,8 @@
 }
 
 .MyPageMain-input-with-button input:focus {
-  border-color: #28a745;
-  outline: none;
-  box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
 }
 
 .MyPageMain-container {
@@ -58,6 +88,7 @@
   max-width: 1200px;
   margin: 0 auto; /* 중앙 정렬 */
 }
+
 
 .MyPageMain-header {
   text-align: left;
@@ -169,6 +200,7 @@
   padding: 40px;
   display: flex;
   flex-direction: column;
+  border-radius: 10px;
 }
 
 .MyPageMain-info-group {
@@ -190,7 +222,7 @@
 }
 
 .MyPageMain-button-container {
-  margin-top: 50px; /* 버튼 간격을 좀 더 넉넉히 */
+  margin-top: 25px; /* 버튼 간격을 좀 더 넉넉히 */
   display: flex;
   gap: 20px; /* 버튼 간의 간격 */
 }
@@ -220,11 +252,13 @@
 }
 
 .MyPageMain-input-field:focus {
-  border-color: #28a745;
+
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
   outline: none;
-  box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
   width: 100%;
 }
+
 
 @media (max-width: 1024px) {
   .MyPageMain-wrapper {
