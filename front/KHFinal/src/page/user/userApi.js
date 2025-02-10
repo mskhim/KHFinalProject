@@ -65,7 +65,6 @@ export const handleKakaoCallback = async (code) => {
  * 회원가입 처리
  */
 export const handleRegister = async (formData) => {
-  alert(formData.id);
   try {
     const response = await fetch('http://localhost:8080/user/insert', {
       method: 'POST',
@@ -111,8 +110,10 @@ export const handleLogin = async (id, provider) => {
     } else {
       alert(data.message);
     }
+    return data.success;
   } catch (error) {
     console.error('로그인 요청 실패:', error);
+    return false;
   }
 };
 
@@ -295,7 +296,31 @@ export const sendPwdByEmail = async (email, pwd) => {
       body: JSON.stringify({ email: email, pwd: pwd }),
     });
     const result = await response.text();
-    console.log(result);
+  } catch (error) {
+    console.error('❌ 이메일 전송 실패:', error);
+  }
+};
+/**
+ * 닉네임 중복확인 API
+ */
+export const checkNickName = async (nickname) => {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/user/checkNickName?nickname=${nickname}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    const data = await response.json();
+    alert(data.success);
+    if (data.success) {
+      return true;
+    } else {
+      return false;
+    }
   } catch (error) {
     console.error('❌ 이메일 전송 실패:', error);
   }

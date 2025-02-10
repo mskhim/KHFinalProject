@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
     public User checkLogin(User user) {
         try {
         	User userLogin= mapper.checkLogin(user);
-            return userLogin; // 중복됐으면 false 중복이 아니며true
+            return userLogin; // 중복됐으면 false 중복이 아니면true
         } catch (Exception e) {
             log.error("User CheckRegist Error: {}", e.getMessage());
             throw new RuntimeException("중복 체크 실패", e);
@@ -222,6 +222,16 @@ public class UserServiceImpl implements UserService {
 	public boolean updateRandomPwdById(User user) {
 		boolean flag=mapper.updateRandomPwdById(user);
 		return flag;
+	}
+
+	//닉네임을 받아서 DB에서 중복확인
+	@Override
+	public User checkNickName(User user) {
+		if(mapper.checkNickName(user)==null) {
+			return null;
+		}
+		User chekckUser = new User();
+		return chekckUser;
 	}
 
 

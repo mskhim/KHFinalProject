@@ -43,7 +43,7 @@ const Header = ({ page }) => {
     setDarkMode(sessionStorage.getItem('darkMode') === 'true');
     document.body.classList.toggle('Header-dark-mode', darkMode);
     setUserName(userNickname);
-  }, [page, darkMode, setDarkMode]);
+  }, [page, darkMode, userNickname]);
 
   const Logout = () => {
     handleLogout().then(() => {

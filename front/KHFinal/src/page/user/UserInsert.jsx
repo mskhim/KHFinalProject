@@ -2,7 +2,7 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { handleRegister } from './userApi';
+import { handleRegister, checkNickName } from './userApi';
 import { Button, Container } from 'react-bootstrap';
 import './css/UserInsert.css';
 import { Context } from '../../Context';
@@ -12,7 +12,7 @@ const UserInsert = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState(null); // ✅ 초기 상태를 `null`로 설정
   const [nicknameValid, setNicknameValid] = useState(false); // 중복 확인 상태
-
+  const [canSubmit, setCanSubmit] = useState(false); // ✅ 제출 가능 여부 상태
   useEffect(() => {
     const storedUser = sessionStorage.getItem('user'); // ✅ 세션 스토리지에서 사용자 정보 가져오기
     if (!storedUser) {
@@ -40,18 +40,19 @@ const UserInsert = () => {
 
     // ✅ 컴포넌트 언마운트 시 `sessionStorage`에서 'user' 삭제
     return () => {
-      console.log('🚨 컴포넌트 언마운트! sessionStorage에서 user 삭제');
       sessionStorage.removeItem('user');
     };
   }, [navigate]);
 
   // 제출 핸들러
   const handleSubmit = async (e) => {
+    if (!canSubmit) {
+      alert('닉네임 중복 확인을 해주세요.');
+      return;
+    }
     e.preventDefault();
     try {
       await handleRegister(formData); // ✅ 회원가입 API 호출
-
-      // ✅ 회원가입 성공 후, 로그인된 상태로 유지 → 자동으로 JWT 발급됨
       const preLoginUrl = sessionStorage.getItem('preLoginUrl') || '/';
       navigate(preLoginUrl);
       sessionStorage.removeItem('preLoginUrl');
@@ -71,21 +72,22 @@ const UserInsert = () => {
   };
 
   // 닉네임 중복 확인 핸들러
-  const handleNicknameCheck = () => {
+  const handleNicknameCheck = async () => {
     // 중복 확인 로직 (예시: 서버에서 확인 후 상태 업데이트)
     const nickname = formData.nickname.trim();
     if (nickname === '') {
       alert('닉네임을 입력해주세요.');
       return;
     }
-
     // 예시: 닉네임이 "test"일 때 중복 처리
-    if (nickname === 'test') {
+    const flag = await checkNickName(nickname); // ✅ 닉네임 중복 확인 API 호출
+    if (!flag) {
       setNicknameValid(false);
       alert('이미 사용중인 닉네임입니다.');
     } else {
       setNicknameValid(true);
       alert('사용 가능한 닉네임입니다.');
+      setCanSubmit(true); // ✅ 중복 확인 성공 시 제출 가능 상태로 변경
     }
   };
 

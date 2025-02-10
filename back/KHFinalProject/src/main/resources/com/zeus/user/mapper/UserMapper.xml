@@ -57,5 +57,10 @@
 		UPDATE USER_ACCOUNT SET PWD = #{pwd}
 		WHERE ID = #{id} AND PROVIDER = #{provider}  
 	</update>
-	
+		<!-- 닉네임을 받아서 중복확인 -->
+	<select id="checkNickName" parameterType="User"
+		resultType="User">
+		SELECT * FROM USER_ACCOUNT
+		WHERE NICKNAME = #{nickname}  
+	</select>
 </mapper>

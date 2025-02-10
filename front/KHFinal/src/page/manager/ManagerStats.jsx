@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form } from 'react-bootstrap';
-import { Bar, Line } from 'react-chartjs-2';
+import { Bar, Line, Pie } from 'react-chartjs-2';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import './css/ManagerStats.css'; // 스타일 파일 추가

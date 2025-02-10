@@ -34,6 +34,22 @@ public class UserController {
 	@Autowired
 	private JwtUtil JwtUtil;
 
+	
+	//닉네임 중복확인
+	@GetMapping("/checkNickName")
+	public ResponseEntity<?> checkNickName(@RequestParam String nickname) {
+		User user = new User();
+		user.setNickname(nickname);
+		user = service.checkNickName(user);
+		 if (user == null) {
+			 log.info("중복없음");
+		        return ResponseEntity.ok(Map.of("success",true));
+		    } else {
+		    	log.info("중복있음");
+		    	return ResponseEntity.ok(Map.of("success",false));
+		    }
+		}
+	
 	//아이디찾기
 		@GetMapping("/findCommonUserIdByEmail")
 		public ResponseEntity<?> findCommonUserIdByEmail(@RequestParam String email) {
