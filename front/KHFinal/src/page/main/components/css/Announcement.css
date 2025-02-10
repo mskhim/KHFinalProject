@@ -8,7 +8,7 @@
   margin-right: 5px;
 }
 
-.Announcement-text-center{
+.Announcement-text-center {
   display: flex;
   justify-content: center;
   align-content: flex-end;
@@ -20,17 +20,7 @@
   align-content: flex-end;
 }
 
-/* ✅ 다크모드에서 버튼의 외곽과 글씨를 검정으로 */
-.custom-inverted-dark-button {
-  background-color: black !important;  /* 검정 배경 */
-  color: rgb(255, 255, 255) !important; /* 글씨도 검정 */
-  border: 1px solid black !important; /* 외곽선 검정 */
-  transition: background-color 0.3s ease, color 0.3s ease;
+.Announcement-dark-mode-button {
+  border: 2px solid rgb(0, 0, 0) !important;
+  border-radius: 5px;
 }
-
-/* ✅ 다크모드에서 호버 시 배경이 회색, 글씨가 흰색 */
-.custom-inverted-dark-button:hover {
-  background-color: #555 !important; /* 배경 회색 */
-  color: white !important; /* 글씨 흰색 */
-}
-

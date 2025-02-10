@@ -13,7 +13,7 @@ import { ButtonRole } from '../../../components/ui';
 import './css/EventMapList.css';
 import { Context } from '../../../Context';
 
-const EventMapList = ({events}) => {
+const EventMapList = ({ events }) => {
   const navigate = useNavigate();
   // ✅ 현재 페이지 상태
   const [currentPage, setCurrentPage] = useState(1);
@@ -27,8 +27,6 @@ const EventMapList = ({events}) => {
   const handleSortChange = (option) => {
     setSortOption(option);
   };
-
- 
 
   // ✅ 정렬 로직 적용
   const sortedEvents = [...events].sort((a, b) => {
@@ -54,7 +52,7 @@ const EventMapList = ({events}) => {
       <div className="d-flex justify-content-end mb-3">
         <ButtonGroup>
           <Button
-            className={`EventListVIewWrap-sort-button ${getDarkModeHover()} ${
+            className={`EventListVIewWrap-sort-button ${getDarkModeHover()} ButtonGroup ${
               sortOption === 'popular' ? 'active' : ''
             } `}
             onClick={() => handleSortChange('popular')}
@@ -62,7 +60,7 @@ const EventMapList = ({events}) => {
             인기순
           </Button>
           <Button
-            className={`EventListVIewWrap-sort-button ${getDarkModeHover()} ${
+            className={`EventListVIewWrap-sort-button ${getDarkModeHover()} ButtonGroup ${
               sortOption === 'date' ? 'active' : ''
             } `}
             onClick={() => handleSortChange('date')}

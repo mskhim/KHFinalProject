@@ -1,12 +1,43 @@
-.EventMapKorea-mapSection {
+/* EventMapKorea-container 스타일 */
+.EventMapKorea-container {
+  border: 1px solid black;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 700px; /* 👉 화면이 너무 작아지지 않도록 최소 크기 설정 */
+  overflow-x: auto; /* 👉 최소 크기 이하로 줄어들지 않도록 가로 스크롤 추가 */
   max-width: 1300px;
-  padding: 20px;
+  padding: 15px;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
-  
-.EventMapKorea-button-container {
-  margin-top: 20px;
-  margin-right: 5px;
+
+/* 버튼들을 화면의 가로 길이에 맞게 설정 */
+.EventMapKorea-buttons {
+  display: flex;
+  justify-content: space-around; /* 버튼 간의 간격을 균등하게 분배 */
+  border-radius: 0px !important;
+  width: 100%; /* 버튼들을 가로로 꽉 채우기 */
+  max-width: 1300px; /* 지도와 동일한 최대 너비 설정 */
+  overflow-x: auto; /* 👉 화면이 작아지면 가로 스크롤 생성 */
+}
+
+/* 개별 버튼 크기 조정 */
+.EventMapKorea-button-individual {
+  flex-grow: 1; /* 👉 버튼이 가로 길이에 맞춰 자동 조정 */
+  text-align: center;
+  box-sizing: border-box; /* 버튼 크기 균일하게 유지 */
+  border: none;
+  border-radius: 0px !important;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.EventMapKorea-mapSection {
+  max-width: 1300px;
+  border-radius: 8px;
+}
+.EventMapKorea-button-group:first-child {
+  border-top-left-radius: 0px !important;
 }
