@@ -172,7 +172,7 @@ export const fetchWithAuth = async (url, options = {}) => {
 };
 
 /**
- * jwt 쿠키에 저장 되어있는지 확인하는 메소드
+ * jwt 쿠키에 저장 되어있는지 확인하는 메소/
  */
 export const checkAuthStatus = async () => {
   try {
@@ -186,6 +186,35 @@ export const checkAuthStatus = async () => {
     }
     const data = await response.json();
     return data; // { authenticated: true, user: {...} }
+  } catch (error) {
+    return { authenticated: false };
+  }
+};
+
+/*
+ * JWT쿠키 검사를 통해 로그인 상태를 확인한 후,
+ * 마이페이지에 회원 정보를 불러옴./
+ */
+export const getUserData = async () => {
+  try {
+    const response = await fetch('http://localhost:8080/user/getUserData', {
+      method: 'GET',
+      credentials: 'include', // ✅ 쿠키 자동 포함
+    });
+
+    if (!response.ok) {
+      return { authenticated: false };
+    }
+
+    const data = await response.json();
+    // const data = { 
+    //   "authenticated", true,
+    //   "message", "JWT 유효",
+    //   "user", user
+    // };
+
+    console.log(data.user.id+"유저정보");
+    return data.user; // { authenticated: true, user: {...} }
   } catch (error) {
     return { authenticated: false };
   }
