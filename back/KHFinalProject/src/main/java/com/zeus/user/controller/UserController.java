@@ -258,12 +258,10 @@ public class UserController {
 	    //  JWT 생성 (액세스 토큰 & 리프레시 토큰)
 	    String accessToken = JwtUtil.createAccessToken(user2);
 	    String refreshToken = JwtUtil.createRefreshToken(user2);
-	    log.info(" JWT 생성 완료");
 
 	    //  JWT를 HttpOnly 쿠키에 저장
 	    addJwtCookie(response, "jwt", accessToken, 60 * 15); // 15분 유지
 	    addJwtCookie(response, "refresh_token", refreshToken, 60 * 60 * 24 * 7); // 7일 유지
-	    log.info(accessToken);
 	    return ResponseEntity.ok(Map.of("success", true, "message", "로그인 성공!","nickname",user2.getNickname()));
 	}
 
@@ -313,9 +311,11 @@ public class UserController {
 	    //  리프레시 토큰을 검증하고 새로운 액세스 토큰 생성
 	    String userId = JwtUtil.validateToken(refreshToken).get("id", String.class);
 	    String provider = JwtUtil.validateToken(refreshToken).get("provider", String.class);
+	    String pwd = JwtUtil.validateToken(refreshToken).get("pwd", String.class);
 	    User user = new User();
 	    user.setId(userId);
 	    user.setProvider(provider);
+	    user.setPwd(pwd);
 	    User dbUser = new User();
 	    dbUser = service.getUserByIdAndProvider(user);
 	    if (dbUser == null) {
@@ -333,11 +333,9 @@ public class UserController {
 	//  JWT 쿠키 검사 (로그인 상태 확인)
 	@GetMapping("/getUserData")
 	public ResponseEntity<Map<String, Object>> getUserData(@CookieValue(name = "jwt", required = false) String jwtToken) { //  쿠키에서 JWT 가져오기
-	    
 		if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken)) {
 	        return ResponseEntity.ok(Map.of("authenticated", false, "message", "JWT가 없거나 만료됨"));
 	    }
-		
 	    // JWT가 유효하면 사용자 정보 반환
 	    String userId = JwtUtil.validateToken(jwtToken).get("id", String.class);
 	    String provider = JwtUtil.validateToken(jwtToken).get("provider", String.class);

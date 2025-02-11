@@ -43,6 +43,7 @@ public class JwtUtil {
         return Jwts.builder()
                 .setSubject("refreshToken")
                 .claim("id", user.getId())
+                .claim("pwd", user.getPwd())
                 .claim("provider", user.getProvider())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION_TIME))    
