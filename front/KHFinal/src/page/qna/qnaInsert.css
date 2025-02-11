@@ -20,6 +20,45 @@
         margin-bottom: 10px;
     }
 
+    /* 축제 선택 영역 */
+.QNAInsert-festival-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* 텍스트와 버튼 사이의 간격 조정 */
+    margin-bottom: 15px;
+}
+
+.QNAInsert-festival-text {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.QNAInsert-search-btn {
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* 팝업 스타일 */
+.QNAInsert-popup .modal-dialog {
+    max-width: 25%; /* 화면의 1/4 크기 */
+}
+
+.QNAInsert-festival-list {
+    list-style: none;
+    padding: 0;
+}
+
+.QNAInsert-festival-item {
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.QNAInsert-festival-item:hover {
+    background: #f0f0f0;
+}
+
     /* Q&A 입력 폼 */
     .QNAInsert-form {
         max-width: 1100px;
@@ -60,28 +99,11 @@
         padding: 10px 20px;
         font-size: 14px;
         font-weight: bold;
-        border: none;
         cursor: pointer;
         transition: background 0.3s;
     }
 
     /* 취소 버튼 */
     .QNAInsert-cancel {
-        background: #ccc;
-        color: black;
         margin-right: 10px;
-    }
-
-    .QNAInsert-cancel:hover {
-        background: #999;
-    }
-
-    /* 작성 버튼 */
-    .QNAInsert-submit {
-        background: #555;
-        color: white;
-    }
-
-    .QNAInsert-submit:hover {
-        background: #373737;
     }
