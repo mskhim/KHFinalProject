@@ -1,137 +1,92 @@
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import "./qnaRead.css";
-import { Link, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { Button } from "react-bootstrap";
+import { Context } from "../../Context";
 
 const QNARead = () => {
+  const { darkMode, setDarkMode } = useContext(Context);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setDarkMode(sessionStorage.getItem("darkMode") === "true");
+  }, [darkMode, setDarkMode]);
+
   const qnaDB = [
     {
       no: 1,
       title: "[Q&A] 질문 내용 1",
-      file: "첨부파일1.jpg",
+      festival: "강릉 단오제",
+      author: "홍길동",
       content:
         "안녕하세요. 첫 번째 질문의 내용입니다. 답변을 기다리고 있습니다.",
       date: "2024.02.06",
-    },
-    {
-      no: 2,
-      title: "Q&A 질문 내용 2",
-      file: "첨부파일2.jpg",
-      content: "이곳은 두 번째 질문의 내용입니다. 다양한 의견을 기다립니다.",
-      date: "2024.02.05",
-    },
-    {
-      no: 3,
-      title: "Q&A 질문 내용 3",
-      file: "첨부파일3.jpg",
-      content: "세 번째 질문입니다. 자세한 답변을 부탁드립니다.",
-      date: "2024.02.04",
     },
   ];
 
   const [qnaRead, setQnaRead] = useState({});
   const param = useParams();
-  const [replyVisible, setReplyVisible] = useState({});
 
   useEffect(() => {
-    setQnaRead(qnaDB.find((item) => item.no === parseInt(param.no)));
+    const selectedPost = qnaDB.find((item) => item.no === parseInt(param.no));
+    setQnaRead(selectedPost || {});
   }, [param]);
-
-  const toggleReply = (commentId) => {
-    setReplyVisible((prev) => ({
-      ...prev,
-      [commentId]: !prev[commentId],
-    }));
-  };
 
   return (
     <>
       <Header />
       <section className="QNARead-notice">
         <div className="QNARead-page-title">
-          <div className="QNARead-container">
-            <h3>Q&A</h3>
-          </div>
+          <h3>Q&A</h3>
+        </div>
+
+        <div className="QNARead-container">
+          <p className="festival-name">축제이름: {qnaRead.festival}</p>
         </div>
 
         <div className="QNARead-board-view">
           <div className="QNARead-container">
-            {/* 목록으로 버튼 */}
-            <div className="QNARead-btn-wrap">
-              <Link to="/QNAList">
-                <button className="QNARead-btn QNARead-btn-dark">
-                  목록으로
-                </button>
-              </Link>
-            </div>
-
-            {/* 게시글 테이블 */}
             <table className="QNARead-board-table">
               <tbody>
                 <tr>
-                  <td colSpan="2" className="QNARead-view-title">
-                    {qnaRead.title}
-                  </td>
+                  <td className="QNARead-view-title">{qnaRead.title}</td>
                 </tr>
                 <tr>
-                  <td colSpan="2" className="QNARead-view-content">
-                    <p>{qnaRead.content}</p>
-                  </td>
+                  <td className="QNARead-view-content">{qnaRead.content}</td>
                 </tr>
               </tbody>
             </table>
 
-            {/* 등록일 */}
             <div className="QNARead-meta">
-              <span className="QNARead-date">등록일: {qnaRead.date}</span>
+              <span>
+                작성자: {qnaRead.author} | 등록일: {qnaRead.date}
+              </span>
             </div>
 
-            {/* 수정,삭제 버튼 */}
             <div className="QNARead-btn-wrap">
-              <Link to="/QnaReInsert">
-                <button className="QNARead-btn QNARead-btn-dark">수정</button>
-              </Link>
-              <button className="QNARead-btn QNARead-btn-dark">삭제</button>
-            </div>
-
-            {/* 댓글 섹션 */}
-            <div className="QNARead-comments-section">
-              <h4>답변</h4>
-
-              {/* 댓글 입력 */}
-              <div className="QNARead-comment-input">
-                <textarea placeholder="댓글을 입력하세요." rows="2"></textarea>
-                <button className="QNARead-comment-btn">등록</button>
-              </div>
-
-              {/* 댓글 목록 */}
-              <div className="QNARead-comment-list">
-                <div className="QNARead-comment">
-                  <p>
-                    <strong>사용자1:</strong> 좋은 질문이네요!
-                  </p>
-                  <button
-                    className="QNARead-reply-toggle"
-                    onClick={() => toggleReply(1)}
-                  >
-                    답글 달기
-                  </button>
-                </div>
-
-                {/* 답글 입력창 (토글 기능 적용) */}
-                <div
-                  className={`QNARead-reply-input ${
-                    replyVisible[1] ? "show" : ""
-                  }`}
+              <Button
+                variant={darkMode ? "outline-light" : "outline-dark"}
+                className="QNARead-btn"
+                onClick={() => navigate("/QnaModify", { state: { qnaRead } })}
+              >
+                수정
+              </Button>
+              <Button
+                variant={darkMode ? "outline-light" : "outline-dark"}
+                className="QNARead-btn"
+              >
+                삭제
+              </Button>
+              <Link to="/QNAList">
+                <Button
+                  variant={darkMode ? "outline-light" : "outline-dark"}
+                  className="QNARead-btn"
                 >
-                  <textarea
-                    placeholder="답글을 입력하세요."
-                    rows="1"
-                  ></textarea>
-                  <button className="QNARead-reply-btn">답글</button>
-                </div>
-              </div>
+                  목록으로
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
