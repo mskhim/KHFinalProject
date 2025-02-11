@@ -44,26 +44,6 @@
 }
 
 /* 검색 버튼 */
-.Notice-btn {
-  display: inline-block;
-  padding: 8px 20px;
-  font-size: 15px;
-  font-weight: 400;
-  background: transparent;
-  text-align: center;
-  cursor: pointer;
-  border: 1px solid #333;
-}
-
-.Notice-btn-dark {
-  background: #555;
-  color: #fff;
-}
-
-.Notice-btn-dark:hover {
-  background: #373737;
-  border-color: #373737;
-}
 
 .Notice-sort-select {
   height: 40px;

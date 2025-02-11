@@ -19,6 +19,11 @@
     text-align: center;
     margin-bottom: 10px;
 }
+.festival-name {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
 
 /* Q&A 컨테이너 크기 조정 */
 .QNARead-container {
@@ -36,22 +41,10 @@
 
 /* 공통 버튼 스타일 */
 .QNARead-btn {
-    padding: 8px 18px;
+    padding: 8px 15px;
     font-size: 14px;
-    border: none;
     cursor: pointer;
     margin: 3px;
-    transition: background 0.3s;
-}
-
-/* 목록으로 버튼 스타일 */
-.QNARead-btn-dark {
-    background: #555;
-    color: #fff;
-}
-
-.QNARead-btn-dark:hover {
-    background: #373737;
 }
 
 /* 게시글 테이블 */
@@ -84,7 +77,7 @@
     margin: 5px;
 }
 
-/* 등록일 및 버튼 컨테이너 */
+/* 등록일 */
 .QNARead-meta {
     display: flex;
     justify-content: right;
@@ -124,14 +117,7 @@
 .QNARead-comment-btn {
     padding: 10px 15px;
     font-size: 14px;
-    border: none;
-    background: #555;
-    color: white;
     cursor: pointer;
-}
-
-.QNARead-comment-btn:hover {
-    background: #373737;
 }
 
 /* 댓글 목록 */
@@ -151,14 +137,10 @@
 .QNARead-reply-toggle {
     cursor: pointer;
     padding: 3px 7px;
-    background: #555;
     font-size: 13px;
-    color: white;
 }
 
-.QNARead-reply-toggle:hover {
-    background: #373737;
-}
+
 
 /* 답글 입력 창 (초기에는 숨김) */
 .QNARead-reply-input {
@@ -184,11 +166,13 @@
     padding: 8px 12px;
     font-size: 12px;
     border: none;
-    background: #555;
-    color: white;
     cursor: pointer;
 }
 
-.QNARead-reply-btn:hover {
-    background: #373737;
+.festival-name {
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    justify-content: left;
 }
+

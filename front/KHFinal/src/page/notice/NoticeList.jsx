@@ -3,10 +3,15 @@ import Footer from "../../components/Footer";
 import "./notice.css";
 import { Link } from "react-router-dom";
 import { Context } from "../../Context";
-import { useContext, useState } from "react";
-import { Container, Pagination } from "react-bootstrap";
+import { useContext, useEffect, useState } from "react";
+import { Pagination, Button } from "react-bootstrap";
 
 const NoticeList = () => {
+  const { darkMode, setDarkMode, getDarkMode } = useContext(Context);
+
+  useEffect(() => {
+    setDarkMode(sessionStorage.getItem("darkMode") === "true");
+  }, [darkMode, setDarkMode]);
   const notice = [
     {
       no: 1,
@@ -24,7 +29,6 @@ const NoticeList = () => {
       date: "2017.06.15",
     },
   ];
-  const { getDarkMode } = useContext(Context);
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 5;
 
@@ -57,13 +61,12 @@ const NoticeList = () => {
                     placeholder="검색어를 입력해주세요."
                     className="Notice-search-input"
                   />
-                  <button type="submit" className="Notice-btn Notice-btn-dark">
+                  <Button
+                    variant={darkMode ? "outline-light" : "outline-dark"}
+                    className="Notice-btn Notice-btn-dark"
+                  >
                     검색
-                  </button>
-                  <select className="Notice-sort-select">
-                    <option value="date">오름차순</option>
-                    <option value="date">내림차순</option>
-                  </select>
+                  </Button>
                 </div>
               </form>
             </div>

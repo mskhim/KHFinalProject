@@ -1,175 +1,58 @@
-/* Q&A 제목 */
+/* Q&A 스타일 */
 .QNA-title-container {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  padding: 10px 100px;
-  margin-top: 10px;
+  text-align: center;
+  padding: 20px 0;
 }
 
 .QNA-title {
-  font-size: 28px;
-  font-weight: 600;
-  margin: 0;
-  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
 }
 
-/* 검색창 정렬 유지 */
-.QNA-header {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+.QNA-table-container {
   width: 100%;
-  margin-bottom: 20px;
-  padding: 10px 20px;
-}
-
-.QNA-board-search {
-  width: auto;
-}
-
-.QNA-search-wrap {
   display: flex;
-  align-items: center;
+  justify-content: center;
 }
 
-.QNA-search-input {
-  height: 40px;
-  width: 250px;
-  font-size: 14px;
-  padding: 7px 14px;
-  border: 1px solid #ccc;
-  margin-right: 10px;
-}
-
-/* 검색 버튼 */
-.QNA-btn {
-  display: inline-block;
-  padding: 8px 20px;
-  font-size: 15px;
-  font-weight: 400;
-  background: transparent;
-  text-align: center;
-  cursor: pointer;
-  border: 1px solid #333;
-}
-
-.QNA-btn-dark {
-  background: #555;
-  color: #fff;
-}
-
-.QNA-btn-dark:hover {
-  background: #373737;
-  border-color: #373737;
-}
-
-.QNA-sort-select {
-  height: 40px;
-  font-size: 14px;
-  padding: 7px 14px;
-  border: 1px solid #ccc;
-  margin-left: 5px;
-}
-
-/* Q&A 전체 높이 조정 */
-.QNA-notice {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 20px 0;
-  min-height: 300px; /* 공지사항 스타일을 반영하여 높이 축소 */
-}
-
-/* Q&A 컨테이너 크기 조정 */
-.QNA-container {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-/* Q&A 테이블 크기 조정 */
 .QNA-board-table {
-  width: 100%;
+  width: 90%;
   border-collapse: collapse;
-  border-top: 2px solid #333;
-  table-layout: fixed;
 }
 
-/* 테이블 헤더 스타일 */
+.QNA-board-table th, .QNA-board-table td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
 .QNA-board-table th {
-  text-align: center;
-  padding: 8px;
-  font-size: 16px;
   font-weight: bold;
 }
 
-.QNA-th-num {
-  width: 10%;
-  text-align: center;
+.QNA-reply {
+  padding-left: 30px;
+  font-style: italic;
 }
 
-.QNA-th-title {
-  width: 50%;
-  text-align: center;
+.QNA-title-link {
+  text-decoration: none; /* 밑줄 제거 */
+  color: inherit; /* 기존 텍스트 색상 유지 */
 }
 
-.QNA-th-name {
-  width: 20%;
-  text-align: center;
+.QNA-title-link:hover {
+  text-decoration: underline; /* 마우스 오버 시 밑줄 추가 */
 }
 
-.QNA-th-date {
-  width: 20%;
-  text-align: center;
-}
-
-/* 테이블 본문 스타일 */
-.QNA-board-table td {
-  padding: 8px;
-  text-align: center;
-  font-size: 15px;
-  border-bottom: 1px solid #ccc;
-}
-
-.QNA-td-title {
-  text-align: left;
-  padding-left: 20px;
-}
-
-.QNA-td-title a {
-  padding: 15px 10px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-weight: bold;
-  text-decoration: none;
-}
-
-.QNA-td-title a:hover {
-  color: #9c9c9c;
-}
-
-/* 글쓰기 버튼 컨테이너 */
+/* 글쓰기 버튼 스타일 */
 .QNA-write-button-container {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin: 20px 0;
 }
 
 .QNA-write-btn {
-  padding: 8px 20px;
-  font-size: 15px;
-  font-weight: 400;
-  background: transparent;
-  cursor: pointer;
-  border: 1px solid #333;
-}
-
-.QNA-write-btn-dark {
-  background: #555;
-  color: #fff;
-}
-
-.QNA-write-btn-dark:hover {
-  background: #373737;
-  border-color: #373737;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
 }

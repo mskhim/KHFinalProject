@@ -2,9 +2,16 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import "./noticeRead.css";
 import { Link, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { Button } from "react-bootstrap";
+import { Context } from "../../Context";
 
 const NoticeRead = () => {
+  const { darkMode, setDarkMode } = useContext(Context);
+
+  useEffect(() => {
+    setDarkMode(sessionStorage.getItem("darkMode") === "true");
+  }, [darkMode, setDarkMode]);
   const noticeDB = [
     {
       no: 1,
@@ -50,9 +57,12 @@ const NoticeRead = () => {
             {/* 목록으로 버튼 */}
             <div className="NoticeRead-btn-wrap">
               <Link to="/NoticeList">
-                <button className="NoticeRead-btn NoticeRead-btn-dark">
+                <Button
+                  variant={darkMode ? "outline-light" : "outline-dark"}
+                  className="NoticeRead-btn NoticeRead-btn-dark"
+                >
                   목록으로
-                </button>
+                </Button>
               </Link>
             </div>
 
