@@ -4,7 +4,7 @@
 
 
 	<insert id="insertEvent"
-		parameterType="com.zeus.event.domain.Event" useGeneratedKeys="true"
+		parameterType="Event" useGeneratedKeys="true"
 		keyProperty="no">
 		INSERT INTO EVENT (NO, PUBLIC_DATA_EVENT_NO,
 		USER_ACCOUNT_NO, PRICE, RATING,
@@ -14,7 +14,7 @@
 		#{rating}, SYSDATE)
 	</insert>
 	
-	<select id="selectPublicDataEvent" parameterType="int"
+	<select id="selectPublicDataEvent" parameterType="User"
 		resultType="PublicDataEvent">
 		SELECT * FROM USER_MANAGEMENT_EVENT A
 		LEFT JOIN PUBLIC_DATA_EVENT B

@@ -15,9 +15,26 @@ export const selectPublicDataEvent = async () => {
       }
     );
     const data = await response.json();
-    console.log(data.dataList);
     return data.dataList;
   } catch (error) {
     return { authenticated: false };
+  }
+};
+
+export const insertEventByManager = async (formData) => {
+  try {
+    const response = await fetch(
+      'http://localhost:8080/manager/insertEventByManager',
+      {
+        method: 'POST',
+        credentials: 'include',
+        body: formData,
+      }
+    );
+
+    alert('축제 등록이 완료되었습니다.!');
+  } catch (error) {
+    console.error('축제 등록 실패:', error);
+    alert('등록 중 오류가 발생했습니다.');
   }
 };

@@ -31,18 +31,16 @@ public class EventController {
 	//  JWT 쿠키 검사 (로그인 상태 확인)
 	@GetMapping("/selectPublicDataEvent")
 	public ResponseEntity<Map<String, Object>> selectPublicDataEvent(@CookieValue(name = "jwt", required = false) String jwtToken) { //  쿠키에서 JWT 가져오기
-		log.info("시작");
 		if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken)) {
+			log.info("토큰만료");
 	        return ResponseEntity.ok(Map.of("authenticated", false, "message", "JWT가 없거나 만료됨"));
 	    }
 	    // JWT가 유효하면 사용자 정보 반환
 	    int no = JwtUtil.validateToken(jwtToken).get("no", Integer.class);
 	    User user = new User();
-	    log.info("no = "+ no);
 	    user.setNo(no);
 	    
 	    List<PublicDataEvent> dataList = service.selectPublicDataEvent(user);
-	    log.info(dataList+"리스트");
 	    
 	    return ResponseEntity.ok(Map.of(
 		        "authenticated", true,
