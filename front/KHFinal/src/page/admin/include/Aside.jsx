@@ -48,9 +48,6 @@ const Aside = () => {
         <Nav.Link as={NavLink} to="/admin/cancellationhistorymanage">
           취소내역 관리
         </Nav.Link>
-        <Nav.Link as={NavLink} to="/admin/stathistory">
-          통계 내역
-        </Nav.Link>
       </Nav>
     </Navbar>
   );

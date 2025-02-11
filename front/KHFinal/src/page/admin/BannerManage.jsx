@@ -116,11 +116,11 @@ const BannerManage = () => {
             </th>
             <th
               className="text-bg-primary text-center"
-              onClick={() => handleSort("title")}
+              onClick={() => handleSort("event_name")}
               style={{ width: "200px" }}
             >
               축제명
-              {thName === "title" &&
+              {thName === "event_name" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th

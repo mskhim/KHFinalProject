@@ -13,7 +13,6 @@ import {
   NoticeManage,
   BannerManage,
   PaymentHistoryManage,
-  StatHistory,
   CancellationHistoryManage,
 } from "../page/admin";
 import { ProtectedRoute, Unauthorized } from "../components";
@@ -58,9 +57,6 @@ const RouterComponentAdmin = () => {
       case "cancellationhistorymanage":
         setSectionName("취소내역 관리");
         break;
-      case "stathistory":
-        setSectionName("통계 내역");
-        break;
     }
   }, [location.pathname]);
 
@@ -81,6 +77,7 @@ const RouterComponentAdmin = () => {
                   </ProtectedRoute>
                 }
               >
+                <Route path="adminmain" element={<AdminMain />} />
                 <Route path="managermanage" element={<ManagerManage />} />
                 <Route path="usermanage" element={<UserManage />} />
                 <Route path="festivalmanage" element={<FestivalManage />} />
@@ -96,8 +93,6 @@ const RouterComponentAdmin = () => {
                   path="cancellationhistorymanage"
                   element={<CancellationHistoryManage />}
                 />
-                <Route path="stathistory" element={<StatHistory />} />
-                <Route path="adminmain" element={<AdminMain />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>

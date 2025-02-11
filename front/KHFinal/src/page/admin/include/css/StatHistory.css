@@ -3,19 +3,18 @@
 }
 
 .admin-chart-container {
-  height: 320px;
+  height: 290px;
   background: #f9f9f9;
-  padding: 15px;
+  padding: 10px;
   border-radius: 10px;
 }
 
 .admin-stat-card {
   background: #fff;
-  padding: 20px;
+  padding: 10px;
   text-align: center;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
 }
 
 .admin-stat-card h4 {

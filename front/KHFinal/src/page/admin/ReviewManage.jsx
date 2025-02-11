@@ -133,11 +133,11 @@ const UserManage = () => {
             </th>
             <th
               className="text-bg-primary text-center"
-              onClick={() => handleSort("member_name")}
+              onClick={() => handleSort("member_id")}
               style={{ width: "150px" }}
             >
               리뷰 작성자
-              {thName === "member_name" &&
+              {thName === "member_id" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
