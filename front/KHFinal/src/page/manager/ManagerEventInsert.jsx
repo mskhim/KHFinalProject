@@ -3,6 +3,7 @@ import { Context } from '../../Context';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { Container, Form, Button } from 'react-bootstrap';
+import { selectPublicDataEvent } from './managerApi';
 
 const ManagerInsert = () => {
   const { getDarkModeHover, getDarkMode } = useContext(Context);
@@ -14,10 +15,11 @@ const ManagerInsert = () => {
 
   // ✅ 공공데이터 API에서 축제 리스트 가져오기
   useEffect(() => {
-    fetch('/api/public/festivals') // 백엔드 연결 후 축제 목록 불러오기
-      .then((res) => res.json())
-      .then((data) => setFestivalList(data))
-      .catch((err) => console.error('축제 목록 가져오기 실패:', err));
+    const getSelectPublicDataEvent = async () => {
+      const PublicList = await selectPublicDataEvent();
+      setFestivalList(PublicList);
+    };
+    getSelectPublicDataEvent();
   }, []);
 
   // ✅ 대표 이미지 업로드 핸들러
