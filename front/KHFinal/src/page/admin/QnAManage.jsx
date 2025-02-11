@@ -167,7 +167,7 @@ const QnAManage = () => {
               style={{ width: "150px" }}
             >
               질문 작성일
-              {thName === "title" &&
+              {thName === "sub_date" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
@@ -182,7 +182,7 @@ const QnAManage = () => {
               style={{ width: "150px" }}
             >
               답변자
-              {thName === "rate" &&
+              {thName === "member_name" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th

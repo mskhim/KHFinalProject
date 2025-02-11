@@ -7,5 +7,4 @@ export { default as NoticeManage } from "./NoticeManage";
 export { default as BannerManage } from "./BannerManage";
 export { default as PaymentHistoryManage } from "./PaymentHistoryManage";
 export { default as CancellationHistoryManage } from "./CancellationHistoryManage";
-export { default as StatHistory } from "./StatHistory";
 export { default as AdminMain } from "./AdminMain";
