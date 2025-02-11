@@ -9,12 +9,12 @@ import StartFestival from './components/StartFestival';
 import EndFestival from './components/EndFestival';
 import { Container } from 'react-bootstrap';
 import RandomFestival from './components/RandomFestival';
-
+import './Main.css';
 const Main = () => {
   return (
     <>
       <Header />
-      <Container>
+      <Container className="Main-container">
         <MainCarousel />
         <Announcement />
         <Top4 />
