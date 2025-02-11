@@ -34,25 +34,6 @@
     padding-right: 20px;
 }
 
-/* 공통 버튼 스타일 */
-.NoticeRead-btn {
-    padding: 8px 18px;
-    font-size: 14px;
-    border: none;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-/* 목록으로 버튼 스타일 */
-.NoticeRead-btn-dark {
-    background: #555;
-    color: #fff;
-}
-
-.NoticeRead-btn-dark:hover {
-    background: #373737;
-}
-
 /* 게시글 테이블 */
 .NoticeRead-board-table {
     width: 100%;
