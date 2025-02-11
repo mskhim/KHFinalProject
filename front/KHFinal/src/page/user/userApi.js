@@ -211,8 +211,6 @@ export const getUserData = async () => {
     //   "message", "JWT 유효",
     //   "user", user
     // };
-
-    console.log(data.user.id + '유저정보');
     return data.user; // { authenticated: true, user: {...} }
   } catch (error) {
     return { authenticated: false };

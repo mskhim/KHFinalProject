@@ -345,8 +345,8 @@ public class UserController {
 	    user.setProvider(provider);
 	    user = service.getUserByIdAndProvider(user);
 	    return ResponseEntity.ok(Map.of(
-	        "authenticated", true,
-	        "message", "JWT 유효",
+		        "authenticated", true,
+		        "message", "JWT 유효",
 	        "user", user
 	    ));
 	}
