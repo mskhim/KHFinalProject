@@ -1,121 +1,112 @@
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import "./qnaList.css";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../../Context";
-import { useContext, useState } from "react";
-import { Pagination } from "react-bootstrap";
+import { Button, Pagination } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const QNAList = () => {
+  const { darkMode, setDarkMode, getDarkMode } = useContext(Context);
+
+  useEffect(() => {
+    setDarkMode(sessionStorage.getItem("darkMode") === "true");
+  }, [darkMode, setDarkMode]);
+
   const qna = [
     {
       no: 1,
-      title: "[Q&A] 테스트입니다1",
-      name: "홍길동",
-      date: "2017.07.13",
+      festival: "강릉 단오제",
+      title: "[Q&A] 질문 내용 1",
+      author: "홍길동",
+      date: "2024.02.06",
+      reply: "답변내용",
     },
     {
       no: 2,
-      title: "Q&A 테스트입니다2",
-      name: "저길동",
-      date: "2017.06.15",
+      festival: "진주 남강 유등축제",
+      title: "Q&A 질문 내용 2",
+      author: "저길동",
+      date: "2024.02.05",
+      reply: "답변내용",
     },
     {
       no: 3,
-      title: "Q&A 테스트입니다3",
-      name: "이길동",
-      date: "2017.06.15",
+      festival: "부산 국제 영화제",
+      title: "Q&A 질문 내용 3",
+      author: "이길동",
+      date: "2024.02.04",
+      reply: "답변내용",
     },
   ];
-  const { getDarkMode } = useContext(Context);
+
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 5;
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
-      console.log(`Fetching data for page: ${page}`);
     }
   };
 
   return (
     <>
       <Header />
-      <section className="QNA-notice">
-        {/* Q&A 제목 */}
+      <section className={`QNA-notice ${darkMode ? "dark-mode" : ""}`}>
         <div className="QNA-title-container">
-          <h3 className={`QNA-title ${getDarkMode()}`}>Q&A</h3>
+          <h3 className="QNA-title">Q&A</h3>
         </div>
-
-        {/* 검색창 */}
-        <div className="QNA-header">
-          <div className="QNA-board-search">
-            <div className="QNA-search-window">
-              <form action="">
-                <div className="QNA-search-wrap">
-                  <label htmlFor="search" className="QNA-blind"></label>
-                  <input
-                    id="search"
-                    type="search"
-                    placeholder="검색어를 입력해주세요."
-                    className="QNA-search-input"
-                  />
-                  <button type="submit" className="QNA-btn QNA-btn-dark">
-                    검색
-                  </button>
-                  <select className="QNA-sort-select">
-                    <option value="date">오름차순</option>
-                    <option value="date">내림차순</option>
-                  </select>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-
-        {/* Q&A 목록 */}
-        <div className="QNA-board-list">
-          <div className="QNA-container">
-            <table className="QNA-board-table">
-              <thead>
-                <tr>
-                  <th className="QNA-th-num">번호</th>
-                  <th className="QNA-th-title">제목</th>
-                  <th className="QNA-th-name">작성자</th>
-                  <th className="QNA-th-date">등록일</th>
-                </tr>
-              </thead>
-              <tbody>
-                {qna.map((data) => (
-                  <tr key={data.no}>
+        <div className="QNA-table-container">
+          <table className="QNA-board-table">
+            <thead>
+              <tr>
+                <th>번호</th>
+                <th>축제</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>등록일</th>
+              </tr>
+            </thead>
+            <tbody>
+              {qna.map((data) => (
+                <React.Fragment key={data.no}>
+                  <tr>
                     <td>{data.no}</td>
-                    <td className="QNA-td-title">
+                    <td>{data.festival}</td>
+                    <td>
                       <Link
-                        to={`/qnaRead/${data.no}`}
-                        className={getDarkMode()}
+                        to={`/QnaRead/${data.no}`}
+                        className="QNA-title-link"
                       >
                         {data.title}
                       </Link>
                     </td>
-                    <td>{data.name}</td>
+                    <td>{data.author}</td>
                     <td>{data.date}</td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-
-            {/* 글쓰기 버튼 추가 */}
-            <div className="QNA-write-button-container">
-              <Link to="/QnaInsert">
-                <button className="QNA-write-btn QNA-write-btn-dark">
-                  글쓰기
-                </button>
-              </Link>
-            </div>
-          </div>
+                  {data.reply && (
+                    <tr>
+                      <td colSpan="5" className="QNA-reply">
+                        ㄴ {data.reply}
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
+              ))}
+            </tbody>
+          </table>
         </div>
       </section>
-
+      <div className="QNA-write-button-container">
+        <Link to="/QnaInsert">
+          <Button
+            variant={darkMode ? "outline-light" : "outline-dark"}
+            className="Notice-btn Notice-btn-dark"
+          >
+            글쓰기
+          </Button>
+        </Link>
+      </div>
       <Pagination
         className={`EventListViewWrap-custom-pagination justify-content-center mt-4 ${getDarkMode()}`}
         variant="dark"
