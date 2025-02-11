@@ -1,5 +1,11 @@
 package com.zeus.manager.mapper;
 
-public interface ManagerMapper {
+import com.zeus.event.domain.Event;
+import com.zeus.event.domain.EventImg;
 
+public interface ManagerMapper {
+	boolean insertEventByManager(Event event);
+	boolean insertEventImgByManagerThumb(EventImg eventImg);
+	boolean insertEventImgByManagerSub(EventImg eventImg);
+	
 }

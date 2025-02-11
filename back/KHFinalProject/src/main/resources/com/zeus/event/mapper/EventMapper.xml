@@ -1,3 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zeus.event.mapper.EventMapper"></mapper>
+<mapper namespace="com.zeus.event.mapper.EventMapper">
+
+
+	<insert id="insertEvent"
+		parameterType="Event" useGeneratedKeys="true"
+		keyProperty="no">
+		INSERT INTO EVENT (NO, PUBLIC_DATA_EVENT_NO,
+		USER_ACCOUNT_NO, PRICE, RATING,
+		SUB_DATE)
+		VALUES (SEQ_EVENT.NEXTVAL,
+		#{publicDataEventNo}, #{userAccountNo}, #{price},
+		#{rating}, SYSDATE)
+	</insert>
+	
+	<select id="selectPublicDataEvent" parameterType="User"
+		resultType="PublicDataEvent">
+		SELECT * FROM USER_MANAGEMENT_EVENT A
+		LEFT JOIN PUBLIC_DATA_EVENT B
+		ON A.PUBLIC_DATA_EVENT_NO = B.NO
+		WHERE A.USER_ACCOUNT_NO=#{no}
+	</select>
+	
+	
+</mapper>

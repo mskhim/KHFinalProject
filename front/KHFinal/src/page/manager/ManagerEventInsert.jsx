@@ -3,21 +3,24 @@ import { Context } from '../../Context';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { Container, Form, Button } from 'react-bootstrap';
+import { insertEventByManager, selectPublicDataEvent } from './managerApi';
 
 const ManagerInsert = () => {
   const { getDarkModeHover, getDarkMode } = useContext(Context);
   const [festivalList, setFestivalList] = useState([]); // 공공데이터 축제 리스트
   const [selectedFestival, setSelectedFestival] = useState(''); // 선택한 축제
+  const [selectedFestivalNo, setSelectedFestivalNo] = useState(''); // 선택한 축제 번호
   const [ticketPrice, setTicketPrice] = useState(''); // 티켓 가격 추가
   const [mainImage, setMainImage] = useState(null); // 대표 이미지
   const [subImages, setSubImages] = useState([]); // 서브 이미지 리스트 (최대 20장)
 
   // ✅ 공공데이터 API에서 축제 리스트 가져오기
   useEffect(() => {
-    fetch('/api/public/festivals') // 백엔드 연결 후 축제 목록 불러오기
-      .then((res) => res.json())
-      .then((data) => setFestivalList(data))
-      .catch((err) => console.error('축제 목록 가져오기 실패:', err));
+    const getSelectPublicDataEvent = async () => {
+      const PublicList = await selectPublicDataEvent();
+      setFestivalList(PublicList);
+    };
+    getSelectPublicDataEvent();
   }, []);
 
   // ✅ 대표 이미지 업로드 핸들러
@@ -59,30 +62,18 @@ const ManagerInsert = () => {
     }
 
     const formData = new FormData();
-    formData.append('festivalName', selectedFestival);
-    formData.append('ticketPrice', ticketPrice);
+    formData.append('eventNo', selectedFestivalNo);
+    formData.append('price', ticketPrice);
     formData.append('mainImage', mainImage);
     subImages.forEach((file) => {
       formData.append('subImages', file);
     });
-
-    try {
-      const response = await fetch('/api/manager/festivalInsert', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error('서버 오류 발생');
-      }
-
-      alert('축제 등록 성공!');
-    } catch (error) {
-      console.error('축제 등록 실패:', error);
-      alert('등록 중 오류가 발생했습니다.');
-    }
+    await insertEventByManager(formData);
   };
-
+  const handleSelectChange = (e) => {
+    setSelectedFestival(e.target.value);
+    setSelectedFestivalNo(e.target.value);
+  };
   return (
     <>
       <Header />
@@ -94,12 +85,14 @@ const ManagerInsert = () => {
             <Form.Label>축제 선택</Form.Label>
             <Form.Select
               value={selectedFestival}
-              onChange={(e) => setSelectedFestival(e.target.value)}
+              onChange={(e) => {
+                handleSelectChange(e);
+              }}
               required
             >
               <option value="">축제를 선택하세요</option>
-              {festivalList.map((festival, index) => (
-                <option key={index} value={festival.name}>
+              {festivalList.map((festival) => (
+                <option key={festival.no} value={festival.no}>
                   {festival.name}
                 </option>
               ))}
