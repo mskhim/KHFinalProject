@@ -47,7 +47,7 @@ const EventMapList = ({ events }) => {
   };
 
   return (
-    <Container className="EventListViewWrap-container py-4 px-4">
+    <Container className="EventListViewWrap-container py-4 ">
       {/* ✅ 정렬 버튼 (상단 오른쪽) */}
       <div className="d-flex justify-content-end mb-3">
         <ButtonGroup>
