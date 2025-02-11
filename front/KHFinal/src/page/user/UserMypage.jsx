@@ -14,26 +14,23 @@ function UserMypage() {
   const [isEditable, setIsEditable] = useState(false); // Edit Mode
   const [userInfo, setUserInfo] = useState({});
 
-
-
   /**userApi.js의 getUserData()함수를 호출하여
    * setUserInfo, setFormData에 data(data.user 회원 정보)를 저장. */
+
   useEffect(() => {
-    const setData = async ()=>{
+    const setData = async () => {
       const data = await getUserData();
       setUserInfo(data);
       setFormData(data);
       console.log(data);
-    }
+    };
     setData();
   }, []);
 
- 
-
   useEffect(() => {
-    const getData = async()=>{
+    const getData = async () => {
       return await getUserData();
-    }
+    };
     console.log(getData());
     setUserInfo(getData());
   }, []);
@@ -170,65 +167,68 @@ function UserMypage() {
                       {formData.provider === 'common' && (
                         // formData.provider === 'common'일 때만 해당 요소들이 렌더링되도록 && (AND) 연산자 사용.
                         // formData.provider === 'common'일 때만 전체 항목 출력.
-                      <div>
-                        <div className="MyPageMain-input-group">
-                          <label htmlFor="id" className="MyPageMain-input-label">
-                            아이디
-                          </label>
-                          {isEditable ? (
-                            <input
-                              ref={idInputRef} // 아이디 input에 ref 연결
-                              type="text"
-                              name="id"
-                              value={formData.id}
-                              onChange={handleInputChange}
-                              className="MyPageMain-input-field"
-                            />
-                          ) : (
-                            <p>{formData.id}</p>
-                          )}
-                        </div>
-                        <div className="MyPageMain-input-group">
-                          <label
-                            htmlFor="password"
-                            className="MyPageMain-input-label"
-                          >
-                            비밀번호
-                          </label>
-                          {isEditable ? (
-                            <input
-                              type="pwd"
-                              name="pwd"
-                              value={formData.pwd}
-                              onChange={handleInputChange}
-                              className="MyPageMain-input-field"
-                            />
-                          ) : (
-                            <p>{formData.pwd}</p>
-                          )}
-                        </div>
+                        <div>
+                          <div className="MyPageMain-input-group">
+                            <label
+                              htmlFor="id"
+                              className="MyPageMain-input-label"
+                            >
+                              아이디
+                            </label>
+                            {isEditable ? (
+                              <input
+                                ref={idInputRef} // 아이디 input에 ref 연결
+                                type="text"
+                                name="id"
+                                value={formData.id}
+                                onChange={handleInputChange}
+                                className="MyPageMain-input-field"
+                              />
+                            ) : (
+                              <p>{formData.id}</p>
+                            )}
+                          </div>
+                          <div className="MyPageMain-input-group">
+                            <label
+                              htmlFor="password"
+                              className="MyPageMain-input-label"
+                            >
+                              비밀번호
+                            </label>
+                            {isEditable ? (
+                              <input
+                                type="pwd"
+                                name="pwd"
+                                value={formData.pwd}
+                                onChange={handleInputChange}
+                                className="MyPageMain-input-field"
+                              />
+                            ) : (
+                              <p>{formData.pwd}</p>
+                            )}
+                          </div>
 
-                        <div className="MyPageMain-input-group">
-                          <label
-                            htmlFor="email"
-                            className="MyPageMain-input-label"
-                          >
-                            이메일
-                          </label>
-                          {isEditable ? (
-                            <input
-                              type="email"
-                              name="email"
-                              value={formData.email}
-                              onChange={handleInputChange}
-                              className="MyPageMain-input-field"
-                            />
-                          ) : (
-                            <p>{formData.email}</p>
-                          )}
+                          <div className="MyPageMain-input-group">
+                            <label
+                              htmlFor="email"
+                              className="MyPageMain-input-label"
+                            >
+                              이메일
+                            </label>
+                            {isEditable ? (
+                              <input
+                                type="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleInputChange}
+                                className="MyPageMain-input-field"
+                              />
+                            ) : (
+                              <p>{formData.email}</p>
+                            )}
+                          </div>
                         </div>
-                    </div>
-                    )}
+                      )}
 
                       {/* 공통 항목 */}
                       <div className="MyPageMain-input-group">
@@ -319,24 +319,24 @@ function UserMypage() {
                           지역
                         </label>
                         {isEditable ? (
-                        <select
-                          name="regionCode"
-                          value={formData.regionCode}
-                          onChange={handleInputChange}
-                          className="MyPageMain-input-field"
+                          <select
+                            name="regionCode"
+                            value={formData.regionCode}
+                            onChange={handleInputChange}
+                            className="MyPageMain-input-field"
                           >
-                          <option value="">선택 없음</option>
-                          <option value="서울">서울</option>
-                          <option value="경기">경기</option>
-                          <option value="강원">강원</option>
-                          <option value="충북">충북</option>
-                          <option value="충남">충남</option>
-                          <option value="전북">전북</option>
-                          <option value="전남">전남</option>
-                          <option value="경북">경북</option>
-                          <option value="경남">경남</option>
-                          <option value="제주">제주</option>
-                        </select>
+                            <option value="">선택 없음</option>
+                            <option value="서울">서울</option>
+                            <option value="경기">경기</option>
+                            <option value="강원">강원</option>
+                            <option value="충북">충북</option>
+                            <option value="충남">충남</option>
+                            <option value="전북">전북</option>
+                            <option value="전남">전남</option>
+                            <option value="경북">경북</option>
+                            <option value="경남">경남</option>
+                            <option value="제주">제주</option>
+                          </select>
                         ) : (
                           <p>{formData.region}</p>
                         )}

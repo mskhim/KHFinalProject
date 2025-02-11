@@ -27,11 +27,11 @@ public class JwtUtil {
 
         return Jwts.builder()
                 .setSubject("userRegister")
+                .claim("no", user.getNo())
                 .claim("id", user.getId())
                 .claim("role", "ROLE_" + user.getRole())
+                .claim("pwd", user.getPwd())
                 .claim("provider", user.getProvider())
-                .claim("phone", user.getPhone())
-                .claim("gender", String.valueOf(user.getGender()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION_TIME))    
                 .signWith(SignatureAlgorithm.HS256, secretKey)
@@ -42,7 +42,9 @@ public class JwtUtil {
     public String createRefreshToken(User user) {
         return Jwts.builder()
                 .setSubject("refreshToken")
+                .claim("no", user.getNo())
                 .claim("id", user.getId())
+                .claim("role", "ROLE_" + user.getRole())
                 .claim("pwd", user.getPwd())
                 .claim("provider", user.getProvider())
                 .setIssuedAt(new Date())

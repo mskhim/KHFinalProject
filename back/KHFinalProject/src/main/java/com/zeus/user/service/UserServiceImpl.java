@@ -64,6 +64,48 @@ public class UserServiceImpl implements UserService {
         return passwordEncoder.matches(rawPassword, encodedPassword); // ✅ 비밀번호 비교
     }
     
+
+    //이메일로 아이디 찾기 기능을 위해 일반 유저 정보를 가져온다. 보안을 위해 아이디만 살려서 보낼것
+	@Override
+	public User findCommonUserByEmail(User user) {
+		if(mapper.findUserByEmail(user)==null) {
+			return null;
+		}
+		User idOnlyUser = new User();
+		idOnlyUser.setId(mapper.findUserByEmail(user).getId());
+		return idOnlyUser;
+	}
+
+	//이메일, 아이디로 비밀번호 찾기 기능을 위해 일반 유저 정보를 가져온다.
+	@Override
+	public User findCommonUserByEmailAndId(User user) {
+		if(mapper.findUserByEmailAndId(user)==null) {
+			return null;
+		}
+		User chekckUser = new User();
+		return chekckUser;
+	}
+
+	//아이디, 프로바이더, 임시비밀번호를 받아 db를 임시비밀번호로 업데이트
+	@Override
+	public boolean updateRandomPwdById(User user) {
+		String encodePwd = encodePassword(user.getPwd());
+		user.setPwd(encodePwd);
+		boolean flag=mapper.updateRandomPwdById(user);
+		return flag;
+	}
+
+	//user안에 id, nickname, email 셋중 하나의 값만 있을때 사용가능한 중복체크 메소드
+	@Override
+	public User checkUserExists(User user) {
+		if(mapper.checkUserExists(user)==null) {
+			return null;
+		}
+		User chekckUser = new User();
+		return chekckUser;
+	}
+
+    
     
     // ================== UserMapper 메서드 추가 ==================
     @Override
@@ -224,44 +266,6 @@ public class UserServiceImpl implements UserService {
 
         return response.getBody();
     }
-
-    //이메일로 아이디 찾기 기능을 위해 일반 유저 정보를 가져온다. 보안을 위해 아이디만 살려서 보낼것
-	@Override
-	public User findCommonUserByEmail(User user) {
-		if(mapper.findUserByEmail(user)==null) {
-			return null;
-		}
-		User idOnlyUser = new User();
-		idOnlyUser.setId(mapper.findUserByEmail(user).getId());
-		return idOnlyUser;
-	}
-
-	//이메일, 아이디로 비밀번호 찾기 기능을 위해 일반 유저 정보를 가져온다.
-	@Override
-	public User findCommonUserByEmailAndId(User user) {
-		if(mapper.findUserByEmailAndId(user)==null) {
-			return null;
-		}
-		User chekckUser = new User();
-		return chekckUser;
-	}
-
-	//아이디, 프로바이더, 임시비밀번호를 받아 db를 임시비밀번호로 업데이트
-	@Override
-	public boolean updateRandomPwdById(User user) {
-		boolean flag=mapper.updateRandomPwdById(user);
-		return flag;
-	}
-
-	//user안에 id, nickname, email 셋중 하나의 값만 있을때 사용가능한 중복체크 메소드
-	@Override
-	public User checkUserExists(User user) {
-		if(mapper.checkUserExists(user)==null) {
-			return null;
-		}
-		User chekckUser = new User();
-		return chekckUser;
-	}
 
 	
 
