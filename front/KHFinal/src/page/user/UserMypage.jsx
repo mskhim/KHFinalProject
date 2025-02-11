@@ -28,6 +28,16 @@ function UserMypage() {
     setData();
   }, []);
 
+ 
+
+  useEffect(() => {
+    const getData = async()=>{
+      return await getUserData();
+    }
+    console.log(getData());
+    setUserInfo(getData());
+  }, []);
+
   const [formData, setFormData] = useState(userInfo); // Copy of userInfo for edit
 
   // 아이디 input에 대한 참조 추가

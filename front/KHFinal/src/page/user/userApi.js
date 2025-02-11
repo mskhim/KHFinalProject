@@ -89,7 +89,6 @@ export const handleRegister = async (formData) => {
  * 로그인 처리 (JWT는 HttpOnly 쿠키에 저장되므로 따로 저장하지 않음)
  */
 export const handleLogin = async (id, provider, pwd) => {
-  console.log('🚀 로그인 요청:', id, provider);
   try {
     const response = await fetch('http://localhost:8080/user/login', {
       method: 'POST',
@@ -103,15 +102,15 @@ export const handleLogin = async (id, provider, pwd) => {
         provider: provider || '',
       }),
     });
-
     const data = await response.json();
     if (data.success) {
-      alert('로그인 성공!');
+      alert(`${data.nickname}님, 환영합니다!`);
     } else {
       alert(data.message);
     }
     return data;
   } catch (error) {
+    alert('실패');
     console.error('로그인 요청 실패:', error);
     return false;
   }
@@ -172,7 +171,7 @@ export const fetchWithAuth = async (url, options = {}) => {
 };
 
 /**
- * jwt 쿠키에 저장 되어있는지 확인하는 메소드
+ * jwt 쿠키에 저장 되어있는지 확인하는 메소/
  */
 export const checkAuthStatus = async () => {
   try {
@@ -186,6 +185,35 @@ export const checkAuthStatus = async () => {
     }
     const data = await response.json();
     return data; // { authenticated: true, user: {...} }
+  } catch (error) {
+    return { authenticated: false };
+  }
+};
+
+/*
+ * JWT쿠키 검사를 통해 로그인 상태를 확인한 후,
+ * 마이페이지에 회원 정보를 불러옴./
+ */
+export const getUserData = async () => {
+  try {
+    const response = await fetch('http://localhost:8080/user/getUserData', {
+      method: 'GET',
+      credentials: 'include', // ✅ 쿠키 자동 포함
+    });
+
+    if (!response.ok) {
+      return { authenticated: false };
+    }
+
+    const data = await response.json();
+    // const data = {
+    //   "authenticated", true,
+    //   "message", "JWT 유효",
+    //   "user", user
+    // };
+
+    console.log(data.user.id + '유저정보');
+    return data.user; // { authenticated: true, user: {...} }
   } catch (error) {
     return { authenticated: false };
   }

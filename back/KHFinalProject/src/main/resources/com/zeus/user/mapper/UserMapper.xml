@@ -26,11 +26,11 @@
 		)
 	</insert>
 
-	<!-- 아이디, 제공자, 비밀번호를 토대로 로그인 확인-->
+	<!-- 아이디, 제공자를 토대로 로그인 유저 반환후 비밀번호 헤싱해서 로그인 확인 확인-->
 	<select id="checkLogin" parameterType="User" resultType="User">
 		SELECT *
 		FROM USER_ACCOUNT
-		WHERE ID = #{id} AND PROVIDER = #{provider} AND PWD = #{pwd}   
+		WHERE ID = #{id} AND PROVIDER = #{provider}   
 	</select>
 	<!-- 아이디와 계정 제공자 로그인확인 -->
 	<select id="findUserByIdAndProvider" parameterType="User"
