@@ -31,10 +31,11 @@ export const insertEventByManager = async (formData) => {
         body: formData,
       }
     );
-
     alert('축제 등록이 완료되었습니다.!');
+    return true;
   } catch (error) {
     console.error('축제 등록 실패:', error);
     alert('등록 중 오류가 발생했습니다.');
+    return false;
   }
 };
