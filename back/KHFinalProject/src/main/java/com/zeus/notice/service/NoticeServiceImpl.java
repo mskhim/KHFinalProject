@@ -17,4 +17,9 @@ public class NoticeServiceImpl implements NoticeService {
 	    public List<Notice> getNotices() {
 	        return mapper.getNotices();
 	    }
+	 @Override
+	    public Notice getNoticeById(int no) {
+	        return mapper.getNoticeById(no); // ✅ 추가된 메서드
+	    }
+	 
 }

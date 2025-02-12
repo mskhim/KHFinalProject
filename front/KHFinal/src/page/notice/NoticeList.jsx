@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { Context } from '../../Context';
 import { useContext, useEffect, useState } from 'react';
 import { Pagination, Button } from 'react-bootstrap';
+import { fetchNotices } from './noticeApi';
 
 const NoticeList = () => {
   const { darkMode, setDarkMode, getDarkMode, getDarkModeHover } =
@@ -13,42 +14,15 @@ const NoticeList = () => {
   const totalPages = 5;
   const [notices, setNotices] = useState([]); //공지사항 데이터 상태
 
-  // ✅ 공지사항 데이터를 가져오는 비동기 함수
-  const fetchNotices = async () => {
-    try {
-      const response = await fetch('http://localhost:8080/notice'); // 백엔드 API 호출
-      if (!response.ok) {
-        throw new Error('서버 응답이 올바르지 않습니다.');
-      }
-      const data = await response.json();
-      setNotices(data); // 가져온 데이터 상태 업데이트
-    } catch (error) {
-      console.error('공지사항을 불러오는 중 오류 발생', error);
-    }
-  };
-
   useEffect(() => {
     setDarkMode(sessionStorage.getItem('darkMode') === 'true');
-    fetchNotices();
-  }, [darkMode, setDarkMode]);
+    const loadNotices = async () => {
+      const data = await fetchNotices(); // 공지사항 데이터 가져오기
+      setNotices(data);
+    };
 
-  // const notice = [
-  //   {
-  //     no: 1,
-  //     title: '[공지사항] 개인정보 처리방침 변경안내',
-  //     date: '2017.07.13',
-  //   },
-  //   {
-  //     no: 2,
-  //     title: '공지사항 안내입니다. 이용해주셔서 감사합니다',
-  //     date: '2017.06.15',
-  //   },
-  //   {
-  //     no: 3,
-  //     title: '공지사항 안내입니다. 이용해주셔서 감사합니다',
-  //     date: '2017.06.15',
-  //   },
-  // ];
+    loadNotices();
+  }, [darkMode, setDarkMode]);
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {

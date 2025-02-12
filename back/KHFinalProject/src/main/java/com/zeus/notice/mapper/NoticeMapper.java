@@ -6,4 +6,6 @@ import com.zeus.notice.domain.Notice;
 
 public interface NoticeMapper {
 	List<Notice> getNotices();
+	Notice getNoticeById(int no);
+
 }
