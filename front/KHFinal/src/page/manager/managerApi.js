@@ -23,15 +23,19 @@ export const selectPublicDataEvent = async () => {
 
 export const insertEventByManager = async (formData) => {
   try {
+    console.log(formData);
     const response = await fetch(
       'http://localhost:8080/manager/insertEventByManager',
       {
         method: 'POST',
         credentials: 'include',
-        body: formData,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       }
     );
-    alert('축제 등록이 완료되었습니다.!');
+
     return true;
   } catch (error) {
     console.error('축제 등록 실패:', error);

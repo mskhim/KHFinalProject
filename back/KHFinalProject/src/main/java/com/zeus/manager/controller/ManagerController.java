@@ -11,13 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.zeus.common.config.JwtUtil;
 import com.zeus.event.domain.Event;
+import com.zeus.event.domain.EventDTO;
 import com.zeus.event.domain.EventImg;
 import com.zeus.manager.service.ManagerService;
 
@@ -37,9 +38,7 @@ public class ManagerController {
 
 	@PostMapping("/insertEventByManager")
 	public ResponseEntity<?> insertEventByManager(@CookieValue(name = "jwt", required = false) String jwtToken,
-			@RequestParam("eventNo") int eventNo, // 공공데이터 이벤트 번호
-			@RequestParam("price") int price, @RequestParam("mainImage") MultipartFile mainImage,
-			@RequestParam("subImages") MultipartFile[] subImages) {
+			@RequestBody EventDTO request) {
 		log.info("컨트롤러실행");
 		try {
 			if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken)) {
@@ -51,33 +50,26 @@ public class ManagerController {
 			int no = JwtUtil.validateToken(jwtToken).get("no", Integer.class);
 			Event event = new Event();
 			event.setUserAccountNo(no);
-			event.setPrice(price);
-			event.setPublicDataEventNo(eventNo);
+			event.setPrice(request.getPrice());
+			event.setPublicDataEventNo(request.getPublicDataEventNo());
 			// 이벤트 테이블에 이벤트 저장, 이후에 event의 no값은 변경된 no 값으로 변경
 			event = service.insertEventByManager(event);
 			// event.getNo()는 이벤트 리스트의 키no
 			// ✅ 대표 이미지 저장
-			String mainImagePath = saveFile(mainImage, "Event_" + event.getNo() + "_Title", 1);
+			String mainImagePath = request.getThumbUrl();
 			EventImg ei = new EventImg();
 			ei.setEventNo(event.getNo());
 			ei.setThumbUrl(mainImagePath);
 			service.insertEventImgByManagerThumb(ei);
 			// ✅ 서브 이미지 저장
 
-			String[] subImagePaths = new String[subImages.length];
-			for (int i = 0; i < subImages.length; i++) {
-				subImagePaths[i] = saveFile(subImages[i], "Event_" + event.getNo() + "_Sub", i + 1);
+			for (int i = 0; i < request.getUrl().size(); i++) {
 				ei.setThumbUrl(null);
-				ei.setUrl(subImagePaths[i]);
+				ei.setUrl(request.getUrl().get(i));
 				service.insertEventImgByManagerSub(ei);
 			}
 
 			// ✅ DB에 저장할 정보 출력 (이후 서비스에 연결)
-			System.out.println("축제명: " + eventNo);
-			System.out.println("대표 이미지 경로: " + mainImagePath);
-			for (String path : subImagePaths) {
-				System.out.println("서브 이미지 경로: " + path);
-			}
 
 			return ResponseEntity.ok("파일 업로드 성공");
 		} catch (Exception e) {

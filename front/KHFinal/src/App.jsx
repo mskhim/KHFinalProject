@@ -5,7 +5,6 @@ import root from './Routes/root';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { Chart, registerables } from 'chart.js';
-
 Chart.register(...registerables);
 
 function App() {

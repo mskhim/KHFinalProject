@@ -21,6 +21,15 @@
 		ON A.PUBLIC_DATA_EVENT_NO = B.NO
 		WHERE A.USER_ACCOUNT_NO=#{no}
 	</select>
+
+	<select id="selectEventList" parameterType="int"
+		resultType="EventSelectList">
+		SELECT E.NO, NAME, START_DATE,END_DATE,THUMBURL FROM EVENT
+		E LEFT JOIN EVENT_IMG I ON E.NO=I.EVENT_NO
+		LEFT JOIN PUBLIC_DATA_EVENT P ON E.PUBLIC_DATA_EVENT_NO = P.NO
+		WHERE I.THUMBURL IS NOT NULL
+		ORDER BY E.NO DESC
+	</select>
 	
 	
 </mapper>

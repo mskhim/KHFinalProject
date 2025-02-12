@@ -13,4 +13,5 @@ public class EventDTO {
     private int price;         // 이용권 가격
     private Double rating;         // 평점
     private String thumbUrl; // 메인 이미지 URL (유니크)
+    private List<String> url;
 }

@@ -4,8 +4,11 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { Container, Form, Button } from 'react-bootstrap';
 import { insertEventByManager, selectPublicDataEvent } from './managerApi';
+import { useNavigate } from 'react-router-dom';
+import { uploadImageToFirebase } from '../../utils/uploadToFirebase';
 
 const ManagerInsert = () => {
+  const navigate = useNavigate();
   const { getDarkModeHover, getDarkMode } = useContext(Context);
   const [festivalList, setFestivalList] = useState([]); // 공공데이터 축제 리스트
   const [selectedFestival, setSelectedFestival] = useState(''); // 선택한 축제
@@ -13,7 +16,7 @@ const ManagerInsert = () => {
   const [ticketPrice, setTicketPrice] = useState(''); // 티켓 가격 추가
   const [mainImage, setMainImage] = useState(null); // 대표 이미지
   const [subImages, setSubImages] = useState([]); // 서브 이미지 리스트 (최대 20장)
-
+  const [uploading, setUploading] = useState(false);
   // ✅ 공공데이터 API에서 축제 리스트 가져오기
   useEffect(() => {
     const getSelectPublicDataEvent = async () => {
@@ -53,7 +56,6 @@ const ManagerInsert = () => {
     }
   };
 
-  // ✅ 데이터 전송 준비 (fetch 사용)
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!selectedFestival || !mainImage || ticketPrice === '') {
@@ -61,19 +63,42 @@ const ManagerInsert = () => {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('eventNo', selectedFestivalNo);
-    formData.append('price', ticketPrice);
-    formData.append('mainImage', mainImage);
-    subImages.forEach((file) => {
-      formData.append('subImages', file);
-    });
-    await insertEventByManager(formData);
+    try {
+      setUploading(true);
+
+      // ✅ 대표 이미지 Firebase 업로드 후 URL 가져오기
+      const thumbUrl = await uploadImageToFirebase(mainImage, 'events/main');
+
+      // ✅ 서브 이미지 Firebase 업로드 후 URL 가져오기
+      const url = await Promise.all(
+        subImages.map((file) => uploadImageToFirebase(file, 'events/sub'))
+      );
+
+      // ✅ Firebase에서 받은 URL만 백엔드에 전송
+      const formData = {
+        publicDataEventNo: selectedFestivalNo,
+        price: ticketPrice,
+        thumbUrl,
+        url,
+      };
+      const flag = await insertEventByManager(formData);
+      if (flag) {
+        alert('축제가 등록되었습니다.');
+        navigate('/eventList');
+      }
+    } catch (error) {
+      console.error('업로드 중 오류 발생:', error);
+    } finally {
+      setUploading(false);
+    }
   };
+  // ✅ 축제 선택 핸들러
   const handleSelectChange = (e) => {
     setSelectedFestival(e.target.value);
     setSelectedFestivalNo(e.target.value);
+    console.log(selectedFestivalNo);
   };
+
   return (
     <>
       <Header />
@@ -92,7 +117,7 @@ const ManagerInsert = () => {
             >
               <option value="">축제를 선택하세요</option>
               {festivalList.map((festival) => (
-                <option key={festival.no} value={festival.no}>
+                <option key={festival.no} value={festival.publicDataEventNo}>
                   {festival.name}
                 </option>
               ))}
@@ -165,7 +190,7 @@ const ManagerInsert = () => {
             variant="primary"
             className={` ${getDarkModeHover()} w-100`}
           >
-            축제 등록
+            {uploading ? '업로드 중...' : '축제 등록'}
           </Button>
         </Form>
       </Container>
