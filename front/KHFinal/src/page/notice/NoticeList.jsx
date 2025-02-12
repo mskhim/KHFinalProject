@@ -7,7 +7,8 @@ import { useContext, useEffect, useState } from "react";
 import { Pagination, Button } from "react-bootstrap";
 
 const NoticeList = () => {
-  const { darkMode, setDarkMode, getDarkMode } = useContext(Context);
+  const { darkMode, setDarkMode, getDarkMode, getDarkModeHover } =
+    useContext(Context);
 
   useEffect(() => {
     setDarkMode(sessionStorage.getItem("darkMode") === "true");
@@ -106,7 +107,7 @@ const NoticeList = () => {
 
       <Pagination
         className={`EventListViewWrap-custom-pagination justify-content-center mt-4 ${getDarkMode()}`}
-        variant="dark"
+        variant="none"
       >
         <Pagination.Prev
           disabled={currentPage === 1}

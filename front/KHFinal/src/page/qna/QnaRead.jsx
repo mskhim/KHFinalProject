@@ -24,6 +24,20 @@ const QNARead = () => {
         "안녕하세요. 첫 번째 질문의 내용입니다. 답변을 기다리고 있습니다.",
       date: "2024.02.06",
     },
+    {
+      no: 2,
+      title: "Q&A 질문 내용 2",
+      festival: "진주 남강 유등축제",
+      content: "두 번째 질문의 내용입니다. 답변을 기다리고 있습니다.",
+      date: "2024.02.05",
+    },
+    {
+      no: 3,
+      title: "Q&A 질문 내용 3",
+      festival: "부산 국제 영화제",
+      content: "세 번째 질문의 내용입니다. 답변을 기다리고 있습니다.",
+      date: "2024.02.04",
+    },
   ];
 
   const [qnaRead, setQnaRead] = useState({});
@@ -69,7 +83,7 @@ const QNARead = () => {
               <Button
                 variant={darkMode ? "outline-light" : "outline-dark"}
                 className="QNARead-btn"
-                onClick={() => navigate("/QnaModify", { state: { qnaRead } })}
+                onClick={() => navigate(`/QnaModify/`, { state: { qnaRead } })}
               >
                 수정
               </Button>
