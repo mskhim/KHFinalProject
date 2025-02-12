@@ -1,37 +1,54 @@
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
-import "./notice.css";
-import { Link } from "react-router-dom";
-import { Context } from "../../Context";
-import { useContext, useEffect, useState } from "react";
-import { Pagination, Button } from "react-bootstrap";
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+import './notice.css';
+import { Link } from 'react-router-dom';
+import { Context } from '../../Context';
+import { useContext, useEffect, useState } from 'react';
+import { Pagination, Button } from 'react-bootstrap';
 
 const NoticeList = () => {
   const { darkMode, setDarkMode, getDarkMode, getDarkModeHover } =
     useContext(Context);
-
-  useEffect(() => {
-    setDarkMode(sessionStorage.getItem("darkMode") === "true");
-  }, [darkMode, setDarkMode]);
-  const notice = [
-    {
-      no: 1,
-      title: "[공지사항] 개인정보 처리방침 변경안내",
-      date: "2017.07.13",
-    },
-    {
-      no: 2,
-      title: "공지사항 안내입니다. 이용해주셔서 감사합니다",
-      date: "2017.06.15",
-    },
-    {
-      no: 3,
-      title: "공지사항 안내입니다. 이용해주셔서 감사합니다",
-      date: "2017.06.15",
-    },
-  ];
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 5;
+  const [notices, setNotices] = useState([]); //공지사항 데이터 상태
+
+  // ✅ 공지사항 데이터를 가져오는 비동기 함수
+  const fetchNotices = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/notice'); // 백엔드 API 호출
+      if (!response.ok) {
+        throw new Error('서버 응답이 올바르지 않습니다.');
+      }
+      const data = await response.json();
+      setNotices(data); // 가져온 데이터 상태 업데이트
+    } catch (error) {
+      console.error('공지사항을 불러오는 중 오류 발생', error);
+    }
+  };
+
+  useEffect(() => {
+    setDarkMode(sessionStorage.getItem('darkMode') === 'true');
+    fetchNotices();
+  }, [darkMode, setDarkMode]);
+
+  // const notice = [
+  //   {
+  //     no: 1,
+  //     title: '[공지사항] 개인정보 처리방침 변경안내',
+  //     date: '2017.07.13',
+  //   },
+  //   {
+  //     no: 2,
+  //     title: '공지사항 안내입니다. 이용해주셔서 감사합니다',
+  //     date: '2017.06.15',
+  //   },
+  //   {
+  //     no: 3,
+  //     title: '공지사항 안내입니다. 이용해주셔서 감사합니다',
+  //     date: '2017.06.15',
+  //   },
+  // ];
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
@@ -63,7 +80,7 @@ const NoticeList = () => {
                     className="Notice-search-input"
                   />
                   <Button
-                    variant={darkMode ? "outline-light" : "outline-dark"}
+                    variant={darkMode ? 'outline-light' : 'outline-dark'}
                     className="Notice-btn Notice-btn-dark"
                   >
                     검색
@@ -85,20 +102,28 @@ const NoticeList = () => {
                 </tr>
               </thead>
               <tbody>
-                {notice.map((data) => (
-                  <tr key={data.no}>
-                    <td>{data.no}</td>
-                    <td className="Notice-td-title">
-                      <Link
-                        to={`/noticeRead/${data.no}`}
-                        className={getDarkMode()}
-                      >
-                        {data.title}
-                      </Link>
+                {notices.length > 0 ? (
+                  notices.map((data) => (
+                    <tr key={data.no}>
+                      <td>{data.no}</td>
+                      <td className="Notice-td-title">
+                        <Link
+                          to={`/noticeRead/${data.no}`}
+                          className={getDarkMode()}
+                        >
+                          {data.title}
+                        </Link>
+                      </td>
+                      <td>{data.subDate}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="3" style={{ textAlign: 'center' }}>
+                      불러올 공지사항이 없습니다.
                     </td>
-                    <td>{data.date}</td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
