@@ -10,7 +10,7 @@
 		INSERT INTO USER_ACCOUNT (
 		NO, ID, PWD,NAME,EMAIL, PHONE, GENDER, REG_DATE, ROLE, BIRTH, REGION, PROVIDER,NICKNAME
 		) VALUES (
-		SEQ_NO.NEXTVAL,
+		SEQ_USER_ACCOUNT_NO.NEXTVAL,
 		#{id},
 		#{pwd},
 		#{name},
@@ -25,6 +25,36 @@
 		#{nickname}
 		)
 	</insert>
+	
+	<!-- ################################################################################################## -->
+	<!-- 회원 정보를 수정. -->
+	<!-- resultType="User" -->
+	<update id="updateUserData" parameterType="User">
+	    UPDATE USER_ACCOUNT
+	    SET 
+	        <choose>
+	            <when test="provider == 'common'">
+	                NAME = #{name},
+	                PWD = #{pwd},
+	                NICKNAME = #{nickname},
+	                BIRTH = #{birth},
+	                GENDER = #{gender},
+	                PHONE = #{phone},
+	                REGION = #{region}
+	            </when>
+	            <otherwise>
+	                NAME = #{name},
+	                PHONE = #{phone},
+	                GENDER = #{gender},
+	                BIRTH = #{birth},
+	                REGION = #{region},
+	                NICKNAME = #{nickname},
+	                PROVIDER = #{provider}
+	            </otherwise>
+	        </choose>
+	    WHERE NO = #{no}
+	</update>
+	<!-- ################################################################################################## -->
 
 	<!-- 아이디, 제공자를 토대로 로그인 유저 반환후 비밀번호 헤싱해서 로그인 확인 확인-->
 	<select id="checkLogin" parameterType="User" resultType="User">

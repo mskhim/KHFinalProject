@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -350,6 +351,50 @@ public class UserController {
 	        "user", user
 	    ));
 	}
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//회원 정보 수정.
+	@PutMapping("/updateUserData")
+	public ResponseEntity <Map <String, Object>> updateUserData (@CookieValue (name = "jwt", required = false) String jwtToken,
+																@RequestBody User updatedUser)
+	{
+		// JWT 토큰 검증.
+		if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken))
+		{
+			return ResponseEntity.ok(Map.of(
+					"authenticated", false,
+					"message", "JWT가 없거나 만료됨"));
+		}
+		
+		// JWT에서 userId와 provider 정보 가져오기.
+		String userId = JwtUtil.validateToken(jwtToken).get("id", String.class);
+		String provider = JwtUtil.validateToken(jwtToken).get("provider", String.class);
+		
+		// 수정할 회원 객체 세팅.
+		updatedUser.setId(userId);
+		updatedUser.setProvider(provider);
+		
+		// 회원 정보 수정 서비스 호출.
+		User updated = service.updateUserData(updatedUser);	// service에서 회원 정보 수정.
+		
+		// 수정된 정보 반환.
+		if (updated != null)
+		{
+			return ResponseEntity.ok(Map.of(
+					"authenticated", true,
+					"message", "회원 정보가 수정되었습니다.",
+					"user", updated));
+		} else
+		{
+			return ResponseEntity.ok(Map.of(
+					"authenticated", false,
+					"message", "회원 정보 수정 실패."));
+		}
+	}
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	
 	
 	//--------------------------------------------------api메소드가 아닌 컨트롤러용 메소드
 	//  JWT 쿠키 삭제 메소드
