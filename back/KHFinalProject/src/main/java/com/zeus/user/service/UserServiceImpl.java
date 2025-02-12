@@ -46,8 +46,7 @@ public class UserServiceImpl implements UserService {
     
     @Value("${jwt.secret}") // application.properties에서 비밀키 읽기
     private String secretKey;
-
-
+    
 
     private final long EXPIRATION_TIME = 1000 * 60 * 60; // 1시간 (밀리초 단위)
 
@@ -111,8 +110,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByIdAndProvider(User user) {
         return mapper.findUserByIdAndProvider(user);
-    }
-    
+    }  
     
     @Override
     public boolean insert(User user) {
@@ -137,6 +135,28 @@ public class UserServiceImpl implements UserService {
         }
     }
     
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // 회원 정보 수정.
+	@Override
+	public User updateUserData(User user)
+	{
+		// Mybatis를 호출하여 회원 정보 수정 진행.
+		int rowsAffected = mapper.updateUserData(user);
+		
+		if (rowsAffected > 0)
+		{
+			// 수정된 회원 정보를 반환.
+			return user;
+		} else
+		{
+			// 회원 정보 수정 실패.
+			return null;
+		}
+	}
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
     //로그인 체크, id와 provider로 user 정보를 가져와헤싱해서 로그인확인
     //provider가 common 이라면 헤싱해서 로그인 이외에는 api 로그인이므로 id와 provider만 일치하는지 확인
     @Override
@@ -160,7 +180,6 @@ public class UserServiceImpl implements UserService {
     		return mapper.checkLogin(user);
     	}
     }
-
     
     // ================== 네이버 로그인 ==================
  // 엑세스 토큰으로 DB에서 사용자 정보 조회
@@ -266,8 +285,5 @@ public class UserServiceImpl implements UserService {
 
         return response.getBody();
     }
-
-	
-
 }
 

@@ -3,7 +3,8 @@
   font-size: 1rem;
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid;
 }
 
 .MyPageMain-input-group label {
@@ -25,10 +26,6 @@
   box-sizing: border-box; /* Ensures padding doesn't affect the width */
 }
 
-.MyPageMain-input-group {
-  margin-bottom: 15px;
-}
-
 .MyPageMain-card-body {
   display: flex;
   flex-direction: column;
@@ -39,21 +36,15 @@
 }
 
 
-.MyPageMain-input-with-button input {
-  margin-top: 20px;
-}
-
 .MyPageMain-input-with-button {
   display: flex;
   align-items: center;
   gap: 10px; /* 입력창과 버튼 간 간격 */
-  position: relative;
-  width: 100%;
+  margin-top: 10px; /* 레이블과의 간격 */
 }
 
 .MyPageMain-input-with-button input {
   width: 80%; /* input의 너비 고정 */
-  margin-top: 20px;
 }
 
 .MyPageMain-input-with-button button {
@@ -61,6 +52,7 @@
   min-width: 120px; /* 버튼의 최소 너비 고정 */
   max-width: 120px; /* 버튼의 최소 너비 고정 */
   height: 40px; /* 버튼 높이 고정 */
+  margin-top: 0px; /* 버튼의 마진을 0으로 설정 */
 }
 
 .MyPageMain-input-with-button label {
@@ -203,11 +195,6 @@
 .MyPageMain-info-group {
   display: flex;
   flex-direction: column;
-}
-
-.MyPageMain-info-group > * {
-  margin-bottom: 10px; /* 항목 간 간격 */
-  border-bottom: 1px solid; /* 각 항목 사이에 선 추가 */
 }
 
 .MyPageMain-info-group > *:last-child {

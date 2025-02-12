@@ -12,4 +12,7 @@ public interface UserMapper {
 	public boolean updateRandomPwdById(User user);
 	public User checkUserExists(User user);
 	
+	//////////////////////////////////////////////
+	public int updateUserData (User user);
+	/////////////////////////////////////////////
 }

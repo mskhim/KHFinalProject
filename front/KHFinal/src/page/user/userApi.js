@@ -217,6 +217,35 @@ export const getUserData = async () => {
   }
 };
 
+/*
+* JWT쿠키 검사를 통해 로그인 상태를 확인한 후,
+* 마이페이지에 불러온 회원 정보를 수정함./
+*/
+export const updateUserData = async (formData) => {
+  try {
+    const response = await fetch('http://localhost:8080/user/updateUserData', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include', // ✅ 쿠키 자동 포함
+      body: JSON.stringify(formData),
+    });
+
+    if (!response.ok) {
+      return { authenticated: false };
+    }
+
+    const data = await response.json();
+    return data; // { authenticated: true, user: {...} }
+  } catch (error) {
+    return { authenticated: false };
+  }
+}
+
+
+
+
 /**
  * 이메일을 받아서 일반회원가입 User를 가져오는 API, 아이디만 가져올것
  */
