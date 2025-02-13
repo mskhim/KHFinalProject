@@ -1,8 +1,8 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useRef } from 'react';
 import { Form, Button, Row, Col, Pagination } from 'react-bootstrap';
 import { ButtonDarkMode } from '../../../components/ui';
 import { Context } from '../../../Context';
-import { selectEventReview } from '../eventApi';
+import { selectEventReview, insertEventReview } from '../eventApi';
 import { useParams } from 'react-router-dom';
 import { getUserData } from '../../user/userApi';
 
@@ -90,19 +90,15 @@ const StarRating = ({ rating = 0, setRating, interactive = false }) => {
 const ReviewSection = () => {
   // ⬅ `rating` 기본값 설정
   const { getDarkMode } = useContext(Context);
-  const mockReviews = [];
-
+  const contentRef = useRef(null);
   const param = useParams();
   const [eventReview, setEventReview] = useState([]);
   const [rating, setRating] = useState(0);
   const [pagenation, setPagenation] = useState(1);
-  const [reviews, setReviews] = useState(mockReviews);
   const [page, setPage] = useState(1);
   const reviewsPerPage = 5;
   const [isLoading, setIsLoading] = useState(false);
-
   const [newReview, setNewReview] = useState({
-    name: '',
     rating: 5, // 기본 별점
     content: '',
   });
@@ -116,33 +112,35 @@ const ReviewSection = () => {
   };
   useEffect(() => {
     getEventReview();
-  }, [page]);
-
-  // 현재 페이지에 해당하는 리뷰 가져오기
+  }, [page, newReview]);
 
   // 리뷰 추가
+
   const addReview = async () => {
     const user = await getUserData();
-    console.log(user);
-    if (user === undefined) {
-      alert('로그인 후 이용해주세요!');
+    if (!user) {
+      alert('로그인 후 이용해주세요.');
       return;
     }
-    if (!newReview.content) {
-      alert('리뷰 내용을 입력해주세요!');
+    if (!contentRef.current.value) {
+      alert('리뷰 내용을 입력해주세요.');
       return;
     }
-    const newEntry = {
-      id: reviews.length + 1,
-      name: newReview.name,
-      rating: newReview.rating,
-      content: newReview.content,
-      date: new Date().toISOString().split('T')[0],
-    };
 
-    setReviews([newEntry, ...reviews]);
-    setNewReview({ name: '', rating: 5, content: '' });
-    setPage(1);
+    // ✅ `setState`의 최신 값으로 API 실행
+    setNewReview(async (prev) => {
+      const updatedReview = {
+        ...prev,
+        name: user.name,
+        eventNo: param.no,
+        userAccountNo: user.no,
+        content: contentRef.current.value,
+      };
+      console.log('최신 newReview:', updatedReview); // ✅ 최신 값 확인
+      await insertEventReview(updatedReview); // ✅ 최신 상태를 반영한 값으로 API 호출
+      setNewReview({ rating: 5, content: '' }); // ✅ 리뷰 작성 후 초기화
+      contentRef.current.value = ''; // ✅ 리뷰 작성 후 초기화
+    });
   };
 
   return (
@@ -175,10 +173,7 @@ const ReviewSection = () => {
               as="textarea"
               rows={3}
               placeholder="리뷰 내용을 입력하세요"
-              value={newReview.content}
-              onChange={(e) =>
-                setNewReview({ ...newReview, content: e.target.value })
-              }
+              ref={contentRef}
             />
           </Col>
         </Row>

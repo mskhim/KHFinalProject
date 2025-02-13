@@ -74,4 +74,9 @@
 		RATING from event_review
 		WHERE EVENT_NO= #{no}
 	</select>
+	
+	<insert id="insertEventReview" parameterType="EventReview"
+		>
+		INSERT INTO EVENT_REVIEW VALUES(SEQ_EVENT_REVIEW_NO.NEXTVAL,#{content},SYSDATE,#{eventNo},#{userAccountNo},#{rating})
+	</insert>
 </mapper>

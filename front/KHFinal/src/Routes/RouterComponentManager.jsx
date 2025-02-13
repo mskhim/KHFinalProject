@@ -1,58 +1,24 @@
-import { Routes, Route } from 'react-router-dom';
-import CommonLayout from '../page/layout/CommonLayout';
-import Main from '../page/main/Main';
-import EventList from '../page/event/EventList';
-import EventRead from '../page/event/EventRead';
-import EventCalendar from '../page/eventCalendar/EventCalendar';
-import EventMap from '../page/eventMap/EventMap';
-import NoticeList from '../page/notice/NoticeList';
-import NoticeRead from '../page/notice/NoticeRead';
-import QnaList from '../page/qna/QnaList';
-import QnaInsert from '../page/qna/QnaInsert';
-import QnaModify from '../page/qna/QnaModify';
-import QnaRead from '../page/qna/QnaRead';
-import QnaReInsert from '../page/qna/QnaReInsert';
-import UserLoginPage from '../page/user/UserLoginPage';
-import UserLoginSuccess from '../page/user/UserLoginSuccess';
-import UserInsert from '../page/user/UserInsert';
-import UserInsertCommon from '../page/user/UserInsertCommon';
-import UserFind from '../page/user/UserFind';
-import Unauthorized from '../components/Unauthorized';
+import { Route, Routes } from 'react-router-dom';
+import { ProtectedRoute } from '../components';
+import { ManagerLayout } from '../page/layout';
+import { ManagerMain, ManagerEventInsert, ManagerStats } from '../page/manager';
 import NotFound from '../page/common/NotFound';
+import ErrorBoundary from '../components/ErrorBoundary';
 
-const RouterComponentCommon = () => {
+const RouterComponentManager = () => {
   return (
-    <Routes>
-      <Route path="/" element={<CommonLayout />}>
-        {/* 메인 페이지 */}
-        <Route index element={<Main />} />
-        {/* 이벤트 관련 페이지 */}
-        <Route path="eventList" element={<EventList />} />
-        <Route path="eventRead/:no" element={<EventRead />} />
-        <Route path="eventCalendar" element={<EventCalendar />} />
-        <Route path="eventMap" element={<EventMap />} />
-        {/* 공지사항 관련 페이지 */}
-        <Route path="noticeList" element={<NoticeList />} />
-        <Route path="noticeRead/:no" element={<NoticeRead />} />
-        {/* QnA 관련 페이지 */}
-        <Route path="qnaList" element={<QnaList />} />
-        <Route path="qnaInsert" element={<QnaInsert />} />
-        <Route path="qnaModify/:no" element={<QnaModify />} />
-        <Route path="qnaRead/:no" element={<QnaRead />} />
-        <Route path="qnaReInsert/:no" element={<QnaReInsert />} />
-        {/* 유저 관련 인증/가입 페이지 */}
-        <Route path="userLoginPage" element={<UserLoginPage />} />
-        <Route path="userLoginSuccess" element={<UserLoginSuccess />} />
-        <Route path="userInsert" element={<UserInsert />} />
-        <Route path="userFind" element={<UserFind />} />
-        <Route path="UserInsertCommon" element={<UserInsertCommon />} />
-        {/* 권한 없음 페이지 */}
-        <Route path="unauthorized" element={<Unauthorized />} />
-        {/* 존재하지 않는 페이지 (404) */}
-        <Route path="*" element={<NotFound />} />
-      </Route>
-    </Routes>
+    <ProtectedRoute requiredRole={1} endpoint="jwtManager">
+      <ErrorBoundary>
+        <Routes>
+          <Route path="/" element={<ManagerLayout />}>
+            <Route path="managerEventInsert" element={<ManagerEventInsert />} />
+            <Route path="managerStats" element={<ManagerStats />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        </Routes>
+      </ErrorBoundary>
+    </ProtectedRoute>
   );
 };
 
-export default RouterComponentCommon;
+export default RouterComponentManager;

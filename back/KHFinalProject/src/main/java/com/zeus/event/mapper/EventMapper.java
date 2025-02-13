@@ -24,5 +24,6 @@ public interface EventMapper {
 	int selectEventReadReviewCount(SortDTO sortDTO);
 	//이벤트 리뷰의 평균 별점 합계
 	List<Double> selectEventReadReviewRating(SortDTO sortDTO);
+	boolean insertEventReview(EventReview eventReview);
 	
 }

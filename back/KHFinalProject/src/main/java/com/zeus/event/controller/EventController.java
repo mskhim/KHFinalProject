@@ -1,14 +1,16 @@
 package com.zeus.event.controller;
 
 
-import java.io.Console;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -77,12 +79,12 @@ public class EventController {
 	}
 	
 	//축제 리뷰 조회
+//	@PreAuthorize("hasAnyAuthority('ROLE_0', 'ROLE_1')")
 	@GetMapping("/selectEventReview")
 	public ResponseEntity<Map<String, Object>> selectEventRivew(@RequestParam int page, @RequestParam int no) {
 		SortDTO sortDTO = new SortDTO();
 		sortDTO.setNo(no);
 		sortDTO.setPage(page);
-	
 		List<EventReview> dataList= service.selectEventReview(sortDTO);
 
 	    return ResponseEntity.ok(Map.of(
@@ -90,6 +92,22 @@ public class EventController {
 	        "dataList", dataList,
 	        "rating",service.selectEventReviewRating(sortDTO),
 	        "count",service.selectEventReviewCount(sortDTO)
+	    ));
+	}
+	
+	//축제 리뷰 추가
+	@PostMapping("/insertEventReview")
+	public ResponseEntity<Map<String, Object>> insertEventReview(@CookieValue(name = "jwt", required = false) String jwtToken,@RequestBody EventReview eventReview) { //  쿠키에서 JWT 가져오기
+		if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken)) {
+			log.info("토큰만료");
+	        return ResponseEntity.ok(Map.of("authenticated", false, "message", "JWT가 없거나 만료됨"));
+	    }
+		log.info("시작");
+	   service.insertEventReview(eventReview);
+	   
+	    return ResponseEntity.ok(Map.of(
+		        "authenticated", true,
+		        "message", "JWT 유효"
 	    ));
 	}
 }

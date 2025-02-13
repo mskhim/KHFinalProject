@@ -60,5 +60,11 @@ public class EventServiceImpl implements EventService {
 		return mapper.selectEventReadReviewCount(sortDTO);
 	}
 
+	@Override
+	public boolean insertEventReview(EventReview eventReview) {
+		return mapper.insertEventReview(eventReview);
+		
+	}
+
 	
 }

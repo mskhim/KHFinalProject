@@ -24,5 +24,7 @@ public interface EventService {
   Double selectEventReviewRating(SortDTO sortDTO);
   //이벤트 리뷰 페이지네이션
   int selectEventReviewCount(SortDTO sortDTO);
+  //리뷰 인서트
+  boolean insertEventReview(EventReview eventReview);
   
 }

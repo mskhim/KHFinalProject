@@ -1,3 +1,5 @@
+import { stringify } from 'uuid';
+
 /**
  * 이벤트 리스트 조회
  */
@@ -61,6 +63,30 @@ export const selectEventReview = async (no, page) => {
   } catch (error) {
     alert('오류가 발생했습니다. ' + error.message);
     throw error;
+  }
+};
+
+/**
+ * 댓글입력
+ */
+export const insertEventReview = async (formData) => {
+  try {
+    const response = await fetch(
+      'http://localhost:8080/event/insertEventReview',
+      {
+        method: 'POST',
+        credentials: 'include', // ✅ 쿠키 자동 포함
+        body: JSON.stringify(formData),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    alert('리뷰를 등록해주셔서 감사합니다.');
+  } catch (error) {
+    alert('리뷰 등록에 실패했습니다.');
+    console.error('리뷰 등록 실패:', error);
   }
 };
 
