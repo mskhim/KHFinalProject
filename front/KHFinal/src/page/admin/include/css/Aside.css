@@ -1,28 +1,20 @@
 .admin-aside {
-  width: 250px;
-  height: 100vh;
+  min-width: 250px;
+  min-height: 100vh;
   background: #2c3e50;
   color: white;
   flex-direction: column;
-  padding: 20px;
-  position: fixed;
 }
 
 .admin-aside-brand h2 {
   font-size: 24px;
   text-align: center;
-  margin-top: 20px;
-  padding-bottom: 0px;
 }
 
 .admin-aside-brand h2 a {
   color: black;
   text-decoration: none;
   font-weight: bolder;
-}
-
-.admin-aside-nav {
-  flex-grow: 1;
 }
 
 .admin-aside-nav a {

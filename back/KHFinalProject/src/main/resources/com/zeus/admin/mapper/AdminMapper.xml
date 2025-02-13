@@ -4,4 +4,10 @@
 	<insert id="insert">
 	insert into test values(test_seq.NEXTVAl,#{name})
 	</insert>
+	
+	
+	<select id="managerSelectAllBySearch" resultType="User" parameterType="User">
+		SELECT * FROM USER_ACCOUNT WHERE ROLE = 1 AND NAME LIKE '%'||#{name}||'%' ORDER BY NO ASC
+	</select>
+
 </mapper>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Table,
@@ -16,68 +16,25 @@ import {
   BsChevronCompactUp,
 } from "react-icons/bs";
 import PermissionModal from "./PermissionModal"; // 권한 추가 모달 컴포넌트 임포트
+import { managerSelectAllBySearch } from "./adminApi"; // adminAPI에서 함수 임포트
 
 const ManagerManage = () => {
   // 객체 배열 변수
-  const [items, setItems] = useState([
-    {
-      no: 1,
-      name: "서울",
-      id: "seoul",
-      pwd: 1234,
-      phone: "010-1111-1111",
-      reg_date: "2025-02-05",
-      permissions: ["2025 해돋이 행사"],
-    },
-    {
-      no: 2,
-      name: "경기도",
-      id: "gyeonggi",
-      pwd: 1234,
-      phone: "010-2222-2222",
-      reg_date: "2025-02-05",
-      permissions: ["천을산 해맞이"],
-    },
-    {
-      no: 3,
-      name: "인천",
-      id: "incheon",
-      pwd: 1234,
-      phone: "010-3333-3333",
-      reg_date: "2025-02-05",
-      permissions: ["해돋이행사"],
-    },
-  ]);
-  const [showPermission, setShowPermission] = useState({});
-  const [showModal, setShowModal] = useState(false);
-  const [currentRow, setCurrentRow] = useState(null);
-  const [newPermission, setNewPermission] = useState("");
+  const [items, setItems] = useState([]);
 
-  const handleTogglePermission = (index) => {
-    setShowPermission((prev) => ({
-      ...prev,
-      [index]: !prev[index],
-    }));
-  };
-
-  const handleShowModal = (index) => {
-    setCurrentRow(index);
-    setShowModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setNewPermission("");
-  };
-
-  const handleAddPermission = (permission) => {
-    if (permission && currentRow !== null) {
-      const updatedItems = [...items];
-      updatedItems[currentRow].permissions.push(permission);
-      setItems(updatedItems);
-      handleCloseModal();
+  const getList = async (name) => {
+    const data = await managerSelectAllBySearch(name);
+    if (data !== null) {
+      setItems(data);
     }
   };
+
+  useEffect(() => {
+    getList("");
+  }, []);
+
+  const [currentRow, setCurrentRow] = useState(null);
+  const [newPermission, setNewPermission] = useState("");
 
   // 정렬할 컬럼 이름
   const [thName, setthName] = useState("");
@@ -111,6 +68,8 @@ const ManagerManage = () => {
   // 검색 함수
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
+    getList(e.target.value);
+    setSelectAll(false);
   };
 
   // 체크박스 전체 선택/해제 함수
@@ -198,18 +157,12 @@ const ManagerManage = () => {
             </th>
             <th
               className="text-bg-primary text-center"
-              onClick={() => handleSort("reg_date")}
+              onClick={() => handleSort("regDate")}
               style={{ width: "160px" }}
             >
               계정 생성일
-              {thName === "reg_date" &&
+              {thName === "regDate" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
-            </th>
-            <th
-              className="text-bg-primary text-center"
-              style={{ width: "210px" }}
-            >
-              축제 권한
             </th>
             <th
               className="text-bg-primary text-center"
@@ -267,18 +220,6 @@ const ManagerManage = () => {
                 style={{ border: "none" }}
               />
             </td>
-            <td
-              className="d-flex justify-content-end"
-              style={{ width: "210px" }}
-            >
-              <DropdownButton title="권한 목록"></DropdownButton>
-              <Button
-                className="btn btn-primary me-2"
-                onClick={() => handleShowModal()}
-              >
-                권한 추가
-              </Button>
-            </td>
             <td style={{ width: "95px" }}>
               <Button className="btn btn-primary me-2">추가</Button>
             </td>
@@ -296,7 +237,7 @@ const ManagerManage = () => {
                 />
               </td>
               <td className="text-center" style={{ width: "80px" }}>
-                {data.no}
+                {index + 1}
               </td>
               <td style={{ width: "170px" }}>
                 <Form.Control
@@ -334,29 +275,9 @@ const ManagerManage = () => {
                 <Form.Control
                   className="admin-table-td text-center"
                   type="date"
-                  defaultValue={data.reg_date}
+                  defaultValue={data.regDate}
                   style={{ border: "none" }}
                 />
-              </td>
-              <td
-                className="d-flex justify-content-end"
-                style={{ width: "210px" }}
-              >
-                <DropdownButton
-                  id={`dropdown-${index}`}
-                  title="권한 목록"
-                  onClick={() => handleTogglePermission(index)}
-                >
-                  {data.permissions.map((permission, idx) => (
-                    <Dropdown.Item key={idx}>{permission}</Dropdown.Item>
-                  ))}
-                </DropdownButton>
-                <Button
-                  className="btn btn-primary me-2"
-                  onClick={() => handleShowModal(index)}
-                >
-                  권한추가
-                </Button>
               </td>
               <td style={{ width: "93px" }}>
                 <Button className="btn btn-primary me-2">수정</Button>
@@ -365,11 +286,6 @@ const ManagerManage = () => {
           ))}
         </tbody>
       </Table>
-      <PermissionModal
-        show={showModal}
-        onHide={handleCloseModal}
-        onAddPermission={handleAddPermission}
-      />
     </Container>
   );
 };

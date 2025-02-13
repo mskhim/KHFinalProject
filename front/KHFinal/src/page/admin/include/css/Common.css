@@ -7,7 +7,7 @@
 .admin-table tbody {
   display: inline-block;
   overflow-y: scroll;
-  max-height: 700px;
+  max-height: 70vh;
 }
 
 .admin-table thead,
