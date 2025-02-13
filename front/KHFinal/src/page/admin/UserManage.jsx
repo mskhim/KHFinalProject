@@ -174,7 +174,7 @@ const UserManage = () => {
         </thead>
         <tbody>
           {/* 데이터 행 */}
-          {filteredItems.map((data) => (
+          {filteredItems.map((data, index) => (
             <tr key={data.id}>
               <td className="text-center" style={{ width: "90px" }}>
                 <Form.Check
@@ -184,13 +184,13 @@ const UserManage = () => {
                   }
                 />
               </td>
-              <td style={{ width: "90px" }}>{data.no}</td>
+              <td style={{ width: "90px" }}>{index + 1}</td>
               <td style={{ width: "200px" }}>{data.id}</td>
               <td style={{ width: "200px" }}>{data.provider}</td>
               <td style={{ width: "200px" }}>{data.phone}</td>
               <td style={{ width: "200px" }}>{data.birth}</td>
               <td style={{ width: "135px" }}>{data.region}</td>
-              <td style={{ width: "164px" }}>{data.reg_date}</td>
+              <td style={{ width: "163px" }}>{data.reg_date}</td>
             </tr>
           ))}
         </tbody>

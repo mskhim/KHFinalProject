@@ -1,13 +1,8 @@
 .admin-app-container {
+  resize: none;
   display: flex;
-  margin-left: 50px;
+  width: 100%;
 }
-
-.admin-main-content {
-  margin-left: 200px;
-  width: calc(100%);
-}
-
 .admin-content {
-  margin: 30px;
+  padding: 30px;
 }

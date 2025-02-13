@@ -6,7 +6,7 @@ import ViVaFesta from "../../../assets/vivafesta.png";
 
 const Aside = () => {
   return (
-    <Navbar className="admin-aside" fixed="top">
+    <Navbar className="admin-aside">
       <div className="admin-aside-brand">
         <h2>
           <NavLink to="/admin/adminmain" className="brand-link">
@@ -20,7 +20,7 @@ const Aside = () => {
           <hr />
         </h2>
       </div>
-      <Nav className="admin-aside-nav flex-column ">
+      <Nav className="admin-aside-nav flex-column">
         <Nav.Link as={NavLink} to="/admin/managermanage">
           매니저 관리
         </Nav.Link>

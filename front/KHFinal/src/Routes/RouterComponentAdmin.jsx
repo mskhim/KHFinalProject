@@ -20,6 +20,7 @@ import { ProtectedRoute, Unauthorized } from "../components";
 import { AdminLayout, ManagerLayout, UserLayout } from "../page/layout";
 
 import NotFound from "../page/common/NotFound";
+import { Container } from "react-bootstrap";
 
 const RouterComponentAdmin = () => {
   const location = useLocation();
@@ -61,45 +62,43 @@ const RouterComponentAdmin = () => {
   }, [location.pathname]);
 
   return (
-    <>
-      <div className="admin-app-container">
-        <Aside />
-        <div className="admin-main-content">
-          <Header sectionName={sectionName} />
-          <div className="admin-content">
-            <Routes>
-              {/* ✅ 관리자 페이지 */}
+    <Container fluid className="admin-app-container m-0 p-0">
+      <Aside />
+      <Container fluid className="admin-main-content m-0 p-0">
+        <Header sectionName={sectionName} />
+        <Container fluid className="admin-content ">
+          <Routes>
+            {/* ✅ 관리자 페이지 */}
+            <Route
+              path="/*"
+              element={
+                <ProtectedRoute requiredRole={0} endpoint="jwtAdmin">
+                  <AdminLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route path="adminmain" element={<AdminMain />} />
+              <Route path="managermanage" element={<ManagerManage />} />
+              <Route path="usermanage" element={<UserManage />} />
+              <Route path="festivalmanage" element={<FestivalManage />} />
+              <Route path="reviewmanage" element={<ReviewManage />} />
+              <Route path="qnamanage" element={<QnAManage />} />
+              <Route path="noticemanage" element={<NoticeManage />} />
+              <Route path="bannermanage" element={<BannerManage />} />
               <Route
-                path="/*"
-                element={
-                  <ProtectedRoute requiredRole={0} endpoint="jwtAdmin">
-                    <AdminLayout />
-                  </ProtectedRoute>
-                }
-              >
-                <Route path="adminmain" element={<AdminMain />} />
-                <Route path="managermanage" element={<ManagerManage />} />
-                <Route path="usermanage" element={<UserManage />} />
-                <Route path="festivalmanage" element={<FestivalManage />} />
-                <Route path="reviewmanage" element={<ReviewManage />} />
-                <Route path="qnamanage" element={<QnAManage />} />
-                <Route path="noticemanage" element={<NoticeManage />} />
-                <Route path="bannermanage" element={<BannerManage />} />
-                <Route
-                  path="paymenthistorymanage"
-                  element={<PaymentHistoryManage />}
-                />
-                <Route
-                  path="cancellationhistorymanage"
-                  element={<CancellationHistoryManage />}
-                />
-                <Route path="*" element={<NotFound />} />
-              </Route>
-            </Routes>
-          </div>
-        </div>
-      </div>
-    </>
+                path="paymenthistorymanage"
+                element={<PaymentHistoryManage />}
+              />
+              <Route
+                path="cancellationhistorymanage"
+                element={<CancellationHistoryManage />}
+              />
+              <Route path="*" element={<NotFound />} />
+            </Route>
+          </Routes>
+        </Container>
+      </Container>
+    </Container>
   );
 };
 
