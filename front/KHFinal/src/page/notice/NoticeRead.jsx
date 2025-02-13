@@ -1,46 +1,35 @@
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
-import "./noticeRead.css";
-import { Link, useParams } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
-import { Context } from "../../Context";
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+import './noticeRead.css';
+import { Link, useParams } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
+import { Button } from 'react-bootstrap';
+import { Context } from '../../Context';
+import { fetchNoticeById } from './noticeApi';
 
 const NoticeRead = () => {
   const { darkMode, setDarkMode } = useContext(Context);
-
-  useEffect(() => {
-    setDarkMode(sessionStorage.getItem("darkMode") === "true");
-  }, [darkMode, setDarkMode]);
-  const noticeDB = [
-    {
-      no: 1,
-      title: "[공지사항] 개인정보 처리방침 변경안내",
-      content:
-        "안녕하세요. 개인정보 처리방침이 변경되었습니다. 새로운 정책을 확인하시고 이용해주시기 바랍니다.",
-      date: "2017.07.13",
-    },
-    {
-      no: 2,
-      title: "공지사항 안내입니다. 이용해주셔서 감사합니다",
-      content:
-        "안녕하세요. 공지사항 안내입니다. 이용해주셔서 감사합니다. 공지사항 안내입니다. 이용해주셔서 감사합니다.",
-      date: "2017.06.15",
-    },
-    {
-      no: 3,
-      title: "공지사항 안내입니다. 이용해주셔서 감사합니다 테스트입니다.",
-      content: "안녕하세요. 테스트입니다.",
-      date: "2017.06.15",
-    },
-  ];
-
   const [noticeRead, setNoticeRead] = useState({});
-  const param = useParams();
+  const { no } = useParams(); // URL에서 공지사항 ID 가져오기
 
   useEffect(() => {
-    setNoticeRead(noticeDB.find((item) => item.no === parseInt(param.no)));
-  }, [param]);
+    setDarkMode(sessionStorage.getItem('darkMode') === 'true');
+
+    const loadNotice = async () => {
+      const data = await fetchNoticeById(no); //공지사항 데이터 가져오기
+      setNoticeRead(data);
+    };
+
+    loadNotice();
+  }, [darkMode, setDarkMode, no]);
+
+  if (!noticeRead) {
+    return (
+      <p style={{ textAlign: 'center', marginTop: '20px' }}>
+        공지사항을 불러오는 중...
+      </p>
+    );
+  }
 
   return (
     <>
@@ -58,7 +47,7 @@ const NoticeRead = () => {
             <div className="NoticeRead-btn-wrap">
               <Link to="/NoticeList">
                 <Button
-                  variant={darkMode ? "outline-light" : "outline-dark"}
+                  variant={darkMode ? 'outline-light' : 'outline-dark'}
                   className="NoticeRead-btn NoticeRead-btn-dark"
                 >
                   목록으로
@@ -84,7 +73,9 @@ const NoticeRead = () => {
 
             {/* 등록일 */}
             <div className="NoticeRead-meta">
-              <span className="NoticeRead-date">등록일: {noticeRead.date}</span>
+              <span className="NoticeRead-date">
+                등록일: {noticeRead.subDate}
+              </span>
             </div>
           </div>
         </div>

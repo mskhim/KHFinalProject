@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,5 +21,11 @@ public class NoticeController {
 	 @GetMapping
 	    public List<Notice> getNotices() {
 	        return service.getNotices();
+	    }
+
+	// ✅ 특정 공지사항 조회 (ID로 가져오기)
+	    @GetMapping("/{no}")
+	    public Notice getNoticeById(@PathVariable("no") int no) {
+	        return service.getNoticeById(no);
 	    }
 }

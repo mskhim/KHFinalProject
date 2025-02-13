@@ -4,5 +4,8 @@
     <select id="getNotices" resultType="Notice">
         SELECT NO, TITLE, CONTENT, SUB_DATE FROM NOTICE ORDER BY NO DESC
     </select>
-
+    <!-- ✅ 특정 공지사항 조회 -->
+    <select id="getNoticeById" parameterType="int" resultType="Notice">
+        SELECT * FROM notice WHERE NO = #{no}
+    </select>
 </mapper>
