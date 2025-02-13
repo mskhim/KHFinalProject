@@ -3,18 +3,20 @@ import Footer from '../../components/Footer';
 import React, { useContext, useState, useRef, useEffect } from 'react';
 import './css/UserMypage.css';
 import { Context } from '../../Context';
-import { Button, Container } from 'react-bootstrap';
+import { Button, Container, Modal } from 'react-bootstrap';
 import { getUserData, checkNickName, updateUserData } from './userApi';
 
 function UserMypage() {
   const { getDarkMode, getDarkModeHover } = useContext(Context);
   const [selectedSection, setSelectedSection] = useState('info-view');
-  const [emailInput, setEmailInput] = useState(''); // 탈퇴 시 이메일 입력 상태
   const [emailError, setEmailError] = useState(false); // 이메일 오류 상태
   const [isEditable, setIsEditable] = useState(false); // Edit Mode
   const [userInfo, setUserInfo] = useState({});
   const [nicknameCheck, setNicknameCheck] = useState(false);  // 닉네임 중복 확인 상태
   const [formData, setFormData] = useState(userInfo); // 수정을 위한 form data.
+  const [showDeleteModal, setShowDeleteModal] = useState(false); // 회원 탈퇴 확인 모달
+  const [deleteEmail, setDeleteEmail] = useState(''); // 탈퇴 시 이메일 상태
+  const [deletePassword, setDeletePassword] = useState(''); // 탈퇴 시 비밀번호 상태
 
   /**userApi.js의 getUserData()함수를 호출하여
    * setUserInfo, setFormData에 data(data.user 회원 정보)를 저장. */
@@ -60,30 +62,30 @@ function UserMypage() {
     }
   };
 
-  // 이메일 입력창에 대한 참조 추가
-  const emailInputRef = useRef(null);
+  // // 이메일 입력창에 대한 참조 추가
+  // const emailInputRef = useRef(null);
 
   // 메뉴 항목 클릭 시 호출되는 함수
   const showSection = (sectionId) => {
     setSelectedSection(sectionId);
   };
 
-  // 이메일 확인 후 탈퇴 처리
-  const handleEmailSubmit = () => {
-    if (emailInput !== userInfo.email) {
-      alert('이메일이 맞지 않습니다. 다시 입력해주세요.');
-      setEmailInput(''); // 입력 필드를 비우고 다시 입력을 요청
-      setEmailError(true); // 이메일 오류 표시
-    } else {
-      const confirmDelete = window.confirm('정말로 탈퇴하시겠습니까?');
-      if (confirmDelete) {
-        setUserInfo({}); // 사용자 정보 초기화
-        setEmailInput(''); // 이메일 입력 필드 초기화
-        alert('탈퇴가 완료되었습니다. 이용해주셔서 감사합니다.');
-        setSelectedSection('info-view'); // 내 정보 조회로 전환
-      }
-    }
-  };
+  // // 이메일 확인 후 탈퇴 처리
+  // const handleEmailSubmit = () => {
+  //   if (emailInput !== userInfo.email) {
+  //     alert('이메일이 맞지 않습니다. 다시 입력해주세요.');
+  //     setEmailInput(''); // 입력 필드를 비우고 다시 입력을 요청
+  //     setEmailError(true); // 이메일 오류 표시
+  //   } else {
+  //     const confirmDelete = window.confirm('정말로 탈퇴하시겠습니까?');
+  //     if (confirmDelete) {
+  //       setUserInfo({}); // 사용자 정보 초기화
+  //       setEmailInput(''); // 이메일 입력 필드 초기화
+  //       alert('탈퇴가 완료되었습니다. 이용해주셔서 감사합니다.');
+  //       setSelectedSection('info-view'); // 내 정보 조회로 전환
+  //     }
+  //   }
+  // };
 
   // Toggle edit mode
   const toggleEdit = () => {
@@ -130,12 +132,26 @@ function UserMypage() {
     }
   }, [isEditable]); // isEditable 상태가 변할 때마다 실행
 
-  // 이메일 입력창에 자동으로 포커스를 맞추기 위한 useEffect
-  useEffect(() => {
-    if (selectedSection === 'account-delete') {
-      emailInputRef.current?.focus(); // 회원 탈퇴 페이지일 때 이메일 input에 focus
+  // 회원 탈퇴 확인 모달 열기
+  const openDeleteModal = () => setShowDeleteModal(true);
+
+  // 회원 탈퇴 확인 모달 닫기
+  const closeDeleteModal = () => setShowDeleteModal(false);
+
+  // 탈퇴 확인 모달에서 탈퇴 처리
+  const handleDeleteAccount = (deleteEmail, deletePassword) => {
+    if (deleteEmail === userInfo.email && deletePassword === userInfo.pwd) {
+      const confirmDelete = window.confirm('정말 탈퇴하시겠습니까?');
+      if (confirmDelete) {
+        alert('탈퇴가 완료되었습니다. 이용해주셔서 감사합니다.');
+        setUserInfo({}); // 회원 정보 삭제
+        closeDeleteModal();
+        setSelectedSection('info-view'); // 내 정보 조회로 전환
+      }
+    } else {
+      alert('입력한 정보가 맞지 않습니다. 다시 시도해주세요.');
     }
-  }, [selectedSection]); // selectedSection 상태가 변경될 때마다 실행
+  };
 
   return (
     <>
@@ -159,9 +175,7 @@ function UserMypage() {
               </li>
               <li>
                 <span
-                  className={
-                    selectedSection === 'account-delete' ? 'active' : ''
-                  }
+                  className={selectedSection === 'account-delete' ? 'active' : ''}
                   onClick={() => showSection('account-delete')}
                 >
                   회원 탈퇴
@@ -186,7 +200,7 @@ function UserMypage() {
                 selectedSection === 'info-view' ? 'active' : ''
               }`}
               id="info-view"
-              >
+            >
               {/* 내 정보 카드 */}
               {Object.keys(userInfo).length > 0 ? (
               <div className="MyPageMain-card">
@@ -352,8 +366,8 @@ function UserMypage() {
                         )}
                       </div>
 
-                      {/* 성별 */}
-                      <div className="MyPageMain-input-group">
+{/* 성별 */}
+<div className="MyPageMain-input-group">
                         <label
                           htmlFor="gender"
                           className="MyPageMain-input-label"
@@ -361,18 +375,19 @@ function UserMypage() {
                           성별
                         </label>
                         {isEditable ? (
-                          <input
-                            type="text"
+                          <select
                             name="gender"
                             value={formData.gender}
                             onChange={handleInputChange}
-                            className="MyPageMain-input-field"
-                          />
+                            >
+                            <option value="">선택 없음</option>
+                            <option value="M">M</option>
+                            <option value="F">F</option>
+                          </select>
                         ) : (
                           <p>{formData.gender}</p>
                         )}
                       </div>
-
                       {/* 휴대폰 번호 */} 
                       <div className="MyPageMain-input-group">
                         <label
@@ -464,34 +479,58 @@ function UserMypage() {
                 selectedSection === 'account-delete' ? 'active' : ''
               }`}
               id="account-delete"
-              >
+            >
               <h2>회원 탈퇴</h2>
               <div className="MyPageMain-account-delete-container">
-                <div className="MyPageMain-input-with-button">
-                  <label htmlFor="email-input">탈퇴를 위한 이메일 입력</label>
-                  <div className="d-flex align-items-center mt-3">
-                    <input
-                      ref={emailInputRef} // 이메일 input에 ref 연결
-                      id="email-input"
-                      type="email"
-                      value={emailInput}
-                      onChange={(e) => setEmailInput(e.target.value)}
-                      className="MyPageMain-input-field border border-1 mt-0 me-3"
-                    />
-                    <Button
-                      variant="none"
-                      className={`${getDarkModeHover()} w-50`}
-                      onClick={handleEmailSubmit}
-                    >
-                      탈퇴하기
-                    </Button>
-                  </div>
-                </div>
+                <p>◦ 회원 탈퇴 시, 예매 및 결제 관련 기능을 이용하실 수 없게 되며, 탈퇴 후에는 모든 계정 정보와 활동 기록이 삭제됩니다.</p>
+                <p>◦ 탈퇴 진행을 계속 원하실 경우, 아래 탈퇴하기 버튼을 눌러주세요. 그 후 안내에 따라 절차를 진행하실 수 있습니다.</p>
+                <br></br>
+                <Button
+                  variant="none"
+                  className={`${getDarkModeHover()} w-100`}
+                  onClick={openDeleteModal}
+                >
+                  탈퇴하기
+                </Button>
               </div>
             </div>
           </Container>
         </div>
       </div>
+
+      {/* 탈퇴 확인 모달 */}
+      <Modal show={showDeleteModal} onHide={closeDeleteModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>회원 탈퇴</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div>
+            <label>이메일</label>
+            <input
+              type="email"
+              className="form-control"
+              placeholder="이메일을 입력하세요"
+            />
+            <label>비밀번호</label>
+            <input
+              type="password"
+              className="form-control"
+              placeholder="비밀번호를 입력하세요"
+            />
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="primary"
+            onClick={() => handleDeleteAccount(deleteEmail, deletePassword)}
+          >
+            확인
+          </Button>
+          <Button variant="secondary" onClick={closeDeleteModal}>
+            취소
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <Footer />
     </>
   );

@@ -58,6 +58,7 @@ public class UserServiceImpl implements UserService {
     public String encodePassword(String rawPassword) {
         return passwordEncoder.encode(rawPassword); // ✅ 비밀번호 해싱
     }
+    
     @Override
     public boolean matchPassword(String rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword); // ✅ 비밀번호 비교
@@ -140,6 +141,9 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User updateUserData(User user)
 	{
+		// 수정된 비밀번호를 암호화 하여 DB에 저장함.
+		user.setPwd(encodePassword(user.getPwd()));
+		
 		// Mybatis를 호출하여 회원 정보 수정 진행.
 		int rowsAffected = mapper.updateUserData(user);
 		
@@ -153,7 +157,8 @@ public class UserServiceImpl implements UserService {
 			return null;
 		}
 	}
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
     
     
     
