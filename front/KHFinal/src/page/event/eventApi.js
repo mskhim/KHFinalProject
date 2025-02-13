@@ -63,8 +63,9 @@ export const selectEventReview = async (no, page) => {
     throw error;
   }
 };
+
 /**
- * 로그인 처리 (JWT는 HttpOnly 쿠키에 저장되므로 따로 저장하지 않음)
+ * 현재 쿠키의 jwt를 확인해서 들어있는 id로 user정보를 가져오기
  */
 export const handleLogin = async (id, provider, pwd) => {
   try {
@@ -182,7 +183,6 @@ export const getUserData = async () => {
     if (!response.ok) {
       return { authenticated: false };
     }
-
     const data = await response.json();
     // const data = {
     //   "authenticated", true,

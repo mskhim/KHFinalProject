@@ -1,6 +1,7 @@
 package com.zeus.event.controller;
 
 
+import java.io.Console;
 import java.util.List;
 import java.util.Map;
 
@@ -77,11 +78,13 @@ public class EventController {
 	
 	//축제 리뷰 조회
 	@GetMapping("/selectEventReview")
-	public ResponseEntity<Map<String, Object>> selectEventRivew(@RequestParam int page,@RequestParam int no) {
+	public ResponseEntity<Map<String, Object>> selectEventRivew(@RequestParam int page, @RequestParam int no) {
 		SortDTO sortDTO = new SortDTO();
 		sortDTO.setNo(no);
 		sortDTO.setPage(page);
+	
 		List<EventReview> dataList= service.selectEventReview(sortDTO);
+
 	    return ResponseEntity.ok(Map.of(
 		        "authenticated", true,
 	        "dataList", dataList,

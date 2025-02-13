@@ -124,7 +124,7 @@ const ReviewSection = () => {
   const addReview = async () => {
     const user = await getUserData();
     console.log(user);
-    if (user.authenticated === false) {
+    if (user === undefined) {
       alert('로그인 후 이용해주세요!');
       return;
     }
@@ -193,6 +193,8 @@ const ReviewSection = () => {
       <hr />
       {isLoading ? (
         <div>Loading...</div>
+      ) : eventReview.length === 0 ? (
+        <div>리뷰가 존재하지 않습니다.</div>
       ) : (
         eventReview.map((review, index) => (
           <div key={index} className="p-2 border-bottom">

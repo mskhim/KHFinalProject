@@ -50,16 +50,15 @@
 
 	<select id="selectEventReadReview" parameterType="sortDTO"
 		resultType="EventReview">
-		SELECT
-		r.no,content,event_no,r.user_account_no,r.rating,r.sub_date,U.NAME FROM event
-		E
-		LEFT JOIN event_review r
-		ON E.NO = r.event_no
-		LEFT JOIN USER_ACCOUNT U
-		ON R.USER_ACCOUNT_NO=U.NO
-		WHERE E.NO= #{no}
-		order by no desc
+		SELECT r.no, content, event_no, r.user_account_no, r.rating, r.sub_date,
+		U.NAME
+		FROM event E
+		LEFT JOIN event_review r ON E.NO = r.event_no
+		LEFT JOIN USER_ACCOUNT U ON r.user_account_no = U.NO
+		WHERE E.NO = #{no} AND r.no IS NOT NULL
+		ORDER BY r.no DESC
 		OFFSET ((#{page} - 1) * 5) ROWS FETCH NEXT 5 ROWS ONLY
+
 	</select>
 	
 	<select id="selectEventReadReviewCount" parameterType="sortDTO"
