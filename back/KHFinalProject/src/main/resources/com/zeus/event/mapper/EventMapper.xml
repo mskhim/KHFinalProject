@@ -3,33 +3,76 @@
 <mapper namespace="com.zeus.event.mapper.EventMapper">
 
 
-	<insert id="insertEvent"
-		parameterType="Event" useGeneratedKeys="true"
-		keyProperty="no">
-		INSERT INTO EVENT (NO, PUBLIC_DATA_EVENT_NO,
-		USER_ACCOUNT_NO, PRICE, RATING,
-		SUB_DATE)
-		VALUES (SEQ_EVENT.NEXTVAL,
-		#{publicDataEventNo}, #{userAccountNo}, #{price},
-		#{rating}, SYSDATE)
-	</insert>
-	
 	<select id="selectPublicDataEvent" parameterType="User"
-		resultType="PublicDataEvent">
+		resultType="PublicDataEventDTO">
 		SELECT * FROM USER_MANAGEMENT_EVENT A
-		LEFT JOIN PUBLIC_DATA_EVENT B
+		LEFT JOIN
+		PUBLIC_DATA_EVENT B
 		ON A.PUBLIC_DATA_EVENT_NO = B.NO
-		WHERE A.USER_ACCOUNT_NO=#{no}
+		WHERE
+		A.USER_ACCOUNT_NO=#{no}
 	</select>
 
-	<select id="selectEventList" parameterType="int"
-		resultType="EventSelectList">
+	<select id="selectEventList" parameterType="SortDTO"
+		resultType="EventSelectListDTO">
 		SELECT E.NO, NAME, START_DATE,END_DATE,THUMBURL FROM EVENT
 		E LEFT JOIN EVENT_IMG I ON E.NO=I.EVENT_NO
-		LEFT JOIN PUBLIC_DATA_EVENT P ON E.PUBLIC_DATA_EVENT_NO = P.NO
+		LEFT JOIN PUBLIC_DATA_EVENT
+		P ON E.PUBLIC_DATA_EVENT_NO = P.NO
 		WHERE I.THUMBURL IS NOT NULL
-		ORDER BY E.NO DESC
+		ORDER BY
+		E.NO DESC
+	</select>
+
+	<select id="selectEventRead" parameterType="sortDTO"
+		resultType="EventSelectRead">
+		SELECT E.NO, P.NO AS PUBLIC_DATA_EVENT_NO, NAME,PRICE,
+		PLACE,START_DATE,END_DATE,CONTENT,GOVERNING,HOST,TEL,HOMEPAGE,ADDRESS,LATITUDE,LONGITUDE,I.THUMBURL
+		FROM EVENT E
+		LEFT JOIN PUBLIC_DATA_EVENT P
+		ON E.PUBLIC_DATA_EVENT_NO = P
+		.NO
+		LEFT JOIN EVENT_IMG I
+		ON E.NO = I.EVENT_NO
+		WHERE E.NO=#{no} AND
+		I.THUMBURL IS NOT NULL
+	</select>
+
+	<select id="selectEventReadSub" parameterType="sortDTO"
+	 resultType="String">
+		SELECT URL FROM event
+		E
+		LEFT JOIN event_img I
+		ON E.NO = I.event_no
+		WHERE E.NO=#{no} AND I.URL IS
+		NOT NULL
+	</select>
+
+	<select id="selectEventReadReview" parameterType="sortDTO"
+		resultType="EventReview">
+		SELECT
+		r.no,content,event_no,r.user_account_no,r.rating,r.sub_date,U.NAME FROM event
+		E
+		LEFT JOIN event_review r
+		ON E.NO = r.event_no
+		LEFT JOIN USER_ACCOUNT U
+		ON R.USER_ACCOUNT_NO=U.NO
+		WHERE E.NO= #{no}
+		order by no desc
+		OFFSET ((#{page} - 1) * 5) ROWS FETCH NEXT 5 ROWS ONLY
 	</select>
 	
+	<select id="selectEventReadReviewCount" parameterType="sortDTO"
+		resultType="int">
+		SELECT
+		COUNT(*) from event_review
+		WHERE EVENT_NO= #{no}
+	</select>
 	
+	<select id="selectEventReadReviewRating" parameterType="sortDTO"
+		resultType="Double">
+		SELECT
+		RATING from event_review
+		WHERE EVENT_NO= #{no}
+	</select>
 </mapper>

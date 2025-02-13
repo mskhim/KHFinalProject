@@ -2,9 +2,9 @@ package com.zeus.manager.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.zeus.event.domain.Event;
+import com.zeus.event.domain.EventDTO;
 import com.zeus.event.domain.EventImg;
 import com.zeus.manager.mapper.ManagerMapper;
 
@@ -16,10 +16,10 @@ public class ManagerServiceImpl implements ManagerService {
 	private ManagerMapper mapper;
 
 	@Override
-	public Event insertEventByManager(Event event) {
+	public EventDTO insertEventByManager(EventDTO eventDTO) {
 		// TODO Auto-generated method stub
-		mapper.insertEventByManager(event);
-		return event;
+		mapper.insertEventByManager(eventDTO);
+		return eventDTO;
 	}
 
 	@Override

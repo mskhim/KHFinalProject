@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class EventSelectList {
+public class EventSelectListDTO {
     private int no;               // 시퀀스 (PK)
     private String name;
     private LocalDate startDate;

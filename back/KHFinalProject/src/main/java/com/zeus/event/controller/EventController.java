@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zeus.common.config.JwtUtil;
-import com.zeus.event.domain.EventSelectList;
-import com.zeus.event.domain.PublicDataEvent;
+import com.zeus.event.domain.EventReview;
+import com.zeus.event.domain.EventSelectListDTO;
+import com.zeus.event.domain.EventSelectReadDTO;
+import com.zeus.event.domain.PublicDataEventDTO;
+import com.zeus.event.domain.SortDTO;
 import com.zeus.event.service.EventService;
 import com.zeus.user.domain.User;
 
@@ -41,23 +44,49 @@ public class EventController {
 	    int no = JwtUtil.validateToken(jwtToken).get("no", Integer.class);
 	    User user = new User();
 	    user.setNo(no);
-	    
-	    List<PublicDataEvent> dataList = service.selectPublicDataEvent(user);
-	    
+	    List<PublicDataEventDTO> dataList = service.selectPublicDataEvent(user);
 	    return ResponseEntity.ok(Map.of(
 		        "authenticated", true,
 		        "message", "JWT 유효",
 	        "dataList", dataList
 	    ));
 	}
+	
 	// 축제 리스트 출력
 	@GetMapping("/selectEventList")
 	public ResponseEntity<Map<String, Object>> selectEventList(@RequestParam int page) {
 		log.info("컨트롤러시작");
-	    List<EventSelectList> dataList = service.selectEventList(page);
+		SortDTO sortDTO = new SortDTO();
+	    List<EventSelectListDTO> dataList = service.selectEventList(sortDTO);
 	    return ResponseEntity.ok(Map.of(
 		        "authenticated", true,
 	        "dataList", dataList
+	    ));
+	}
+	//축제 조회
+	@GetMapping("/selectEventRead")
+	public ResponseEntity<Map<String, Object>> selectEventRead(@RequestParam int no) {
+		SortDTO sortDTO = new SortDTO();
+		sortDTO.setNo(no);
+		EventSelectReadDTO dataList= service.selectEventRead(sortDTO);
+	    return ResponseEntity.ok(Map.of(
+		        "authenticated", true,
+	        "dataList", dataList
+	    ));
+	}
+	
+	//축제 리뷰 조회
+	@GetMapping("/selectEventReview")
+	public ResponseEntity<Map<String, Object>> selectEventRivew(@RequestParam int page,@RequestParam int no) {
+		SortDTO sortDTO = new SortDTO();
+		sortDTO.setNo(no);
+		sortDTO.setPage(page);
+		List<EventReview> dataList= service.selectEventReview(sortDTO);
+	    return ResponseEntity.ok(Map.of(
+		        "authenticated", true,
+	        "dataList", dataList,
+	        "rating",service.selectEventReviewRating(sortDTO),
+	        "count",service.selectEventReviewCount(sortDTO)
 	    ));
 	}
 }

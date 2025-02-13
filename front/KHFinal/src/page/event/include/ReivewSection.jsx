@@ -1,7 +1,10 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Form, Button, Row, Col, Pagination } from 'react-bootstrap';
 import { ButtonDarkMode } from '../../../components/ui';
 import { Context } from '../../../Context';
+import { selectEventReview } from '../eventApi';
+import { useParams } from 'react-router-dom';
+import { getUserData } from '../../user/userApi';
 
 // ⭐ 별점 컴포넌트 (상위 컴포넌트에서 받은 평균 별점 사용)
 const StarRating = ({ rating = 0, setRating, interactive = false }) => {
@@ -84,77 +87,51 @@ const StarRating = ({ rating = 0, setRating, interactive = false }) => {
   );
 };
 
-const ReviewSection = ({ rating = 0 }) => {
+const ReviewSection = () => {
   // ⬅ `rating` 기본값 설정
   const { getDarkMode } = useContext(Context);
-  const mockReviews = [
-    {
-      id: 1,
-      name: '김철수',
-      rating: 5,
-      content: '정말 멋진 축제였어요!',
-      date: '2025-10-06',
-    },
-    {
-      id: 2,
-      name: '이영희',
-      rating: 4,
-      content: '볼거리가 많았어요!',
-      date: '2025-10-05',
-    },
-    {
-      id: 3,
-      name: '박민수',
-      rating: 3,
-      content: '그냥 그랬어요.',
-      date: '2025-10-04',
-    },
-    {
-      id: 4,
-      name: '최수진',
-      rating: 2,
-      content: '기대보다 별로였어요.',
-      date: '2025-10-03',
-    },
-    {
-      id: 5,
-      name: '정하나',
-      rating: 1,
-      content: '너무 사람이 많아서 불편했어요.',
-      date: '2025-10-02',
-    },
-    {
-      id: 6,
-      name: '홍길동',
-      rating: 5,
-      content: '불꽃놀이가 환상적이었습니다!',
-      date: '2025-10-01',
-    },
-  ];
+  const mockReviews = [];
 
+  const param = useParams();
+  const [eventReview, setEventReview] = useState([]);
+  const [rating, setRating] = useState(0);
+  const [pagenation, setPagenation] = useState(1);
   const [reviews, setReviews] = useState(mockReviews);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [page, setPage] = useState(1);
   const reviewsPerPage = 5;
-  const totalPages = Math.ceil(reviews.length / reviewsPerPage);
+  const [isLoading, setIsLoading] = useState(false);
+
   const [newReview, setNewReview] = useState({
     name: '',
     rating: 5, // 기본 별점
     content: '',
   });
+  const getEventReview = async () => {
+    setIsLoading(true);
+    const response = await selectEventReview(param.no, page);
+    setEventReview(response.dataList);
+    setRating(response.rating);
+    setPagenation(Math.floor(response.count / reviewsPerPage + 1));
+    setIsLoading(false);
+  };
+  useEffect(() => {
+    getEventReview();
+  }, [page]);
 
   // 현재 페이지에 해당하는 리뷰 가져오기
-  const getCurrentPageReviews = () => {
-    const startIndex = (currentPage - 1) * reviewsPerPage;
-    return reviews.slice(startIndex, startIndex + reviewsPerPage);
-  };
 
   // 리뷰 추가
-  const addReview = () => {
-    if (!newReview.name || !newReview.content) {
-      alert('이름과 리뷰 내용을 입력해주세요!');
+  const addReview = async () => {
+    const user = await getUserData();
+    console.log(user);
+    if (user.authenticated === false) {
+      alert('로그인 후 이용해주세요!');
       return;
     }
-
+    if (!newReview.content) {
+      alert('리뷰 내용을 입력해주세요!');
+      return;
+    }
     const newEntry = {
       id: reviews.length + 1,
       name: newReview.name,
@@ -165,7 +142,7 @@ const ReviewSection = ({ rating = 0 }) => {
 
     setReviews([newEntry, ...reviews]);
     setNewReview({ name: '', rating: 5, content: '' });
-    setCurrentPage(1);
+    setPage(1);
   };
 
   return (
@@ -174,7 +151,7 @@ const ReviewSection = ({ rating = 0 }) => {
 
       {/* ⭐ 평균 별점 표시 */}
       <div className="mb-3 d-flex align-items-center">
-        <strong style={{ marginRight: '10px' }}>전체 리뷰 평균:</strong>
+        <strong style={{ marginRight: '10px' }}>전체 리뷰 평균 :</strong>
         <StarRating rating={rating} />
       </div>
 
@@ -182,7 +159,7 @@ const ReviewSection = ({ rating = 0 }) => {
       <Form>
         <Row className="mb-2">
           <Col md={3}>
-            <strong>별점 선택:</strong>
+            <strong>별점 선택 :</strong>
             <StarRating
               rating={newReview.rating}
               setRating={(value) =>
@@ -205,47 +182,50 @@ const ReviewSection = ({ rating = 0 }) => {
             />
           </Col>
         </Row>
-        <ButtonDarkMode text="리뷰 작성" onClick={addReview}>
+        <br />
+        <ButtonDarkMode text="리뷰 작성" onClick={addReview} width={'w-100'}>
           리뷰 작성
         </ButtonDarkMode>
       </Form>
       <hr />
 
       {/* 리뷰 목록 */}
-      {getCurrentPageReviews().map((review) => (
-        <div key={review.id} className="p-2 border-bottom">
-          <div className="d-flex align-items-center">
-            <strong>{review.name}</strong> ({review.date})
-            <span style={{ marginLeft: '10px' }}>
-              <StarRating rating={review.rating} />
-            </span>
+      <hr />
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : (
+        eventReview.map((review, index) => (
+          <div key={index} className="p-2 border-bottom">
+            <div className="d-flex align-items-center">
+              <strong>{review.name}</strong> &nbsp;({review.subDate})
+              <span style={{ marginLeft: '10px' }}>
+                <StarRating rating={review.rating} />
+              </span>
+            </div>
+            <p>{review.content}</p>
           </div>
-          <p>{review.content}</p>
-        </div>
-      ))}
+        ))
+      )}
 
-      {/* 페이지네이션 */}
       <Pagination
         className={`justify-content-center mt-3 ${getDarkMode()} custom-pagination`}
       >
         <Pagination.Prev
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
+          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          disabled={page === 1}
         />
-        {[...Array(totalPages).keys()].map((num) => (
+        {[...Array(pagenation).keys()].map((num) => (
           <Pagination.Item
             key={num + 1}
-            active={num + 1 === currentPage}
-            onClick={() => setCurrentPage(num + 1)}
+            active={num + 1 === page}
+            onClick={() => setPage(num + 1)}
           >
             {num + 1}
           </Pagination.Item>
         ))}
         <Pagination.Next
-          onClick={() =>
-            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-          }
-          disabled={currentPage === totalPages}
+          onClick={() => setPage((prev) => Math.min(prev + 1, pagenation))}
+          disabled={page === pagenation}
         />
       </Pagination>
     </div>

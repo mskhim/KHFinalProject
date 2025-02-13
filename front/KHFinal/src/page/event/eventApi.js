@@ -1,5 +1,5 @@
 /**
- * 회원가입 처리
+ * 이벤트 리스트 조회
  */
 export const selectEventList = async (page) => {
   try {
@@ -20,6 +20,49 @@ export const selectEventList = async (page) => {
   }
 };
 
+/**
+ * 이벤트 조회
+ */
+export const selectEventRead = async (no) => {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/event/selectEventRead?&no=${no}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    const data = await response.json();
+    return data.dataList;
+  } catch (error) {
+    alert('오류가 발생했습니다. ' + error.message);
+    throw error;
+  }
+};
+
+/**
+ * 이벤트 리뷰 조회
+ */
+export const selectEventReview = async (no, page) => {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/event/selectEventReview?page=${page}&no=${no}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    alert('오류가 발생했습니다. ' + error.message);
+    throw error;
+  }
+};
 /**
  * 로그인 처리 (JWT는 HttpOnly 쿠키에 저장되므로 따로 저장하지 않음)
  */

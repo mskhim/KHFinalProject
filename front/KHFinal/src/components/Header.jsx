@@ -33,7 +33,6 @@ const Header = ({ page }) => {
     userNickname,
     logout,
     tokenExpiration,
-    extendToken,
     getDarkMode,
   } = useContext(Context);
 
@@ -94,13 +93,6 @@ const Header = ({ page }) => {
   const toggleFestivalNav = () => {
     setIsAnimating(true);
     setShowFestivalNav((prev) => !prev);
-  };
-
-  //토큰연장
-  const handleExtendToken = () => {
-    refreshAccessToken().then((res) => {
-      extendToken();
-    });
   };
 
   return (
@@ -223,10 +215,7 @@ const Header = ({ page }) => {
                   <NavDropdown.Divider />
                   <NavDropdown.Item onClick={Logout}>로그아웃</NavDropdown.Item>
                 </NavDropdown>
-                <TokenRemain
-                  initialExpiration={tokenExpiration}
-                  onExtend={handleExtendToken}
-                />
+                <TokenRemain initialExpiration={tokenExpiration} />
                 {/* ) : ( */}
                 <div className="me-2">
                   <ButtonDarkMode text="로그인" onClick={handleLogin} />
