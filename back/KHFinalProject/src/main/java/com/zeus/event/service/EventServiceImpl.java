@@ -12,6 +12,7 @@ import com.zeus.event.domain.EventSelectReadDTO;
 import com.zeus.event.domain.PublicDataEventDTO;
 import com.zeus.event.domain.SortDTO;
 import com.zeus.event.mapper.EventMapper;
+import com.zeus.user.domain.Cart;
 import com.zeus.user.domain.User;
 
 import lombok.extern.slf4j.Slf4j;
@@ -75,6 +76,11 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public boolean deleteEvent(EventDTO eventDTO) {
 		return mapper.deleteEvent(eventDTO);
+	}
+
+	@Override
+	public boolean insertEventToCart(Cart cart) {
+		return mapper.insertEventToCart(cart);
 	}
 
 	

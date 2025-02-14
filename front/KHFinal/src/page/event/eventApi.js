@@ -73,14 +73,17 @@ export const deleteEvent = async (userNo, eventNo) => {
  */
 export const insertEventToCart = async (formData) => {
   try {
-    const response = await fetch('http://localhost:8080/event/addEventToCart', {
-      method: 'POST',
-      credentials: 'include', // ✅ 쿠키 자동 포함
-      body: JSON.stringify(formData),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await fetch(
+      'http://localhost:8080/event/insertEventToCart',
+      {
+        method: 'POST',
+        credentials: 'include', // ✅ 쿠키 자동 포함
+        body: JSON.stringify(formData),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
     const data = await response.json();
     alert(data.message);
     return data.state;

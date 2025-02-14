@@ -17,7 +17,8 @@ const UserRoutes = () => {
     if (
       location.pathname !== '/userLoginPage' &&
       location.pathname !== '/userLoginSuccess' &&
-      location.pathname !== '/userInsert'
+      location.pathname !== '/userInsert' &&
+      location.pathname !== '/userInsertCommon'
     ) {
       sessionStorage.setItem(
         'preLoginUrl',

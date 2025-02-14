@@ -99,6 +99,8 @@ const ReviewSection = () => {
   const [eventReview, setEventReview] = useState([]);
   const [rating, setRating] = useState(0);
   const [pagenation, setPagenation] = useState(1);
+  const [prePagenation, setPrePagenation] = useState(1);
+  const [firstPage, setFirstPage] = useState(1);
   const [page, setPage] = useState(1);
   const reviewsPerPage = 5;
   const [isLoading, setIsLoading] = useState(false);
@@ -106,19 +108,44 @@ const ReviewSection = () => {
     rating: 5, // 기본 별점
     content: '',
   });
+
   const getEventReview = async () => {
     setIsLoading(true);
     const response = await selectEventReview(param.no, page);
     setEventReview(response.dataList);
     setRating(response.rating);
-    setPagenation(
+    setPrePagenation(
       Math.floor(
         response.count / reviewsPerPage +
           (response.count % reviewsPerPage === 0 ? 0 : 1)
       )
     );
+    if (prePagenation > 5) {
+      setPagenation(5);
+    } else {
+      setPagenation(
+        Math.floor(
+          response.count / reviewsPerPage +
+            (response.count % reviewsPerPage === 0 ? 0 : 1)
+        )
+      );
+    }
     setIsLoading(false);
   };
+  const pageNext = () => {
+    setPage((prev) => Math.min(prev + 1, prePagenation));
+
+    if (page > firstPage + 4) {
+      setFirstPage((prev) => Math.min(prev + 1, prePagenation - 4));
+    }
+  };
+  const pagePrev = () => {
+    setPage((prev) => Math.max(prev - 1, 1));
+    if (page < firstPage) {
+      setFirstPage((prev) => Math.max(prev - 1, 1));
+    }
+  };
+
   useEffect(() => {
     getEventReview();
   }, [page, newReview]);
@@ -234,23 +261,17 @@ const ReviewSection = () => {
       <Pagination
         className={`justify-content-center mt-3 ${getDarkMode()} custom-pagination`}
       >
-        <Pagination.Prev
-          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-          disabled={page === 1}
-        />
+        <Pagination.Prev onClick={pagePrev} disabled={page === 1} />
         {[...Array(pagenation).keys()].map((num) => (
           <Pagination.Item
-            key={num + 1}
-            active={num + 1 === page}
-            onClick={() => setPage(num + 1)}
+            key={num + firstPage}
+            active={num + firstPage === page}
+            onClick={() => setPage(num + firstPage)}
           >
-            {num + 1}
+            {num + firstPage}
           </Pagination.Item>
         ))}
-        <Pagination.Next
-          onClick={() => setPage((prev) => Math.min(prev + 1, pagenation))}
-          disabled={page === pagenation}
-        />
+        <Pagination.Next onClick={pageNext} disabled={page === prePagenation} />
       </Pagination>
     </div>
   );

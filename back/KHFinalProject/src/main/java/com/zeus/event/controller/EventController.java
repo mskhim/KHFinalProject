@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +22,7 @@ import com.zeus.event.domain.EventSelectReadDTO;
 import com.zeus.event.domain.PublicDataEventDTO;
 import com.zeus.event.domain.SortDTO;
 import com.zeus.event.service.EventService;
+import com.zeus.user.domain.Cart;
 import com.zeus.user.domain.User;
 
 import lombok.extern.slf4j.Slf4j;
@@ -114,7 +114,7 @@ public class EventController {
 			return ResponseEntity.ok(Map.of("authenticated", false, "message", "JWT가 없거나 만료됨"));
 		}
 		String jwtRole = JwtUtil.validateToken(jwtToken).get("role", String.class);
-		if (!jwtRole.equals("ROLE_0")) {
+		if (jwtRole.equals("ROLE_1")) {
 			return ResponseEntity.ok(Map.of("state", false, "message", "일반 유저만 리뷰 작성 가능."));
 		}
 		service.insertEventReview(eventReview);
@@ -135,10 +135,27 @@ public class EventController {
 		String jwtRole = JwtUtil.validateToken(jwtToken).get("role", String.class);
 		int jwtUserNo = JwtUtil.validateToken(jwtToken).get("no", Integer.class);
 
-		if (jwtUserNo != eventReview.getUserAccountNo() || jwtRole.equals("ROLE_0")) {
-			return ResponseEntity.ok(Map.of("state", false, "message", "자신의 리뷰만 삭제 가능합니다."));
+		if (jwtUserNo == eventReview.getUserAccountNo() || jwtRole.equals("ROLE_0")) {
+			boolean flag = service.deleteEventReview(eventReview);
+			return ResponseEntity.ok(Map.of("state", flag, "message", "리뷰가 삭제되었습니다."));
 		}
-		boolean flag = service.deleteEventReview(eventReview);
-		return ResponseEntity.ok(Map.of("state", flag, "message", "리뷰가 삭제되었습니다."));
+		return ResponseEntity.ok(Map.of("state", false, "message", "자신의 리뷰만 삭제 가능합니다."));
+	}
+	// 축제 장바구니에 추가
+	@PostMapping("/insertEventToCart")
+	public ResponseEntity<Map<String, Object>> insertEventToCart(
+			@CookieValue(name = "jwt", required = false) String jwtToken, @RequestBody Cart cart) { // 쿠키에서
+		if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken)) {
+			log.info("토큰만료");
+			return ResponseEntity.ok(Map.of("authenticated", false, "message", "JWT가 없거나 만료됨"));
+		}
+		String jwtRole = JwtUtil.validateToken(jwtToken).get("role", String.class);
+		int jwtUserNo = JwtUtil.validateToken(jwtToken).get("no", Integer.class);
+		if (jwtRole.equals("ROLE_0")||jwtRole.equals("ROLE_1")) {
+			return ResponseEntity.ok(Map.of("state", false, "message", "일반회원만 장바구니 이용이 가능합니다."));
+		}
+		cart.setUserAccountNo(jwtUserNo);
+		boolean flag = service.insertEventToCart(cart);
+		return ResponseEntity.ok(Map.of("state", flag, "message", "장바구니에 등록되었습니다."));
 	}
 }

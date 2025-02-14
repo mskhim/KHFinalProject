@@ -87,4 +87,9 @@
 		>
 		DELETE FROM EVENT WHERE NO=#{no}
 	</delete>
+	
+	<insert id="insertEventToCart" parameterType="Cart"
+		>
+		INSERT INTO CART VALUES(SEQ_CART_NO.NEXTVAL,#{eventNo},#{userAccountNo},#{qt},SYSDATE)
+	</insert>
 </mapper>

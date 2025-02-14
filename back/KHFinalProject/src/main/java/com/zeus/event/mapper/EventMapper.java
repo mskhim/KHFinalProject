@@ -8,6 +8,7 @@ import com.zeus.event.domain.EventSelectListDTO;
 import com.zeus.event.domain.EventSelectRead;
 import com.zeus.event.domain.PublicDataEventDTO;
 import com.zeus.event.domain.SortDTO;
+import com.zeus.user.domain.Cart;
 import com.zeus.user.domain.User;
 
 public interface EventMapper {
@@ -31,5 +32,7 @@ public interface EventMapper {
 	boolean deleteEventReview(EventReview eventReview);
 	//이벤트 게시글 삭제
 	boolean deleteEvent(EventDTO eventDTO);
+	//이벤트 장바구니에 등록
+	boolean insertEventToCart(Cart cart);
 	
 }
