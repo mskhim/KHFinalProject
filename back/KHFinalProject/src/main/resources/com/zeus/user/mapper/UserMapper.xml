@@ -55,7 +55,20 @@
 	    WHERE NO = #{no}
 	</update>
 	<!-- ################################################################################################## -->
-
+	<!-- ################################################################################################## -->
+	<!-- 사용자 조회 쿼리 -->
+	<select id="getUserByNo" parameterType="Integer" resultType="User">
+	    SELECT * 
+	    FROM USER_ACCOUNT 
+	    WHERE NO = #{userNo}
+	</select>
+	<!-- 회원 탈퇴 쿼리 (비밀번호 확인을 서비스 레이어에서 처리) -->
+	<delete id="deleteUserData" parameterType="Integer">
+	    DELETE
+	    FROM USER_ACCOUNT
+	    WHERE NO = #{userNo}
+	</delete>
+	<!-- ################################################################################################## -->
 	<!-- 아이디, 제공자를 토대로 로그인 유저 반환후 비밀번호 헤싱해서 로그인 확인 확인-->
 	<select id="checkLogin" parameterType="User" resultType="User">
 		SELECT *

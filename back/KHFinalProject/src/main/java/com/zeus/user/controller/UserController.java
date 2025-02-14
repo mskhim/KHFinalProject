@@ -6,7 +6,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -393,7 +395,69 @@ public class UserController {
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////
+	// 회원 탈퇴
+	@DeleteMapping("/deleteUserData")
+	public ResponseEntity<Map <String, Object>> deleteUserData(
+	        @CookieValue(name = "jwt", required = false) String jwtToken,
+	        @RequestBody User deleteUser) { // 클라이언트에서 받은 평문 비밀번호
+
+	    // JWT 토큰 검증
+	    if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken))
+	    {
+	        return ResponseEntity.ok(Map.of(
+	                "authenticated", false,
+	                "message", "JWT가 없거나 만료됨"));
+	    }
+	    
+	    // 토큰에서 no 빼서 db에서 정보 가져오기
+		// JWT에서 no 정보 가져오기.
+		Integer userNo = JwtUtil.validateToken(jwtToken).get("no", Integer.class);
+		
+		// DB에서 해당 userNo로 사용자 정보 가져오기.
+		User dbUser = service.getUserByNo(userNo);
+		
+		if (dbUser == null)
+		{
+			return ResponseEntity.ok(Map.of(
+					"authenticated", false,
+					"message", "사용자 정보를 찾을 수 없습니다."));
+		}
+		
+		// 입력한 이메일 비교.
+		if ( !dbUser.getEmail().equals(deleteUser.getEmail()))
+		{
+			return ResponseEntity.ok(Map.of(
+					"authenticated", false,
+					"message", "이메일이 일치하지 않습니다."));
+		}
+		
+		// 비밀번호 비교(DB에 저장된 암호화된 비밀번호와 비교).
+		 BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		    
+		 if (!passwordEncoder.matches(deleteUser.getPwd(), dbUser.getPwd()))
+		 {
+		     return ResponseEntity.ok(Map.of(
+		             "authenticated", false,
+		             "message", "비밀번호가 일치하지 않습니다."));
+		 }
+		    
+		 // 비밀번호와 이메일이 일치하면 회원 탈퇴 진행.
+		 boolean isDeleted = service.deleteUserData(userNo); // 사용자 삭제 서비스 호출 (userNo로 삭제)
+
+		    if (isDeleted)
+		    {
+		        return ResponseEntity.ok(Map.of(
+		                "authenticated", true,
+		                "message", "회원 탈퇴가 완료되었습니다."));
+		    } else
+		    {
+		        return ResponseEntity.ok(Map.of(
+		                "authenticated", false,
+		                "message", "회원 탈퇴 처리 중 오류가 발생했습니다."));
+		    }
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	
 	//--------------------------------------------------api메소드가 아닌 컨트롤러용 메소드
@@ -481,7 +545,4 @@ public class UserController {
 	    }
 	    return null;
 	}
-	
-	
-
 }

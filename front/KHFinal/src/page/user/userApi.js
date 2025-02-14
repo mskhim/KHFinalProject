@@ -218,9 +218,9 @@ export const getUserData = async () => {
 };
 
 /*
- * JWT쿠키 검사를 통해 로그인 상태를 확인한 후,
- * 마이페이지에 불러온 회원 정보를 수정함./
- */
+* JWT쿠키 검사를 통해 로그인 상태를 확인한 후,
+* 마이페이지에 불러온 회원 정보를 수정함./
+*/
 export const updateUserData = async (formData) => {
   try {
     const response = await fetch('http://localhost:8080/user/updateUserData', {
@@ -241,7 +241,39 @@ export const updateUserData = async (formData) => {
   } catch (error) {
     return { authenticated: false };
   }
-};
+}
+
+/*
+* JWT쿠키 검사를 통해 로그인 상태를 확인한 후,
+* 마이페이지에 출력된 이메일, 비밀번호 입력을 통해 회원 탈퇴 진행./
+*/
+export const deleteUserData = async (formData) => {
+  try {
+    const response = await fetch('http://localhost:8080/user/deleteUserData', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include', // ✅ 쿠키 자동 포함
+      body: JSON.stringify(formData),
+    });
+
+    const data = await response.json();
+
+    if (data.authenticated) {  // 서버의 응답 확인
+      alert(data.message);  // 서버에서 받은 메시지 표시
+    } else {
+      alert(data.message);  // 서버에서 받은 메시지 표시
+    }
+    return data.authenticated;  // 서버에서 받은 성공 여부 반환
+  } catch (error)
+  {
+    console.error("회원 탈퇴 오류:", error);  // 서버 요청 오류에 대한 로그 출력
+    alert('서버 요청에 실패했습니다. 다시 시도해주세요.');
+    
+    return false;
+  }
+}
 
 /**
  * 이메일을 받아서 일반회원가입 User를 가져오는 API, 아이디만 가져올것

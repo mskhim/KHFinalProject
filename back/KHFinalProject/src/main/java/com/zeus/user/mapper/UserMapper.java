@@ -14,5 +14,8 @@ public interface UserMapper {
 	
 	//////////////////////////////////////////////
 	public int updateUserData (User user);
+	// jwt에서 가져온 userNo를 통해 사용자 정보 조회.
+	public User getUserByNo(Integer userNo);
+	public int deleteUserData(Integer userNo);
 	/////////////////////////////////////////////
 }

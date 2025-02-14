@@ -16,6 +16,10 @@ public interface UserService {
 	
 	///////////////////////////////////////////////////////
 	User updateUserData (User user);
+	//User deleteUserData (User user);
+	// jwt에서 가져온 userNo로 회원 정보 조회 후, 회원 탈퇴 진행.
+	boolean deleteUserData(Integer userNo);
+	User getUserByNo(Integer userNo);
 	///////////////////////////////////////////////////////
 	
 	

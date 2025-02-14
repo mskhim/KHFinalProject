@@ -4,12 +4,11 @@ import React, { useContext, useState, useRef, useEffect } from 'react';
 import './css/UserMypage.css';
 import { Context } from '../../Context';
 import { Button, Container, Modal } from 'react-bootstrap';
-import { getUserData, checkNickName, updateUserData } from './userApi';
+import { getUserData, checkNickName, updateUserData, deleteUserData } from './userApi';
 
 function UserMypage() {
-  const { getDarkMode, getDarkModeHover } = useContext(Context);
+  const { getDarkMode, getDarkModeHover, logout } = useContext(Context);
   const [selectedSection, setSelectedSection] = useState('info-view');
-  const [emailError, setEmailError] = useState(false); // 이메일 오류 상태
   const [isEditable, setIsEditable] = useState(false); // Edit Mode
   const [userInfo, setUserInfo] = useState({});
   const [nicknameCheck, setNicknameCheck] = useState(false);  // 닉네임 중복 확인 상태
@@ -62,30 +61,10 @@ function UserMypage() {
     }
   };
 
-  // // 이메일 입력창에 대한 참조 추가
-  // const emailInputRef = useRef(null);
-
   // 메뉴 항목 클릭 시 호출되는 함수
   const showSection = (sectionId) => {
     setSelectedSection(sectionId);
   };
-
-  // // 이메일 확인 후 탈퇴 처리
-  // const handleEmailSubmit = () => {
-  //   if (emailInput !== userInfo.email) {
-  //     alert('이메일이 맞지 않습니다. 다시 입력해주세요.');
-  //     setEmailInput(''); // 입력 필드를 비우고 다시 입력을 요청
-  //     setEmailError(true); // 이메일 오류 표시
-  //   } else {
-  //     const confirmDelete = window.confirm('정말로 탈퇴하시겠습니까?');
-  //     if (confirmDelete) {
-  //       setUserInfo({}); // 사용자 정보 초기화
-  //       setEmailInput(''); // 이메일 입력 필드 초기화
-  //       alert('탈퇴가 완료되었습니다. 이용해주셔서 감사합니다.');
-  //       setSelectedSection('info-view'); // 내 정보 조회로 전환
-  //     }
-  //   }
-  // };
 
   // Toggle edit mode
   const toggleEdit = () => {
@@ -138,21 +117,57 @@ function UserMypage() {
   // 회원 탈퇴 확인 모달 닫기
   const closeDeleteModal = () => setShowDeleteModal(false);
 
-  // 탈퇴 확인 모달에서 탈퇴 처리
-  const handleDeleteAccount = (deleteEmail, deletePassword) => {
-    if (deleteEmail === userInfo.email && deletePassword === userInfo.pwd) {
+  // // 탈퇴 확인 모달에서 탈퇴 처리
+  // const handleDeleteAccount = (deleteEmail, deletePassword) => {
+  //   if (deleteEmail === userInfo.email && deletePassword === userInfo.pwd) {
+  //     const confirmDelete = window.confirm('정말 탈퇴하시겠습니까?');
+  //     if (confirmDelete) {
+  //       alert('탈퇴가 완료되었습니다. 이용해주셔서 감사합니다.');
+  //       setUserInfo({}); // 회원 정보 삭제
+  //       closeDeleteModal();
+  //       setSelectedSection('info-view'); // 내 정보 조회로 전환
+  //     }
+  //   } else {
+  //     alert('입력한 정보가 맞지 않습니다. 다시 시도해주세요.');
+  //   }
+  // };
+
+  // 탈퇴 확인 처리 (이메일과 비밀번호를 백엔드로 전송)
+  const handleDeleteAccount = async () =>
+  {
+
+    if (!deleteEmail || !deletePassword)
+    {
+      alert('이메일과 비밀번호를 모두 입력해주세요.');
+    
+      return;
+    }
+
+    if (deleteEmail === userInfo.email)
+    {
       const confirmDelete = window.confirm('정말 탈퇴하시겠습니까?');
-      if (confirmDelete) {
-        alert('탈퇴가 완료되었습니다. 이용해주셔서 감사합니다.');
-        setUserInfo({}); // 회원 정보 삭제
-        closeDeleteModal();
-        setSelectedSection('info-view'); // 내 정보 조회로 전환
+      if (confirmDelete)
+      {
+        const response = await deleteUserData({email: deleteEmail, pwd: deletePassword});
+        
+        if (response)
+        {
+          setUserInfo({});  // 회원 정보 삭제
+          closeDeleteModal();
+          // 민석이
+          logout();
+        } else
+        {
+          alert('회원 탈퇴에 실패했습니다. 다시 시도해주세요.');
+        }
+      } else
+      {
+        alert('입력한 이메일이 일치하지 않습니다.');
       }
-    } else {
-      alert('입력한 정보가 맞지 않습니다. 다시 시도해주세요.');
     }
   };
-
+  
+ 
   return (
     <>
       <Header />
@@ -366,8 +381,8 @@ function UserMypage() {
                         )}
                       </div>
 
-{/* 성별 */}
-<div className="MyPageMain-input-group">
+                      {/* 성별 */}
+                      <div className="MyPageMain-input-group">
                         <label
                           htmlFor="gender"
                           className="MyPageMain-input-label"
@@ -510,12 +525,17 @@ function UserMypage() {
               type="email"
               className="form-control"
               placeholder="이메일을 입력하세요"
+              value={deleteEmail} // value로 상태를 바인딩
+              onChange={(e) => setDeleteEmail(e.target.value)} // 상태 업데이트
             />
+            <br></br>
             <label>비밀번호</label>
             <input
               type="password"
               className="form-control"
               placeholder="비밀번호를 입력하세요"
+              value={deletePassword} // value로 상태를 바인딩
+              onChange={(e) => setDeletePassword(e.target.value)} // 상태 업데이트
             />
           </div>
         </Modal.Body>

@@ -64,6 +64,15 @@ public class UserServiceImpl implements UserService {
         return passwordEncoder.matches(rawPassword, encodedPassword); // ✅ 비밀번호 비교
     }
     
+    /////////////////////////////////////////////////////////
+    /// DB에서 userNo로 사용자 정보 조회.
+	@Override
+	public User getUserByNo(Integer userNo)
+	{
+		return mapper.getUserByNo(userNo);
+	}
+    /////////////////////////////////////////////////////////
+
 
     //이메일로 아이디 찾기 기능을 위해 일반 유저 정보를 가져온다. 보안을 위해 아이디만 살려서 보낼것
 	@Override
@@ -157,9 +166,52 @@ public class UserServiceImpl implements UserService {
 			return null;
 		}
 	}
-	/////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////
-    
+	//////////////////////////////////////////////////////////////////////////
+//	@Override
+//	public boolean deleteUserData(String email, String rawPassword) {
+//	    try {
+//	        // DB에서 해당 이메일로 저장된 암호화된 비밀번호를 가져옴
+//	        String encodedPassword = mapper.getPasswordByEmail(email);
+//
+//	        if (encodedPassword == null) {
+//	            return false; // 이메일이 존재하지 않으면 탈퇴할 수 없음
+//	        }
+//
+//	        // BCryptPasswordEncoder를 사용하여 평문 비밀번호와 DB에 저장된 암호화된 비밀번호 비교
+//	        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//
+//	        // 입력된 평문 비밀번호를 암호화하여 DB에 저장된 암호화된 비밀번호와 비교
+//	        if (passwordEncoder.matches(rawPassword, encodedPassword)) {
+//	            // 비밀번호 일치 -> 회원 탈퇴 진행
+//	            mapper.deleteUserData(email);
+//	            return true;
+//	        } else {
+//	            // 비밀번호 일치하지 않으면 false 반환
+//	            return false;
+//	        }
+//	    } catch (Exception e) {
+//	        throw new RuntimeException("회원 탈퇴 처리 중 오류가 발생하였습니다.", e);
+//	    }
+//	}
+	
+	@Override
+	public boolean deleteUserData(Integer userNo)
+	{
+		try
+		{
+			// 삭제 쿼리 호출 (userNo를 기준으로 사용자 삭제)
+			int rowsAffected = mapper.deleteUserData(userNo);
+			// 삭제가 성공적으로 이루어졌다면
+			return rowsAffected > 0; // 1 이상의 값이 반환되면 삭제 성공
+			
+		} catch (Exception e)
+		{
+			e.printStackTrace(); // 예외가 발생한 경우 예외 로그 출력
+			return false; // 예외가 발생하면 false 반환
+		}
+	}
+	////////////////////////////////////////////////////////////////////////
     
     
     //로그인 체크, id와 provider로 user 정보를 가져와헤싱해서 로그인확인
@@ -291,4 +343,3 @@ public class UserServiceImpl implements UserService {
         return response.getBody();
     }
 }
-
