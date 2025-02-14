@@ -1,0 +1,185 @@
+/* Q&A 제목 */
+.QNA-title-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 10px 100px;
+  margin-bottom: 10px;
+}
+
+.QNA-title {
+  font-size: 28px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* 검색창 정렬 유지 */
+.QNA-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+}
+
+.QNA-board-search {
+  width: auto;
+}
+
+.QNA-search-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.QNA-search-input {
+  height: 40px;
+  width: 250px;
+  font-size: 14px;
+  padding: 7px 14px;
+  border: 1px solid #ccc;
+  margin-right: 10px;
+}
+
+/* 검색 버튼 */
+
+.QNA-btn, QNA-btn-dark {
+  height: 40px;
+  font-size: 14px;
+  padding: 7px 14px;
+  border: 1px solid #ccc;
+  margin-left: 5px;
+}
+
+/* Q&A 테이블 */
+.QNA-board-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-top: 2px solid #333;
+  table-layout: fixed;
+}
+
+.QNA-board-table th {
+  text-align: center;
+  padding: 8px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.QNA-board-table td {
+  padding: 8px;
+  text-align: center;
+  font-size: 15px;
+  border-bottom: 1px solid #ccc;
+}
+
+/* 제목과 작성자 왼쪽 정렬 */
+.QNA-td-title {
+  text-align: left;
+  padding-left: 20px;
+}
+
+.QNA-td-title a {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.QNA-td-title a:hover {
+  color: #9c9c9c;
+}
+
+.QNA-td-author {
+  text-align: left;
+  padding-left: 20px;
+}
+
+/* 답변 스타일 */
+.QNA-reply {
+  padding-left: 20px;
+  font-style: italic;
+}
+
+/* 글쓰기 버튼 */
+.QNA-write-button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.QNA-btn {
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+/* Q&A 아코디언 */
+.QNA-accordion-toggle {
+  cursor: pointer;
+}
+
+/* 답변 입력 영역 가로 정렬 */
+.QNA-reply-input {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  gap: 10px;
+}
+
+/* textarea 크기 조정 */
+.QNA-reply-textarea {
+  flex-grow: 1;
+  height: 50px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  resize: none;
+  border-radius: 5px;
+}
+
+/* 답변 등록 버튼 */
+.QNA-reply-submit {
+  padding: 8px 15px;
+  font-size: 14px;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+
+/* 답변 등록 버튼 */
+.QNA-reply-btn {
+  font-size: 14px;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+/* Q&A 아코디언 */
+.QNA-accordion-toggle {
+  cursor: pointer;
+}
+
+.QNA-reply {
+  padding: 15px;
+  font-style: italic;
+}
+
+.QNA-reply-content {
+  padding: 10px;
+}
+
+/* 답변 등록 버튼 */
+.QNA-reply-btn {
+  font-size: 14px;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+/* 답변 작성 폼 */
+.QNA-reply-form {
+  margin-top: 10px;
+}
+
+.QNA-write-button-container {
+  margin-top: 15px;
+}
+
