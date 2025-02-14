@@ -38,7 +38,7 @@ public class ManagerController {
 
 	@PostMapping("/insertEventByManager")
 	public ResponseEntity<?> insertEventByManager(@CookieValue(name = "jwt", required = false) String jwtToken,
-			@RequestBody EventDTO request) {
+			@RequestBody EventDTO eventDTO) {
 		log.info("컨트롤러실행");
 		try {
 			if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken)) {
@@ -48,24 +48,21 @@ public class ManagerController {
 			}
 			// JWT가 유효하면 사용자 정보 반환
 			int no = JwtUtil.validateToken(jwtToken).get("no", Integer.class);
-			Event event = new Event();
-			event.setUserAccountNo(no);
-			event.setPrice(request.getPrice());
-			event.setPublicDataEventNo(request.getPublicDataEventNo());
+			eventDTO.setUserAccountNo(no);
 			// 이벤트 테이블에 이벤트 저장, 이후에 event의 no값은 변경된 no 값으로 변경
-			event = service.insertEventByManager(event);
+			eventDTO = service.insertEventByManager(eventDTO);
 			// event.getNo()는 이벤트 리스트의 키no
 			// ✅ 대표 이미지 저장
-			String mainImagePath = request.getThumbUrl();
+			String mainImagePath = eventDTO.getThumbUrl();
 			EventImg ei = new EventImg();
-			ei.setEventNo(event.getNo());
+			ei.setEventNo(eventDTO.getNo());
 			ei.setThumbUrl(mainImagePath);
 			service.insertEventImgByManagerThumb(ei);
 			// ✅ 서브 이미지 저장
 
-			for (int i = 0; i < request.getUrl().size(); i++) {
+			for (int i = 0; i < eventDTO.getUrl().size(); i++) {
 				ei.setThumbUrl(null);
-				ei.setUrl(request.getUrl().get(i));
+				ei.setUrl(eventDTO.getUrl().get(i));
 				service.insertEventImgByManagerSub(ei);
 			}
 
@@ -77,33 +74,6 @@ public class ManagerController {
 		}
 	}
 
- // ✅ 파일 저장 메서드 (확장자 유지)
-    private String saveFile(MultipartFile file, String tag, int no) throws IOException {
-        if (file.isEmpty()) {
-            return null;
-        }
-        
-        // ✅ 파일명과 확장자 분리
-        String originalFileName = file.getOriginalFilename();
-        String extension = "";
-        
-        // ✅ 확장자 추출
-        if (originalFileName != null && originalFileName.contains(".")) {
-            extension = originalFileName.substring(originalFileName.lastIndexOf(".")); // 확장자 추출 (.jpg, .png 등)
-        }
-        
-        // ✅ 새로운 파일명 생성 (확장자 포함)
-        String fileName = System.currentTimeMillis() + "_" + tag + "_" + no + extension;
-        
-        // ✅ 파일 저장 경로 지정
-        Path filePath = Paths.get(UPLOAD_DIR + fileName);
-        
-        // ✅ 파일 저장
-        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-        
-        return "/uploads/event/" + fileName; // ✅ 저장된 파일 경로 반환 (DB 저장용 URL)
-    }
-	
 	
 	
 	

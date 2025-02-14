@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { Context } from '../../Context';
 import ButtonDarkMode from './ButtonDarkMode';
+import { refreshAccessToken } from '../../page/user/userApi';
 const TokenRemain = () => {
   const { loginTime, setLoginTime, logout } = useContext(Context);
 
@@ -46,6 +47,7 @@ const TokenRemain = () => {
     setLoginTime(newLoginTime);
     sessionStorage.setItem('loginTime', newLoginTime.toString());
     setTokenExpiration(900);
+    refreshAccessToken();
     alert('토큰이 연장되었습니다.');
   };
 

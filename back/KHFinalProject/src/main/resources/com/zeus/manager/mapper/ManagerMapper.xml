@@ -3,7 +3,7 @@
 <mapper namespace="com.zeus.manager.mapper.ManagerMapper">
 
 	<!-- 이벤트 데이터 삽입 -->
-	<insert id="insertEventByManager" parameterType="Event">
+	<insert id="insertEventByManager" parameterType="EventDTO">
 	<selectKey keyProperty="no" resultType="int" order="AFTER">
         SELECT SEQ_EVENT_NO.CURRVAL FROM DUAL
     </selectKey>

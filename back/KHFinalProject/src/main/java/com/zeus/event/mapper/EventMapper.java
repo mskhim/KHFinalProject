@@ -2,23 +2,34 @@ package com.zeus.event.mapper;
 
 import java.util.List;
 
-import com.zeus.event.domain.Event;
 import com.zeus.event.domain.EventDTO;
-import com.zeus.event.domain.EventImg;
-import com.zeus.event.domain.EventSelectList;
-import com.zeus.event.domain.PublicDataEvent;
+import com.zeus.event.domain.EventReview;
+import com.zeus.event.domain.EventSelectListDTO;
+import com.zeus.event.domain.EventSelectRead;
+import com.zeus.event.domain.PublicDataEventDTO;
+import com.zeus.event.domain.SortDTO;
 import com.zeus.user.domain.User;
 
 public interface EventMapper {
-	//이벤트 게시판에 등록 매개변수 event의 no 값을 시퀀스로 자동 증가된 값으로 수정해서 주입
-	boolean insertEvent(Event event);
-	//이벤트 게시판 no 값을 fk로 타이틀, 서브이미지 등록
-	boolean insertEventImg(EventImg eventImg);
 	//이벤트 리스트 출력 기본출력은 그냥 등록순으로 할것 page값으로 페이징 처리.
-	List<EventSelectList> selectEventList(int page);
-	//이벤트 리스트 출력 sort할 항목을 찾아서 sorting page값으로 페이징 처리.
-	boolean selectEventListSorted(String page);
+	List<EventSelectListDTO> selectEventList(SortDTO sortDTO);
 	//공공데이터 테이블을 이용하여 데이터를 select
-	List<PublicDataEvent> selectPublicDataEvent(User user);
+	List<PublicDataEventDTO> selectPublicDataEvent(User user);
+	//이벤트 조회시 이벤트 데이터 select
+	EventSelectRead selectEventRead(SortDTO sortDTO);
+	//이벤트 조회시 이벤트 서브이미지 list
+	List<String> selectEventReadSub(SortDTO sortDTO);
+	//이벤트 조회시 이벤트 리뷰 list
+	List<EventReview> selectEventReadReview(SortDTO sortDTO);
+	//이벤트 조회시 이벤트 리뷰 list
+	int selectEventReadReviewCount(SortDTO sortDTO);
+	//이벤트 리뷰의 평균 별점 합계
+	List<Double> selectEventReadReviewRating(SortDTO sortDTO);
+	//이벤트 리뷰 추가
+	boolean insertEventReview(EventReview eventReview);
+	//이벤트 리뷰 삭제
+	boolean deleteEventReview(EventReview eventReview);
+	//이벤트 게시글 삭제
+	boolean deleteEvent(EventDTO eventDTO);
 	
 }

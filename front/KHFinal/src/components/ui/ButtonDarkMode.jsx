@@ -9,7 +9,7 @@ const ButtonDarkMode = ({ text, onClick, width }) => {
   return (
     <Button
       onClick={onClick}
-      className={` ${getDarkModeHover()} ${width}`}
+      className={` ${getDarkModeHover()} ${width} text-nowrap`}
       variant="none"
     >
       {text}
