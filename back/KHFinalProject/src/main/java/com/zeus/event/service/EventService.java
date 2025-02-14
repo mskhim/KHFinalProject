@@ -2,6 +2,7 @@ package com.zeus.event.service;
 
 import java.util.List;
 
+import com.zeus.event.domain.EventDTO;
 import com.zeus.event.domain.EventReview;
 import com.zeus.event.domain.EventSelectListDTO;
 import com.zeus.event.domain.EventSelectReadDTO;
@@ -15,7 +16,6 @@ public interface EventService {
   //이벤트 리스트 
   List<EventSelectListDTO> selectEventList(SortDTO sortDTO);
   //이벤트 리스트 페이지네이션 개수
-  
   //이벤트 조회
   EventSelectReadDTO selectEventRead(SortDTO sortDTO);
   //이벤트 리뷰 조회
@@ -26,5 +26,9 @@ public interface EventService {
   int selectEventReviewCount(SortDTO sortDTO);
   //리뷰 인서트
   boolean insertEventReview(EventReview eventReview);
+  //리뷰 삭제
+  boolean deleteEventReview(EventReview eventReview);
+  //축제 게시글 삭제
+  boolean deleteEvent(EventDTO eventDTO);
   
 }

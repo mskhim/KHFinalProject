@@ -2,6 +2,7 @@ package com.zeus.event.mapper;
 
 import java.util.List;
 
+import com.zeus.event.domain.EventDTO;
 import com.zeus.event.domain.EventReview;
 import com.zeus.event.domain.EventSelectListDTO;
 import com.zeus.event.domain.EventSelectRead;
@@ -24,6 +25,11 @@ public interface EventMapper {
 	int selectEventReadReviewCount(SortDTO sortDTO);
 	//이벤트 리뷰의 평균 별점 합계
 	List<Double> selectEventReadReviewRating(SortDTO sortDTO);
+	//이벤트 리뷰 추가
 	boolean insertEventReview(EventReview eventReview);
+	//이벤트 리뷰 삭제
+	boolean deleteEventReview(EventReview eventReview);
+	//이벤트 게시글 삭제
+	boolean deleteEvent(EventDTO eventDTO);
 	
 }

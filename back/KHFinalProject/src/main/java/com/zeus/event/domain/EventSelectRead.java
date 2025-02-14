@@ -25,4 +25,5 @@ public class EventSelectRead {
     private Double longitude; // 경도
     private int price;
 	private String thumburl;
+	private int userAccountNo;
 }

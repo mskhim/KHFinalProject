@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.zeus.event.domain.EventDTO;
 import com.zeus.event.domain.EventReview;
 import com.zeus.event.domain.EventSelectListDTO;
 import com.zeus.event.domain.EventSelectReadDTO;
@@ -64,6 +65,16 @@ public class EventServiceImpl implements EventService {
 	public boolean insertEventReview(EventReview eventReview) {
 		return mapper.insertEventReview(eventReview);
 		
+	}
+
+	@Override
+	public boolean deleteEventReview(EventReview eventReview) {
+		return mapper.deleteEventReview(eventReview);
+	}
+
+	@Override
+	public boolean deleteEvent(EventDTO eventDTO) {
+		return mapper.deleteEvent(eventDTO);
 	}
 
 	

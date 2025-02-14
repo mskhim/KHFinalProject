@@ -1,8 +1,12 @@
 import { useContext, useEffect, useState, useRef } from 'react';
 import { Form, Button, Row, Col, Pagination } from 'react-bootstrap';
-import { ButtonDarkMode } from '../../../components/ui';
+import { ButtonDarkMode, ButtonRoleAndUserNo } from '../../../components/ui';
 import { Context } from '../../../Context';
-import { selectEventReview, insertEventReview } from '../eventApi';
+import {
+  selectEventReview,
+  insertEventReview,
+  deleteEventReview,
+} from '../eventApi';
 import { useParams } from 'react-router-dom';
 import { getUserData } from '../../user/userApi';
 
@@ -107,7 +111,12 @@ const ReviewSection = () => {
     const response = await selectEventReview(param.no, page);
     setEventReview(response.dataList);
     setRating(response.rating);
-    setPagenation(Math.floor(response.count / reviewsPerPage + 1));
+    setPagenation(
+      Math.floor(
+        response.count / reviewsPerPage +
+          (response.count % reviewsPerPage === 0 ? 0 : 1)
+      )
+    );
     setIsLoading(false);
   };
   useEffect(() => {
@@ -115,7 +124,6 @@ const ReviewSection = () => {
   }, [page, newReview]);
 
   // 리뷰 추가
-
   const addReview = async () => {
     const user = await getUserData();
     if (!user) {
@@ -139,8 +147,14 @@ const ReviewSection = () => {
       console.log('최신 newReview:', updatedReview); // ✅ 최신 값 확인
       await insertEventReview(updatedReview); // ✅ 최신 상태를 반영한 값으로 API 호출
       setNewReview({ rating: 5, content: '' }); // ✅ 리뷰 작성 후 초기화
+      setPage(1);
       contentRef.current.value = ''; // ✅ 리뷰 작성 후 초기화
     });
+  };
+  const hadleDeleteReview = async (userNo, reviewNo) => {
+    const response = await deleteEventReview(userNo, reviewNo);
+    setPage(1);
+    setNewReview({ rating: 5, content: '' });
   };
 
   return (
@@ -185,7 +199,6 @@ const ReviewSection = () => {
       <hr />
 
       {/* 리뷰 목록 */}
-      <hr />
       {isLoading ? (
         <div>Loading...</div>
       ) : eventReview.length === 0 ? (
@@ -194,10 +207,24 @@ const ReviewSection = () => {
         eventReview.map((review, index) => (
           <div key={index} className="p-2 border-bottom">
             <div className="d-flex align-items-center">
-              <strong>{review.name}</strong> &nbsp;({review.subDate})
-              <span style={{ marginLeft: '10px' }}>
-                <StarRating rating={review.rating} />
-              </span>
+              <div className="d-flex justify-content-between w-100">
+                <div>
+                  <strong>{review.name}</strong> &nbsp;({review.subDate})
+                  <span style={{ marginLeft: '10px' }}>
+                    <StarRating rating={review.rating} />
+                  </span>
+                </div>
+                <div>
+                  <ButtonRoleAndUserNo
+                    text={'삭제'}
+                    userNo={review.userAccountNo}
+                    role={'user'}
+                    onClick={() =>
+                      hadleDeleteReview(review.userAccountNo, review.no)
+                    }
+                  />
+                </div>
+              </div>
             </div>
             <p>{review.content}</p>
           </div>

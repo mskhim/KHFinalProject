@@ -23,10 +23,6 @@ const UserRoutes = () => {
         'preLoginUrl',
         location.pathname + location.search
       );
-      console.log(
-        '🔍 저장된 이전 페이지:',
-        sessionStorage.getItem('preLoginUrl')
-      );
     }
   }, [location]); // ✅ 경로 변경 시마다 실행
   return (

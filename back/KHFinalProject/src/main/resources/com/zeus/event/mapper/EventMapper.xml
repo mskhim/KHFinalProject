@@ -26,7 +26,7 @@
 
 	<select id="selectEventRead" parameterType="sortDTO"
 		resultType="EventSelectRead">
-		SELECT E.NO, P.NO AS PUBLIC_DATA_EVENT_NO, NAME,PRICE,
+		SELECT E.NO, E.USER_ACCOUNT_NO, P.NO AS PUBLIC_DATA_EVENT_NO, NAME,PRICE,
 		PLACE,START_DATE,END_DATE,CONTENT,GOVERNING,HOST,TEL,HOMEPAGE,ADDRESS,LATITUDE,LONGITUDE,I.THUMBURL
 		FROM EVENT E
 		LEFT JOIN PUBLIC_DATA_EVENT P
@@ -79,4 +79,12 @@
 		>
 		INSERT INTO EVENT_REVIEW VALUES(SEQ_EVENT_REVIEW_NO.NEXTVAL,#{content},SYSDATE,#{eventNo},#{userAccountNo},#{rating})
 	</insert>
+	<delete id="deleteEventReview" parameterType="EventReview"
+		>
+		DELETE FROM EVENT_REVIEW WHERE NO=#{no}
+	</delete>
+		<delete id="deleteEvent" parameterType="EventDTO"
+		>
+		DELETE FROM EVENT WHERE NO=#{no}
+	</delete>
 </mapper>

@@ -11,18 +11,18 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { Context } from '../../Context'; // 다크모드 컨텍스트 적용
 import './css/EventRead.css'; // CSS 파일 추가
-import { Navigate, useParams } from 'react-router-dom';
-import { use } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import ReviewSection from './include/ReivewSection';
 import MapSection from './include/MapSection';
-import { ButtonDarkMode } from '../../components/ui';
-import { selectEventRead, selectEventReview } from './eventApi';
+import { ButtonDarkMode, ButtonRoleAndUserNo } from '../../components/ui';
+import { deleteEvent, insertEventToCart, selectEventRead } from './eventApi';
+import CartModalPage from './include/CartModalPage';
 
 const EventRead = () => {
-  let events = [];
-
   const param = useParams();
+  const nav = useNavigate();
   const [eventInfo, setEventInfo] = useState({});
+  const [cart, setCart] = useState({ qt: 1 });
   const [ticketCount, setTicketCount] = useState(1);
   const { getDarkMode, getDarkModeHover } = useContext(Context); // 다크모드 적용
   const [mainImage, setMainImage] = useState(''); // ✅ 현재 메인 이미지 상태
@@ -36,6 +36,11 @@ const EventRead = () => {
     };
     eventData();
   }, [param.no]);
+  // 장바구니 담기
+  useEffect(() => {
+    setCart({ eventNo: eventInfo.no, qt: ticketCount });
+  }, [ticketCount, eventInfo.no]);
+
   const scrollRef = useRef(null);
   const scrollLeft = () => {
     if (scrollRef.current) {
@@ -53,7 +58,23 @@ const EventRead = () => {
   const handleDecrease = () => {
     if (ticketCount > 1) setTicketCount(ticketCount - 1);
   };
+  const handleDelete = async () => {
+    const response = await deleteEvent(eventInfo.userAccountNo, eventInfo.no);
+    if (response) {
+      nav('/eventList');
+    }
+  };
 
+  const [showModal, setShowModal] = useState(false);
+  const handleCart = async () => {
+    // 장바구니 담기 API 호출
+
+    const response = await insertEventToCart(cart);
+    // 모달 표시
+    if (response) {
+      setShowModal(true);
+    }
+  };
   return (
     <>
       <Header page="list" />
@@ -146,7 +167,17 @@ const EventRead = () => {
           {/* 📌 우측: 축제 정보 + 예매 */}
           <Col md={4} className="d-flex flex-column justify-content-center p-4">
             {' '}
-            <h2 className="EventReadTitle-title me-5">{eventInfo.name}</h2>
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <h2 className="EventReadTitle-title me-5 text-nowrap">
+                {eventInfo.name}
+              </h2>
+              <ButtonRoleAndUserNo
+                text="삭제"
+                userNo={eventInfo.userAccountNo}
+                role="manager"
+                onClick={() => handleDelete()}
+              />
+            </div>
             <p className="EventReadTitle-location">
               <strong>장소:</strong> {eventInfo.place}
             </p>
@@ -205,6 +236,7 @@ const EventRead = () => {
               </h5>
               <Button
                 className={`btn-primary w-100 ${getDarkModeHover()} EventReadTitle-cart-btn`}
+                onClick={handleCart}
               >
                 🛒 장바구니 담기
               </Button>
@@ -224,6 +256,7 @@ const EventRead = () => {
           </Col>
         </Row>
       </Container>
+      <CartModalPage showModal={showModal} setShowModal={setShowModal} />
       <Footer />
     </>
   );
