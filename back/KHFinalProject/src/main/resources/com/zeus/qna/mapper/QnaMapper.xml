@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zeus.qna.mapper.QnaMapper">
+
+    <select id="getAllQna" resultType="QnaDTO">
+        select q.no, q.title, q.content,q.user_account_no, q.sub_date,q.qna_no, p.name as event_name,u.name as user_name  from qna q
+	 	join user_account u 
+	 	on q.user_account_no=u.no
+	 	join event e
+	 	on q.event_no=e.no
+	 	join public_data_event p
+	 	on e.public_data_event_no =p.no
+	 	order by q.no desc 
+    </select>
+
+    <insert id="insertQna" parameterType="Qna" useGeneratedKeys="true" keyProperty="no">
+        INSERT INTO qna (no ,title, content, user_account_no, sub_date,event_no)
+        VALUES (seq_qna_no.nextval,#{title}, #{content}, #{userAccountNo}, sysdate, #{eventNo})
+    </insert>
+
+    <update id="updateQna">
+        UPDATE qna SET title=#{title}, content=#{content} WHERE no=#{no}
+    </update>
+
+    <select id="getFestivalList" resultType="PublicDataEventDTO">
+        SELECT e.no, name FROM EVENT E 
+        LEFT JOIN public_data_event P
+        ON E.public_data_event_NO= P.NO
+    </select>
+
+</mapper>
