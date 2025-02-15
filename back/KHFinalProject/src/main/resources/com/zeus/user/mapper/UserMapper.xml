@@ -56,17 +56,42 @@
 	</update>
 	<!-- ################################################################################################## -->
 	<!-- ################################################################################################## -->
-	<!-- 사용자 조회 쿼리 -->
+	<!-- 회원 탈퇴를 위한 사용자 조회 쿼리. -->
 	<select id="getUserByNo" parameterType="Integer" resultType="User">
 	    SELECT * 
 	    FROM USER_ACCOUNT 
 	    WHERE NO = #{userNo}
 	</select>
-	<!-- 회원 탈퇴 쿼리 (비밀번호 확인을 서비스 레이어에서 처리) -->
+	<!-- 회원 탈퇴 쿼리 (비밀번호 확인을 서비스 레이어에서 처리). -->
 	<delete id="deleteUserData" parameterType="Integer">
 	    DELETE
 	    FROM USER_ACCOUNT
 	    WHERE NO = #{userNo}
+	</delete>
+	<!-- ################################################################################################## -->
+	<!-- ################################################################################################## -->
+	<!-- 로그인 된 사용자(토큰 no = userNo)의 장바구니 조회 쿼리. -->
+	<select id="getCartData" parameterType="Integer" resultType="CartDTO">
+	    SELECT C.NO, 
+	           P.NAME, 
+	           C.QT, 
+	           P.START_DATE, 
+	           P.END_DATE, 
+	           P.CONTENT, 
+	           E.PRICE
+	    FROM CART C
+	    LEFT JOIN EVENT E ON C.EVENT_NO = E.NO
+	    JOIN PUBLIC_DATA_EVENT P ON E.PUBLIC_DATA_EVENT_NO = P.NO
+	    JOIN USER_ACCOUNT U ON C.USER_ACCOUNT_NO = U.NO  <!-- USER_ACCOUNT 테이블과 조인 -->
+	    WHERE U.NO = #{userNo}  <!-- userNo로 장바구니 데이터 조회 -->
+	</select>
+	<!-- ################################################################################################## -->
+	<!-- ################################################################################################## -->
+	<!-- 로그인 된 사용자(토큰 no = userNo)의 장바구니 삭제 쿼리. -->
+	<delete id="deleteCartData" parameterType="Cart">
+		DELETE
+		FROM CART
+		WHERE NO = #{no}
 	</delete>
 	<!-- ################################################################################################## -->
 	<!-- 아이디, 제공자를 토대로 로그인 유저 반환후 비밀번호 헤싱해서 로그인 확인 확인-->

@@ -1,5 +1,7 @@
 package com.zeus.user.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -14,6 +16,8 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zeus.common.config.JwtUtil;
+import com.zeus.user.domain.Cart;
+import com.zeus.user.domain.CartDTO;
 import com.zeus.user.domain.User;
 import com.zeus.user.mapper.UserMapper;
 
@@ -168,33 +172,7 @@ public class UserServiceImpl implements UserService {
 	}
 	//////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////
-//	@Override
-//	public boolean deleteUserData(String email, String rawPassword) {
-//	    try {
-//	        // DB에서 해당 이메일로 저장된 암호화된 비밀번호를 가져옴
-//	        String encodedPassword = mapper.getPasswordByEmail(email);
-//
-//	        if (encodedPassword == null) {
-//	            return false; // 이메일이 존재하지 않으면 탈퇴할 수 없음
-//	        }
-//
-//	        // BCryptPasswordEncoder를 사용하여 평문 비밀번호와 DB에 저장된 암호화된 비밀번호 비교
-//	        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-//
-//	        // 입력된 평문 비밀번호를 암호화하여 DB에 저장된 암호화된 비밀번호와 비교
-//	        if (passwordEncoder.matches(rawPassword, encodedPassword)) {
-//	            // 비밀번호 일치 -> 회원 탈퇴 진행
-//	            mapper.deleteUserData(email);
-//	            return true;
-//	        } else {
-//	            // 비밀번호 일치하지 않으면 false 반환
-//	            return false;
-//	        }
-//	    } catch (Exception e) {
-//	        throw new RuntimeException("회원 탈퇴 처리 중 오류가 발생하였습니다.", e);
-//	    }
-//	}
-	
+	// 회원 탈퇴.
 	@Override
 	public boolean deleteUserData(Integer userNo)
 	{
@@ -212,8 +190,31 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 	////////////////////////////////////////////////////////////////////////
-    
-    
+	////////////////////////////////////////////////////////////////////////
+	// userNo와 일치하는 장바구니 정보를 출력.
+	@Override
+	public List <CartDTO> getCartData(Integer userNo)
+	{
+		return mapper.getCartData(userNo);  // List<CartDTO> 반환;
+	}
+	////////////////////////////////////////////////////////////////////////
+	// 장바구니 삭제.
+	@Override
+	public boolean deleteCartData(Cart cart)
+	{
+		try {
+            // 장바구니 삭제 쿼리 실행
+            int result = mapper.deleteCartData(cart);
+
+            // 삭제 성공 여부를 확인하여 true/false 반환
+            return result > 0;  // 삭제된 행의 수가 1 이상이면 삭제 성공
+        } catch (Exception e) {
+            // 예외가 발생하면 false 반환
+            e.printStackTrace();
+            return false;
+        }
+	}
+	////////////////////////////////////////////////////////////////////////
     //로그인 체크, id와 provider로 user 정보를 가져와헤싱해서 로그인확인
     //provider가 common 이라면 헤싱해서 로그인 이외에는 api 로그인이므로 id와 provider만 일치하는지 확인
     @Override

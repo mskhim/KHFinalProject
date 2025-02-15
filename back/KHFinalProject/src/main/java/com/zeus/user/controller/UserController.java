@@ -2,6 +2,7 @@ package com.zeus.user.controller;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zeus.common.config.JwtUtil;
+import com.zeus.user.domain.Cart;
+import com.zeus.user.domain.CartDTO;
 import com.zeus.user.domain.User;
 import com.zeus.user.service.UserService;
 
@@ -396,7 +399,7 @@ public class UserController {
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
-	// 회원 탈퇴
+	// 회원 탈퇴.
 	@DeleteMapping("/deleteUserData")
 	public ResponseEntity<Map <String, Object>> deleteUserData(
 	        @CookieValue(name = "jwt", required = false) String jwtToken,
@@ -425,7 +428,7 @@ public class UserController {
 		}
 		
 		// 입력한 이메일 비교.
-		if ( !dbUser.getEmail().equals(deleteUser.getEmail()))
+		if (!dbUser.getEmail().equals(deleteUser.getEmail()))
 		{
 			return ResponseEntity.ok(Map.of(
 					"authenticated", false,
@@ -458,8 +461,78 @@ public class UserController {
 		    }
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	
+	// 장바구니 조회.
+	@GetMapping("/getCartData")
+	public ResponseEntity <Map <String, Object>> getCartData(@CookieValue(name = "jwt", required = false) String jwtToken)
+	{
+	       // JWT 토큰 검증
+	       if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken))
+	       {
+	           return ResponseEntity.ok(Map.of(
+	                   "authenticated", false,
+	                   "message", "JWT가 없거나 만료됨"));
+	       }
+	        // JWT에서 userNo 추출
+        Integer userNo = JwtUtil.validateToken(jwtToken).get("no", Integer.class);
+        
+		// userNo로 장바구니 데이터 조회
+        List <CartDTO> cartData = service.getCartData(userNo);
+	        if (!cartData.isEmpty())
+        {
+            return ResponseEntity.ok(Map.of(
+            		"authenticated", true,
+            		"cartDTO", cartData));
+        } else
+        {
+            return ResponseEntity.ok(Map.of(
+            		"authenticated", true,
+            		"message", "장바구니 데이터가 없습니다."));
+        }
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	// 장바구니 삭제.
+	@DeleteMapping("/deleteCartData")
+	public ResponseEntity<Map<String, Object>> deleteCartData(
+	        @CookieValue(name = "jwt", required = false) String jwtToken,
+	        @RequestBody Cart deleteCart) {  // Cart 객체를 요청 본문에서 받습니다.
+
+	    // JWT 토큰 검증
+	    if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken)) {
+	        return ResponseEntity.ok(Map.of(
+	                "authenticated", false,
+	                "message", "JWT가 없거나 만료됨"));
+	    }
+
+	    // JWT에서 userNo 추출 (인증용)
+	    Integer userNo = JwtUtil.validateToken(jwtToken).get("no", Integer.class);
+
+	    // DB에서 해당 userNo로 사용자 정보 가져오기
+	    User dbUser = service.getUserByNo(userNo);
+
+	    if (dbUser == null) {
+	        return ResponseEntity.ok(Map.of(
+	                "authenticated", false,
+	                "message", "사용자 정보를 찾을 수 없습니다."));
+	    }
+
+	    // 장바구니 항목 삭제 처리
+	    boolean isDeleted = service.deleteCartData(deleteCart);
+
+	    if (isDeleted)
+	    {
+	        return ResponseEntity.ok(Map.of(
+	        		"authenticated", true,
+	        		"message", "장바구니 항목 삭제 성공"));
+	    } else
+	    {
+	        return ResponseEntity.ok(Map.of(
+	        		"authenticated", false,
+	        		"message", "장바구니 항목 삭제 실패"));
+	    }
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	//--------------------------------------------------api메소드가 아닌 컨트롤러용 메소드
 	//  JWT 쿠키 삭제 메소드
 	private void deleteJwtCookie(HttpServletResponse response, String name) {

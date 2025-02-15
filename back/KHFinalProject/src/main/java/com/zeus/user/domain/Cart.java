@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Data
-public class Cart {
+public class Cart
+{
     private int no;                // 장바구니 번호 (PK)
     private int eventNo;           // 축제 번호 (FK)
     private int userAccountNo;     // 회원 번호 (FK)

@@ -275,6 +275,59 @@ export const deleteUserData = async (formData) => {
   }
 }
 
+/*
+ * JWT쿠키 검사를 통해 로그인 상태를 확인한 후,
+ * 장바구니 정보를 불러옴./
+ */
+export const getCartData = async () => {
+  try
+  {
+    const response = await fetch('http://localhost:8080/user/getCartData',{
+      method: 'GET',
+      credentials: 'include', // ✅ 쿠키 자동 포함
+    });
+
+    if (!response.ok)
+    {
+      return { authenticated: false };
+    }
+
+    const data = await response.json();
+    return data.cartDTO; // { authenticated: true, cartDTO: {...} }
+  } catch (error)
+  {
+    return { authenticated: false };
+  }
+};
+
+/*
+* JWT쿠키 검사를 통해 로그인 상태를 확인한 후,
+* 장바구니 내역을 삭제함./
+*/
+export const deleteCartData = async (cart) => {
+  try {
+    const response = await fetch('http://localhost:8080/user/deleteCartData', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(cart),  // Cart 객체를 JSON으로 보냄
+      credentials: 'include',  // 쿠키 자동 포함
+    });
+
+    const data = await response.json();  // 응답 데이터 파싱
+
+    console.log('서버 응답:', data);  // 디버깅 용도
+
+    return data;  // 응답값 그대로 반환 (프론트에서 처리)
+  } catch (error) {
+    console.error("장바구니 삭제 오류:", error);  // 서버 요청 오류에 대한 로그 출력
+    return { authenticated: false, message: '서버 요청에 실패했습니다. 다시 시도해주세요.' };
+  }
+};
+
+
+
 /**
  * 이메일을 받아서 일반회원가입 User를 가져오는 API, 아이디만 가져올것
  */
