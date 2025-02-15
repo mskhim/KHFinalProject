@@ -3,15 +3,17 @@ import { stringify } from 'uuid';
 /**
  * 이벤트 리스트 조회
  */
-export const selectEventList = async (page) => {
+export const selectEventList = async (sortOption) => {
+  console.log(sortOption);
   try {
     const response = await fetch(
-      `http://localhost:8080/event/selectEventList?page=${page}`,
+      `http://localhost:8080/event/selectEventList`,
       {
-        method: 'GET',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify(sortOption),
       }
     );
     const data = await response.json();

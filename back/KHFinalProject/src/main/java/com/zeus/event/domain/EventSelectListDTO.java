@@ -13,4 +13,7 @@ public class EventSelectListDTO {
     private LocalDate startDate;
     private LocalDate endDate;
     private String thumbUrl; // 메인 이미지 URL (유니크)
+    private String address;
+    private String rating;
+    
 }
