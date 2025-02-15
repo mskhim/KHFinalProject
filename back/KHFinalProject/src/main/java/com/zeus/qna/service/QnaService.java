@@ -1,8 +1,14 @@
 package com.zeus.qna.service;
 
-import org.springframework.stereotype.Service;
+import java.util.List;
+
+import com.zeus.event.domain.PublicDataEventDTO;
+import com.zeus.qna.domain.Qna;
+import com.zeus.qna.domain.QnaDTO;
 
 public interface QnaService {
-
-
+    List<QnaDTO> getAllQna();
+    void insertQna(Qna qna);
+    void updateQna(Qna qna);
+    List<PublicDataEventDTO> getFestivalList();
 }
