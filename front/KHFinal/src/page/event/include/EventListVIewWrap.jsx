@@ -1,12 +1,12 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useRef, useCallback } from 'react';
 import {
   Container,
   Row,
   Col,
   Card,
-  Pagination,
   ButtonGroup,
   Button,
+  Spinner, // ✅ 스피너 추가
 } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { ButtonRole } from '../../../components/ui';
@@ -14,40 +14,90 @@ import './css/EventListViewWrap.css';
 import { Context } from '../../../Context';
 import { selectEventList } from '../eventApi';
 
-const EventListViewWrap = () => {
+const EventListViewWrap = ({ sortOption, setSortOption }) => {
   const navigate = useNavigate();
-  // ✅ 현재 페이지 상태
-  const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = 5; // 전체 페이지 개수
-  const { getDarkModeHover, getDarkMode } = useContext(Context);
-  const [eventList, setEventList] = useState([]); // 이벤트 리스트
-  // ✅ 정렬 상태
-  const [sortOption, setSortOption] = useState('popular'); // "popular" | "date"
+  const { getDarkModeHover } = useContext(Context);
+  const [eventList, setEventList] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(false); // ✅ 로딩 상태 추가
+  const observerRef = useRef(null);
 
+  // ✅ 새로운 이벤트 리스트 불러오기
+  const fetchEvents = useCallback(
+    async (data) => {
+      if (!hasMore || isLoading) return; // ✅ 이미 로딩 중이면 중복 실행 방지
+      setIsLoading(true); // ✅ 로딩 시작
+
+      try {
+        const dataList = await selectEventList(data);
+
+        if (dataList.length === 0 && data.page > 1) {
+          setHasMore(false);
+        } else {
+          setEventList((prevList) => [...prevList, ...dataList]);
+        }
+
+        if (dataList.length < 9 && data.page > 1) {
+          setHasMore(false);
+        }
+      } catch (error) {
+        console.error('❌ 이벤트 데이터를 불러오는 중 오류 발생:', error);
+      } finally {
+        setIsLoading(false); // ✅ 로딩 종료
+      }
+    },
+    [sortOption.page, isLoading]
+  );
+
+  // ✅ page가 변경될 때만 fetchEvents 실행
   useEffect(() => {
-    const getEventList = async () => {
-      const dataList = await selectEventList(currentPage);
-      setEventList(dataList);
-    };
-    getEventList();
-  }, [currentPage]);
+    fetchEvents(sortOption);
+  }, [sortOption.toggle]);
+
+  // ✅ 검색 조건이 변경될 때 리스트 초기화
+  useEffect(() => {
+    setEventList([]); // ✅ 기존 데이터 초기화
+    setHasMore(true);
+  }, [sortOption.sort, sortOption.search, sortOption.date, sortOption.region]);
+
+  // ✅ Intersection Observer를 이용한 무한 스크롤
+  useEffect(() => {
+    console.log('observerRef:', observerRef.current);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (
+          entries[0].isIntersecting &&
+          hasMore &&
+          eventList.length >= 9 &&
+          !isLoading
+        ) {
+          setTimeout(() => {
+            setSortOption((prev) => ({
+              ...prev,
+              page: prev.page + 1,
+              toggle: !prev.toggle,
+            }));
+          }, 500);
+        }
+      },
+      { threshold: 1.0 }
+    );
+
+    if (observerRef.current) observer.observe(observerRef.current);
+
+    return () => observer.disconnect();
+  }, [hasMore, eventList.length, isLoading]); // ✅ isLoading 추가
 
   // ✅ 정렬 옵션 변경
   const handleSortChange = (option) => {
-    setSortOption(option);
-  };
-
-  // ✅ 스프링부트에서 가져오는 9개 데이터 (현재 페이지 기준)
-
-  // ✅ 정렬 로직 적용
-  const sortedEvents = [].sort((a, b) => {});
-
-  // ✅ 페이지 변경 함수
-  const handlePageChange = (page) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-      console.log(`Fetching data for page: ${page}`);
-    }
+    setSortOption((prev) => ({
+      ...prev,
+      sort: option,
+      page: 1,
+      toggle: !prev.toggle,
+    }));
+    setEventList([]); // 기존 데이터 초기화
+    setHasMore(true); // 데이터 다시 불러오기 가능하게 설정
   };
 
   return (
@@ -57,18 +107,27 @@ const EventListViewWrap = () => {
         <ButtonGroup>
           <Button
             className={`EventListVIewWrap-sort-button ${getDarkModeHover()} ButtonGroup ${
-              sortOption === 'popular' ? 'active' : ''
+              sortOption.sort === 'subDate' ? 'active' : ''
             } `}
-            onClick={() => handleSortChange('popular')}
+            onClick={() => handleSortChange('subDate')}
+            variant="none"
+          >
+            등록일순
+          </Button>
+          <Button
+            className={`EventListVIewWrap-sort-button ${getDarkModeHover()} ButtonGroup ${
+              sortOption.sort === 'rating' ? 'active' : ''
+            } `}
+            onClick={() => handleSortChange('rating')}
             variant="none"
           >
             인기순
           </Button>
           <Button
             className={`EventListVIewWrap-sort-button ${getDarkModeHover()} ButtonGroup ${
-              sortOption === 'date' ? 'active' : ''
+              sortOption.sort === 'startDate' ? 'active' : ''
             } `}
-            onClick={() => handleSortChange('date')}
+            onClick={() => handleSortChange('startDate')}
             variant="none"
           >
             개최일순
@@ -76,6 +135,16 @@ const EventListViewWrap = () => {
         </ButtonGroup>
       </div>
       <br />
+
+      {/* ✅ 로딩 중이면 스피너 표시 */}
+      {isLoading && eventList.length === 0 && (
+        <div className="d-flex justify-content-center my-4">
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        </div>
+      )}
+
       {/* ✅ 이벤트 카드 목록 */}
       <Row className="g-4">
         {eventList.map((event) => (
@@ -104,7 +173,22 @@ const EventListViewWrap = () => {
           </Col>
         ))}
       </Row>
-      <br />
+
+      {/* ✅ 무한 스크롤 감지 대상 */}
+      <div
+        ref={observerRef}
+        style={{ height: '20px', background: 'transparent' }}
+      />
+
+      {/* ✅ 추가 로딩 스피너 (스크롤 하단에서) */}
+      {isLoading && eventList.length > 0 && (
+        <div className="d-flex justify-content-center my-4">
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        </div>
+      )}
+
       <br />
       <br />
       <div className="d-flex justify-content-end">
@@ -116,29 +200,6 @@ const EventListViewWrap = () => {
           }}
         />
       </div>
-      {/* ✅ 페이지네이션 */}
-      <Pagination
-        className={`EventListViewWrap-custom-pagination justify-content-center mt-4 ${getDarkMode()}`}
-        variant="dark"
-      >
-        <Pagination.Prev
-          disabled={currentPage === 1}
-          onClick={() => handlePageChange(currentPage - 1)}
-        />
-        {Array.from({ length: totalPages }, (_, i) => (
-          <Pagination.Item
-            key={i + 1}
-            active={i + 1 === currentPage}
-            onClick={() => handlePageChange(i + 1)}
-          >
-            {i + 1}
-          </Pagination.Item>
-        ))}
-        <Pagination.Next
-          disabled={currentPage === totalPages}
-          onClick={() => handlePageChange(currentPage + 1)}
-        />
-      </Pagination>
     </Container>
   );
 };

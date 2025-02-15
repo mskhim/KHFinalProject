@@ -98,6 +98,7 @@ const ReviewSection = () => {
   const param = useParams();
   const [eventReview, setEventReview] = useState([]);
   const [rating, setRating] = useState(0);
+  const [newRating, setNewRating] = useState(5);
   const [pagenation, setPagenation] = useState(1);
   const [prePagenation, setPrePagenation] = useState(1);
   const [firstPage, setFirstPage] = useState(1);
@@ -170,6 +171,7 @@ const ReviewSection = () => {
         eventNo: param.no,
         userAccountNo: user.no,
         content: contentRef.current.value,
+        rating: newRating,
       };
       console.log('최신 newReview:', updatedReview); // ✅ 최신 값 확인
       await insertEventReview(updatedReview); // ✅ 최신 상태를 반영한 값으로 API 호출
@@ -200,10 +202,8 @@ const ReviewSection = () => {
           <Col md={3}>
             <strong>별점 선택 :</strong>
             <StarRating
-              rating={newReview.rating}
-              setRating={(value) =>
-                setNewReview({ ...newReview, rating: value })
-              }
+              rating={newRating}
+              setRating={(value) => setNewRating(value)}
               interactive={true}
             />
           </Col>

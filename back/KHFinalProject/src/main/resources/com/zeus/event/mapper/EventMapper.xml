@@ -13,16 +13,59 @@
 		A.USER_ACCOUNT_NO=#{no}
 	</select>
 
-	<select id="selectEventList" parameterType="SortDTO"
-		resultType="EventSelectListDTO">
-		SELECT E.NO, NAME, START_DATE,END_DATE,THUMBURL FROM EVENT
-		E LEFT JOIN EVENT_IMG I ON E.NO=I.EVENT_NO
-		LEFT JOIN PUBLIC_DATA_EVENT
-		P ON E.PUBLIC_DATA_EVENT_NO = P.NO
-		WHERE I.THUMBURL IS NOT NULL
-		ORDER BY
-		E.NO DESC
-	</select>
+	<select id="selectEventList" parameterType="SortDTO" resultType="EventSelectListDTO">
+    SELECT 
+        E.NO, 
+        NAME, 
+        START_DATE, 
+        END_DATE, 
+        THUMBURL, 
+        P.ADDRESS ,
+        T.AVG_RATING AS RATING
+    FROM EVENT E 
+    LEFT JOIN EVENT_IMG I ON E.NO = I.EVENT_NO
+    LEFT JOIN PUBLIC_DATA_EVENT P ON E.PUBLIC_DATA_EVENT_NO = P.NO
+    LEFT JOIN vw_event_avg_rating T ON E.NO=T.NO
+    WHERE I.THUMBURL IS NOT NULL
+     <if test="sort == 'startDate'">
+        AND START_DATE>SYSDATE
+    </if>
+    <!-- 검색 조건 추가 -->
+    <if test="search != null and search != ''">
+        AND p.NAME LIKE '%' || #{search} || '%'
+    </if>
+
+    <!-- 날짜 필터링 -->
+    <if test="date != null">
+        AND #{date} BETWEEN p.START_DATE AND p.END_DATE
+    </if>
+
+    <!-- 지역 필터링 -->
+    <if test="region != null and region != ''">
+        AND P.ADDRESS LIKE '%' || #{region} || '%'
+    </if>
+
+    <!-- 정렬 옵션 -->
+    ORDER BY
+    <choose>
+        <when test="sort == 'subDate'">
+            E.NO DESC  <!-- 등록일 순 -->
+        </when>
+        <when test="sort == 'rating'">
+            RATING DESC  <!-- 인기순 -->
+        </when>
+        <when test="sort == 'startDate'">
+            START_DATE ASC  <!-- 개최일 순 -->
+        </when>
+        <otherwise>
+            E.NO DESC  <!-- 기본값: 등록일 순 -->
+        </otherwise>
+    </choose>
+
+    <!-- 페이징 처리 -->
+    OFFSET ((#{page} - 1) * 9) ROWS FETCH NEXT 9 ROWS ONLY
+</select>
+
 
 	<select id="selectEventRead" parameterType="sortDTO"
 		resultType="EventSelectRead">

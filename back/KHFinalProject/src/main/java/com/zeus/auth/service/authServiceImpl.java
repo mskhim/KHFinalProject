@@ -12,8 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 public class authServiceImpl implements authService {
 	@Autowired
 	private JwtUtil JwtUtil;
-	
-	@Override//토큰과 id, provider를 넣어서 검증
+
+	@Override // 토큰과 id, provider를 넣어서 검증
 	public boolean checkAuth(String jwtToken, String userId, String provider) {
 		if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken)) {
 			log.info("토큰만료");
@@ -27,7 +27,7 @@ public class authServiceImpl implements authService {
 		return false;
 	}
 
-	@Override//토큰과 유저 no를 넣어서 검증
+	@Override // 토큰과 유저 no를 넣어서 검증
 	public boolean checkAuth(String jwtToken, int userNo) {
 		if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken)) {
 			log.info("토큰만료");

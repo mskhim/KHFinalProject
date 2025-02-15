@@ -1,61 +1,66 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { Context } from '../../../Context'; // ✅ 다크모드 Context 사용
 import './css/EventListSearchWrap.css';
 import { ButtonDarkMode } from '../../../components/ui';
-const EventListSearchWrap = ({ onSearch }) => {
+
+const EventListSearchWrap = ({ setSortOption, sortOption }) => {
   const { getDarkMode, getDarkModeHover } = useContext(Context); // ✅ 다크모드 여부
   const [searchDate, setSearchDate] = useState('');
   const [searchRegion, setSearchRegion] = useState('');
   const [searchName, setSearchName] = useState('');
   const [isSearching, setIsSearching] = useState(false);
-  const [regions, setRegions] = useState([]); // ✅ 지역 리스트 (목업 데이터)
-
-  // ✅ 지역 리스트 (목업 데이터) - 나중에 API 연동 시 이 부분을 대체
-  useEffect(() => {
-    const fetchMockRegions = async () => {
-      const mockData = [
-        { id: 1, name: '서울' },
-        { id: 2, name: '부산' },
-        { id: 3, name: '대구' },
-        { id: 4, name: '인천' },
-        { id: 5, name: '광주' },
-        { id: 6, name: '대전' },
-        { id: 7, name: '울산' },
-        { id: 8, name: '경기' },
-        { id: 9, name: '강원' },
-        { id: 10, name: '충북' },
-        { id: 11, name: '충남' },
-        { id: 12, name: '전북' },
-        { id: 13, name: '전남' },
-        { id: 14, name: '경북' },
-        { id: 15, name: '경남' },
-        { id: 16, name: '제주' },
-      ];
-      setRegions(mockData);
-    };
-
-    fetchMockRegions();
-  }, []);
+  const isFirstRender = useRef(true); // ✅ 처음 렌더링 여부를 저장하는 ref
+  const [regions, setRegions] = useState([
+    { id: 1, name: '서울' },
+    { id: 2, name: '부산' },
+    { id: 3, name: '대구' },
+    { id: 4, name: '인천' },
+    { id: 5, name: '광주' },
+    { id: 6, name: '대전' },
+    { id: 7, name: '울산' },
+    { id: 8, name: '경기' },
+    { id: 9, name: '강원' },
+    { id: 10, name: '충북' },
+    { id: 11, name: '충남' },
+    { id: 12, name: '전북' },
+    { id: 13, name: '전남' },
+    { id: 14, name: '경북' },
+    { id: 15, name: '경남' },
+    { id: 16, name: '제주' },
+  ]); // ✅ 지역 리스트 (목업 데이터)
 
   // ✅ 검색 버튼 클릭
   const handleSearch = () => {
-    if (isSearching) {
+    setIsSearching(!isSearching);
+  };
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    if (!isSearching) {
       setSearchDate('');
       setSearchRegion('');
       setSearchName('');
-      setIsSearching(false);
-      onSearch(null);
+      setSortOption(() => ({
+        page: 1,
+        sort: 'subDate',
+        search: null,
+        date: null,
+        region: null,
+        toggle: !sortOption.toggle,
+      }));
     } else {
-      const searchParams = {
+      setSortOption((prev) => ({
+        ...prev, // ✅ 기존 상태 유지
+        search: searchName,
         date: searchDate,
         region: searchRegion,
-        name: searchName,
-      };
-      setIsSearching(true);
-      onSearch(searchParams);
+        toggle: !prev.toggle,
+      }));
     }
-  };
+  }, [isSearching]);
 
   return (
     <Container

@@ -54,12 +54,11 @@ public class EventController {
 	}
 
 	// 축제 리스트 출력
-	@GetMapping("/selectEventList")
-	public ResponseEntity<Map<String, Object>> selectEventList(@RequestParam int page) {
-		log.info("컨트롤러시작");
-		SortDTO sortDTO = new SortDTO();
+	@PostMapping("/selectEventList")
+	public ResponseEntity<Map<String, Object>> selectEventList(@RequestBody SortDTO sortDTO) {
+		log.info(sortDTO+"");
 		List<EventSelectListDTO> dataList = service.selectEventList(sortDTO);
-		return ResponseEntity.ok(Map.of("authenticated", true, "dataList", dataList));
+		return ResponseEntity.ok(Map.of("state", true, "dataList", dataList));
 	}
 
 	// 축제 삭제
@@ -126,7 +125,6 @@ public class EventController {
 	@DeleteMapping("/deleteEventReview")
 	public ResponseEntity<Map<String, Object>> deleteEventReview(
 			@CookieValue(name = "jwt", required = false) String jwtToken, @RequestBody EventReview eventReview) { // 쿠키에서
-																													// JWT
 																													// 가져오기
 		if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken)) {
 			log.info("토큰만료");
