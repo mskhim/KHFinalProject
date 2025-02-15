@@ -1,5 +1,12 @@
 package com.zeus.user.service;
 
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
+
+import com.zeus.user.domain.Cart;
+import com.zeus.user.domain.CartDTO;
 import com.zeus.user.domain.User;
 
 public interface UserService {
@@ -16,6 +23,14 @@ public interface UserService {
 	
 	///////////////////////////////////////////////////////
 	User updateUserData (User user);
+	//User deleteUserData (User user);
+	// jwt에서 가져온 userNo로 회원 정보 조회 후, 회원 탈퇴 진행.
+	boolean deleteUserData(Integer userNo);
+	User getUserByNo(Integer userNo);
+    // 여러 개의 장바구니 항목을 반환하므로 List로 설정
+    List <CartDTO> getCartData(Integer userNo);
+    // 장바구니 항목 삭제.
+	boolean deleteCartData(Cart cart);
 	///////////////////////////////////////////////////////
 	
 	
@@ -29,7 +44,7 @@ public interface UserService {
     String getKakaoAccessToken(String code); // 카카오 Access Token 요청
     String getKakaoUserInfo(String accessToken); // 카카오 사용자 정보 요청
     
-    //비밀버호 해싱관련
+    //비밀번호 해싱관련
     public String encodePassword(String rawPassword);
     public boolean matchPassword(String rawPassword, String encodedPassword);
 }

@@ -1,5 +1,7 @@
 package com.zeus.user.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -14,6 +16,8 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zeus.common.config.JwtUtil;
+import com.zeus.user.domain.Cart;
+import com.zeus.user.domain.CartDTO;
 import com.zeus.user.domain.User;
 import com.zeus.user.mapper.UserMapper;
 
@@ -64,6 +68,15 @@ public class UserServiceImpl implements UserService {
         return passwordEncoder.matches(rawPassword, encodedPassword); // ✅ 비밀번호 비교
     }
     
+    /////////////////////////////////////////////////////////
+    /// DB에서 userNo로 사용자 정보 조회.
+	@Override
+	public User getUserByNo(Integer userNo)
+	{
+		return mapper.getUserByNo(userNo);
+	}
+    /////////////////////////////////////////////////////////
+
 
     //이메일로 아이디 찾기 기능을 위해 일반 유저 정보를 가져온다. 보안을 위해 아이디만 살려서 보낼것
 	@Override
@@ -157,11 +170,51 @@ public class UserServiceImpl implements UserService {
 			return null;
 		}
 	}
-	/////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////
-    
-    
-    
+	//////////////////////////////////////////////////////////////////////////
+	// 회원 탈퇴.
+	@Override
+	public boolean deleteUserData(Integer userNo)
+	{
+		try
+		{
+			// 삭제 쿼리 호출 (userNo를 기준으로 사용자 삭제)
+			int rowsAffected = mapper.deleteUserData(userNo);
+			// 삭제가 성공적으로 이루어졌다면
+			return rowsAffected > 0; // 1 이상의 값이 반환되면 삭제 성공
+			
+		} catch (Exception e)
+		{
+			e.printStackTrace(); // 예외가 발생한 경우 예외 로그 출력
+			return false; // 예외가 발생하면 false 반환
+		}
+	}
+	////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////
+	// userNo와 일치하는 장바구니 정보를 출력.
+	@Override
+	public List <CartDTO> getCartData(Integer userNo)
+	{
+		return mapper.getCartData(userNo);  // List<CartDTO> 반환;
+	}
+	////////////////////////////////////////////////////////////////////////
+	// 장바구니 삭제.
+	@Override
+	public boolean deleteCartData(Cart cart)
+	{
+		try {
+            // 장바구니 삭제 쿼리 실행
+            int result = mapper.deleteCartData(cart);
+
+            // 삭제 성공 여부를 확인하여 true/false 반환
+            return result > 0;  // 삭제된 행의 수가 1 이상이면 삭제 성공
+        } catch (Exception e) {
+            // 예외가 발생하면 false 반환
+            e.printStackTrace();
+            return false;
+        }
+	}
+	////////////////////////////////////////////////////////////////////////
     //로그인 체크, id와 provider로 user 정보를 가져와헤싱해서 로그인확인
     //provider가 common 이라면 헤싱해서 로그인 이외에는 api 로그인이므로 id와 provider만 일치하는지 확인
     @Override
@@ -291,4 +344,3 @@ public class UserServiceImpl implements UserService {
         return response.getBody();
     }
 }
-
