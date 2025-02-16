@@ -1,68 +1,59 @@
+import { useEffect, useState, useContext } from 'react';
+import { Pagination, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import './notice.css';
-import { Link } from 'react-router-dom';
-import { Context } from '../../Context';
-import { useContext, useEffect, useState } from 'react';
-import { Pagination, Button } from 'react-bootstrap';
 import { fetchNotices } from './noticeApi';
+import { Context } from '../../Context';
 
 const NoticeList = () => {
-  const { darkMode, setDarkMode, getDarkMode, getDarkModeHover } =
-    useContext(Context); //다크모드
-  const [currentPage, setCurrentPage] = useState(1); //현재 페이지
-  const [notices, setNotices] = useState([]); //전체 공지사항 데이터
+  const { darkMode, setDarkMode, getDarkMode, getDarkModeHover } = useContext(Context);
+  const [notices, setNotices] = useState([]); // 전체 공지사항 데이터
   const [searchTerm, setSearchTerm] = useState(''); // 검색어
-  const noticesPerPage = 10; // 페이지당 최대 공지사항 개수
+  const [allNotices, setAllNotices] = useState([]); // 전체 공지사항 데이터를 저장할 상태
+  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
+  const [totalPages, setTotalPages] = useState(1); // 총 페이지 수
+  const noticesPerPage = 1; // 페이지당 최대 공지사항 개수
+
+  // 전체 공지사항 데이터를 가져오는 함수
+  const loadAllNotices = async () => {
+    try {
+      const data = await fetchNotices(1, 100); // 처음 한 번에 전체 공지사항을 가져옵니다.
+      setAllNotices(data); // 전체 공지사항 데이터를 상태에 저장
+    } catch (error) {
+      console.error('전체 공지사항을 불러오는 중 오류 발생:', error);
+    }
+  };
 
   useEffect(() => {
-    setDarkMode(sessionStorage.getItem('darkMode') === 'true');
-    const loadNotices = async () => {
-      const data = await fetchNotices(); // 공지사항 데이터 가져오기
-      setNotices(data);
-    };
-
-    loadNotices();
-  }, [darkMode, setDarkMode]);
+    loadAllNotices(); // 컴포넌트가 마운트될 때 전체 공지사항을 불러옵니다.
+  }, []);
 
   // 검색어 입력 시 상태 업데이트
   const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-    setCurrentPage(1); //검색어 변경 시 첫 페이지로 이동
+    setSearchTerm(event.target.value); // 검색어 업데이트
+    setCurrentPage(1); // 검색 시 첫 페이지로 리셋
   };
 
   // 검색어에 맞는 공지사항 필터링
-  const filteredNotices = notices.filter((data) =>
-    data.title.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredNotices = allNotices.filter((data) =>
+    data.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    data.content.toLowerCase().includes(searchTerm.toLowerCase()) // 내용까지 검색
   );
 
-  // 총 페이지 수 계산 (공지사항 개수를 10개씩 나눠서)
-  const totalPages = Math.max(
-    1,
-    Math.ceil(filteredNotices.length / noticesPerPage)
-  );
+  // 페이지네이션을 위한 로직
+  const paginatedNotices = filteredNotices.slice((currentPage - 1) * noticesPerPage, currentPage * noticesPerPage);
+  
+  // 총 페이지 수 계산
+  useEffect(() => {
+    setTotalPages(Math.ceil(filteredNotices.length / noticesPerPage));
+  }, [filteredNotices]);
 
-  // 현재 페이지에서 보여줄 공지사항 데이터
-  const startIndex = (currentPage - 1) * noticesPerPage;
-  const paginatedNotices = filteredNotices.slice(
-    startIndex,
-    startIndex + noticesPerPage
-  );
-
-  // 페이지네이션 그룹 계산
-  let paginationNumbers = [];
-  if (totalPages <= 5) {
-    // 50개 이하일 때 (1~5 페이지 표시)
-    paginationNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
-  } else {
-    // 50개 초과 시 해당 범위에 맞게 페이지 그룹 표시
-    const groupStart = Math.floor((currentPage - 1) / 5) * 5 + 1;
-    const groupEnd = Math.min(groupStart + 4, totalPages);
-    paginationNumbers = Array.from(
-      { length: groupEnd - groupStart + 1 },
-      (_, i) => groupStart + i
-    );
-  }
+  // 페이지 변경 핸들러
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
     <>
@@ -86,7 +77,7 @@ const NoticeList = () => {
                     placeholder="검색어를 입력해주세요."
                     className="Notice-search-input"
                     value={searchTerm}
-                    onChange={handleSearchChange}
+                    onChange={handleSearchChange} // 검색어 변경 시 업데이트
                   />
                   <Button
                     variant={darkMode ? 'outline-light' : 'outline-dark'}
@@ -115,11 +106,8 @@ const NoticeList = () => {
                   paginatedNotices.map((data) => (
                     <tr key={data.no}>
                       <td>{data.no}</td>
-                      <td className="Notice-td-title">
-                        <Link
-                          to={`/noticeRead/${data.no}`}
-                          className={getDarkMode()}
-                        >
+                      <td>
+                        <Link to={`/noticeRead/${data.no}`} className={getDarkMode()}>
                           {data.title}
                         </Link>
                       </td>
@@ -128,42 +116,32 @@ const NoticeList = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="3" style={{ textAlign: 'center' }}>
-                      불러올 공지사항이 없습니다.
-                    </td>
+                    <td colSpan="3" style={{ textAlign: 'center' }}>검색 결과가 없습니다.</td>
                   </tr>
                 )}
               </tbody>
             </table>
           </div>
         </div>
+
+        {/* 페이지네이션 */}
+        {totalPages > 1 && (
+          <Pagination className={`justify-content-center mt-4 ${getDarkMode()}`}>
+            <Pagination.Prev disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} />
+            {Array.from({ length: totalPages }, (_, index) => (
+              <Pagination.Item 
+                key={index + 1} 
+                active={index + 1 === currentPage} 
+                onClick={() => handlePageChange(index + 1)}
+              >
+                {index + 1}
+              </Pagination.Item>
+            ))}
+            <Pagination.Next disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)} />
+          </Pagination>
+        )}
       </section>
 
-      {/* 페이지네이션 (공지사항이 10개 이상일 때만 표시) */}
-      {totalPages > 1 && (
-        <Pagination
-          className={`EventListViewWrap-custom-pagination justify-content-center mt-4 ${getDarkMode()}`}
-          variant="none"
-        >
-          <Pagination.Prev
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage(currentPage - 1)}
-          />
-          {paginationNumbers.map((page) => (
-            <Pagination.Item
-              key={page}
-              active={page === currentPage}
-              onClick={() => setCurrentPage(page)}
-            >
-              {page}
-            </Pagination.Item>
-          ))}
-          <Pagination.Next
-            disabled={currentPage === totalPages}
-            onClick={() => setCurrentPage(currentPage + 1)}
-          />
-        </Pagination>
-      )}
       <Footer className="Notice-footer" />
     </>
   );
