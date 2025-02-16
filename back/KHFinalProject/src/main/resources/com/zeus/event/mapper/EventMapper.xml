@@ -21,7 +21,9 @@
         END_DATE, 
         THUMBURL, 
         P.ADDRESS ,
-        T.AVG_RATING AS RATING
+        T.AVG_RATING AS RATING,
+        longitude,
+        latitude
     FROM EVENT E 
     LEFT JOIN EVENT_IMG I ON E.NO = I.EVENT_NO
     LEFT JOIN PUBLIC_DATA_EVENT P ON E.PUBLIC_DATA_EVENT_NO = P.NO
@@ -135,4 +137,26 @@
 		>
 		INSERT INTO CART VALUES(SEQ_CART_NO.NEXTVAL,#{eventNo},#{userAccountNo},#{qt},SYSDATE)
 	</insert>
+	
+	<select id="selectEventListMonth" parameterType="SortDTO" resultType="EventSelectListDTO">
+    SELECT 
+        E.NO, 
+        P.NAME, 
+        TO_CHAR(P.START_DATE, 'YYYY-MM-DD') AS START_DATE, 
+        TO_CHAR(P.END_DATE, 'YYYY-MM-DD') AS END_DATE, 
+        I.THUMBURL, 
+        P.ADDRESS,
+        T.AVG_RATING AS RATING
+    FROM EVENT E 
+    LEFT JOIN EVENT_IMG I ON E.NO = I.EVENT_NO
+    LEFT JOIN PUBLIC_DATA_EVENT P ON E.PUBLIC_DATA_EVENT_NO = P.NO
+    LEFT JOIN vw_event_avg_rating T ON E.NO = T.NO
+    WHERE I.THUMBURL IS NOT NULL
+    AND EXTRACT(YEAR FROM P.START_DATE) = EXTRACT(YEAR FROM #{date})
+AND EXTRACT(MONTH FROM P.START_DATE) = EXTRACT(MONTH FROM #{date})
+
+    <!-- 정렬 옵션 -->
+    ORDER BY P.START_DATE ASC
+</select>
+
 </mapper>

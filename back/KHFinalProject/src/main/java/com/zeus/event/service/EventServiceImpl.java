@@ -83,5 +83,10 @@ public class EventServiceImpl implements EventService {
 		return mapper.insertEventToCart(cart);
 	}
 
+	@Override
+	public List<EventSelectListDTO> selectEventListMonth(SortDTO sortDTO) {
+		return mapper.selectEventListMonth(sortDTO);
+	}
+
 	
 }

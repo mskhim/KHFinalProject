@@ -13,13 +13,18 @@ import { useNavigate } from 'react-router-dom';
 import { ButtonRole } from '../../../components/ui';
 import './css/EventListViewWrap.css';
 import { Context } from '../../../Context';
-import { selectEventList } from '../eventApi';
+import { selectEventList } from '../eventMapApi';
 import { BsCheckCircle, BsClock, BsXCircle } from 'react-icons/bs';
 
-const EventListViewWrap = ({ sortOption, setSortOption }) => {
+const EventListViewWrap = ({
+  sortOption,
+  setSortOption,
+  eventList,
+  setEventList,
+}) => {
   const navigate = useNavigate();
   const { getDarkModeHover } = useContext(Context);
-  const [eventList, setEventList] = useState([]);
+
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false); // ✅ 로딩 상태 추가
   const observerRef = useRef(null);
@@ -32,7 +37,6 @@ const EventListViewWrap = ({ sortOption, setSortOption }) => {
 
       try {
         const dataList = await selectEventList(data);
-
         if (dataList.length === 0 && data.page > 1) {
           setHasMore(false);
         } else {

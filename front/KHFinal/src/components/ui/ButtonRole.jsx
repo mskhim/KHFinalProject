@@ -5,29 +5,56 @@ import PropTypes from 'prop-types';
 import { authCheckRole } from './uiApi';
 
 const ButtonRole = ({ text, role, onClick }) => {
-  //text = 버튼 text, role = 버튼 보여줄 role(manager,admin), onClick = 버튼 클릭 시 실행할 함수
-  //<ButtonRole text="삭제" role="manager" onClick={() => console.log('버튼 클릭')} />
-  const [tokenRole, setTokenRole] = useState('Role_1'); // 추후 토큰에서 role값 추출
-  const [jwtRole, setJwtRole] = useState(null);
+  const [tokenRole, setTokenRole] = useState(null); // ✅ 토큰에서 role 값 가져오도록 변경
   const [visible, setVisible] = useState(false);
   const { getDarkModeHover } = useContext(Context); // 다크 모드 상태 가져오기
+
+  // ✅ 토큰에서 role 값 가져오는 함수 (예제)
+  const fetchTokenRole = () => {
+    const storedTokenRole = localStorage.getItem('tokenRole'); // ✅ 실제 토큰에서 가져오도록 수정 가능
+    return storedTokenRole || 'guest'; // 기본값 설정
+  };
+
   useEffect(() => {
+    // ✅ role 값이 없으면 요청하지 않음
+    if (!role) {
+      console.warn('⚠️ role 값이 없습니다. 요청을 생략합니다.');
+      return;
+    }
+
+    // ✅ 토큰에서 role 값을 가져옴
+    setTokenRole(fetchTokenRole());
+
     const getJwtRole = async () => {
-      const response = await authCheckRole(role);
-      setVisible(response);
+      try {
+        const response = await authCheckRole(role);
+        setVisible(response === true); // ✅ response가 true일 때만 버튼 보이도록 설정
+      } catch (error) {
+        console.error('❌ 권한 체크 중 오류 발생:', error);
+        setVisible(false);
+      }
     };
+
     getJwtRole();
-  }, [jwtRole, role, tokenRole]);
+  }, [role, tokenRole]);
+
   return (
     <Button
       onClick={onClick}
-      className={`ButtonDarkMode   ${getDarkModeHover()} text-nowrap`}
+      className={`ButtonDarkMode ${getDarkModeHover()} text-nowrap`}
       variant="none"
-      style={{ display: visible ? 'block' : 'none' }}
+      style={{ display: visible ? 'block' : 'none' }} // ✅ false면 숨김
     >
       {text}
     </Button>
   );
+};
+
+// ✅ PropTypes 추가 (안전한 타입 검증)
+ButtonRole.propTypes = {
+  text: PropTypes.string.isRequired, // 버튼 텍스트
+  role: PropTypes.string.isRequired, // role은 필수
+  onClick: PropTypes.func.isRequired, // 클릭 이벤트 핸들러
 };
 
 export default ButtonRole;

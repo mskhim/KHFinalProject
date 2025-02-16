@@ -15,5 +15,6 @@ public class EventSelectListDTO {
     private String thumbUrl; // 메인 이미지 URL (유니크)
     private String address;
     private String rating;
-    
+    private double longitude;
+    private double latitude;
 }

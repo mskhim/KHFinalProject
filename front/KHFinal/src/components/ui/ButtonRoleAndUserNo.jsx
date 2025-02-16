@@ -5,29 +5,44 @@ import PropTypes from 'prop-types';
 import { authCheckRoleAndUserNo } from './uiApi';
 
 const ButtonRoleAndUserNo = ({ text, userNo, role, onClick }) => {
-  //text = 버튼 , role = nickName(manager,user) 메니저와 user의 닉네임을 jwt에서 추출후 프로퍼티값과 비교, isManager = true일때는 manager버튼 false 일때는 user버튼 ,onClick = 버튼 클릭 시 실행할 함수
-  //<ButtonNickName text="삭제" nickName="manager" isManager={true} onClick={() => console.log('버튼 클릭')} />
-
   const [visible, setVisible] = useState(false);
   const { getDarkModeHover } = useContext(Context); // 다크 모드 상태 가져오기
+
   useEffect(() => {
+    if (!role || !userNo) {
+      return;
+    }
+
     const getJwtRole = async () => {
-      const response = await authCheckRoleAndUserNo(role, userNo);
-      setVisible(response);
+      try {
+        const response = await authCheckRoleAndUserNo(role, userNo);
+        setVisible(response === true); // ✅ response가 true일 때만 표시
+      } catch (error) {
+        console.error('❌ 권한 체크 중 오류 발생:', error);
+        setVisible(false);
+      }
     };
+
     getJwtRole();
   }, [role, userNo]);
 
   return (
     <Button
       onClick={onClick}
-      className={`ButtonDarkMode   ${getDarkModeHover()} text-nowrap`}
+      className={`ButtonDarkMode ${getDarkModeHover()} text-nowrap`}
       variant="none"
       style={{ display: visible ? 'block' : 'none' }}
     >
       {text}
     </Button>
   );
+};
+
+ButtonRoleAndUserNo.propTypes = {
+  text: PropTypes.string.isRequired, // 버튼 텍스트
+  userNo: PropTypes.oneOfType([PropTypes.string, PropTypes.number]), // userNo는 문자열 또는 숫자 가능
+  role: PropTypes.string, // role은 문자열
+  onClick: PropTypes.func.isRequired, // 클릭 이벤트 핸들러
 };
 
 export default ButtonRoleAndUserNo;

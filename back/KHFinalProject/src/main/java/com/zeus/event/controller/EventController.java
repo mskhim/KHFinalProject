@@ -56,11 +56,16 @@ public class EventController {
 	// 축제 리스트 출력
 	@PostMapping("/selectEventList")
 	public ResponseEntity<Map<String, Object>> selectEventList(@RequestBody SortDTO sortDTO) {
-		log.info(sortDTO+"");
 		List<EventSelectListDTO> dataList = service.selectEventList(sortDTO);
 		return ResponseEntity.ok(Map.of("state", true, "dataList", dataList));
 	}
-
+	// 축제 리스트 출력
+		@PostMapping("/selectEventListMonth")
+		public ResponseEntity<Map<String, Object>> selectEventListMonth(@RequestBody SortDTO sortDTO) {
+			log.info(sortDTO.getDate()+"");
+			List<EventSelectListDTO> dataList = service.selectEventListMonth(sortDTO);
+			return ResponseEntity.ok(Map.of("state", true, "dataList", dataList));
+		}
 	// 축제 삭제
 	@DeleteMapping("/deleteEvent")
 	public ResponseEntity<Map<String, Object>> deleteEvent(@CookieValue(name = "jwt", required = false) String jwtToken,

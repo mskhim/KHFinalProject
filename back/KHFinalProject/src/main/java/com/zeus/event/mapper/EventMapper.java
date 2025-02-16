@@ -35,5 +35,7 @@ public interface EventMapper {
 	boolean deleteEvent(EventDTO eventDTO);
 	//이벤트 장바구니에 등록
 	boolean insertEventToCart(Cart cart);
+	//sortDTO에 date 값을 읽어서 해당 날짜의 월에 해당하는 모든 이벤트 호출
+	List<EventSelectListDTO> selectEventListMonth(SortDTO sortDTO);
 	
 }

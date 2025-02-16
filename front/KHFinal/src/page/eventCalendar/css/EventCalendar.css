@@ -2,11 +2,16 @@
   max-width: 900px;
   margin: 0 auto;
   padding: 20px;
-  border: 1px solid #e0e0e0;
   border-radius: 8px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
-
+.calendar-container.dark-mode {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(160, 160, 160, 0.1);
+}
 /* 월 타이틀 스타일 */
 .month-title {
   font-size: 24px;
@@ -49,4 +54,103 @@
 .has-festival {
   background: #ffe5e5;
   border: 1px solid #ff4444;
+}
+
+/* ✅ 둥근 날짜 스타일 */
+.calendar-day {
+  height: 60px;
+  width: 60px;
+  vertical-align: middle;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: 0.3s ease-in-out;
+  font-weight: bold;
+}
+
+.calendar-day:hover {
+  background-color: rgba(0, 123, 255, 0.2);
+  transform: scale(1.05);
+}
+
+/* ✅ 오늘 날짜 강조 */
+.calendar-today {
+  background-color: rgba(255, 193, 7, 0.3) !important;
+  border: 2px solid #ffc107;
+}
+
+/* ✅ 선택된 날짜 강조 */
+.calendar-selected {
+  background-color: rgba(40, 167, 69, 0.3) !important;
+  border: 2px solid #28a745;
+}
+
+/* ✅ 축제 개수 배지 */
+.festival-badge {
+  font-size: 12px;
+  margin-top: 3px;
+}
+/* ✅ 테이블 크기 일정하게 유지 */
+.calendar-table {
+  table-layout: fixed; /* 열 너비 일정하게 유지 */
+  width: 100%;
+}
+
+/* ✅ 달력 셀 크기 조정 */
+.calendar-day {
+  width: 50px; /* 셀 너비 */
+  height: 70px; /* 셀 높이 */
+  vertical-align: top;
+  padding: 5px;
+  text-align: center;
+}
+
+/* ✅ 날짜 숫자 스타일 */
+.day-number {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* ✅ 배지 컨테이너 */
+.badge-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 20px; /* 배지가 없을 때도 공간 유지 */
+}
+
+/* ✅ 배지 (축제 개수 표시) */
+.festival-badge {
+  font-size: 12px;
+  padding: 3px 7px;
+  border-radius: 10px;
+}
+
+/* ✅ 배지가 없을 때도 높이 유지 */
+.festival-placeholder {
+  height: 20px; /* 배지 크기와 동일 */
+  visibility: hidden; /* 내용 없을 때 공간 유지 */
+}
+.month-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+}
+
+.btn-month-nav {
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 8px 12px;
+  background-color: var(--bs-primary);
+  color: white;
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+  border: none;
+}
+
+.btn-month-nav:hover {
+  background-color: var(--bs-dark);
+  transform: scale(1.1);
 }

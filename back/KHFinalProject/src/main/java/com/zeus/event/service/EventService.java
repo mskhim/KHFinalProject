@@ -42,5 +42,7 @@ public interface EventService {
 
 	// 축제 티켓 장바구니에등록
 	boolean insertEventToCart(Cart cart);
+	//월별 리스트 출력을 위해서
+	List<EventSelectListDTO> selectEventListMonth(SortDTO sortDTO);
 
 }

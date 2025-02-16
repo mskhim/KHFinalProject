@@ -4,7 +4,6 @@ import { stringify } from 'uuid';
  * 이벤트 리스트 조회
  */
 export const selectEventList = async (sortOption) => {
-  console.log(sortOption);
   try {
     const response = await fetch(
       `http://localhost:8080/event/selectEventList`,

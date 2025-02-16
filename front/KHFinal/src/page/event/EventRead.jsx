@@ -17,7 +17,7 @@ import MapSection from './include/MapSection';
 import { ButtonDarkMode, ButtonRoleAndUserNo } from '../../components/ui';
 import { deleteEvent, insertEventToCart, selectEventRead } from './eventApi';
 import CartModalPage from './include/CartModalPage';
-
+import { getStorage, ref, deleteObject } from 'firebase/storage';
 const EventRead = () => {
   const param = useParams();
   const nav = useNavigate();
@@ -58,11 +58,49 @@ const EventRead = () => {
   const handleDecrease = () => {
     if (ticketCount > 1) setTicketCount(ticketCount - 1);
   };
+  // 삭제 핸들러
+
   const handleDelete = async () => {
-    const response = await deleteEvent(eventInfo.userAccountNo, eventInfo.no);
-    if (response) {
-      nav('/eventList');
+    try {
+      const storage = getStorage(); // ✅ Firebase Storage 초기화
+
+      const deleteImageFromStorage = async (imageUrl) => {
+        if (!imageUrl) return;
+
+        try {
+          const imagePath = extractPathFromUrl(imageUrl); // ✅ 올바른 경로 추출
+          if (!imagePath) return;
+
+          const imageRef = ref(storage, imagePath);
+          await deleteObject(imageRef);
+          console.log(`✅ Firebase Storage에서 삭제됨: ${imagePath}`);
+        } catch (error) {
+          console.error(`❌ 이미지 삭제 실패: ${imageUrl}`, error);
+        }
+      };
+
+      // ✅ 메인 이미지 삭제
+      await deleteImageFromStorage(mainImage);
+
+      // ✅ 서브 이미지 삭제 (배열로 처리)
+      await Promise.all(subImages.map((img) => deleteImageFromStorage(img)));
+
+      // ✅ 데이터베이스에서 이벤트 삭제
+      const response = await deleteEvent(eventInfo.userAccountNo, eventInfo.no);
+      if (response) {
+        console.log('✅ 이벤트가 DB에서 삭제됨');
+        nav('/eventList');
+      }
+    } catch (error) {
+      console.error('❌ 이벤트 삭제 중 오류 발생', error);
     }
+  };
+
+  // ✅ Firebase Storage 이미지 경로 추출 함수
+  const extractPathFromUrl = (imageUrl) => {
+    if (!imageUrl) return null;
+    const match = imageUrl.match(/o\/(.+)\?/);
+    return match ? decodeURIComponent(match[1]) : null; // ✅ URL 디코딩하여 경로 반환
   };
 
   const [showModal, setShowModal] = useState(false);
@@ -182,7 +220,7 @@ const EventRead = () => {
               <strong>장소:</strong> {eventInfo.place}
             </p>
             <p className="EventReadTitle-dates">
-              <strong>일정:</strong> {eventInfo.startDate} ~{eventInfo.endDate}
+              <strong>일정:</strong> {eventInfo.startDate} ~ {eventInfo.endDate}
               {eventInfo.END_DATE}
             </p>
             <p className="EventReadTitle-content">{eventInfo.content}</p>
@@ -207,39 +245,64 @@ const EventRead = () => {
             </p>
             {/* 🎟 티켓 수량 선택 */}
             <div className={`border p-3 rounded mb-3 ${getDarkMode()} div`}>
-              <p className={`mb-2 ${getDarkMode()} span`}>
-                가격 : <strong>{eventInfo.price}원</strong>
-              </p>
-              <ButtonGroup className="mb-3">
-                <Button
-                  className={`btn-outline-secondary ${getDarkModeHover()} EventReadTitle-ticket-btn`}
-                  onClick={handleDecrease}
-                  variant="none"
-                >
-                  -
-                </Button>
-                <span className="fs-4 px-3 EventReadTitle-ticket-count">
-                  {ticketCount}
-                </span>
-                <Button
-                  className={`btn-outline-secondary ${getDarkModeHover()} EventReadTitle-ticket-btn`}
-                  onClick={handleIncrease}
-                >
-                  +
-                </Button>
-              </ButtonGroup>
-              <h5 className="mb-2">
-                합계 :{' '}
-                <strong>
-                  {(ticketCount * eventInfo.price).toLocaleString()}원
-                </strong>
-              </h5>
-              <Button
-                className={`btn-primary w-100 ${getDarkModeHover()} EventReadTitle-cart-btn`}
-                onClick={handleCart}
-              >
-                🛒 장바구니 담기
-              </Button>
+              {new Date(eventInfo.endDate) < new Date() ? (
+                // ✅ 종료된 축제
+                <div className="text-center p-4">
+                  <h4 className="text-danger fw-bold"> 축제 종료</h4>
+                  <p className={`mb-2 text-muted ${getDarkMode()} span`}>
+                    이 축제는 종료된 축제로, 예매가 불가능합니다.
+                  </p>
+                </div>
+              ) : eventInfo.price === 0 ? (
+                // ✅ 무료 입장 가능
+                <div className="text-center p-4">
+                  <h4 className="text-success fw-bold">무료 입장 가능</h4>
+                  <p className={`mb-2 text-muted ${getDarkMode()} span`}>
+                    이 축제는 별도의 입장권 없이 누구나 자유롭게 즐길 수
+                    있습니다!
+                  </p>
+                </div>
+              ) : (
+                // ✅ 가격이 있을 때 (기존 UI 유지)
+                <>
+                  <p className={`mb-2 ${getDarkMode()} span`}>
+                    가격 :{' '}
+                    <strong>
+                      {Number(eventInfo.price).toLocaleString()}원
+                    </strong>
+                  </p>
+                  <ButtonGroup className="mb-3">
+                    <Button
+                      className={`btn-outline-secondary ${getDarkModeHover()} EventReadTitle-ticket-btn`}
+                      onClick={handleDecrease}
+                      variant="none"
+                    >
+                      -
+                    </Button>
+                    <span className="fs-4 px-3 EventReadTitle-ticket-count">
+                      {ticketCount}
+                    </span>
+                    <Button
+                      className={`btn-outline-secondary ${getDarkModeHover()} EventReadTitle-ticket-btn`}
+                      onClick={handleIncrease}
+                    >
+                      +
+                    </Button>
+                  </ButtonGroup>
+                  <h5 className="mb-2">
+                    합계 :{' '}
+                    <strong>
+                      {(ticketCount * eventInfo.price).toLocaleString()}원
+                    </strong>
+                  </h5>
+                  <Button
+                    className={`btn-primary w-100 ${getDarkModeHover()} EventReadTitle-cart-btn`}
+                    onClick={handleCart}
+                  >
+                    🛒 장바구니 담기
+                  </Button>
+                </>
+              )}
             </div>
           </Col>
         </Row>
