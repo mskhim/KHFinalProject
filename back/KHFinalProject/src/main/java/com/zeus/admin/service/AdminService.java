@@ -9,7 +9,16 @@ public interface AdminService {
 	
 	public void insert(String name);
 
-	
 	public List<User> managerSelectAllBySearch(String name) throws Exception;
+
+	public void managerInsert(User user) throws Exception;
+
+	public void managerUpdate(User user) throws Exception;
 	
+	public void managerDelete(List<Integer> ids) throws Exception;
+
+	public List<User> userSelectAllBySearch(String id) throws Exception;
+
+	public void userDelete(List<Integer> ids) throws Exception;
 }
+

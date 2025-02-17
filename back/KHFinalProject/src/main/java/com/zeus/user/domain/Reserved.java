@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class Reserved {
+public class Reserved
+{
     private int no;               // 예약 번호 (PK)
     private String id;            // 예약 ID
     private int eventNo;          // 이벤트 번호 (FK, EVENT 테이블 참조)

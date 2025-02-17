@@ -1,26 +1,23 @@
 package com.zeus.manager.controller;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.zeus.common.config.JwtUtil;
-import com.zeus.event.domain.Event;
 import com.zeus.event.domain.EventDTO;
 import com.zeus.event.domain.EventImg;
+import com.zeus.manager.domain.ManagerStats;
 import com.zeus.manager.service.ManagerService;
+import com.zeus.user.domain.User;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -74,7 +71,22 @@ public class ManagerController {
 		}
 	}
 
-	
+	// 축제 INSERT할때 쓰일 MANNAGER 별 담당 데이터 확인
+	@GetMapping("/selectEventStatsData")
+	public ResponseEntity<Map<String, Object>> selectPublicDataEvent(
+			@CookieValue(name = "jwt", required = false) String jwtToken) { // 쿠키에서 JWT 가져오기
+		if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken)) {
+			log.info("토큰만료");
+			return ResponseEntity.ok(Map.of("authenticated", false, "message", "JWT가 없거나 만료됨"));
+		}
+		// JWT가 유효하면 사용자 정보 반환
+		int no = JwtUtil.validateToken(jwtToken).get("no", Integer.class);
+		User user = new User();
+		user.setNo(no);
+		List<ManagerStats> dataList = service.selectEventStatsData(user);
+		log.info(dataList+"");
+		return ResponseEntity.ok(Map.of("authenticated", true, "message", "JWT 유효", "dataList", dataList));
+	}
 	
 	
 }

@@ -6,12 +6,15 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import com.zeus.admin.service.AdminService;
 import com.zeus.user.domain.User;
@@ -25,28 +28,77 @@ public class AdminController {
 
 	@Autowired
 	private AdminService service;
-	
-	 @GetMapping("/test")
-	    public Map<String, String> test() {
-	        Map<String, String> response = new HashMap<>();
-	        response.put("test", "Hello from Spring Boot!");
-	        return response;
-	    }
-	 
-	 
-	 
-	 @PostMapping("/insert")
-	 public ResponseEntity<String> insert(@RequestBody Map<String, String> requestData) {
-	     String name = requestData.get("name"); // "name" 필드의 값 추출
-	     System.out.println("Received name: " + name);
-	     service.insert(name);
-	     
-	     return ResponseEntity.ok("Success");
-	 }
 
-	 
-	 @GetMapping("/managerSelectAllBySearch")
-    public List<User> managerSelectAllBySearch(@RequestParam(name = "name", defaultValue="") String name) throws Exception {
-        return service.managerSelectAllBySearch(name);
-    }
+	@GetMapping("/test")
+	public Map<String, String> test() {
+		Map<String, String> response = new HashMap<>();
+		response.put("test", "Hello from Spring Boot!");
+		return response;
+	}
+
+	@PostMapping("/insert")
+	public ResponseEntity<String> insert(@RequestBody Map<String, String> requestData) {
+		String name = requestData.get("name"); // "name" 필드의 값 추출
+		System.out.println("Received name: " + name);
+		service.insert(name);
+
+		return ResponseEntity.ok("Success");
+	}
+
+	@GetMapping("/managerSelectAllBySearch")
+	public List<User> managerSelectAllBySearch(@RequestParam(name = "name", defaultValue = "") String name)
+			throws Exception {
+		return service.managerSelectAllBySearch(name);
+	}
+
+	@PostMapping("/managerInsert")
+	public ResponseEntity<String> managerInsert(@RequestBody User user) {
+		try {
+			service.managerInsert(user);
+			return ResponseEntity.ok("Success");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to insert manager");
+		}
+	}
+
+	@PutMapping("/managerUpdate")
+	public ResponseEntity<String> managerUpdate(@RequestBody User user) {
+		try {
+			service.managerUpdate(user);
+			return ResponseEntity.ok("Success");
+		} catch (Exception e) {
+			log.error("Failed to update manager", e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update manager");
+		}
+	}
+
+	@DeleteMapping("/managerDelete")
+	public ResponseEntity<String> managerDelete(@RequestBody Map<String, List<Integer>> requestData) {
+		try {
+			List<Integer> ids = requestData.get("ids");
+			service.managerDelete(ids);
+			return ResponseEntity.ok("Success");
+		} catch (Exception e) {
+			log.error("Failed to delete managers", e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete managers");
+		}
+	}
+
+	@GetMapping("/userSelectAllBySearch")
+	public List<User> userSelectAllBySearch(@RequestParam(name = "id", defaultValue = "") String id)
+			throws Exception {
+		return service.userSelectAllBySearch(id);
+	}
+
+	@DeleteMapping("/userDelete")
+	public ResponseEntity<String> userDelete(@RequestBody Map<String, List<Integer>> requestData) {
+		try {
+			List<Integer> ids = requestData.get("ids");
+			service.userDelete(ids);
+			return ResponseEntity.ok("Success");
+		} catch (Exception e) {
+			log.error("Failed to delete users", e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete users");
+		}
+	}
 }

@@ -94,6 +94,36 @@
 		WHERE NO = #{no}
 	</delete>
 	<!-- ################################################################################################## -->
+	<!-- ################################################################################################## -->
+	<!-- 로그인된 사용자(토큰 no = userNo)의 예매내역 출력 쿼리. -->
+	<select id="getReservedData" parameterType="User" resultType="ReservedDTO">
+		SELECT 
+		    R.NO,
+		    E.NO,
+		    SYSDATE, 
+		    P.NAME, 
+		    C.QT, 
+		    P.END_DATE, 
+		    (E.PRICE * C.QT) AS TOTAL_COST
+		FROM 
+		    RESERVED R
+		JOIN 
+		    CART C ON R.EVENT_NO = C.EVENT_NO AND R.USER_ACCOUNT_NO = C.USER_ACCOUNT_NO
+		JOIN 
+		    EVENT E ON R.EVENT_NO = E.NO
+		JOIN 
+		    PUBLIC_DATA_EVENT P ON E.PUBLIC_DATA_EVENT_NO = P.NO
+		WHERE 
+		    R.USER_ACCOUNT_NO = #{no}
+	</select>
+	<!-- ################################################################################################## -->
+	<!-- ################################################################################################## -->
+	<delete id="deleteReservedData" parameterType="Integer">
+		DELETE
+		FROM RESERVED
+		WHERE NO = #{no}
+	</delete>
+	<!-- ################################################################################################## -->
 	<!-- 아이디, 제공자를 토대로 로그인 유저 반환후 비밀번호 헤싱해서 로그인 확인 확인-->
 	<select id="checkLogin" parameterType="User" resultType="User">
 		SELECT *

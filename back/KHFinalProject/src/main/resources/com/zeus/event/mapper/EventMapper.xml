@@ -13,65 +13,82 @@
 		A.USER_ACCOUNT_NO=#{no}
 	</select>
 
-	<select id="selectEventList" parameterType="SortDTO" resultType="EventSelectListDTO">
-    SELECT 
-        E.NO, 
-        NAME, 
-        START_DATE, 
-        END_DATE, 
-        THUMBURL, 
-        P.ADDRESS ,
-        T.AVG_RATING AS RATING,
-        longitude,
-        latitude
-    FROM EVENT E 
-    LEFT JOIN EVENT_IMG I ON E.NO = I.EVENT_NO
-    LEFT JOIN PUBLIC_DATA_EVENT P ON E.PUBLIC_DATA_EVENT_NO = P.NO
-    LEFT JOIN vw_event_avg_rating T ON E.NO=T.NO
-    WHERE I.THUMBURL IS NOT NULL
-     <if test="sort == 'startDate'">
-        AND START_DATE>SYSDATE
-    </if>
-    <!-- 검색 조건 추가 -->
-    <if test="search != null and search != ''">
-        AND p.NAME LIKE '%' || #{search} || '%'
-    </if>
+	<select id="selectEventList" parameterType="SortDTO"
+		resultType="EventSelectListDTO">
+		SELECT
+		E.NO,
+		NAME,
+		START_DATE,
+		END_DATE,
+		THUMBURL,
+		P.ADDRESS ,
+		T.AVG_RATING
+		AS RATING,
+		longitude,
+		latitude
+		FROM EVENT E
+		LEFT JOIN EVENT_IMG I ON E.NO
+		= I.EVENT_NO
+		LEFT JOIN PUBLIC_DATA_EVENT P ON E.PUBLIC_DATA_EVENT_NO =
+		P.NO
+		LEFT JOIN vw_event_avg_rating T ON E.NO=T.NO
+		WHERE I.THUMBURL IS
+		NOT NULL
 
-    <!-- 날짜 필터링 -->
-    <if test="date != null">
-        AND #{date} BETWEEN p.START_DATE AND p.END_DATE
-    </if>
+		<!-- 검색 조건 추가 -->
+		<if test="search != null and search != ''">
+			AND p.NAME LIKE '%' || #{search} || '%'
+		</if>
 
-    <!-- 지역 필터링 -->
-    <if test="region != null and region != ''">
-        AND P.ADDRESS LIKE '%' || #{region} || '%'
-    </if>
+		<!-- 날짜 필터링 -->
+		<if test="date != null">
+			AND #{date} BETWEEN p.START_DATE AND p.END_DATE
+		</if>
 
-    <!-- 정렬 옵션 -->
-    ORDER BY
-    <choose>
-        <when test="sort == 'subDate'">
-            E.NO DESC  <!-- 등록일 순 -->
-        </when>
-        <when test="sort == 'rating'">
-            RATING DESC  <!-- 인기순 -->
-        </when>
-        <when test="sort == 'startDate'">
-            START_DATE ASC  <!-- 개최일 순 -->
-        </when>
-        <otherwise>
-            E.NO DESC  <!-- 기본값: 등록일 순 -->
-        </otherwise>
-    </choose>
+		<!-- 지역 필터링 -->
+		<if test="region != null and region != ''">
+			AND P.ADDRESS LIKE '%' || #{region} || '%'
+		</if>
 
-    <!-- 페이징 처리 -->
-    OFFSET ((#{page} - 1) * 9) ROWS FETCH NEXT 9 ROWS ONLY
-</select>
+		<!-- 정렬 옵션 -->
+		ORDER BY
+		<choose>
+			<when test="sort == 'subDate'">
+			CASE
+				WHEN END_DATE >= SYSDATE THEN 1  <!-- 진행 중인 이벤트 우선 -->
+				ELSE 2  <!-- 종료된 이벤트는 맨 뒤 -->
+				END, 
+				E.NO DESC  <!-- 등록일 순 -->
+			</when>
+			<when test="sort == 'rating'">
+				CASE
+				WHEN END_DATE >= SYSDATE THEN 1  <!-- 진행 중인 이벤트 우선 -->
+				ELSE 2  <!-- 종료된 이벤트는 맨 뒤 -->
+				END,
+				RATING DESC  <!-- 인기순 -->
+			</when>
+			<when test="sort == 'startDate'">
+				CASE
+				WHEN END_DATE >= SYSDATE THEN 1  <!-- 진행 중인 이벤트 우선 -->
+				ELSE 2  <!-- 종료된 이벤트는 맨 뒤 -->
+				END,
+				START_DATE ASC  <!-- 같은 그룹 내에서는 개최일 순으로 정렬 -->
+			</when>
+
+			<otherwise>
+				E.NO DESC  <!-- 기본값: 등록일 순 -->
+			</otherwise>
+		</choose>
+
+		<!-- 페이징 처리 -->
+		OFFSET ((#{page} - 1) * 9) ROWS FETCH NEXT 9 ROWS ONLY
+	</select>
 
 
 	<select id="selectEventRead" parameterType="sortDTO"
 		resultType="EventSelectRead">
-		SELECT E.NO, E.USER_ACCOUNT_NO, P.NO AS PUBLIC_DATA_EVENT_NO, NAME,PRICE,
+		SELECT E.NO, E.USER_ACCOUNT_NO, P.NO AS
+		PUBLIC_DATA_EVENT_NO, NAME,PRICE,
 		PLACE,START_DATE,END_DATE,CONTENT,GOVERNING,HOST,TEL,HOMEPAGE,ADDRESS,LATITUDE,LONGITUDE,I.THUMBURL
 		FROM EVENT E
 		LEFT JOIN PUBLIC_DATA_EVENT P
@@ -84,79 +101,92 @@
 	</select>
 
 	<select id="selectEventReadSub" parameterType="sortDTO"
-	 resultType="String">
+		resultType="String">
 		SELECT URL FROM event
 		E
 		LEFT JOIN event_img I
-		ON E.NO = I.event_no
+		ON E.NO =
+		I.event_no
 		WHERE E.NO=#{no} AND I.URL IS
 		NOT NULL
 	</select>
 
 	<select id="selectEventReadReview" parameterType="sortDTO"
 		resultType="EventReview">
-		SELECT r.no, content, event_no, r.user_account_no, r.rating, r.sub_date,
+		SELECT r.no, content, event_no, r.user_account_no,
+		r.rating, r.sub_date,
 		U.NAME
 		FROM event E
-		LEFT JOIN event_review r ON E.NO = r.event_no
+		LEFT JOIN event_review r ON
+		E.NO = r.event_no
 		LEFT JOIN USER_ACCOUNT U ON r.user_account_no = U.NO
 		WHERE E.NO = #{no} AND r.no IS NOT NULL
 		ORDER BY r.no DESC
-		OFFSET ((#{page} - 1) * 5) ROWS FETCH NEXT 5 ROWS ONLY
+		OFFSET
+		((#{page} - 1) * 5) ROWS FETCH NEXT 5 ROWS ONLY
 
 	</select>
-	
+
 	<select id="selectEventReadReviewCount" parameterType="sortDTO"
 		resultType="int">
 		SELECT
 		COUNT(*) from event_review
 		WHERE EVENT_NO= #{no}
 	</select>
-	
+
 	<select id="selectEventReadReviewRating" parameterType="sortDTO"
 		resultType="Double">
 		SELECT
 		RATING from event_review
 		WHERE EVENT_NO= #{no}
 	</select>
-	
-	<insert id="insertEventReview" parameterType="EventReview"
-		>
-		INSERT INTO EVENT_REVIEW VALUES(SEQ_EVENT_REVIEW_NO.NEXTVAL,#{content},SYSDATE,#{eventNo},#{userAccountNo},#{rating})
-	</insert>
-	<delete id="deleteEventReview" parameterType="EventReview"
-		>
-		DELETE FROM EVENT_REVIEW WHERE NO=#{no}
-	</delete>
-		<delete id="deleteEvent" parameterType="EventDTO"
-		>
-		DELETE FROM EVENT WHERE NO=#{no}
-	</delete>
-	
-	<insert id="insertEventToCart" parameterType="Cart"
-		>
-		INSERT INTO CART VALUES(SEQ_CART_NO.NEXTVAL,#{eventNo},#{userAccountNo},#{qt},SYSDATE)
-	</insert>
-	
-	<select id="selectEventListMonth" parameterType="SortDTO" resultType="EventSelectListDTO">
-    SELECT 
-        E.NO, 
-        P.NAME, 
-        TO_CHAR(P.START_DATE, 'YYYY-MM-DD') AS START_DATE, 
-        TO_CHAR(P.END_DATE, 'YYYY-MM-DD') AS END_DATE, 
-        I.THUMBURL, 
-        P.ADDRESS,
-        T.AVG_RATING AS RATING
-    FROM EVENT E 
-    LEFT JOIN EVENT_IMG I ON E.NO = I.EVENT_NO
-    LEFT JOIN PUBLIC_DATA_EVENT P ON E.PUBLIC_DATA_EVENT_NO = P.NO
-    LEFT JOIN vw_event_avg_rating T ON E.NO = T.NO
-    WHERE I.THUMBURL IS NOT NULL
-    AND EXTRACT(YEAR FROM P.START_DATE) = EXTRACT(YEAR FROM #{date})
-AND EXTRACT(MONTH FROM P.START_DATE) = EXTRACT(MONTH FROM #{date})
 
-    <!-- 정렬 옵션 -->
-    ORDER BY P.START_DATE ASC
-</select>
+	<insert id="insertEventReview" parameterType="EventReview">
+		INSERT INTO
+		EVENT_REVIEW
+		VALUES(SEQ_EVENT_REVIEW_NO.NEXTVAL,#{content},SYSDATE,#{eventNo},#{userAccountNo},#{rating})
+	</insert>
+	<delete id="deleteEventReview" parameterType="EventReview">
+		DELETE FROM
+		EVENT_REVIEW WHERE NO=#{no}
+	</delete>
+	<delete id="deleteEvent" parameterType="EventDTO">
+		DELETE FROM
+		EVENT WHERE
+		NO=#{no}
+	</delete>
+
+	<insert id="insertEventToCart" parameterType="Cart">
+		INSERT INTO
+		CART
+		VALUES(SEQ_CART_NO.NEXTVAL,#{eventNo},#{userAccountNo},#{qt},SYSDATE)
+	</insert>
+
+	<select id="selectEventListMonth" parameterType="SortDTO"
+		resultType="EventSelectListDTO">
+		SELECT
+		E.NO,
+		P.NAME,
+		TO_CHAR(P.START_DATE, 'YYYY-MM-DD') AS START_DATE,
+		TO_CHAR(P.END_DATE, 'YYYY-MM-DD') AS END_DATE,
+		I.THUMBURL,
+		P.ADDRESS,
+		T.AVG_RATING AS RATING
+		FROM EVENT E
+		LEFT JOIN EVENT_IMG I ON E.NO =
+		I.EVENT_NO
+		LEFT JOIN PUBLIC_DATA_EVENT P ON E.PUBLIC_DATA_EVENT_NO =
+		P.NO
+		LEFT JOIN vw_event_avg_rating T ON E.NO = T.NO
+		WHERE I.THUMBURL IS
+		NOT NULL
+		AND EXTRACT(YEAR FROM P.START_DATE) = EXTRACT(YEAR FROM
+		#{date})
+		AND EXTRACT(MONTH FROM P.START_DATE) = EXTRACT(MONTH FROM
+		#{date})
+
+		<!-- 정렬 옵션 -->
+		ORDER BY P.START_DATE ASC
+	</select>
 
 </mapper>

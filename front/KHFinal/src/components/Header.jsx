@@ -11,7 +11,11 @@ import {
 import { BsPersonCircle, BsChevronDown } from 'react-icons/bs';
 import { FaGithub, FaBell, FaMoon, FaSun, FaCartPlus } from 'react-icons/fa';
 import './Header.css';
-import { handleLogout, refreshAccessToken } from '../page/user/userApi';
+import {
+  getCartData,
+  handleLogout,
+  refreshAccessToken,
+} from '../page/user/userApi';
 import { Context } from '../Context';
 import ScrollToTopButton from './ui/ScrollToTopButton';
 import TokenRemain from './ui/TokenRemain';
@@ -26,6 +30,7 @@ const Header = ({ page }) => {
   const [showFestivalNav, setShowFestivalNav] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [activeTab, setActiveTab] = useState('');
+  const [cart, setCart] = useState([]);
   const {
     darkMode,
     setDarkMode,
@@ -51,6 +56,15 @@ const Header = ({ page }) => {
   const handleLogin = () => {
     navigate('/userLoginPage');
   };
+  useEffect(() => {
+    if (isAuthenticated) {
+      const getCart = async () => {
+        const data = await getCartData();
+        setCart(data);
+      };
+      getCart();
+    }
+  }, []);
 
   const toggleDarkMode = () => {
     const disableTransitions = () => {
@@ -254,7 +268,7 @@ const Header = ({ page }) => {
                       className="Header-notification-badge Header-cart-icon"
                       onClick={() => navigate('/user/userCart')}
                     >
-                      {cartElement}
+                      {cart ? cart.length : 0}
                     </Badge>
                   )}
                 </div>
