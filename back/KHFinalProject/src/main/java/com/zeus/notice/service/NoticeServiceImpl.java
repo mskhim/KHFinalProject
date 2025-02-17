@@ -18,6 +18,11 @@ public class NoticeServiceImpl implements NoticeService {
 	@Autowired
 	private NoticeMapper mapper;
 	
+	@Override
+	public List<Notice> getAllNotices(String keyword) {
+	    return mapper.getAllNotices(keyword);
+	}
+	
 	 @Override
 	    public List<Notice> getNoticesByPage(int page, int pageSize) {
 		 return mapper.getNoticesByPage(page, pageSize);

@@ -25,6 +25,11 @@ public class NoticeController {
 	@Autowired
 	private NoticeService service;
 	
+	@GetMapping("/all")
+	public List<Notice> getAllNotices(@RequestParam(name = "keyword", required = false, defaultValue = "") String keyword) {
+	    return service.getAllNotices(keyword);
+	}
+	
 	// ✅ 페이징 처리된 공지사항 목록 가져오기
     @GetMapping
     public List<Notice> getNoticesByPage(

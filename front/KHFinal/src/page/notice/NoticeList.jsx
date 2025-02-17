@@ -4,55 +4,93 @@ import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import './notice.css';
-import { fetchNotices } from './noticeApi';
+import {
+  fetchNotices,
+  fetchTotalNoticesCount,
+  fetchAllNotices,
+} from './noticeApi';
 import { Context } from '../../Context';
 
 const NoticeList = () => {
-  const { darkMode, setDarkMode, getDarkMode, getDarkModeHover } = useContext(Context);
-  const [notices, setNotices] = useState([]); // 전체 공지사항 데이터
+  const { darkMode, setDarkMode, getDarkMode, getDarkModeHover } =
+    useContext(Context);
+  const [notices, setNotices] = useState([]); // 공지사항 데이터
   const [searchTerm, setSearchTerm] = useState(''); // 검색어
-  const [allNotices, setAllNotices] = useState([]); // 전체 공지사항 데이터를 저장할 상태
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
   const [totalPages, setTotalPages] = useState(1); // 총 페이지 수
-  const noticesPerPage = 1; // 페이지당 최대 공지사항 개수
+  const noticesPerPage = 10; // 페이지당 최대 공지사항 개수
+  const [isSearchMode, setIsSearchMode] = useState(false); // 검색 모드 여부
 
   // 전체 공지사항 데이터를 가져오는 함수
-  const loadAllNotices = async () => {
+  const loadNotices = async (page) => {
     try {
-      const data = await fetchNotices(1, 100); // 처음 한 번에 전체 공지사항을 가져옵니다.
-      setAllNotices(data); // 전체 공지사항 데이터를 상태에 저장
+      const data = await fetchNotices(page, noticesPerPage); // 처음 한 번에 전체 공지사항을 가져옵니다.
+      setNotices(data); // 전체 공지사항 데이터를 상태에 저장
+      setIsSearchMode(false); // 일반 모드
     } catch (error) {
       console.error('전체 공지사항을 불러오는 중 오류 발생:', error);
     }
   };
 
-  useEffect(() => {
-    loadAllNotices(); // 컴포넌트가 마운트될 때 전체 공지사항을 불러옵니다.
-  }, []);
-
-  // 검색어 입력 시 상태 업데이트
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value); // 검색어 업데이트
-    setCurrentPage(1); // 검색 시 첫 페이지로 리셋
+  // 📌 전체 공지사항 검색 (검색어가 있을 때 실행)
+  const loadAllNotices = async (keyword) => {
+    try {
+      const data = await fetchAllNotices(keyword);
+      setNotices(data);
+      setIsSearchMode(true); // 검색 모드 활성화
+      setCurrentPage(1); // 검색 시 첫 페이지로 리셋
+    } catch (error) {
+      console.error('전체 공지사항을 불러오는 중 오류 발생:', error);
+    }
   };
 
-  // 검색어에 맞는 공지사항 필터링
-  const filteredNotices = allNotices.filter((data) =>
-    data.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    data.content.toLowerCase().includes(searchTerm.toLowerCase()) // 내용까지 검색
-  );
+  // 총 공지사항 개수 불러오기
+  const loadTotalPages = async () => {
+    if (isSearchMode) return; // 검색 모드일 경우 페이지네이션 계산하지 않음
+    try {
+      const totalCount = await fetchTotalNoticesCount();
+      setTotalPages(Math.ceil(totalCount / noticesPerPage));
+    } catch (error) {
+      console.error('총 공지사항 개수를 불러오는 중 오류 발생:', error);
+    }
+  };
 
-  // 페이지네이션을 위한 로직
-  const paginatedNotices = filteredNotices.slice((currentPage - 1) * noticesPerPage, currentPage * noticesPerPage);
-  
-  // 총 페이지 수 계산
   useEffect(() => {
-    setTotalPages(Math.ceil(filteredNotices.length / noticesPerPage));
-  }, [filteredNotices]);
+    if (!isSearchMode) {
+      loadNotices(currentPage);
+    }
+    loadTotalPages();
+  }, [currentPage, isSearchMode]); // 페이지 변경 시 로드 (검색 모드 아닐 때)
 
-  // 페이지 변경 핸들러
+  // 📌 검색 입력 핸들러
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  // 📌 검색 버튼 클릭 시 실행
+  const handleSearchSubmit = () => {
+    if (searchTerm.trim()) {
+      loadAllNotices(searchTerm); // 검색어가 있으면 전체 데이터에서 검색
+    } else {
+      loadNotices(1); // 검색어가 없으면 기본 데이터 불러오기
+      setCurrentPage(1);
+    }
+  };
+
+  // 검색 취소 버튼 클릭 핸들러
+  const handleCancelSearch = () => {
+    setSearchTerm(''); // 검색어 초기화
+    setIsSearchMode(false); // 검색 모드 해제
+    setCurrentPage(1); // 첫 페이지로 이동
+    loadNotices(1); // 원래 페이지별 데이터 불러오기
+  };
+
+  // 📌 페이지네이션 변경 핸들러
   const handlePageChange = (page) => {
     setCurrentPage(page);
+    if (!isSearchMode) {
+      loadNotices(page);
+    }
   };
 
   return (
@@ -79,12 +117,23 @@ const NoticeList = () => {
                     value={searchTerm}
                     onChange={handleSearchChange} // 검색어 변경 시 업데이트
                   />
-                  <Button
-                    variant={darkMode ? 'outline-light' : 'outline-dark'}
-                    className="Notice-btn Notice-btn-dark"
-                  >
-                    검색
-                  </Button>
+                  {isSearchMode ? (
+                    <Button
+                      variant={darkMode ? 'outline-light' : 'outline-dark'}
+                      className="Notice-btn Notice-btn-dark"
+                      onClick={handleCancelSearch}
+                    >
+                      검색 취소
+                    </Button>
+                  ) : (
+                    <Button
+                      variant={darkMode ? 'outline-light' : 'outline-dark'}
+                      className="Notice-btn Notice-btn-dark"
+                      onClick={handleSearchSubmit}
+                    >
+                      검색
+                    </Button>
+                  )}
                 </div>
               </form>
             </div>
@@ -102,12 +151,15 @@ const NoticeList = () => {
                 </tr>
               </thead>
               <tbody>
-                {paginatedNotices.length > 0 ? (
-                  paginatedNotices.map((data) => (
+                {notices.length > 0 ? (
+                  notices.map((data) => (
                     <tr key={data.no}>
                       <td>{data.no}</td>
-                      <td>
-                        <Link to={`/noticeRead/${data.no}`} className={getDarkMode()}>
+                      <td className="Notice-td-title">
+                        <Link
+                          to={`/noticeRead/${data.no}`}
+                          className={getDarkMode()}
+                        >
                           {data.title}
                         </Link>
                       </td>
@@ -116,7 +168,9 @@ const NoticeList = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="3" style={{ textAlign: 'center' }}>검색 결과가 없습니다.</td>
+                    <td colSpan="3" style={{ textAlign: 'center' }}>
+                      검색 결과가 없습니다.
+                    </td>
                   </tr>
                 )}
               </tbody>
@@ -124,20 +178,28 @@ const NoticeList = () => {
           </div>
         </div>
 
-        {/* 페이지네이션 */}
-        {totalPages > 1 && (
-          <Pagination className={`justify-content-center mt-4 ${getDarkMode()}`}>
-            <Pagination.Prev disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} />
+        {/* 페이지네이션 (검색 모드가 아닐 때만 표시) */}
+        {!isSearchMode && totalPages > 1 && (
+          <Pagination
+            className={`justify-content-center mt-4 ${getDarkMode()}`}
+          >
+            <Pagination.Prev
+              disabled={currentPage === 1}
+              onClick={() => handlePageChange(currentPage - 1)}
+            />
             {Array.from({ length: totalPages }, (_, index) => (
-              <Pagination.Item 
-                key={index + 1} 
-                active={index + 1 === currentPage} 
+              <Pagination.Item
+                key={index + 1}
+                active={index + 1 === currentPage}
                 onClick={() => handlePageChange(index + 1)}
               >
                 {index + 1}
               </Pagination.Item>
             ))}
-            <Pagination.Next disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)} />
+            <Pagination.Next
+              disabled={currentPage === totalPages}
+              onClick={() => handlePageChange(currentPage + 1)}
+            />
           </Pagination>
         )}
       </section>

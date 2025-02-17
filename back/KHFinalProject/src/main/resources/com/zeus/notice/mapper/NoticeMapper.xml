@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zeus.notice.mapper.NoticeMapper">
+
+<!-- 전체 공지사항 불러오기 (검색 기능 포함) -->
+<select id="getAllNotices" resultType="Notice">
+    SELECT NO, TITLE, CONTENT, SUB_DATE 
+    FROM NOTICE 
+    WHERE TITLE LIKE '%' || #{keyword} || '%' 
+       OR CONTENT LIKE '%' || #{keyword} || '%'
+    ORDER BY NO DESC
+</select>
+
     <select id="getNoticesByPage" resultType="Notice">
         SELECT * FROM (
         SELECT n.*, ROWNUM AS rnum FROM (
