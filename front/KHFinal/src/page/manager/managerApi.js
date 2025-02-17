@@ -1,5 +1,5 @@
 /**
- * 공공데이터 축제정보를 받어오는 API
+ * 매니저에 해당하는 축제정보를 받어오는 API
  */
 
 export const selectPublicDataEvent = async () => {
@@ -41,5 +41,27 @@ export const insertEventByManager = async (formData) => {
     console.error('축제 등록 실패:', error);
     alert('등록 중 오류가 발생했습니다.');
     return false;
+  }
+};
+/**
+ * 통계정보를 받아오는 api
+ */
+
+export const selectEventStatsData = async (no) => {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/event/selectEventStatsData?no=${no}`,
+      {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    const data = await response.json();
+    return data.dataList;
+  } catch (error) {
+    return { authenticated: false };
   }
 };

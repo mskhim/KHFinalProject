@@ -2,7 +2,8 @@ import { Header, Footer } from '../../components';
 import EventListVisualWrap from './include/EventListVisualWrap';
 import EventListSearchWrap from './include/EventListSearchWrap';
 import EventListViewWrap from './include/EventListViewWrap';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import exApi from '../../api/ExceptionApi';
 
 const EventList = () => {
   //  정렬 상태

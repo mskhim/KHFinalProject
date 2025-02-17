@@ -4,183 +4,190 @@ import { Bar, Line, Pie } from 'react-chartjs-2';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import './css/ManagerStats.css'; // 스타일 파일 추가
-const festivalsMockData = {
-  1: {
-    name: '서울 불꽃축제',
-    regionData: {
-      labels: [
-        '서울',
-        '경기',
-        '강원',
-        '충북',
-        '충남',
-        '전북',
-        '전남',
-        '경북',
-        '경남',
-        '제주',
-      ],
-      values: [320, 450, 380, 290, 310, 400, 220, 390, 410, 200],
-    },
-    bookingData: {
-      labels: Array.from(
-        { length: 10 },
-        (_, i) => `${i * 10}% ~ ${(i + 1) * 10}%`
-      ),
-      values: Array.from(
-        { length: 10 },
-        () => Math.floor(Math.random() * 1000) + 100
-      ),
-    },
-    ratingData: {
-      labels: Array.from(
-        { length: 7 },
-        (_, i) => `${1 + 10 * i}세 ~ ${10 + 10 * i}세`
-      ),
-      values: Array.from(
-        { length: 7 },
-        () => Math.floor(Math.random() * 5) + 1
-      ),
-    },
-  },
-  2: {
-    name: '부산 바다축제',
-    regionData: {
-      labels: [
-        '서울',
-        '경기',
-        '강원',
-        '충북',
-        '충남',
-        '전북',
-        '전남',
-        '경북',
-        '경남',
-        '제주',
-      ],
-      values: [200, 320, 280, 310, 360, 390, 290, 410, 450, 380],
-    },
-    bookingData: {
-      labels: Array.from(
-        { length: 10 },
-        (_, i) => `${i * 10}% ~ ${(i + 1) * 10}%`
-      ),
-      values: Array.from(
-        { length: 10 },
-        () => Math.floor(Math.random() * 1000) + 100
-      ),
-    },
-    ratingData: {
-      labels: Array.from(
-        { length: 7 },
-        (_, i) => `${1 + 10 * i}세 ~ ${10 + 10 * i}세`
-      ),
-      values: Array.from(
-        { length: 7 },
-        () => Math.floor(Math.random() * 5) + 1
-      ),
-    },
-  },
-  3: {
-    name: '대구 치맥축제',
-    regionData: {
-      labels: [
-        '서울',
-        '경기',
-        '강원',
-        '충북',
-        '충남',
-        '전북',
-        '전남',
-        '경북',
-        '경남',
-        '제주',
-      ],
-      values: [250, 300, 270, 320, 400, 430, 350, 390, 410, 240],
-    },
-    bookingData: {
-      labels: Array.from(
-        { length: 10 },
-        (_, i) => `${i * 10}% ~ ${(i + 1) * 10}%`
-      ),
-      values: Array.from(
-        { length: 10 },
-        () => Math.floor(Math.random() * 1000) + 100
-      ),
-    },
-    ratingData: {
-      labels: Array.from(
-        { length: 7 },
-        (_, i) => `${1 + 10 * i}세 ~ ${10 + 10 * i}세`
-      ),
-      values: Array.from(
-        { length: 7 },
-        () => Math.floor(Math.random() * 5) + 1
-      ),
-    },
-  },
-  4: {
-    name: '제주 감귤축제',
-    regionData: {
-      labels: [
-        '서울',
-        '경기',
-        '강원',
-        '충북',
-        '충남',
-        '전북',
-        '전남',
-        '경북',
-        '경남',
-        '제주',
-      ],
-      values: [180, 220, 190, 250, 300, 280, 230, 290, 330, 500], // 제주 비중 증가
-    },
-    bookingData: {
-      labels: Array.from(
-        { length: 10 },
-        (_, i) => `${i * 10}% ~ ${(i + 1) * 10}%`
-      ),
-      values: Array.from(
-        { length: 10 },
-        () => Math.floor(Math.random() * 1000) + 100
-      ),
-    },
-  },
-  ratingData: {
-    labels: Array.from(
-      { length: 7 },
-      (_, i) => `${1 + 10 * i}세 ~ ${10 + 10 * i}세`
-    ),
-    values: Array.from({ length: 7 }, () => Math.floor(Math.random() * 5) + 1),
-  },
-};
+import { selectEventStatsData } from './managerApi';
 
-const festivals = Object.keys(festivalsMockData).map((id) => ({
-  id: Number(id),
-  name: festivalsMockData[id].name,
-}));
+// const festivalsMockData = {
+//   1: {
+//     name: '서울 불꽃축제',
+//     regionData: {
+//       labels: [
+//         '서울',
+//         '경기',
+//         '강원',
+//         '충북',
+//         '충남',
+//         '전북',
+//         '전남',
+//         '경북',
+//         '경남',
+//         '제주',
+//       ],
+//       values: [320, 450, 380, 290, 310, 400, 220, 390, 410, 200],
+//     },
+//     bookingData: {
+//       labels: Array.from(
+//         { length: 10 },
+//         (_, i) => `${i * 10}% ~ ${(i + 1) * 10}%`
+//       ),
+//       values: Array.from(
+//         { length: 10 },
+//         () => Math.floor(Math.random() * 1000) + 100
+//       ),
+//     },
+//     ratingData: {
+//       labels: Array.from(
+//         { length: 7 },
+//         (_, i) => `${1 + 10 * i}세 ~ ${10 + 10 * i}세`
+//       ),
+//       values: Array.from(
+//         { length: 7 },
+//         () => Math.floor(Math.random() * 5) + 1
+//       ),
+//     },
+//   },
+//   2: {
+//     name: '부산 바다축제',
+//     regionData: {
+//       labels: [
+//         '서울',
+//         '경기',
+//         '강원',
+//         '충북',
+//         '충남',
+//         '전북',
+//         '전남',
+//         '경북',
+//         '경남',
+//         '제주',
+//       ],
+//       values: [200, 320, 280, 310, 360, 390, 290, 410, 450, 380],
+//     },
+//     bookingData: {
+//       labels: Array.from(
+//         { length: 10 },
+//         (_, i) => `${i * 10}% ~ ${(i + 1) * 10}%`
+//       ),
+//       values: Array.from(
+//         { length: 10 },
+//         () => Math.floor(Math.random() * 1000) + 100
+//       ),
+//     },
+//     ratingData: {
+//       labels: Array.from(
+//         { length: 7 },
+//         (_, i) => `${1 + 10 * i}세 ~ ${10 + 10 * i}세`
+//       ),
+//       values: Array.from(
+//         { length: 7 },
+//         () => Math.floor(Math.random() * 5) + 1
+//       ),
+//     },
+//   },
+//   3: {
+//     name: '대구 치맥축제',
+//     regionData: {
+//       labels: [
+//         '서울',
+//         '경기',
+//         '강원',
+//         '충북',
+//         '충남',
+//         '전북',
+//         '전남',
+//         '경북',
+//         '경남',
+//         '제주',
+//       ],
+//       values: [250, 300, 270, 320, 400, 430, 350, 390, 410, 240],
+//     },
+//     bookingData: {
+//       labels: Array.from(
+//         { length: 10 },
+//         (_, i) => `${i * 10}% ~ ${(i + 1) * 10}%`
+//       ),
+//       values: Array.from(
+//         { length: 10 },
+//         () => Math.floor(Math.random() * 1000) + 100
+//       ),
+//     },
+//     ratingData: {
+//       labels: Array.from(
+//         { length: 7 },
+//         (_, i) => `${1 + 10 * i}세 ~ ${10 + 10 * i}세`
+//       ),
+//       values: Array.from(
+//         { length: 7 },
+//         () => Math.floor(Math.random() * 5) + 1
+//       ),
+//     },
+//   },
+//   4: {
+//     name: '제주 감귤축제',
+//     regionData: {
+//       labels: [
+//         '서울',
+//         '경기',
+//         '강원',
+//         '충북',
+//         '충남',
+//         '전북',
+//         '전남',
+//         '경북',
+//         '경남',
+//         '제주',
+//       ],
+//       values: [180, 220, 190, 250, 300, 280, 230, 290, 330, 500], // 제주 비중 증가
+//     },
+//     bookingData: {
+//       labels: Array.from(
+//         { length: 10 },
+//         (_, i) => `${i * 10}% ~ ${(i + 1) * 10}%`
+//       ),
+//       values: Array.from(
+//         { length: 10 },
+//         () => Math.floor(Math.random() * 1000) + 100
+//       ),
+//     },
+//   },
+//   ratingData: {
+//     labels: Array.from(
+//       { length: 7 },
+//       (_, i) => `${1 + 10 * i}세 ~ ${10 + 10 * i}세`
+//     ),
+//     values: Array.from({ length: 7 }, () => Math.floor(Math.random() * 5) + 1),
+//   },
+// };
 
 const ManagerStats = () => {
-  const [selectedFestival, setSelectedFestival] = useState(festivals[0].id);
+  const [selectedFestival, setSelectedFestival] = useState([]);
+  const [festivalStatsData, setFestivalStatsData] = useState({});
+  const [festivals, setFestivals] = useState([]);
+  useEffect(() => {
+    const festivalStatsData = async (festivalNo) => {
+      const response = await selectEventStatsData(festivalNo);
+      setFestivalStatsData(response);
+      setFestivals(
+        response.map((festival) => ({ id: festival.no, name: festival.name }))
+      );
+    };
+    festivalStatsData(1);
+  }, []);
   const [regionData, setRegionData] = useState({ labels: [], values: [] });
   const [bookingData, setBookingData] = useState({ labels: [], values: [] });
   const [ratingData, setRatingData] = useState({ labels: [], values: [] });
-
   useEffect(() => {
     fetchStatistics(selectedFestival);
   }, [selectedFestival]);
 
   const fetchStatistics = (festivalId) => {
     // 🎯 내부 목업 데이터 활용
-    const selectedData = festivalsMockData[festivalId];
+    const selectedData = festivalStatsData[festivalId];
     if (selectedData) {
       setRegionData(selectedData.regionData);
       setBookingData(selectedData.bookingData);
       setRatingData(selectedData.ratingData);
     }
   };
-
   return (
     <>
       <Header />
