@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zeus.common.config.JwtUtil;
 import com.zeus.user.domain.Cart;
 import com.zeus.user.domain.CartDTO;
+import com.zeus.user.domain.ReservedDTO;
 import com.zeus.user.domain.User;
 import com.zeus.user.service.UserService;
 
@@ -463,31 +464,36 @@ public class UserController {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// 장바구니 조회.
 	@GetMapping("/getCartData")
-	public ResponseEntity <Map <String, Object>> getCartData(@CookieValue(name = "jwt", required = false) String jwtToken)
+	public ResponseEntity<Map<String, Object>> getCartData(
+			@CookieValue(name = "jwt", required = false) String jwtToken)
 	{
-	       // JWT 토큰 검증
-	       if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken))
-	       {
-	           return ResponseEntity.ok(Map.of(
-	                   "authenticated", false,
-	                   "message", "JWT가 없거나 만료됨"));
-	       }
-	        // JWT에서 userNo 추출
-        Integer userNo = JwtUtil.validateToken(jwtToken).get("no", Integer.class);
-        
+
+		// JWT 토큰 검증
+		if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken))
+		{
+			return ResponseEntity.ok(Map.of("authenticated", false, "message", "JWT가 없거나 만료됨"));
+		}
+		
+		// JWT에서 userNo 추출
+		Integer userNo = JwtUtil.validateToken(jwtToken).get("no", Integer.class);
+
+		// DB에서 해당 userNo로 사용자 정보 가져오기.
+		User dbUser = service.getUserByNo(userNo);
+
+		if (dbUser == null)
+		{
+			return ResponseEntity.ok(Map.of("authenticated", false, "message", "사용자 정보를 찾을 수 없습니다."));
+		}
+
 		// userNo로 장바구니 데이터 조회
-        List <CartDTO> cartData = service.getCartData(userNo);
-	        if (!cartData.isEmpty())
-        {
-            return ResponseEntity.ok(Map.of(
-            		"authenticated", true,
-            		"cartDTO", cartData));
-        } else
-        {
-            return ResponseEntity.ok(Map.of(
-            		"authenticated", true,
-            		"message", "장바구니 데이터가 없습니다."));
-        }
+		List<CartDTO> cartData = service.getCartData(userNo);
+		if (!cartData.isEmpty())
+		{
+			return ResponseEntity.ok(Map.of("authenticated", true, "cartDTO", cartData));
+		} else
+		{
+			return ResponseEntity.ok(Map.of("authenticated", true, "message", "장바구니 데이터가 없습니다."));
+		}
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -498,7 +504,8 @@ public class UserController {
 	        @RequestBody Cart deleteCart) {  // Cart 객체를 요청 본문에서 받습니다.
 
 	    // JWT 토큰 검증
-	    if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken)) {
+	    if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken))
+	    {
 	        return ResponseEntity.ok(Map.of(
 	                "authenticated", false,
 	                "message", "JWT가 없거나 만료됨"));
@@ -510,7 +517,8 @@ public class UserController {
 	    // DB에서 해당 userNo로 사용자 정보 가져오기
 	    User dbUser = service.getUserByNo(userNo);
 
-	    if (dbUser == null) {
+	    if (dbUser == null)
+	    {
 	        return ResponseEntity.ok(Map.of(
 	                "authenticated", false,
 	                "message", "사용자 정보를 찾을 수 없습니다."));
@@ -532,6 +540,85 @@ public class UserController {
 	    }
 	}
 
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	// 예매내역 조회.
+    @GetMapping("/getReservedData")
+    public ResponseEntity<Map<String, Object>> getReservedData(
+            @CookieValue(name = "jwt", required = false) String jwtToken)
+    {
+
+        // JWT 토큰 검증
+        if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken))
+        {
+            return ResponseEntity.ok(Map.of(
+            		"authenticated", false,
+            		"message", "JWT가 없거나 만료됨"));
+        }
+
+        // JWT에서 userNo 추출
+        Integer userNo = JwtUtil.validateToken(jwtToken).get("no", Integer.class);
+
+        // DB에서 해당 userNo로 사용자 정보 가져오기
+        User dbUser = service.getUserByNo(userNo);
+
+        // 사용자 정보가 없다면, 예매 내역 조회하지 않음
+        if (dbUser == null) {
+            return ResponseEntity.ok(Map.of(
+            		"authenticated", false,
+            		"message", "사용자 정보가 없습니다."));
+        }
+
+        // 예매 내역 가져오기
+        List <ReservedDTO> reservedData = service.getReservedData(userNo);
+
+        return ResponseEntity.ok(Map.of(
+        		"authenticated", true,
+        		"reservedData", reservedData));
+    }
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	// 예매 취소(삭제).
+    @DeleteMapping("/deleteReservedData")
+    public ResponseEntity<Map<String, Object>> deleteCartData(
+    		@CookieValue(name = "jwt", required = false) String jwtToken,
+	        @RequestBody ReservedDTO deleteReserved)
+    {
+    	// JWT 토큰 검증
+        if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken))
+        {
+            return ResponseEntity.ok(Map.of("authenticated", false, "message", "JWT가 없거나 만료됨"));
+        }
+
+        // JWT에서 userNo 추출
+        Integer userNo = JwtUtil.validateToken(jwtToken).get("no", Integer.class);
+
+        // DB에서 해당 userNo로 사용자 정보 가져오기
+        User dbUser = service.getUserByNo(userNo);
+
+        // 사용자 정보가 없다면, 예매 내역 조회하지 않음
+        if (dbUser == null)
+        {
+            return ResponseEntity.ok(Map.of(
+            		"authenticated", false,
+            		"message", "사용자 정보가 없습니다."));
+        }
+        
+        // 예매 취소(삭제)
+        boolean isDeleted = service.deleteReservedData(deleteReserved.getNo());
+
+        if (isDeleted)
+        {
+            return ResponseEntity.ok(Map.of(
+            		"authenticated", true,
+            		"message", "예매 취소가 완료되었습니다."));
+        } else
+        {
+            return ResponseEntity.ok(Map.of(
+            		"authenticated", false,
+            		"message", "예매 취소 실패"));
+        }
+    }
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	//--------------------------------------------------api메소드가 아닌 컨트롤러용 메소드
 	//  JWT 쿠키 삭제 메소드
