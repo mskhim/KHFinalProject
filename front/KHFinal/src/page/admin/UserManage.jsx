@@ -1,39 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Container, Table, Form, Button } from "react-bootstrap";
 import "./include/css/Common.css";
 import { BsSortDown, BsSortUp } from "react-icons/bs";
+import {
+  userSelectAllBySearch,
+  userDelete, // 추가
+} from "./adminApi"; // adminAPI에서 함수 임포트
 
 const UserManage = () => {
   // 객체 배열 변수
-  const [items, setItems] = useState([
-    {
-      no: 1,
-      id: "hgd",
-      provider: "kakao",
-      phone: "010-1111-1111",
-      birth: "2000-01-01",
-      region: "서울",
-      reg_date: "2025-02-05",
-    },
-    {
-      no: 2,
-      id: "itw",
-      provider: "naver",
-      phone: "010-2222-2222",
-      birth: "2000-01-01",
-      region: "부산",
-      reg_date: "2025-02-05",
-    },
-    {
-      no: 3,
-      id: "kdj",
-      provider: "local",
-      phone: "010-3333-3333",
-      birth: "2000-01-01",
-      region: "대전",
-      reg_date: "2025-02-05",
-    },
-  ]);
+  const [items, setItems] = useState([]);
+
+  const getList = async (id) => {
+    const data = await userSelectAllBySearch(id);
+    if (data !== null) {
+      setItems(data);
+    }
+  };
+
+  useEffect(() => {
+    getList("");
+  }, []);
 
   // 정렬할 컬럼 이름
   const [thName, setthName] = useState("");
@@ -67,19 +54,21 @@ const UserManage = () => {
   // 검색 함수
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
+    setSelectAll(false);
+    getList(e.target.value);
   };
 
   // 체크박스 전체 선택/해제 함수
   const handleSelectAll = () => {
     const newSelectAll = !selectAll;
     setSelectAll(newSelectAll);
-    setItems(items.map((item) => ({ ...item, checked: newSelectAll })));
+    setItems(filteredItems.map((item) => ({ ...item, checked: newSelectAll })));
   };
 
   // 개별 체크박스 선택/해제 함수
-  const handleCheckboxChange = (id) => {
-    const updatedItems = items.map((item) =>
-      item.id === id ? { ...item, checked: !item.checked } : item
+  const handleCheckboxChange = (no) => {
+    const updatedItems = filteredItems.map((item) =>
+      item.no === no ? { ...item, checked: !item.checked } : item
     );
     setItems(updatedItems);
     setSelectAll(updatedItems.every((item) => item.checked));
@@ -89,6 +78,17 @@ const UserManage = () => {
   const filteredItems = items.filter((item) =>
     item.id.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // 유저 삭제 함수
+  const handleDelete = async () => {
+    const selectedUsers = items.filter((item) => item.checked);
+    if (selectedUsers.length === 0) {
+      return alert("삭제할 유저를 선택해주세요.");
+    }
+    const idsToDelete = selectedUsers.map((item) => item.no);
+    await userDelete(idsToDelete);
+    getList("");
+  };
 
   return (
     <Container className="text-center">
@@ -101,7 +101,9 @@ const UserManage = () => {
           style={{ width: "200px" }}
           className="me-3"
         />
-        <Button className="btn btn-danger">삭제</Button>
+        <Button className="btn btn-danger" onClick={handleDelete}>
+          삭제
+        </Button>
       </div>
 
       <Table bordered hover responsive className="admin-table">
@@ -163,11 +165,11 @@ const UserManage = () => {
             </th>
             <th
               className="text-bg-primary text-center"
-              onClick={() => handleSort("reg_date")}
+              onClick={() => handleSort("regDate")}
               style={{ width: "180px" }}
             >
               계정 생성일
-              {thName === "reg_date" &&
+              {thName === "regDate" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
           </tr>
@@ -175,13 +177,11 @@ const UserManage = () => {
         <tbody>
           {/* 데이터 행 */}
           {filteredItems.map((data, index) => (
-            <tr key={data.id}>
+            <tr key={data.no}>
               <td className="text-center" style={{ width: "90px" }}>
                 <Form.Check
-                  checked={data.checked}
-                  onChange={() =>
-                    handleCheckboxChange(data.id) && handleSelectAll()
-                  }
+                  checked={data.checked || false}
+                  onChange={() => handleCheckboxChange(data.no)}
                 />
               </td>
               <td style={{ width: "90px" }}>{index + 1}</td>
@@ -190,7 +190,7 @@ const UserManage = () => {
               <td style={{ width: "200px" }}>{data.phone}</td>
               <td style={{ width: "200px" }}>{data.birth}</td>
               <td style={{ width: "135px" }}>{data.region}</td>
-              <td style={{ width: "163px" }}>{data.reg_date}</td>
+              <td style={{ width: "163px" }}>{data.regDate}</td>
             </tr>
           ))}
         </tbody>

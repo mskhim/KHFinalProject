@@ -9,5 +9,26 @@
 	<select id="managerSelectAllBySearch" resultType="User" parameterType="User">
 		SELECT * FROM USER_ACCOUNT WHERE ROLE = 1 AND NAME LIKE '%'||#{name}||'%' ORDER BY NO ASC
 	</select>
+	
+	<insert id="managerInsert" parameterType="User">
+		INSERT INTO USER_ACCOUNT (NO, ID, PWD, PHONE, REG_DATE, ROLE, NAME)
+VALUES (SEQ_USER_ACCOUNT_NO.NEXTVAL, #{id}, #{pwd}, #{phone}, SYSDATE, 1, #{name})
+	</insert>
+
+	<update id="managerUpdate" parameterType="User">
+		UPDATE USER_ACCOUNT SET ID=#{id}, PWD=#{pwd}, PHONE=#{phone}, NAME=#{name} WHERE NO=#{no}
+	</update>
+
+	<!-- UserManage -->
+	<select id="userSelectAllBySearch" resultType="User" parameterType="User">
+		SELECT * FROM USER_ACCOUNT WHERE ROLE = 2 AND NAME LIKE '%'||#{id}||'%' ORDER BY NO ASC
+	</select>
+
+	<delete id="userDelete" parameterType="map">
+		DELETE FROM USER_ACCOUNT WHERE NO IN
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
 
 </mapper>

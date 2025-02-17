@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Container,
   Table,
@@ -16,7 +16,12 @@ import {
   BsChevronCompactUp,
 } from "react-icons/bs";
 import PermissionModal from "./PermissionModal"; // 권한 추가 모달 컴포넌트 임포트
-import { managerSelectAllBySearch } from "./adminApi"; // adminAPI에서 함수 임포트
+import {
+  managerSelectAllBySearch,
+  managerInsert,
+  managerUpdate,
+  managerDelete,
+} from "./adminApi"; // adminAPI에서 함수 임포트
 
 const ManagerManage = () => {
   // 객체 배열 변수
@@ -35,6 +40,12 @@ const ManagerManage = () => {
 
   const [currentRow, setCurrentRow] = useState(null);
   const [newPermission, setNewPermission] = useState("");
+
+  const name = useRef();
+  const id = useRef();
+  const pwd = useRef();
+  const phone = useRef();
+  const date = new Date().toISOString().split("T")[0];
 
   // 정렬할 컬럼 이름
   const [thName, setthName] = useState("");
@@ -68,21 +79,21 @@ const ManagerManage = () => {
   // 검색 함수
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
-    getList(e.target.value);
     setSelectAll(false);
+    getList(e.target.value);
   };
 
   // 체크박스 전체 선택/해제 함수
   const handleSelectAll = () => {
     const newSelectAll = !selectAll;
     setSelectAll(newSelectAll);
-    setItems(items.map((item) => ({ ...item, checked: newSelectAll })));
+    setItems(filteredItems.map((item) => ({ ...item, checked: newSelectAll })));
   };
 
   // 개별 체크박스 선택/해제 함수
-  const handleCheckboxChange = (id) => {
-    const updatedItems = items.map((item) =>
-      item.id === id ? { ...item, checked: !item.checked } : item
+  const handleCheckboxChange = (no) => {
+    const updatedItems = filteredItems.map((item) =>
+      item.no === no ? { ...item, checked: !item.checked } : item
     );
     setItems(updatedItems);
     setSelectAll(updatedItems.every((item) => item.checked));
@@ -92,6 +103,51 @@ const ManagerManage = () => {
   const filteredItems = items.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // 매니저 추가 함수
+  const handleInsert = async () => {
+    const newManager = {
+      name: name.current.value,
+      id: id.current.value,
+      pwd: pwd.current.value,
+      phone: phone.current.value,
+      regDate: date,
+    };
+    if (name.current.value === null) {
+      return alert("입력값을 확인해주세요");
+    }
+    await managerInsert(newManager);
+    getList("");
+    name.current.value = "";
+    id.current.value = "";
+    pwd.current.value = "";
+    phone.current.value = "";
+  };
+
+  // 매니저 수정 함수
+  const handleUpdate = async (no) => {
+    const updatedManager = {
+      no: no,
+      id: document.getElementById(`id-${no}`).value,
+      name: document.getElementById(`name-${no}`).value,
+      pwd: document.getElementById(`pwd-${no}`).value,
+      phone: document.getElementById(`phone-${no}`).value,
+    };
+
+    await managerUpdate(updatedManager);
+    getList("");
+  };
+
+  // 매니저 삭제 함수
+  const handleDelete = async () => {
+    const selectedManagers = items.filter((item) => item.checked);
+    if (selectedManagers.length === 0) {
+      return alert("삭제할 매니저를 선택해주세요.");
+    }
+    const idsToDelete = selectedManagers.map((item) => item.no);
+    await managerDelete(idsToDelete);
+    getList("");
+  };
 
   return (
     <Container className="admin-page text-center">
@@ -104,7 +160,9 @@ const ManagerManage = () => {
           style={{ width: "200px" }}
           className="me-3"
         />
-        <Button className="btn btn-danger">삭제</Button>
+        <Button className="btn btn-danger" onClick={handleDelete}>
+          삭제
+        </Button>
       </div>
 
       <Table bordered hover responsive className="admin-table table">
@@ -175,16 +233,17 @@ const ManagerManage = () => {
         <tbody>
           {/* 입력 가능한 빈 행 */}
           <tr>
-            <td className="text-center" style={{ width: "80px" }}>
+            <td className="align-content-center" style={{ width: "80px" }}>
               신규 추가
             </td>
-            <td className="text-center" style={{ width: "80px" }}>
+            <td className="align-content-center" style={{ width: "80px" }}>
               -
             </td>
             <td style={{ width: "170px" }}>
               <Form.Control
                 className="admin-table-td text-center"
                 type="text"
+                ref={name}
                 placeholder="담당자"
                 style={{ border: "none" }}
               />
@@ -193,6 +252,7 @@ const ManagerManage = () => {
               <Form.Control
                 className="admin-table-td text-center"
                 type="text"
+                ref={id}
                 placeholder="아이디"
                 style={{ border: "none" }}
               />
@@ -201,6 +261,7 @@ const ManagerManage = () => {
               <Form.Control
                 className="admin-table-td text-center"
                 type="text"
+                ref={pwd}
                 placeholder="비밀번호"
                 style={{ border: "none" }}
               />
@@ -209,78 +270,79 @@ const ManagerManage = () => {
               <Form.Control
                 className="admin-table-td text-center"
                 type="text"
+                ref={phone}
                 placeholder="전화번호"
                 style={{ border: "none" }}
               />
             </td>
-            <td style={{ width: "160px" }}>
-              <Form.Control
-                className="admin-table-td text-center"
-                type="date"
-                style={{ border: "none" }}
-              />
+            <td style={{ width: "160px" }} className="align-content-center">
+              {date}
             </td>
-            <td style={{ width: "95px" }}>
-              <Button className="btn btn-primary me-2">추가</Button>
+            <td style={{ width: "96px" }}>
+              <Button className="btn btn-primary me-2" onClick={handleInsert}>
+                추가
+              </Button>
             </td>
           </tr>
 
           {/* 데이터 행 */}
           {filteredItems.map((data, index) => (
-            <tr key={data.id}>
-              <td className="text-center" style={{ width: "80px" }}>
+            <tr key={data.no}>
+              <td className="align-content-center" style={{ width: "80px" }}>
                 <Form.Check
-                  checked={data.checked}
-                  onChange={() =>
-                    handleCheckboxChange(data.id) && handleSelectAll()
-                  }
+                  checked={data.checked || false}
+                  onChange={() => handleCheckboxChange(data.no)}
                 />
               </td>
-              <td className="text-center" style={{ width: "80px" }}>
+              <td className="align-content-center" style={{ width: "80px" }}>
                 {index + 1}
               </td>
               <td style={{ width: "170px" }}>
                 <Form.Control
+                  id={`name-${data.no}`}
                   className="admin-table-td text-center"
                   type="text"
-                  defaultValue={data.name}
+                  defaultValue={data.name || ""}
                   style={{ border: "none" }}
                 />
               </td>
               <td style={{ width: "160px" }}>
                 <Form.Control
+                  id={`id-${data.no}`}
                   className="admin-table-td text-center"
                   type="text"
-                  defaultValue={data.id}
+                  defaultValue={data.id || ""}
                   style={{ border: "none" }}
                 />
               </td>
               <td style={{ width: "160px" }}>
                 <Form.Control
+                  id={`pwd-${data.no}`}
                   className="admin-table-td text-center"
                   type="text"
-                  defaultValue={data.pwd}
+                  defaultValue={data.pwd || ""}
                   style={{ border: "none" }}
                 />
               </td>
               <td style={{ width: "160px" }}>
                 <Form.Control
+                  id={`phone-${data.no}`}
                   className="admin-table-td text-center"
                   type="text"
-                  defaultValue={data.phone}
+                  defaultValue={data.phone || ""}
                   style={{ border: "none" }}
                 />
               </td>
-              <td style={{ width: "160px" }}>
-                <Form.Control
-                  className="admin-table-td text-center"
-                  type="date"
-                  defaultValue={data.regDate}
-                  style={{ border: "none" }}
-                />
+              <td style={{ width: "160px" }} className="align-content-center">
+                {data.regDate || ""}
               </td>
-              <td style={{ width: "93px" }}>
-                <Button className="btn btn-primary me-2">수정</Button>
+              <td style={{ width: "96px" }}>
+                <Button
+                  className="btn btn-primary me-2"
+                  onClick={() => handleUpdate(data.no)}
+                >
+                  수정
+                </Button>
               </td>
             </tr>
           ))}
