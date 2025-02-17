@@ -4,16 +4,20 @@
 
 	<!-- 이벤트 데이터 삽입 -->
 	<insert id="insertEventByManager" parameterType="EventDTO">
-	<selectKey keyProperty="no" resultType="int" order="AFTER">
-        SELECT SEQ_EVENT_NO.CURRVAL FROM DUAL
-    </selectKey>
-		INSERT INTO EVENT (NO,PUBLIC_DATA_EVENT_NO, USER_ACCOUNT_NO, PRICE, RATING)
-		VALUES (SEQ_EVENT_NO.NEXTVAL,#{publicDataEventNo}, #{userAccountNo}, #{price}, 3)
+		<selectKey keyProperty="no" resultType="int" order="AFTER">
+			SELECT
+			SEQ_EVENT_NO.CURRVAL FROM DUAL
+		</selectKey>
+		INSERT INTO EVENT (NO,PUBLIC_DATA_EVENT_NO, USER_ACCOUNT_NO, PRICE,
+		RATING)
+		VALUES (SEQ_EVENT_NO.NEXTVAL,#{publicDataEventNo},
+		#{userAccountNo}, #{price}, 3)
 	</insert>
 
 
 	<!-- 이벤트 이미지 데이터 삽입 -->
-	<insert id="insertEventImgByManagerThumb" parameterType="EventImg">
+	<insert id="insertEventImgByManagerThumb"
+		parameterType="EventImg">
 		INSERT INTO
 		EVENT_IMG (NO, EVENT_NO,THUMBURL) VALUES (
 		SEQ_EVENT_IMG_NO.NEXTVAL,
@@ -21,14 +25,72 @@
 		#{thumbUrl}
 		)
 	</insert>
-	
-		<!-- 이벤트 이미지 데이터 삽입 -->
+
+	<!-- 이벤트 이미지 데이터 삽입 -->
 	<insert id="insertEventImgByManagerSub" parameterType="EventImg">
-		INSERT INTO
+		INSERT
+		INTO
 		EVENT_IMG (NO, EVENT_NO,URL) VALUES (
 		SEQ_EVENT_IMG_NO.NEXTVAL,
 		#{eventNo},
 		#{url}
 		)
 	</insert>
+	<select id="getManagerEventStatistics" parameterType="User"
+		resultType="map">
+		SELECT
+		e.NO AS eventNo,
+		p.NAME AS eventName,
+
+		-- 지역별 인원 수 계산
+		COALESCE(SUM(CASE WHEN u.REGION = '서울' THEN 1 ELSE 0 END), 0) AS region_seoul,
+		COALESCE(SUM(CASE WHEN u.REGION = '경기' THEN 1 ELSE 0 END), 0) AS
+		region_gyeonggi,
+		COALESCE(SUM(CASE WHEN u.REGION = '강원' THEN 1 ELSE 0 END), 0) AS region_gangwon,
+		COALESCE(SUM(CASE WHEN u.REGION = '충북' THEN 1 ELSE 0 END), 0) AS
+		region_chungbuk,
+		COALESCE(SUM(CASE WHEN u.REGION = '충남' THEN 1 ELSE 0 END), 0) AS region_chungnam,
+		COALESCE(SUM(CASE WHEN u.REGION = '전북' THEN 1 ELSE 0 END), 0) AS
+		region_jeonbuk,
+		COALESCE(SUM(CASE WHEN u.REGION = '전남' THEN 1 ELSE 0 END), 0) AS region_jeonnam,
+		COALESCE(SUM(CASE WHEN u.REGION = '경북' THEN 1 ELSE 0 END), 0) AS
+		region_gyeongbuk,
+		COALESCE(SUM(CASE WHEN u.REGION = '경남' THEN 1 ELSE 0 END), 0) AS region_gyeongnam,
+		COALESCE(SUM(CASE WHEN u.REGION = '제주' THEN 1 ELSE 0 END), 0) AS
+		region_jeju,
+
+		-- 연령별 평점 평균 계산
+		ROUND(COALESCE(AVG(CASE WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM u.BIRTH) <![CDATA[<=]]> 19
+		THEN er.RATING END), 0), 2) AS rating_10s,
+		ROUND(COALESCE(AVG(CASE WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM u.BIRTH) BETWEEN
+		20 AND 29 THEN er.RATING END), 0), 2) AS rating_20s,
+		ROUND(COALESCE(AVG(CASE WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR
+		FROM u.BIRTH) BETWEEN 30 AND 39 THEN er.RATING END), 0), 2) AS
+		rating_30s,
+		ROUND(COALESCE(AVG(CASE WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM u.BIRTH) BETWEEN
+		40 AND 49 THEN er.RATING END), 0), 2) AS rating_40s,
+		ROUND(COALESCE(AVG(CASE WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR
+		FROM u.BIRTH) <![CDATA[>=]]> 50 THEN er.RATING END), 0), 2) AS rating_50s,
+
+		-- 성별 인원 수 계산
+		COALESCE(SUM(CASE WHEN u.GENDER = 'M' THEN 1 ELSE 0 END), 0) AS male_count,
+		COALESCE(SUM(CASE WHEN u.GENDER = 'F' THEN 1 ELSE 0 END), 0) AS
+		female_count
+
+		FROM EVENT e
+		JOIN USER_MANAGEMENT_EVENT um ON e.PUBLIC_DATA_EVENT_NO =
+		um.PUBLIC_DATA_EVENT_NO
+		JOIN PUBLIC_DATA_EVENT p ON e.PUBLIC_DATA_EVENT_NO = p.NO
+		LEFT JOIN RESERVED r ON e.NO = r.EVENT_NO
+		LEFT JOIN USER_ACCOUNT u ON r.USER_ACCOUNT_NO = u.NO
+		LEFT JOIN EVENT_REVIEW er ON e.NO = er.EVENT_NO
+		LEFT JOIN USER_ACCOUNT ur ON er.USER_ACCOUNT_NO = ur.NO
+
+		WHERE um.USER_ACCOUNT_NO = #{no}
+
+		GROUP BY e.NO, p.NAME
+	</select>
+
+
+
 </mapper>
