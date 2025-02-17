@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 
 import com.zeus.user.domain.Cart;
 import com.zeus.user.domain.CartDTO;
+import com.zeus.user.domain.Reserved;
+import com.zeus.user.domain.ReservedDTO;
 import com.zeus.user.domain.User;
 
 public interface UserService {
@@ -31,6 +33,10 @@ public interface UserService {
     List <CartDTO> getCartData(Integer userNo);
     // 장바구니 항목 삭제.
 	boolean deleteCartData(Cart cart);
+	// 예매내역 조회.
+	List <ReservedDTO> getReservedData(int userNo);
+	// 예매내역 삭제.
+	boolean deleteReservedData(int no);
 	///////////////////////////////////////////////////////
 	
 	

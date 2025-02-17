@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zeus.common.config.JwtUtil;
 import com.zeus.user.domain.Cart;
 import com.zeus.user.domain.CartDTO;
+import com.zeus.user.domain.ReservedDTO;
 import com.zeus.user.domain.User;
 import com.zeus.user.mapper.UserMapper;
 
@@ -198,6 +199,7 @@ public class UserServiceImpl implements UserService {
 		return mapper.getCartData(userNo);  // List<CartDTO> 반환;
 	}
 	////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////
 	// 장바구니 삭제.
 	@Override
 	public boolean deleteCartData(Cart cart)
@@ -215,6 +217,47 @@ public class UserServiceImpl implements UserService {
         }
 	}
 	////////////////////////////////////////////////////////////////////////
+	@Override
+	public List<ReservedDTO> getReservedData(int userNo)
+	{
+
+		System.out.println("User object received: " + userNo); // 로그 추가
+		
+		List<ReservedDTO> reservedData = mapper.getReservedData(userNo);
+		
+		// 추가 로그 출력
+		if (reservedData == null || reservedData.isEmpty())
+		{
+			System.out.println("예매 내역이 없습니다.");
+		} else
+		{
+			System.out.println("예매 내역: " + reservedData);
+		}
+
+		return reservedData;
+	}
+	////////////////////////////////////////////////////////////////////////
+	// 예매내역 취소(삭제).
+	@Override
+	public boolean deleteReservedData(int no)
+	{
+		try
+		{
+	        // 예매 내역 삭제 쿼리 실행
+	        int result = mapper.deleteReservedData(no);
+
+	        // 삭제된 행의 수가 1 이상이면 삭제 성공
+	        return result > 0;
+
+	    } catch (Exception e)
+		{
+	        // 예외가 발생하면 예외 로그를 출력하고 false 반환
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
+	////////////////////////////////////////////////////////////////////////
+
     //로그인 체크, id와 provider로 user 정보를 가져와헤싱해서 로그인확인
     //provider가 common 이라면 헤싱해서 로그인 이외에는 api 로그인이므로 id와 provider만 일치하는지 확인
     @Override

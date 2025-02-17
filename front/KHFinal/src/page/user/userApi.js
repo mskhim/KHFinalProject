@@ -326,7 +326,82 @@ export const deleteCartData = async (cart) => {
   }
 };
 
+/*
+ * JWT쿠키 검사를 통해 로그인 상태를 확인한 후,
+ * 예매 내역을 조회함.
+ */
+export const getReservedData = async () =>
+{
+  try
+  {
+    // 예매 내역 조회 API 호출
+    const response = await fetch('http://localhost:8080/user/getReservedData', {
+      method: 'GET',
+      credentials: 'include', // ✅ 쿠키 자동 포함
+    });
 
+    // 응답이 OK가 아니면 인증 실패 처리
+    if (!response.ok)
+    {
+      return { authenticated: false };
+    }
+
+    // 응답 데이터 파싱
+    const data = await response.json();
+
+    // 예매 내역이 있으면 반환, 없으면 빈 배열을 반환
+    if (data.authenticated)
+    {
+      return { authenticated: true, reservedData: data.reservedData };
+    } else
+    {
+      return { authenticated: false, message: data.message || "예매 내역이 없습니다." };
+    }
+
+  } catch (error)
+  {
+    // 예외가 발생하면 인증 실패로 처리
+    return { authenticated: false, message: "서버 오류가 발생했습니다." };
+  }
+};
+
+/*
+ * JWT쿠키 검사를 통해 로그인 상태를 확인한 후,
+ * 조회된 예매내역을 취소(삭제)함.
+ */
+export const deleteReservedData = async (reservationId) => {
+  try {
+    // 예매 내역 취소(삭제) API 호출
+    const response = await fetch('http://localhost:8080/user/deleteReservedData', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include', // ✅ 쿠키 자동 포함
+      body: JSON.stringify({ no: reservationId }), // 삭제할 예약 번호
+    });
+
+    // 응답이 OK가 아니면 인증 실패 처리
+    if (!response.ok) {
+      const errorData = await response.json();
+      return { authenticated: false, message: errorData.message || "예매 취소 실패" };
+    }
+
+    // 응답 데이터 파싱
+    const data = await response.json();
+
+    // 예매 취소가 성공한 경우 처리
+    if (data.authenticated) {
+      return { authenticated: true, message: "예매 취소가 완료되었습니다." };
+    } else {
+      return { authenticated: false, message: data.message || "예매 취소 실패" };
+    }
+
+  } catch (error) {
+    // 예외가 발생하면 오류 처리
+    return { authenticated: false, message: "서버 오류가 발생했습니다." };
+  }
+};
 
 /**
  * 이메일을 받아서 일반회원가입 User를 가져오는 API, 아이디만 가져올것
