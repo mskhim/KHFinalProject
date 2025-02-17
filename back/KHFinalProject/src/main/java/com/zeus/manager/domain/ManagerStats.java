@@ -10,7 +10,7 @@ public class ManagerStats {
 	private String name;
 	private List<Integer> regionData;
 	private List<Double> avgRating;
-	private List<Integer> bookingData;
+	private List<Integer> genderData;
 	
 	
 }

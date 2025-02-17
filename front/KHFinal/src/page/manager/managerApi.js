@@ -47,10 +47,10 @@ export const insertEventByManager = async (formData) => {
  * 통계정보를 받아오는 api
  */
 
-export const selectEventStatsData = async (no) => {
+export const selectEventStatsData = async () => {
   try {
     const response = await fetch(
-      `http://localhost:8080/event/selectEventStatsData?no=${no}`,
+      `http://localhost:8080/manager/selectEventStatsData`,
       {
         method: 'GET',
         credentials: 'include',

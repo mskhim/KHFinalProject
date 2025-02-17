@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.zeus.common.config.JwtUtil;
 import com.zeus.event.domain.EventDTO;
 import com.zeus.event.domain.EventImg;
-import com.zeus.event.domain.PublicDataEventDTO;
+import com.zeus.manager.domain.ManagerStats;
 import com.zeus.manager.service.ManagerService;
 import com.zeus.user.domain.User;
 
@@ -83,7 +83,8 @@ public class ManagerController {
 		int no = JwtUtil.validateToken(jwtToken).get("no", Integer.class);
 		User user = new User();
 		user.setNo(no);
-		List<PublicDataEventDTO> dataList = service.selectEventStatsData(user);
+		List<ManagerStats> dataList = service.selectEventStatsData(user);
+		log.info(dataList+"");
 		return ResponseEntity.ok(Map.of("authenticated", true, "message", "JWT 유효", "dataList", dataList));
 	}
 	

@@ -5,7 +5,7 @@ import java.util.List;
 import com.zeus.event.domain.Event;
 import com.zeus.event.domain.EventDTO;
 import com.zeus.event.domain.EventImg;
-import com.zeus.event.domain.PublicDataEventDTO;
+import com.zeus.manager.domain.ManagerStats;
 import com.zeus.user.domain.User;
 
 public interface ManagerService {
@@ -13,6 +13,6 @@ public interface ManagerService {
 	EventDTO insertEventByManager(EventDTO eventDTO);
 	Event insertEventImgByManagerThumb(EventImg eventImg);
 	Event insertEventImgByManagerSub(EventImg eventImg);
-	List<PublicDataEventDTO> selectEventStatsData(User user);
+	List<ManagerStats> selectEventStatsData(User user);
 	
 }
