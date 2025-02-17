@@ -1,3 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zeus.main.mapper.MainMapper"></mapper>
+<mapper namespace="com.zeus.main.mapper.MainMapper">
+
+<select id="topSeries" resultType="Main">
+    SELECT 
+    E.NO, 
+    P.NAME, 
+    I.THUMBURL
+FROM EVENT E 
+LEFT JOIN EVENT_IMG I ON E.NO = I.EVENT_NO
+LEFT JOIN PUBLIC_DATA_EVENT P ON E.PUBLIC_DATA_EVENT_NO = P.NO
+LEFT JOIN vw_event_avg_rating T ON E.NO=T.NO
+WHERE I.THUMBURL IS NOT NULL
+ORDER BY T.AVG_RATING DESC
+FETCH FIRST 4 ROWS ONLY
+</select>
+
+<select id="byRegionRate" resultType="Main">
+WITH RankedEvents AS (
+    SELECT 
+        E.NO, 
+        E.PUBLIC_DATA_EVENT_NO,
+        P.NAME, 
+        P.ADDRESS,
+        I.THUMBURL, 
+        T.AVG_RATING,
+        SUBSTR(P.ADDRESS, 1, INSTR(P.ADDRESS, ' ') - 1) AS REGION,
+        RANK() OVER (PARTITION BY SUBSTR(P.ADDRESS, 1, INSTR(P.ADDRESS, ' ') - 1)
+                     ORDER BY T.AVG_RATING DESC, E.NO ASC) AS RANKING
+    FROM EVENT E
+    LEFT JOIN EVENT_IMG I ON E.NO = I.EVENT_NO
+    LEFT JOIN PUBLIC_DATA_EVENT P ON E.PUBLIC_DATA_EVENT_NO = P.NO
+    LEFT JOIN EVENT_AVG_RATING T ON E.NO = T.EVENT_NO
+    WHERE I.THUMBURL IS NOT NULL
+)
+SELECT NO, NAME, ADDRESS, THUMBURL, AVG_RATING
+FROM RankedEvents
+WHERE RANKING = 1
+</select>
+
+<select id="comeStartDate" resultType="Main">
+    SELECT 
+        E.NO, 
+        NAME, 
+        START_DATE, 
+        END_DATE, 
+        THUMBURL, 
+        P.ADDRESS ,
+        T.AVG_RATING AS RATING
+    FROM EVENT E 
+    LEFT JOIN EVENT_IMG I ON E.NO = I.EVENT_NO
+    LEFT JOIN PUBLIC_DATA_EVENT P ON E.PUBLIC_DATA_EVENT_NO = P.NO
+    LEFT JOIN vw_event_avg_rating T ON E.NO=T.NO
+    WHERE I.THUMBURL IS NOT NULL AND START_DATE>SYSDATE
+    ORDER BY START_DATE ASC FETCH FIRST 7 ROWS ONLY
+</select>
+
+<select id="comeEndDate" resultType="Main">
+ SELECT 
+        E.NO, 
+        NAME, 
+        START_DATE, 
+        END_DATE, 
+        THUMBURL, 
+        P.ADDRESS ,
+        T.AVG_RATING AS RATING
+    FROM EVENT E 
+    LEFT JOIN EVENT_IMG I ON E.NO = I.EVENT_NO
+    LEFT JOIN PUBLIC_DATA_EVENT P ON E.PUBLIC_DATA_EVENT_NO = P.NO
+    LEFT JOIN vw_event_avg_rating T ON E.NO=T.NO
+    WHERE I.THUMBURL IS NOT NULL AND END_DATE>SYSDATE
+    ORDER BY END_DATE ASC FETCH FIRST 7 ROWS ONLY
+</select>
+
+
+</mapper>

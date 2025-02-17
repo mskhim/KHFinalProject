@@ -78,11 +78,13 @@ const NoticeList = () => {
   };
 
   // 검색 취소 버튼 클릭 핸들러
-  const handleCancelSearch = () => {
+  const handleCancelSearch = async () => {
     setSearchTerm(''); // 검색어 초기화
     setIsSearchMode(false); // 검색 모드 해제
     setCurrentPage(1); // 첫 페이지로 이동
-    loadNotices(1); // 원래 페이지별 데이터 불러오기
+
+    const data = await fetchNotices(1); // 데이터를 먼저 가져옴
+    setNotices(data); // 공지사항 목록 업데이트
   };
 
   // 📌 페이지네이션 변경 핸들러

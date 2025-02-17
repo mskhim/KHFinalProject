@@ -1,6 +1,13 @@
 package com.zeus.main.service;
 
-public interface MainService {
+import java.util.List;
 
+import com.zeus.main.domain.Main;
+
+public interface MainService {
+	 	List<Main> getTopSeries();
+	 	List<Main> getByRegionRate();
+	 	List<Main> getComeStartDate();
+	 	List<Main> getComeEndDate();
 
 }
