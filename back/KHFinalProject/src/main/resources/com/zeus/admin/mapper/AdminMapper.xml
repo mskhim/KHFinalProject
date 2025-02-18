@@ -12,7 +12,8 @@
 	
 	<insert id="managerInsert" parameterType="User">
 		INSERT INTO USER_ACCOUNT (NO, ID, PWD, PHONE, REG_DATE, ROLE, NAME)
-VALUES (SEQ_USER_ACCOUNT_NO.NEXTVAL, #{id}, #{pwd}, #{phone}, SYSDATE, 1, #{name})
+		VALUES (SEQ_USER_ACCOUNT_NO.NEXTVAL, #{id}, #{pwd}, #{phone}, SYSDATE,
+		1, #{name})
 	</insert>
 
 	<update id="managerUpdate" parameterType="User">
@@ -124,6 +125,27 @@ VALUES (SEQ_USER_ACCOUNT_NO.NEXTVAL, #{id}, #{pwd}, #{phone}, SYSDATE, 1, #{name
 			#{id}
 		</foreach>
 		OR QNA_NO IN
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<!-- NoticeManage -->
+	<select id="noticeSelectAllBySearch" resultType="Notice" parameterType="Notice">
+		SELECT * FROM NOTICE WHERE TITLE LIKE '%'||#{title}||'%' ORDER BY NO ASC
+	</select>
+
+	<insert id="noticeInsert" parameterType="Notice">
+		INSERT INTO NOTICE (NO, TITLE, CONTENT, SUB_DATE)
+		VALUES (SEQ_NOTICE_NO.NEXTVAL, #{title}, #{content}, SYSDATE)
+	</insert>
+
+	<update id="noticeUpdate" parameterType="Notice">
+		UPDATE NOTICE SET TITLE=#{title}, CONTENT=#{content}, SUB_DATE=#{subDate} WHERE NO=#{no}
+	</update>
+
+	<delete id="noticeDelete" parameterType="map">
+		DELETE FROM NOTICE WHERE NO IN
 		<foreach item="id" collection="ids" open="(" separator="," close=")">
 			#{id}
 		</foreach>

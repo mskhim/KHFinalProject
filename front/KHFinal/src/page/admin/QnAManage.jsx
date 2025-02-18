@@ -62,9 +62,11 @@ const QnAManage = () => {
   };
 
   // 개별 체크박스 선택/해제 함수
-  const handleCheckboxChange = (no) => {
+  const handleCheckboxChange = (questionNo) => {
     const updatedItems = items.map((item) =>
-      item.questionNo === no ? { ...item, checked: !item.checked } : item
+      item.questionNo === questionNo
+        ? { ...item, checked: !item.checked }
+        : item
     );
     setItems(updatedItems);
     setSelectAll(updatedItems.every((item) => item.checked));

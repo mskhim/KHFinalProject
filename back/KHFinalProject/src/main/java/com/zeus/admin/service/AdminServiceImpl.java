@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.zeus.admin.mapper.AdminMapper;
+import com.zeus.notice.domain.Notice;
 import com.zeus.user.domain.User;
 import com.zeus.admin.domain.AdminEventDTO;
 import com.zeus.admin.domain.AdminReviewDTO;
@@ -92,5 +93,27 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public void qnaDelete(List<Integer> ids) throws Exception {
 		mapper.qnaDelete(ids);
+	}
+
+	@Override
+	public List<Notice> noticeSelectAllBySearch(String title) throws Exception {
+		com.zeus.notice.domain.Notice notice = new Notice();
+		notice.setTitle(title);
+		return mapper.noticeSelectAllBySearch(notice);
+	}
+
+	@Override
+	public void noticeInsert(Notice notice) throws Exception {
+		mapper.noticeInsert(notice);
+	}
+
+	@Override
+	public void noticeUpdate(Notice notice) throws Exception {
+		mapper.noticeUpdate(notice);
+	}
+
+	@Override
+	public void noticeDelete(List<Integer> ids) throws Exception {
+		mapper.noticeDelete(ids);
 	}
 }

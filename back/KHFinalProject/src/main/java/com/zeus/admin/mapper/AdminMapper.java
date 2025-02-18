@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.zeus.event.domain.Event;
+import com.zeus.notice.domain.Notice;
 import com.zeus.user.domain.User;
 import com.zeus.admin.domain.AdminEventDTO;
 import com.zeus.admin.domain.AdminReviewDTO;
@@ -58,4 +59,18 @@ public interface AdminMapper {
 	
 	// QnA 삭제
 	public void qnaDelete(List<Integer> ids) throws Exception;
+
+// 공지사항 관리 페이지
+
+	// 공지사항 전체 및 검색 전체조회
+	public List<Notice> noticeSelectAllBySearch(Notice notice) throws Exception;
+
+	// 공지사항 추가
+	public void noticeInsert(Notice notice) throws Exception;
+
+	// 공지사항 수정
+	public void noticeUpdate(Notice notice) throws Exception;
+
+	// 공지사항 삭제
+	public void noticeDelete(List<Integer> ids) throws Exception;
 }
