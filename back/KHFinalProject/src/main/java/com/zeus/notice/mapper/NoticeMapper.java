@@ -12,4 +12,5 @@ public interface NoticeMapper {
 	List<Notice> getNoticesByPage(@Param("page") int page, @Param("pageSize") int pageSize);
 	Notice getNoticeById(int no);
 	int getTotalNoticesCount();
+	List<Notice> lateNotices();
 }

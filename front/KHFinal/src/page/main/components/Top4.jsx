@@ -31,7 +31,7 @@ export default function Top4() {
             <Card
               key={index}
               className="bg-dark text-black Top4-card"
-              style={{ width: '25%', height: '600px', cursor: 'pointer' }}
+              style={{ width: '25%', height: '800px', cursor: 'pointer' }}
               onClick={() => handleImageClick(event.no)} // 클릭 시 이벤트 no 값으로 이동
             >
               <Card.Img
@@ -47,11 +47,23 @@ export default function Top4() {
                 }}
               />
               <Card.ImgOverlay>
-                <Card.Title>{`Top ${index + 1}`}</Card.Title>
+                <Card.Title className="Top4-titlename">{`Top ${
+                  index + 1
+                }`}</Card.Title>
                 <Card.Text></Card.Text>
               </Card.ImgOverlay>
-              <Card.Body style={{ height: '100px' }}>
-                <Card.Title>{event.name}</Card.Title>{' '}
+              <Card.Body
+                style={{
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)', // 반투명한 검은색 배경
+                  color: 'white', // 글씨색을 흰색으로
+                  padding: '5px 10px', // 텍스트 주위 여백
+                  display: 'inline-block',
+                  height: '100px',
+                }}
+              >
+                <Card.Title style={{ fontSize: '30px' }}>
+                  {event.name}
+                </Card.Title>{' '}
                 {/* event.name을 타이틀로 */}
                 <Card.Text>
                   {/* 필요한 경우 여기 추가 설명을 넣을 수 있습니다 */}
