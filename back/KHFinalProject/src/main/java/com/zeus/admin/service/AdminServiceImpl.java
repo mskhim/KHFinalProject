@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.zeus.admin.mapper.AdminMapper;
 import com.zeus.user.domain.User;
 import com.zeus.admin.domain.AdminEventDTO;
+import com.zeus.admin.domain.AdminReviewDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -66,5 +67,17 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public void festivalDelete(List<Integer> ids) throws Exception {
 		mapper.festivalDelete(ids);
+	}
+
+	@Override
+	public List<AdminReviewDTO> reviewSelectAllBySearch(String eventName) throws Exception {
+		AdminReviewDTO review = new AdminReviewDTO();
+		review.setEventName(eventName);
+		return mapper.reviewSelectAllBySearch(review);
+	}
+
+	@Override
+	public void reviewDelete(List<Integer> ids) throws Exception {
+		mapper.reviewDelete(ids);
 	}
 }

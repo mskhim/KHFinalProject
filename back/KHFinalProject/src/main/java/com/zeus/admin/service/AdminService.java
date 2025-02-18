@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.zeus.user.domain.User;
 import com.zeus.admin.domain.AdminEventDTO;
+import com.zeus.admin.domain.AdminReviewDTO;
 
 public interface AdminService {
 	
@@ -24,5 +25,9 @@ public interface AdminService {
 	public List<AdminEventDTO> festivalSelectAllBySearch(String eventName) throws Exception;
 
 	public void festivalDelete(List<Integer> ids) throws Exception;
+
+	public List<AdminReviewDTO> reviewSelectAllBySearch(String eventName) throws Exception;
+
+	public void reviewDelete(List<Integer> ids) throws Exception;
 }
 

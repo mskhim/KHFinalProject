@@ -1,39 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Table, Form, Button } from "react-bootstrap";
 import "./include/css/Common.css";
 import { BsSortDown, BsSortUp } from "react-icons/bs";
+import { reviewSelectAllBySearch, reviewDelete } from "./adminApi"; // adminAPI에서 함수 임포트
 
-const UserManage = () => {
+const ReviewManage = () => {
   // 객체 배열 변수
-  const [items, setItems] = useState([
-    {
-      no: 1,
-      event_name: "2025 해돋이 행사",
-      member_id: "hgd",
-      title: "리뷰 타이틀1",
-      comment: "내용1",
-      rate: 5,
-      sub_date: "2025-02-05",
-    },
-    {
-      no: 2,
-      event_name: "천을산 해맞이",
-      member_id: "kdj",
-      title: "리뷰 타이틀2",
-      comment: "내용2",
-      rate: 3,
-      sub_date: "2025-02-05",
-    },
-    {
-      no: 3,
-      event_name: "해맞이축제",
-      member_id: "itw",
-      title: "리뷰 타이틀3",
-      comment: "내용3",
-      rate: 1,
-      sub_date: "2025-02-05",
-    },
-  ]);
+  const [items, setItems] = useState([]);
+
+  const getList = async (eventName) => {
+    const data = await reviewSelectAllBySearch(eventName);
+    if (data !== null) {
+      setItems(data);
+    }
+  };
+
+  useEffect(() => {
+    getList("");
+  }, []);
 
   // 정렬할 컬럼 이름
   const [thName, setthName] = useState("");
@@ -67,27 +51,39 @@ const UserManage = () => {
   // 검색 함수
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
+    getList(e.target.value);
   };
 
   // 체크박스 전체 선택/해제 함수
   const handleSelectAll = () => {
     const newSelectAll = !selectAll;
     setSelectAll(newSelectAll);
-    setItems(items.map((item) => ({ ...item, checked: newSelectAll })));
+    setItems(filteredItems.map((item) => ({ ...item, checked: newSelectAll })));
   };
 
   // 개별 체크박스 선택/해제 함수
   const handleCheckboxChange = (no) => {
-    const updatedItems = items.map((item) =>
+    const updatedItems = filteredItems.map((item) =>
       item.no === no ? { ...item, checked: !item.checked } : item
     );
     setItems(updatedItems);
     setSelectAll(updatedItems.every((item) => item.checked));
   };
 
+  // 삭제 함수
+  const handleDelete = async () => {
+    const selectedReviews = items.filter((item) => item.checked);
+    if (selectedReviews.length === 0) {
+      return alert("삭제할 리뷰를 선택해주세요.");
+    }
+    const idsToDelete = selectedReviews.map((item) => item.no);
+    await reviewDelete(idsToDelete);
+    getList("");
+  };
+
   // 검색어에 따라 필터링된 아이템
   const filteredItems = items.filter((item) =>
-    item.event_name.toLowerCase().includes(searchTerm.toLowerCase())
+    item.eventName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -101,7 +97,9 @@ const UserManage = () => {
           style={{ width: "200px" }}
           className="me-3"
         />
-        <Button className="btn btn-danger">삭제</Button>
+        <Button className="btn btn-danger" onClick={handleDelete}>
+          삭제
+        </Button>
       </div>
 
       <Table bordered hover responsive className="admin-table">
@@ -124,76 +122,64 @@ const UserManage = () => {
             </th>
             <th
               className="text-bg-primary text-center"
-              onClick={() => handleSort("event_name")}
+              onClick={() => handleSort("eventName")}
               style={{ width: "230px" }}
             >
               축제명
-              {thName === "event_name" &&
+              {thName === "eventName" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
               className="text-bg-primary text-center"
-              onClick={() => handleSort("member_id")}
+              onClick={() => handleSort("userName")}
               style={{ width: "150px" }}
             >
               리뷰 작성자
-              {thName === "member_id" &&
+              {thName === "userName" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
               className="text-bg-primary text-center"
-              onClick={() => handleSort("title")}
-              style={{ width: "230px" }}
-            >
-              리뷰 제목
-              {thName === "title" &&
-                (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
-            </th>
-            <th
-              className="text-bg-primary text-center"
-              style={{ width: "250px" }}
+              style={{ width: "480px" }}
             >
               리뷰 내용
             </th>
             <th
               className="text-bg-primary text-center"
-              onClick={() => handleSort("rate")}
+              onClick={() => handleSort("rating")}
               style={{ width: "90px" }}
             >
               평점
-              {thName === "rate" &&
+              {thName === "rating" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
               className="text-bg-primary text-center"
-              onClick={() => handleSort("sub_date")}
+              onClick={() => handleSort("subDate")}
               style={{ width: "165px" }}
             >
               리뷰 작성일
-              {thName === "sub_date" &&
+              {thName === "subDate" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
           </tr>
         </thead>
         <tbody>
           {/* 데이터 행 */}
-          {filteredItems.map((data) => (
+          {filteredItems.map((data, index) => (
             <tr key={data.no}>
               <td className="text-center" style={{ width: "90px" }}>
                 <Form.Check
-                  checked={data.checked}
-                  onChange={() =>
-                    handleCheckboxChange(data.no) && handleSelectAll()
-                  }
+                  checked={data.checked || false}
+                  onChange={() => handleCheckboxChange(data.no)}
                 />
               </td>
-              <td style={{ width: "90px" }}>{data.no}</td>
-              <td style={{ width: "230px" }}>{data.event_name}</td>
-              <td style={{ width: "150px" }}>{data.member_id}</td>
-              <td style={{ width: "230px" }}>{data.title}</td>
-              <td style={{ width: "250px" }}>{data.comment}</td>
-              <td style={{ width: "90px" }}>{data.rate}</td>
-              <td style={{ width: "148px" }}>{data.sub_date}</td>
+              <td style={{ width: "90px" }}>{index + 1}</td>
+              <td style={{ width: "230px" }}>{data.eventName}</td>
+              <td style={{ width: "150px" }}>{data.userName}</td>
+              <td style={{ width: "480px" }}>{data.content}</td>
+              <td style={{ width: "90px" }}>{data.rating}</td>
+              <td style={{ width: "148px" }}>{data.subDate}</td>
             </tr>
           ))}
         </tbody>
@@ -202,4 +188,4 @@ const UserManage = () => {
   );
 };
 
-export default UserManage;
+export default ReviewManage;

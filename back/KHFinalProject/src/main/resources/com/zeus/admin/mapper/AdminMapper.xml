@@ -47,7 +47,7 @@ VALUES (SEQ_USER_ACCOUNT_NO.NEXTVAL, #{id}, #{pwd}, #{phone}, SYSDATE, 1, #{name
 		PDE.CONTENT,
 		PDE.TEL,
 		PDE.HOMEPAGE
-		FROM ADMIN.EVENT E
+		FROM EVENT E
 		LEFT JOIN ADMIN.USER_ACCOUNT UA
 		ON E.USER_ACCOUNT_NO = UA.NO
 		LEFT JOIN ADMIN.PUBLIC_DATA_EVENT PDE
@@ -56,7 +56,35 @@ VALUES (SEQ_USER_ACCOUNT_NO.NEXTVAL, #{id}, #{pwd}, #{phone}, SYSDATE, 1, #{name
 	</select>
 
 	<delete id="festivalDelete" parameterType="map">
-		DELETE FROM ADMIN.EVENT WHERE NO IN
+		DELETE FROM EVENT WHERE NO IN
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<!-- FestivalReviewManage-->
+	<select id="reviewSelectAllBySearch" resultType="AdminReviewDTO" parameterType="AdminReviewDTO">
+		SELECT
+			ER.NO,
+			ER.CONTENT,
+			ER.SUB_DATE,
+			ER.EVENT_NO,
+			ER.USER_ACCOUNT_NO,
+			ER.RATING,
+			UA.NAME AS USER_NAME,
+			PDE.NAME AS EVENT_NAME
+		FROM EVENT_REVIEW ER
+		LEFT JOIN USER_ACCOUNT UA
+		ON ER.USER_ACCOUNT_NO = UA.NO
+		LEFT JOIN EVENT E
+		ON ER.EVENT_NO = E.NO
+		LEFT JOIN PUBLIC_DATA_EVENT PDE
+		ON E.PUBLIC_DATA_EVENT_NO = PDE.NO
+		WHERE PDE.NAME LIKE '%'||#{eventName}||'%' ORDER BY ER.NO ASC
+	</select>
+
+	<delete id="reviewDelete" parameterType="map">
+		DELETE FROM EVENT_REVIEW WHERE NO IN
 		<foreach item="id" collection="ids" open="(" separator="," close=")">
 			#{id}
 		</foreach>
