@@ -5,10 +5,10 @@ import './Main.css';
 import MainCarousel from './components/MainCarousel';
 import Top4 from './components/Top4';
 import Announcement from './components/Announcement';
+import ByRegionFestival from './components/ByRegionFestival';
 import StartFestival from './components/StartFestival';
 import EndFestival from './components/EndFestival';
 import { Container } from 'react-bootstrap';
-import RandomFestival from './components/RandomFestival';
 import './Main.css';
 const Main = () => {
   return (
@@ -18,9 +18,9 @@ const Main = () => {
         <MainCarousel />
         <Announcement />
         <Top4 />
+        <ByRegionFestival />
         <StartFestival />
         <EndFestival />
-        <RandomFestival />
       </Container>
       <Footer />
     </>

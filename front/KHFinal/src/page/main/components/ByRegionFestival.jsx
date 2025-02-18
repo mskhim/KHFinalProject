@@ -2,38 +2,37 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
-import './css/EndFestival.css';
-import { comeEndDate } from '../mainApi';
-
-export default function EndFestival() {
+import './css/RandomFestival.css';
+import { byRegionRate } from '../mainApi.js';
+function ByRegionFestival() {
   const navigate = useNavigate();
-  const [comeEndEvents, setcomeEndEvents] = useState([]);
+  const [byRegionEvents, setbyRegionEvents] = useState([]);
 
   useEffect(() => {
-    const fetchcomeEnd = async () => {
-      const data = await comeEndDate();
+    const fetchbyRagionRate = async () => {
+      const data = await byRegionRate();
       if (data) {
-        setcomeEndEvents(data);
+        setbyRegionEvents(data);
       }
     };
-    fetchcomeEnd();
+    fetchbyRagionRate();
   }, []);
 
   const handleImageClick = (no) => {
     navigate(`/eventRead/${no}`);
   };
 
-  const items = comeEndEvents.map((event, index) => (
+  const items = byRegionEvents.map((event, index) => (
     <div
-      className="carousel-item EndFestival-item"
+      className="carousel-item RandomFestival-item"
       key={index}
       onClick={() => handleImageClick(event.no)}
       style={{ cursor: 'pointer' }}
     >
       <img
         src={event.thumbUrl}
-        alt={`Item ${index + 1}`}
-        className="carousel-image EndFestival-image"
+        alt={event.name}
+        className="carousel-image RandomFestival-image"
       />
     </div>
   ));
@@ -45,8 +44,8 @@ export default function EndFestival() {
   };
   return (
     <>
-      <h3>&ensp;EndingSoon</h3>
-      <div className="carousel-container .EndFestival-container">
+      <h3>&ensp;byRegionFestival</h3>
+      <div className="carousel-container RandomFestival-container">
         <AliceCarousel
           mouseTracking
           items={items}
@@ -61,3 +60,5 @@ export default function EndFestival() {
     </>
   );
 }
+
+export default ByRegionFestival;

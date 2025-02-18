@@ -32,4 +32,11 @@
         SELECT COUNT(*) FROM NOTICE
     </select>
     
+    <select id="lateNotices" resultType="Notice">
+    SELECT *
+	FROM NOTICE
+	ORDER BY NO DESC
+	FETCH FIRST 3 ROWS ONLY
+    </select>
+    
 </mapper>

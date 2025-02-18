@@ -15,6 +15,7 @@
 }
 
 .Announcement-content {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-content: flex-end;
@@ -23,4 +24,23 @@
 .Announcement-dark-mode-button {
   border: 2px solid rgb(0, 0, 0) !important;
   border-radius: 5px;
+}
+
+.custom-arrow {
+  position: absolute;
+  right: 60px; /* 버튼을 오른쪽에 정렬 */
+  z-index: 10;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.custom-prev {
+}
+
+.custom-next {
+  bottom: 10px;
+  right: 20px;
 }

@@ -36,4 +36,10 @@ public class NoticeServiceImpl implements NoticeService {
 	        return mapper.getTotalNoticesCount();
 	    }
 
+	@Override
+	public List<Notice> lateNotices() {
+		return mapper.lateNotices();
+	}
+	 
+
 }

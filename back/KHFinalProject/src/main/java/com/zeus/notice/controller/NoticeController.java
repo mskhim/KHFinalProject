@@ -48,4 +48,9 @@ public class NoticeController {
 	    public int getTotalNoticesCount() {
 	        return service.getTotalNoticesCount();
 	    }
+	    
+	    @GetMapping("/lateNotices")
+	    public List<Notice> lateNotices(){
+	    	return service.lateNotices();
+	    }
 }
