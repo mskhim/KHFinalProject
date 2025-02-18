@@ -1,13 +1,13 @@
 package com.zeus.admin.service;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.zeus.admin.mapper.AdminMapper;
 import com.zeus.user.domain.User;
+import com.zeus.admin.domain.AdminEventDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -54,5 +54,17 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public void userDelete(List<Integer> ids) throws Exception {
 		mapper.userDelete(ids);
+	}
+
+	@Override
+	public List<AdminEventDTO> festivalSelectAllBySearch(String eventName) throws Exception {
+		AdminEventDTO event = new AdminEventDTO();
+		event.setEventName(eventName);
+		return mapper.festivalSelectAllBySearch(event);
+	}
+
+	@Override
+	public void festivalDelete(List<Integer> ids) throws Exception {
+		mapper.festivalDelete(ids);
 	}
 }

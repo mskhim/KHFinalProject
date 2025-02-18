@@ -1,45 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Table, Form, Button } from "react-bootstrap";
 import "./include/css/Common.css";
 import { BsSortDown, BsSortUp } from "react-icons/bs";
+import { festivalSelectAllBySearch, festivalDelete } from "./adminApi"; // festivalDelete 함수 임포트
 
 const FestivalManage = () => {
   // 객체 배열 변수
-  const [items, setItems] = useState([
-    {
-      no: 1,
-      name: "2025 해돋이 행사",
-      place: "경포해변+정동진",
-      content: "해돋이 행사",
-      start_date: "2025-01-01",
-      end_date: "2025-01-01",
-      phone: "033-640-5130",
-      homepage: "",
-      manager_name: "강원특별자치도 강릉시청",
-    },
-    {
-      no: 2,
-      name: "천을산 해맞이",
-      place: "천을산 정상",
-      content: "신년메세지, 해오름 퍼포먼스 등",
-      start_date: "2025-01-01",
-      end_date: "2025-01-01",
-      phone: "053-666-2163",
-      homepage: "https://www.suseong.kr",
-      manager_name: "대구광역시 수성구청",
-    },
-    {
-      no: 3,
-      name: "해맞이축제",
-      place: "와룡산 상리봉+계성고 옆 등산로 초입",
-      content: "전통문화공연,  성악공연,  해맞이 퍼포먼스,  떡국나눔",
-      start_date: "2025-01-01",
-      end_date: "2025-01-01",
-      phone: "053-663-2181",
-      homepage: "http://www.dgs.go.kr/tour/",
-      manager_name: "대구광역시 서구청",
-    },
-  ]);
+  const [items, setItems] = useState([]);
+
+  const getList = async (eventName) => {
+    const data = await festivalSelectAllBySearch(eventName);
+    if (data !== null) {
+      setItems(data);
+    }
+  };
+
+  useEffect(() => {
+    getList("");
+  }, []);
 
   // 정렬할 컬럼 이름
   const [thName, setthName] = useState("");
@@ -73,18 +51,20 @@ const FestivalManage = () => {
   // 검색 함수
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
+    setSelectAll(false);
+    getList(e.target.value);
   };
 
   // 체크박스 전체 선택/해제 함수
   const handleSelectAll = () => {
     const newSelectAll = !selectAll;
     setSelectAll(newSelectAll);
-    setItems(items.map((item) => ({ ...item, checked: newSelectAll })));
+    setItems(filteredItems.map((item) => ({ ...item, checked: newSelectAll })));
   };
 
   // 개별 체크박스 선택/해제 함수
   const handleCheckboxChange = (no) => {
-    const updatedItems = items.map((item) =>
+    const updatedItems = filteredItems.map((item) =>
       item.no === no ? { ...item, checked: !item.checked } : item
     );
     setItems(updatedItems);
@@ -93,8 +73,19 @@ const FestivalManage = () => {
 
   // 검색어에 따라 필터링된 아이템
   const filteredItems = items.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    item.eventName.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // 축제 삭제 함수
+  const handleDelete = async () => {
+    const selectedFestivals = items.filter((item) => item.checked);
+    if (selectedFestivals.length === 0) {
+      return alert("삭제할 축제를 선택해주세요.");
+    }
+    const idsToDelete = selectedFestivals.map((item) => item.no);
+    await festivalDelete(idsToDelete);
+    getList("");
+  };
 
   return (
     <Container className="text-center">
@@ -107,7 +98,9 @@ const FestivalManage = () => {
           style={{ width: "200px" }}
           className="me-3"
         />
-        <Button className="btn btn-danger">삭제</Button>
+        <Button className="btn btn-danger" onClick={handleDelete}>
+          삭제
+        </Button>
       </div>
 
       <Table bordered hover responsive className="admin-table ">
@@ -130,11 +123,11 @@ const FestivalManage = () => {
             </th>
             <th
               className="text-bg-primary text-center"
-              onClick={() => handleSort("name")}
+              onClick={() => handleSort("eventName")}
               style={{ width: "150px" }}
             >
               축제명
-              {thName === "name" &&
+              {thName === "eventName" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
@@ -151,20 +144,20 @@ const FestivalManage = () => {
             </th>
             <th
               className="text-bg-primary text-center"
-              onClick={() => handleSort("start_date")}
+              onClick={() => handleSort("startDate")}
               style={{ width: "130px" }}
             >
               개최일
-              {thName === "start_date" &&
+              {thName === "startDate" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
               className="text-bg-primary text-center"
-              onClick={() => handleSort("end_date")}
+              onClick={() => handleSort("endDate")}
               style={{ width: "130px" }}
             >
               폐막일
-              {thName === "end_date" &&
+              {thName === "endDate" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
@@ -181,36 +174,34 @@ const FestivalManage = () => {
             </th>
             <th
               className="text-bg-primary text-center"
-              onClick={() => handleSort("manager_name")}
+              onClick={() => handleSort("userName")}
               style={{ width: "140px" }}
             >
               축제 담당자
-              {thName === "manager_name" &&
+              {thName === "userName" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
           </tr>
         </thead>
         <tbody>
           {/* 데이터 행 */}
-          {filteredItems.map((data) => (
+          {filteredItems.map((data, index) => (
             <tr key={data.no}>
               <td className="text-center" style={{ width: "90px" }}>
                 <Form.Check
-                  checked={data.checked}
-                  onChange={() =>
-                    handleCheckboxChange(data.no) && handleSelectAll()
-                  }
+                  checked={data.checked || false}
+                  onChange={() => handleCheckboxChange(data.no)}
                 />
               </td>
-              <td style={{ width: "90px" }}>{data.no}</td>
-              <td style={{ width: "150px" }}>{data.name}</td>
+              <td style={{ width: "90px" }}>{index + 1}</td>
+              <td style={{ width: "150px" }}>{data.eventName}</td>
               <td style={{ width: "150px" }}>{data.place}</td>
               <td style={{ width: "150px" }}>{data.content}</td>
-              <td style={{ width: "130px" }}>{data.start_date}</td>
-              <td style={{ width: "130px" }}>{data.end_date}</td>
-              <td style={{ width: "130px" }}>{data.phone}</td>
+              <td style={{ width: "130px" }}>{data.startDate}</td>
+              <td style={{ width: "130px" }}>{data.endDate}</td>
+              <td style={{ width: "130px" }}>{data.tel}</td>
               <td style={{ width: "130px" }}>{data.homepage}</td>
-              <td style={{ width: "123px" }}>{data.manager_name}</td>
+              <td style={{ width: "123px" }}>{data.userName}</td>
             </tr>
           ))}
         </tbody>

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.zeus.event.domain.Event;
 import com.zeus.user.domain.User;
+import com.zeus.admin.domain.AdminEventDTO;
 
 public interface AdminMapper {
 
@@ -26,12 +27,6 @@ public interface AdminMapper {
 
 // 유저 관리 페이지
 
-	// 유저 전체 조회
-	public List<Map<String, Object>> userSelectAll(User user) throws Exception;
-
-	// 검색시 유저 조회
-	public List<Map<String, Object>> userSelect(User user) throws Exception;
-
 	// 유저 전체 및 검색 전체조회
 	public List<User> userSelectAllBySearch(User user) throws Exception;
 
@@ -40,18 +35,9 @@ public interface AdminMapper {
 
 // 축제 관리 페이지
 	
-	// 축제 전체 조회
-	public List<Map<String, Object>> festivalSelectAll(Event event) throws Exception;
-
-	// 검색시 축제 조회
-	public List<Map<String, Object>> festivalSelect(Event e) throws Exception;
-
-	// 축제 추가
-	public void festivalInsert(Map<String, Object> map) throws Exception;
-
-	// 축제 수정
-	public void festivalUpdate(Map<String, Object> map) throws Exception;
+	// 축제 전체 및 검색 전체조회
+	public List<AdminEventDTO> festivalSelectAllBySearch(AdminEventDTO event) throws Exception;
 
 	// 축제 삭제
-	public void festivalDelete(String id) throws Exception;
+	public void festivalDelete(List<Integer> ids) throws Exception;
 }

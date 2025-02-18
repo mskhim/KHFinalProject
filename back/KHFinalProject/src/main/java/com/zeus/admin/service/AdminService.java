@@ -1,9 +1,9 @@
 package com.zeus.admin.service;
 
 import java.util.List;
-import java.util.Map;
 
 import com.zeus.user.domain.User;
+import com.zeus.admin.domain.AdminEventDTO;
 
 public interface AdminService {
 	
@@ -20,5 +20,9 @@ public interface AdminService {
 	public List<User> userSelectAllBySearch(String id) throws Exception;
 
 	public void userDelete(List<Integer> ids) throws Exception;
+
+	public List<AdminEventDTO> festivalSelectAllBySearch(String eventName) throws Exception;
+
+	public void festivalDelete(List<Integer> ids) throws Exception;
 }
 
