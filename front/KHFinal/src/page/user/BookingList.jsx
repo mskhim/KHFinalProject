@@ -6,7 +6,7 @@ import { Context } from '../../Context';
 import { Button } from 'react-bootstrap';
 
 // API 함수 import
-import { getReservedData, deleteReservedData, saveReservedCancelData, getReservedCancelData } from './userApi'; // 'saveReservedCancelData', 'getReservedCancelData' 추가 import
+import { getReservedData, deleteReservedData, getReservedCancelData } from './userApi'; // 'saveReservedCancelData', 'getReservedCancelData' 추가 import
 
 function BookingList() {
   // 상태 초기화
@@ -34,13 +34,16 @@ function BookingList() {
     fetchReservedData();
   }, []); // 컴포넌트 마운트 시에만 실행
 
+
+
   // 예매 취소 내역을 불러오는 useEffect
   useEffect(() => {
     const fetchCanceledData = async () => {
       const data = await getReservedCancelData();
+      console.log('받아온 취소된 예매 내역 데이터:', data); // 콘솔 로그 추가
 
       if (data.authenticated) {
-        setCanceledReservations(data.data || []); // 취소된 예매 내역을 상태에 저장
+        setCanceledReservations(data.reservedCancelData || []); // 취소된 예매 내역을 상태에 저장
       } else {
         alert(data.message || '취소 내역을 불러오는 데 실패했습니다.');
       }
@@ -63,8 +66,8 @@ function BookingList() {
     );
   };
 
-// 예매 취소 버튼 클릭 시 호출되는 함수
-const handleCancelReservations = async () => {
+  // 예매 취소 버튼 클릭 시 호출되는 함수
+  const handleCancelReservations = async () => {
   if (selectedReservations.length === 0) {
     alert('취소할 예약을 선택하세요.');
     return;
@@ -83,7 +86,7 @@ const handleCancelReservations = async () => {
     // 삭제된 예약 목록 필터링
     const canceled = reservations.filter((reservation) =>
       selectedReservations.includes(reservation.no) // 'no'로 수정
-    );
+    ).map((reservation) => ({ ...reservation, status: '예매 취소' })); // 상태를 '예매 취소'로 변경
 
     // 삭제된 예매 내역 상태 업데이트
     setReservations((prevReservations) =>
@@ -91,31 +94,6 @@ const handleCancelReservations = async () => {
         (reservation) => !selectedReservations.includes(reservation.no) // 'no'로 수정
       )
     );
-
-    // 취소된 예약 내역 서버에 저장
-    await Promise.all(
-      canceled.map(async (reservation) => {
-        const result = await saveReservedCancelData({
-          no: reservation.no,
-          name: reservation.name,
-          sysdate: reservation.sysdate,
-          endDate: reservation.endDate,
-          qt: reservation.qt,
-          totalCost: reservation.totalCost,
-          status: '예매 취소', // 예매 취소 상태로 저장
-        });
-        return result;
-      })
-    );
-
-    // 취소된 예약을 상태에 추가
-    setCanceledReservations((prev) => [
-      ...prev,
-      ...canceled.map((reservation) => ({
-        ...reservation,
-        status: '예매 취소', // 취소된 예약은 상태를 '예매 취소'로 설정
-      })),
-    ]);
 
     // 선택한 예약 취소 후 상태 초기화
     setSelectedReservations([]);
@@ -129,6 +107,15 @@ const handleCancelReservations = async () => {
     }
   }
 };
+  // 예약이 24시간 경과했는지 체크하는 함수
+  const isReservationExpired = (reservedDate) => {
+  const reservationDate = new Date(reservedDate); // reservedDate를 Date 객체로 변환
+  const currentDate = new Date(); // 현재 시간
+  const timeDifference = currentDate - reservationDate; // 경과 시간 (밀리초 단위)
+
+    // 24시간을 밀리초로 환산한 값 (24시간 = 24 * 60 * 60 * 1000 밀리초)
+    return timeDifference > 24 * 60 * 60 * 1000; // 24시간 경과했다면 true 반환
+  };
 
   return (
     <>
@@ -187,23 +174,27 @@ const handleCancelReservations = async () => {
                         <td className="BookingList-td">{reservation.no}</td>
                         <td className="BookingList-td">
                           {(() => {
-                            const date = new Date(reservation.sysdate);
-                            const year = date.getFullYear();
-                            const month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
-                            const day = String(date.getDate()).padStart(2, '0');
-                            return `${year}-${month}-${day}`;
+                            // Date 객체로 변환
+                            const date = new Date(reservation.reservedDate);
+
+                            // yyyy-mm-dd 형식으로 변환
+                            const formattedDate = date.toISOString().split('T')[0]; // '2025-02-17'
+
+                            return formattedDate;
+
                           })()}
                         </td>
-                        <td className="BookingList-td">{reservation.name}</td>
+                        <td className="BookingList-td">{reservation.name}</td> {/* 축제명 출력 */}
                         <td className="BookingList-td">{reservation.qt}</td>
-                        <td className="BookingList-td">{reservation.endDate}</td>
+                        <td className="BookingList-td">{reservation.endDate}</td> {/* 사용 기한 출력 */}
                         <td className="BookingList-td">{new Intl.NumberFormat().format(reservation.totalCost)} 원</td> {/* 결제 금액 표시 */}
                         <td className="BookingList-td">
-                          <input
-                            type="checkbox"
-                            onChange={() => handleReservationSelect(reservation.no)} // 'NO' -> 'no'로 수정
-                            checked={selectedReservations.includes(reservation.no)} // 'NO' -> 'no'로 수정
-                          />
+                        <input
+                          type="checkbox"
+                          onChange={() => handleReservationSelect(reservation.no)} // 'NO' -> 'no'로 수정
+                          checked={selectedReservations.includes(reservation.no)} // 'NO' -> 'no'로 수정
+                          disabled={isReservationExpired(reservation.reservedDate)} // 24시간이 경과했으면 비활성화
+                        />
                         </td>
                       </tr>
                     ))}
@@ -235,6 +226,7 @@ const handleCancelReservations = async () => {
                       <th className="BookingList-th">축제명</th>
                       <th className="BookingList-th">인원</th>
                       <th className="BookingList-th">사용 기한</th>
+                      <th className="BookingList-th">결제 금액</th>
                       <th className="BookingList-th">상태</th>
                     </tr>
                   </thead>
@@ -243,20 +235,38 @@ const handleCancelReservations = async () => {
                       <tr key={reservation.no}>
                         <td className="BookingList-td">{reservation.no}</td>
                         <td className="BookingList-td">
-                          {new Date(reservation.sysdate).toLocaleDateString('ko-KR')}
+                          {(() => {
+                            // Date 객체로 변환
+                            const date = new Date(reservation.reservedDate);
+                            // yyyy-mm-dd 형식으로 변환
+                            const formattedDate = date.toISOString().split('T')[0]; // '2025-02-17'
+                            return formattedDate;
+                          })()}
                         </td>
-                        <td className="BookingList-td">{reservation.name}</td>
+                        <td className="BookingList-td">{reservation.name}</td> {/* 축제명 출력 */}
                         <td className="BookingList-td">{reservation.qt}</td>
-                        <td className="BookingList-td">{reservation.endDate}</td>
                         <td className="BookingList-td">
-                          <span style={{ color: 'red' }}>{reservation.status}</span>
+                          {(() => {
+                            // Date 객체로 변환
+                            const date = new Date(reservation.endDate);
+
+                            // yyyy-mm-dd 형식으로 변환
+                            const formattedDate = date.toISOString().split('T')[0]; // '2025-02-17'
+
+                            return formattedDate;
+
+                          })()}
+                          </td> {/* 사용 기한 출력 */}
+                        <td className="BookingList-td">{new Intl.NumberFormat().format(reservation.totalCost)} 원</td>
+                        <td className="BookingList-td">
+                          <span style={{ color: 'red', fontSize: 'small'}}>예매 취소</span> {/* 상태 출력 */}
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               ) : (
-                <p id="BookingList-cancel" style={{ textAlign: 'center' }}>취소 내역이 존재하지 않습니다.</p>
+                <p id="BookingList-cancel" style={{ textAlign: 'center'}}>취소 내역이 존재하지 않습니다.</p>
               )}
             </div>
           </div>

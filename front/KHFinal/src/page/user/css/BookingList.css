@@ -105,6 +105,17 @@
   border-radius: 10px; /* 둥근 모서리 */
 }
 
+#BookingList-cancel
+{
+  text-align: center;
+  display: flex;
+  justify-content: center; /* 가로 중앙 정렬 */
+  align-items: center;     /* 세로 중앙 정렬 */
+  min-height: 200px;       /* 기본 최소 높이 설정 */
+  font-size: 16px;         /* 글자 크기 조정 */
+  color: none;
+}
+
 .BookingList-content.dark-mode {
   background-color: #333; /* 다크모드 배경색 */
   color: white;
@@ -186,4 +197,21 @@
   text-align: right;
   font-size: 12px;
   margin-top: 5px;
+}
+
+@media (max-width: 768px)
+{
+  #BookingList-cancel
+  {
+    min-height: 300px; /* 모바일에서 더 넓은 높이 제공 */
+  }
+}
+
+@media (max-width: 480px)
+{
+  #BookingList-cancel
+  {
+    min-height: 350px; /* 더 작은 화면에서 높이 더 확장 */
+    font-size: 18px;   /* 작은 화면에서 글자 크기 증가 */
+  }
 }

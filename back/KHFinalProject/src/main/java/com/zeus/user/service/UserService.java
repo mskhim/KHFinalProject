@@ -38,8 +38,6 @@ public interface UserService {
 	List <ReservedDTO> getReservedData(int userNo);
 	// 예매내역 삭제.
 	boolean deleteReservedData(int no);
-	// 삭제된 예매내역 저장.
-	boolean saveReservedCancelData(ReservedCancelDTO reservedCancelDTO, Integer userNo);
 	// 삭제내역 조회.
 	List <ReservedCancelDTO> getReservedCancelData(Integer userNo);
 	///////////////////////////////////////////////////////

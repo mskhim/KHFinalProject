@@ -4,7 +4,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Context } from '../../Context';
 import { getCartData, deleteCartData } from './userApi'; //
 import './css/UserCart.css';
-import Payment from '../../components/Payment';
 import { useNavigate } from 'react-router-dom';
 // deleteCartData를 import합니다.
 
@@ -146,6 +145,12 @@ function UserCart() {
   useEffect(() => {
     console.log(selectedItems);
   }, [selectedItems]);
+
+  // item.name 클릭 시 호출되는 함수
+  const handleItemClick = (eventNo) => {
+    navigate(`/eventRead/${eventNo}`); // eventRead 페이지로 이동
+  };
+
   return (
     <>
       {/* Header 컴포넌트 */}
@@ -193,12 +198,13 @@ function UserCart() {
                       <div className="Cart-festival-info">
                         <div className="Cart-festival-text">
                           <h3>
-                            <a
-                              href="#"
+                            <span
+                              onClick={() => handleItemClick(item.eventNo)} // 클릭 시 handleItemClick 함수 호출
                               className={`Cart-festival-link ${getDarkMode()}`}
+                              style={{ cursor: 'pointer' }} // 클릭 가능한 스타일 추가
                             >
                               {item.name}
-                            </a>
+                            </span>
                           </h3>
                           <p className={`Cart-festival-date ${getDarkMode()}`}>
                             축제 일시 : {item.startDate} ~ {item.endDate}
@@ -239,6 +245,7 @@ function UserCart() {
                       <button
                         className={`Cart-remove-btn ${getDarkMode()}`}
                         onClick={() => handleRemoveItem(item.no)} // 아이템 삭제
+                        style={{ width: '50px' }}
                       >
                         삭제
                       </button>

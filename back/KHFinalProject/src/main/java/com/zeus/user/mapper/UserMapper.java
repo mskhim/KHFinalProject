@@ -29,7 +29,6 @@ public interface UserMapper {
 	public int deleteCartData(Cart cart);
 	public List <ReservedDTO> getReservedData(int userNo);
 	public int deleteReservedData(int no);
-	public int saveReservedCancelData(ReservedCancelDTO reservedCancelDTO);
 	public List <ReservedCancelDTO> getReservedCancelData(Integer userNo);
 	/////////////////////////////////////////////
 }
