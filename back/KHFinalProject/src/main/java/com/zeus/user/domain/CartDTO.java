@@ -16,4 +16,5 @@ public class CartDTO
     private LocalDate endDate;		// 종료 날짜.
     private String content;			// 축제 내용.
     private int price;				// 예매 가격. 
+    private int eventNo;			// 
 }

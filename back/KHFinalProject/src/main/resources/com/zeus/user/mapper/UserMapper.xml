@@ -78,7 +78,8 @@
 	           P.START_DATE, 
 	           P.END_DATE, 
 	           P.CONTENT, 
-	           E.PRICE
+	           E.PRICE,
+	           E.NO AS EVENT_NO
 	    FROM CART C
 	    LEFT JOIN EVENT E ON C.EVENT_NO = E.NO
 	    JOIN PUBLIC_DATA_EVENT P ON E.PUBLIC_DATA_EVENT_NO = P.NO
@@ -123,6 +124,59 @@
 		FROM RESERVED
 		WHERE NO = #{no}
 	</delete>
+	<!-- ################################################################################################## -->
+	<!-- ################################################################################################## -->
+	<!-- 취소내역 저장 -->
+	<insert id="saveReservedCancelData" parameterType="ReservedCancelDTO">
+		INSERT INTO RESERVED_CANCEL (CANCEL_NO, RESERVED_NO, USER_ACCOUNT_NO, EVENT_NO, QT, CANCEL_DATE, TOTAL_COST)
+		SELECT 
+		    CANCEL_SEQ.NEXTVAL,
+		    R.NO,
+		    U.NO,
+		    P.NO,
+		    C.QT,
+		    SYSDATE,
+		    (C.QT * E.PRICE) AS TOTAL_COST
+		FROM 
+		    RESERVED R
+		JOIN 
+		    CART C ON R.EVENT_NO = C.EVENT_NO AND R.USER_ACCOUNT_NO = C.USER_ACCOUNT_NO
+		JOIN 
+		    PUBLIC_DATA_EVENT P ON R.EVENT_NO = P.NO
+		JOIN 
+		    USER_ACCOUNT U ON R.USER_ACCOUNT_NO = U.NO
+		JOIN 
+		    EVENT E ON R.EVENT_NO = E.NO
+		WHERE 
+		    R.NO = #{reservedNo}
+		    AND U.NO = #{userAccountNo}
+	</insert>
+	<!-- ################################################################################################## -->
+	<!-- ################################################################################################## -->
+	<!-- 취소내역 조회. -->
+	<select id="getReservedCancelData" parameterType="ReservedCancelDTO">
+		SELECT
+		    R.NO AS RESERVED_NO,
+		    R.RESERVED_DATE,
+		    P.NAME AS EVENT_NAME,
+		    C.QT,
+		    P.END_DATE,
+		    (C.QT * E.PRICE) AS TOTAL_COST
+		FROM
+		    RESERVED R
+		JOIN 
+		    RESERVED_CANCEL RC ON R.NO = RC.RESERVED_NO
+		JOIN 
+		    USER_ACCOUNT U ON RC.USER_ACCOUNT_NO = U.NO
+		JOIN 
+		    CART C ON R.EVENT_NO = C.EVENT_NO AND R.USER_ACCOUNT_NO = C.USER_ACCOUNT_NO
+		JOIN 
+		    PUBLIC_DATA_EVENT P ON R.EVENT_NO = P.NO
+		JOIN 
+		    EVENT E ON R.EVENT_NO = E.NO
+		WHERE
+		    RC.USER_ACCOUNT_NO = #{userAccountNo}
+	</select>
 	<!-- ################################################################################################## -->
 	<!-- 아이디, 제공자를 토대로 로그인 유저 반환후 비밀번호 헤싱해서 로그인 확인 확인-->
 	<select id="checkLogin" parameterType="User" resultType="User">
