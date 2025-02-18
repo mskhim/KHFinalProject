@@ -2,6 +2,7 @@ import React from 'react';
 import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
 import './css/StartFestival.css';
+import Card from 'react-bootstrap/Card';
 
 function StartFestival() {
   const imageUrls = [
@@ -13,13 +14,16 @@ function StartFestival() {
   ];
 
   const items = imageUrls.map((url, index) => (
-    <div className="carousel-item StartFestival-item" key={index}>
-      <img
+    <Card className="carousel-item StartFestival-item" key={index}>
+      <Card.Img
         src={url}
         alt={`Item ${index + 1}`}
         className="carousel-image StartFestival-image"
       />
-    </div>
+      <Card.Body>
+        <Card.Text>abcdefg</Card.Text>
+      </Card.Body>
+    </Card>
   ));
 
   const responsive = {
