@@ -1,5 +1,6 @@
 package com.zeus.user.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -18,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zeus.common.config.JwtUtil;
 import com.zeus.user.domain.Cart;
 import com.zeus.user.domain.CartDTO;
+import com.zeus.user.domain.ReservedCancelDTO;
 import com.zeus.user.domain.ReservedDTO;
 import com.zeus.user.domain.User;
 import com.zeus.user.mapper.UserMapper;
@@ -77,6 +80,7 @@ public class UserServiceImpl implements UserService {
 		return mapper.getUserByNo(userNo);
 	}
     /////////////////////////////////////////////////////////
+    
 
 
     //이메일로 아이디 찾기 기능을 위해 일반 유저 정보를 가져온다. 보안을 위해 아이디만 살려서 보낼것
@@ -217,6 +221,7 @@ public class UserServiceImpl implements UserService {
         }
 	}
 	////////////////////////////////////////////////////////////////////////
+	// 예매 내역 조회.
 	@Override
 	public List<ReservedDTO> getReservedData(int userNo)
 	{
@@ -257,7 +262,41 @@ public class UserServiceImpl implements UserService {
 	    }
 	}
 	////////////////////////////////////////////////////////////////////////
+	// 예매 삭제 내역 저장.
+	@Transactional
+	@Override
+	public boolean saveReservedCancelData(ReservedCancelDTO reservedCancelDTO, Integer userNo) {
+	    System.out.println("예매 취소 내역 저장 시작: " + reservedCancelDTO);  // 로그 추가
+	    reservedCancelDTO.setUserAccountNo(userNo); // 사용자 번호 설정
+	    reservedCancelDTO.setCancelDate(LocalDate.now()); // 취소 날짜 설정
 
+	    // 예매 취소 내역 저장
+	    int result = mapper.saveReservedCancelData(reservedCancelDTO);
+
+	    if (result > 0) {
+	        System.out.println("예매 취소 내역 저장 성공: " + reservedCancelDTO);  // 성공 로그
+	    } else {
+	        System.out.println("예매 취소 내역 저장 실패");  // 실패 로그
+	    }
+
+	    return result > 0;  // 저장 성공 여부 반환
+	}
+	////////////////////////////////////////////////////////////////////////
+	// 예매 삭제 내역 조회.
+	@Override
+	public List<ReservedCancelDTO> getReservedCancelData(Integer userNo) {
+	    List<ReservedCancelDTO> cancelData = mapper.getReservedCancelData(userNo);
+	    
+	    if (cancelData == null || cancelData.isEmpty()) {
+	        System.out.println("취소 내역이 없습니다. userNo: " + userNo);
+	    } else {
+	        System.out.println("취소 내역: " + cancelData);
+	    }
+
+	    return cancelData;
+	}
+
+	////////////////////////////////////////////////////////////////////////
     //로그인 체크, id와 provider로 user 정보를 가져와헤싱해서 로그인확인
     //provider가 common 이라면 헤싱해서 로그인 이외에는 api 로그인이므로 id와 provider만 일치하는지 확인
     @Override
