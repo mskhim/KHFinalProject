@@ -5,6 +5,7 @@ import java.util.List;
 import com.zeus.user.domain.User;
 import com.zeus.admin.domain.AdminEventDTO;
 import com.zeus.admin.domain.AdminReviewDTO;
+import com.zeus.admin.domain.AdminQnaDTO;
 
 public interface AdminService {
 	
@@ -29,5 +30,9 @@ public interface AdminService {
 	public List<AdminReviewDTO> reviewSelectAllBySearch(String eventName) throws Exception;
 
 	public void reviewDelete(List<Integer> ids) throws Exception;
+
+	public List<AdminQnaDTO> qnaSelectAllBySearch(String eventName) throws Exception;
+
+	public void qnaDelete(List<Integer> ids) throws Exception;
 }
 

@@ -89,4 +89,43 @@ VALUES (SEQ_USER_ACCOUNT_NO.NEXTVAL, #{id}, #{pwd}, #{phone}, SYSDATE, 1, #{name
 			#{id}
 		</foreach>
 	</delete>
+	
+	<!-- FestivalQnAManage -->
+	<select id="qnaSelectAllBySearch" resultType="AdminQnaDTO" parameterType="AdminQnaDTO">
+		SELECT
+		Q1.NO AS QUESTION_NO,
+		PDE.NAME AS EVENT_NAME,
+		Q1.TITLE AS QUESTION_TITLE,
+		Q1.CONTENT AS QUESTION_CONTENT,
+		UA1.NAME AS QUESTION_WRITER,
+		Q1.SUB_DATE AS QUESTION_DATE,
+		Q2.NO AS ANSWER_NO,
+		Q2.CONTENT AS ANSWER_CONTENT,
+		UA2.NAME AS ANSWER_WRITER,
+		Q2.SUB_DATE AS ANSWER_DATE
+		FROM QNA Q1
+		LEFT JOIN QNA Q2
+		ON Q1.NO = Q2.QNA_NO
+		INNER JOIN USER_ACCOUNT UA1
+		ON Q1.USER_ACCOUNT_NO = UA1.NO
+		LEFT JOIN ADMIN.USER_ACCOUNT UA2
+		ON Q2.USER_ACCOUNT_NO = UA2.NO
+		LEFT JOIN ADMIN.EVENT E
+		ON Q1.EVENT_NO = E.NO
+		LEFT JOIN ADMIN.PUBLIC_DATA_EVENT PDE
+		ON E.PUBLIC_DATA_EVENT_NO = PDE.NO
+		WHERE Q1.QNA_NO=0 AND PDE.NAME LIKE '%'||#{eventName}||'%'
+		ORDER BY Q1.NO asc
+	</select>
+	
+	<delete id="qnaDelete" parameterType="map">
+		DELETE FROM QNA WHERE NO IN
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+		OR QNA_NO IN
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
 </mapper>

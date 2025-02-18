@@ -1,45 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Table, Form, Button } from "react-bootstrap";
 import "./include/css/Common.css";
 import { BsSortDown, BsSortUp } from "react-icons/bs";
+import { qnaSelectAllBySearch, qnaDelete } from "./adminApi"; // Import the functions
 
 const QnAManage = () => {
   // 객체 배열 변수
-  const [items, setItems] = useState([
-    {
-      no: 1,
-      event_name: "2025 해돋이 행사",
-      title: "질문1",
-      content: "질문 내용 1",
-      member_id: "질문자",
-      sub_date: "2025-02-05",
-      reply_content: "답변 내용1",
-      member_name: "답변자",
-      reply_date: "2025-02-05",
-    },
-    {
-      no: 2,
-      event_name: "천을산 해맞이",
-      title: "질문2",
-      content: "질문 내용 2",
-      member_id: "질문자",
-      sub_date: "2025-02-05",
-      reply_content: "답변 내용2",
-      member_name: "답변자",
-      reply_date: "2025-02-05",
-    },
-    {
-      no: 3,
-      event_name: "해맞이축제",
-      title: "질문3",
-      content: "질문 내용 3",
-      member_id: "질문자",
-      sub_date: "2025-02-05",
-      reply_content: "답변 내용3",
-      member_name: "답변자",
-      reply_date: "2025-02-05",
-    },
-  ]);
+  const [items, setItems] = useState([]);
+
+  const getList = async (eventName) => {
+    const data = await qnaSelectAllBySearch(eventName);
+    if (data !== null) {
+      setItems(data);
+    }
+  };
+
+  useEffect(() => {
+    getList("");
+  }, []);
 
   // 정렬할 컬럼 이름
   const [thName, setthName] = useState("");
@@ -73,6 +51,7 @@ const QnAManage = () => {
   // 검색 함수
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
+    getList(e.target.value);
   };
 
   // 체크박스 전체 선택/해제 함수
@@ -85,15 +64,26 @@ const QnAManage = () => {
   // 개별 체크박스 선택/해제 함수
   const handleCheckboxChange = (no) => {
     const updatedItems = items.map((item) =>
-      item.no === no ? { ...item, checked: !item.checked } : item
+      item.questionNo === no ? { ...item, checked: !item.checked } : item
     );
     setItems(updatedItems);
     setSelectAll(updatedItems.every((item) => item.checked));
   };
 
+  // 유저 삭제 함수
+  const handleDelete = async () => {
+    const selectedItems = items.filter((item) => item.checked);
+    if (selectedItems.length === 0) {
+      return alert("삭제할 항목을 선택해주세요.");
+    }
+    const idsToDelete = selectedItems.map((item) => item.questionNo);
+    await qnaDelete(idsToDelete);
+    getList("");
+  };
+
   // 검색어에 따라 필터링된 아이템
   const filteredItems = items.filter((item) =>
-    item.event_name.toLowerCase().includes(searchTerm.toLowerCase())
+    item.eventName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -107,7 +97,9 @@ const QnAManage = () => {
           style={{ width: "200px" }}
           className="me-3"
         />
-        <Button className="btn btn-danger">삭제</Button>
+        <Button className="btn btn-danger" onClick={handleDelete}>
+          삭제
+        </Button>
       </div>
 
       <Table bordered hover responsive className="admin-table">
@@ -121,29 +113,29 @@ const QnAManage = () => {
             </th>
             <th
               className="text-bg-primary text-center"
-              onClick={() => handleSort("no")}
+              onClick={() => handleSort("questionNo")}
               style={{ width: "60px" }}
             >
               NO
-              {thName === "no" &&
+              {thName === "questionNo" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
               className="text-bg-primary text-center"
-              onClick={() => handleSort("event_name")}
+              onClick={() => handleSort("eventName")}
               style={{ width: "200px" }}
             >
               축제명
-              {thName === "event_name" &&
+              {thName === "eventName" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
               className="text-bg-primary text-center"
-              onClick={() => handleSort("title")}
+              onClick={() => handleSort("questionTitle")}
               style={{ width: "200px" }}
             >
               질문 제목
-              {thName === "title" &&
+              {thName === "questionTitle" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
@@ -154,20 +146,20 @@ const QnAManage = () => {
             </th>
             <th
               className="text-bg-primary text-center"
-              onClick={() => handleSort("member_id")}
+              onClick={() => handleSort("questionWriter")}
               style={{ width: "150px" }}
             >
               질문 작성자
-              {thName === "member_id" &&
+              {thName === "questionWriter" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
               className="text-bg-primary text-center"
-              onClick={() => handleSort("sub_date")}
+              onClick={() => handleSort("questionDate")}
               style={{ width: "150px" }}
             >
               질문 작성일
-              {thName === "sub_date" &&
+              {thName === "questionDate" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
@@ -178,45 +170,43 @@ const QnAManage = () => {
             </th>
             <th
               className="text-bg-primary text-center"
-              onClick={() => handleSort("member_name")}
+              onClick={() => handleSort("answerWriter")}
               style={{ width: "150px" }}
             >
               답변자
-              {thName === "member_name" &&
+              {thName === "answerWriter" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
               className="text-bg-primary text-center"
-              onClick={() => handleSort("reply_date")}
+              onClick={() => handleSort("answerDate")}
               style={{ width: "150px" }}
             >
               답변 작성일
-              {thName === "reply_date" &&
+              {thName === "answerDate" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
           </tr>
         </thead>
         <tbody>
           {/* 데이터 행 */}
-          {filteredItems.map((data) => (
-            <tr key={data.no}>
+          {filteredItems.map((data, index) => (
+            <tr key={data.questionNo}>
               <td className="text-center" style={{ width: "50px" }}>
                 <Form.Check
-                  checked={data.checked}
-                  onChange={() =>
-                    handleCheckboxChange(data.no) && handleSelectAll()
-                  }
+                  checked={data.checked || false}
+                  onChange={() => handleCheckboxChange(data.questionNo)}
                 />
               </td>
-              <td style={{ width: "60px" }}>{data.no}</td>
-              <td style={{ width: "200px" }}>{data.event_name}</td>
-              <td style={{ width: "200px" }}>{data.title}</td>
-              <td style={{ width: "200px" }}>{data.content}</td>
-              <td style={{ width: "150px" }}>{data.member_id}</td>
-              <td style={{ width: "150px" }}>{data.sub_date}</td>
-              <td style={{ width: "200px" }}>{data.reply_content}</td>
-              <td style={{ width: "150px" }}>{data.member_name}</td>
-              <td style={{ width: "134px" }}>{data.reply_date}</td>
+              <td style={{ width: "60px" }}>{index + 1}</td>
+              <td style={{ width: "200px" }}>{data.eventName}</td>
+              <td style={{ width: "200px" }}>{data.questionTitle}</td>
+              <td style={{ width: "200px" }}>{data.questionContent}</td>
+              <td style={{ width: "150px" }}>{data.questionWriter}</td>
+              <td style={{ width: "150px" }}>{data.questionDate}</td>
+              <td style={{ width: "200px" }}>{data.answerContent}</td>
+              <td style={{ width: "150px" }}>{data.answerWriter}</td>
+              <td style={{ width: "134px" }}>{data.answerDate}</td>
             </tr>
           ))}
         </tbody>
