@@ -6,6 +6,7 @@ import java.util.Map;
 import com.zeus.event.domain.Event;
 import com.zeus.user.domain.User;
 import com.zeus.admin.domain.AdminEventDTO;
+import com.zeus.admin.domain.AdminReviewDTO;
 
 public interface AdminMapper {
 
@@ -40,4 +41,9 @@ public interface AdminMapper {
 
 	// 축제 삭제
 	public void festivalDelete(List<Integer> ids) throws Exception;
+
+// 리뷰 관리 페이지
+	public List<AdminReviewDTO> reviewSelectAllBySearch(AdminReviewDTO review) throws Exception;
+
+	public void reviewDelete(List<Integer> ids) throws Exception;
 }

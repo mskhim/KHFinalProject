@@ -183,3 +183,47 @@ export const festivalDelete = async (ids) => {
     throw error;
   }
 };
+
+export const reviewSelectAllBySearch = async (eventName) => {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/admin/reviewSelectAllBySearch?eventName=${eventName}`,
+      {
+        method: "GET",
+        credentials: "include",
+      }
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("리뷰 정보 조회 실패:", error);
+    return null;
+  }
+};
+
+export const reviewDelete = async (ids) => {
+  try {
+    const response = await fetch("http://localhost:8080/admin/reviewDelete", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({ ids }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete reviews");
+    }
+
+    const responseData = await response.text();
+    console.log("Review delete response:", responseData);
+    alert("삭제가 완료되었습니다");
+    return responseData;
+  } catch (error) {
+    alert("삭제 중 오류가 발생했습니다.");
+    console.error("리뷰 삭제 실패:", error);
+    throw error;
+  }
+};
