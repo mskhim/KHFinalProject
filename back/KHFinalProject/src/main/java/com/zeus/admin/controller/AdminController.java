@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 
 import com.zeus.admin.service.AdminService;
 import com.zeus.user.domain.User;
+import com.zeus.admin.domain.AdminEventDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -85,8 +86,7 @@ public class AdminController {
 	}
 
 	@GetMapping("/userSelectAllBySearch")
-	public List<User> userSelectAllBySearch(@RequestParam(name = "id", defaultValue = "") String id)
-			throws Exception {
+	public List<User> userSelectAllBySearch(@RequestParam(name = "id", defaultValue = "") String id) throws Exception {
 		return service.userSelectAllBySearch(id);
 	}
 
@@ -99,6 +99,24 @@ public class AdminController {
 		} catch (Exception e) {
 			log.error("Failed to delete users", e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete users");
+		}
+	}
+
+	@GetMapping("/festivalSelectAllBySearch")
+	public List<AdminEventDTO> festivalSelectAllBySearch(
+			@RequestParam(name = "eventName", defaultValue = "") String eventName) throws Exception {
+		return service.festivalSelectAllBySearch(eventName);
+	}
+
+	@DeleteMapping("/festivalDelete")
+	public ResponseEntity<String> festivalDelete(@RequestBody Map<String, List<Integer>> requestData) {
+		try {
+			List<Integer> ids = requestData.get("ids");
+			service.festivalDelete(ids);
+			return ResponseEntity.ok("Success");
+		} catch (Exception e) {
+			log.error("Failed to delete festivals", e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete festivals");
 		}
 	}
 }

@@ -5,7 +5,7 @@
 	insert into test values(test_seq.NEXTVAl,#{name})
 	</insert>
 	
-	
+	<!-- ManagerManage -->
 	<select id="managerSelectAllBySearch" resultType="User" parameterType="User">
 		SELECT * FROM USER_ACCOUNT WHERE ROLE = 1 AND NAME LIKE '%'||#{name}||'%' ORDER BY NO ASC
 	</select>
@@ -31,4 +31,34 @@ VALUES (SEQ_USER_ACCOUNT_NO.NEXTVAL, #{id}, #{pwd}, #{phone}, SYSDATE, 1, #{name
 		</foreach>
 	</delete>
 
+	<!-- FestivalManage -->
+	<select id="festivalSelectAllBySearch" resultType="AdminEventDTO" parameterType="AdminEventDTO">
+		SELECT
+		E.NO,
+		E.PUBLIC_DATA_EVENT_NO,
+		E.USER_ACCOUNT_NO,
+		E.PRICE,
+		E.RATING,
+		UA.NAME AS USER_NAME,
+		PDE.NAME AS EVENT_NAME,
+		PDE.PLACE,
+		PDE.START_DATE,
+		PDE.END_DATE,
+		PDE.CONTENT,
+		PDE.TEL,
+		PDE.HOMEPAGE
+		FROM ADMIN.EVENT E
+		LEFT JOIN ADMIN.USER_ACCOUNT UA
+		ON E.USER_ACCOUNT_NO = UA.NO
+		LEFT JOIN ADMIN.PUBLIC_DATA_EVENT PDE
+		ON E.PUBLIC_DATA_EVENT_NO = PDE.NO
+		WHERE PDE.NAME LIKE '%'||#{eventName}||'%' ORDER BY E.NO ASC
+	</select>
+
+	<delete id="festivalDelete" parameterType="map">
+		DELETE FROM ADMIN.EVENT WHERE NO IN
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
 </mapper>

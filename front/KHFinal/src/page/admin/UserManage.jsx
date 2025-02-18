@@ -54,7 +54,6 @@ const UserManage = () => {
   // 검색 함수
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
-    setSelectAll(false);
     getList(e.target.value);
   };
 
