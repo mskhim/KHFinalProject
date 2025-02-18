@@ -1,34 +1,46 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
 import './css/StartFestival.css';
 import Card from 'react-bootstrap/Card';
-
+import { comeStartDate } from '../mainApi';
 function StartFestival() {
-  const imageUrls = [
-    'https://picsum.photos/300/200?random=1',
-    'https://picsum.photos/300/200?random=2',
-    'https://picsum.photos/300/200?random=3',
-    'https://picsum.photos/300/200?random=4',
-    'https://picsum.photos/300/200?random=5',
-  ];
+  const navigate = useNavigate();
+  const [comeStartEvents, setcomeStartEvents] = useState([]);
 
-  const items = imageUrls.map((url, index) => (
-    <Card className="carousel-item StartFestival-item" key={index}>
-      <Card.Img
-        src={url}
+  useEffect(() => {
+    const fetchcomeStart = async () => {
+      const data = await comeStartDate();
+      if (data) {
+        setcomeStartEvents(data);
+      }
+    };
+    fetchcomeStart();
+  }, []);
+
+  const handleImageClick = (no) => {
+    navigate(`/eventRead/${no}`);
+  };
+
+  const items = comeStartEvents.map((event, index) => (
+    <div
+      className="carousel-item StartFestival-item"
+      key={index}
+      onClick={() => handleImageClick(event.no)}
+      style={{ cursor: 'pointer' }}
+    >
+      <img
+        src={event.thumbUrl}
         alt={`Item ${index + 1}`}
         className="carousel-image StartFestival-image"
       />
-      <Card.Body>
-        <Card.Text>abcdefg</Card.Text>
-      </Card.Body>
-    </Card>
+    </div>
   ));
 
   const responsive = {
     0: { items: 1 },
-    600: { items: 2 },
+    800: { items: 2 },
     1024: { items: 5 },
   };
 

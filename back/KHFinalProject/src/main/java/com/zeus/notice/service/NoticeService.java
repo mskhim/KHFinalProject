@@ -11,4 +11,5 @@ public interface NoticeService {
 	List<Notice> getNoticesByPage(int page, int pageSize);
 	Notice getNoticeById(int no);// ✅ 공지사항 1개 조회 추가
 	int getTotalNoticesCount();
+	List<Notice> lateNotices();
 }
