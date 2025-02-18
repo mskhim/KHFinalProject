@@ -658,7 +658,7 @@ public class UserController {
         }
 
         
-        if (reservedCancel == null || reservedCancel.isEmpty())
+        if (reservedCancel == null)
         {
             return ResponseEntity.ok(Map.of(
             		"authenticated", false,

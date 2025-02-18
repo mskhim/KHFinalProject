@@ -231,7 +231,7 @@ public class UserServiceImpl implements UserService {
 		List <ReservedDTO> reservedData = mapper.getReservedData(userNo);
 		
 		// 추가 로그 출력
-		if (reservedData == null || reservedData.isEmpty())
+		if (reservedData == null)
 		{
 			System.out.println("예매 내역이 없습니다.");
 		} else
