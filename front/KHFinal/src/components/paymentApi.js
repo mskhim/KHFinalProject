@@ -1,4 +1,5 @@
-export const verifyPayment = async ({ selectedItems, totalAmount }) => {
+export const verifyPayment = async (selectedItems, totalAmount) => {
+  console.log(selectedItems, totalAmount);
   try {
     const response = await fetch('http://localhost:8080/payment/verify', {
       method: 'POST',

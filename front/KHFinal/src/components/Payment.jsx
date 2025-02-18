@@ -16,24 +16,6 @@ const Payment = () => {
     }
   }, [selectedItems, totalAmount, navigate]);
 
-  // ✅ 결제 검증 API 호출
-  const verifyPayments = async () => {
-    console.log(selectedItems, totalAmount);
-    try {
-      const verifiedPaymentId = await verifyPayment(selectedItems, totalAmount);
-      if (!verifiedPaymentId) {
-        alert('결제 검증에 실패했습니다.');
-        navigate('/user/userCart');
-      } else {
-        setPaymentId(verifiedPaymentId);
-      }
-    } catch (error) {
-      console.error('결제 검증 오류:', error);
-      alert('결제 검증 중 문제가 발생했습니다.');
-      navigate('/user/userCart');
-    }
-  };
-
   const initPayment = async (verifiedPaymentId) => {
     try {
       const tossPayments = await loadTossPayments(
