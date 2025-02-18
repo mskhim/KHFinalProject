@@ -403,6 +403,82 @@ export const deleteReservedData = async (reservationId) => {
   }
 };
 
+/*
+ * JWT쿠키 검사를 통해 로그인 상태를 확인한 후,
+ * 예매 취소 내역을 저장함.
+ */
+export const saveReservedCancelData = async (reservedCancelData) => {
+  try {
+    // 예매 취소 내역 저장 API 호출
+    const response = await fetch('http://localhost:8080/user/saveReservedCancelData', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include', // ✅ 쿠키 자동 포함
+      body: JSON.stringify(reservedCancelData), // 예매 취소 내역 데이터
+    });
+
+    // 응답이 OK가 아니면 인증 실패 처리
+    if (!response.ok) {
+      const errorData = await response.json();
+      return { authenticated: false, message: errorData.message || "예매 취소 내역 저장 실패" };
+    }
+
+    // 응답 데이터 파싱
+    const data = await response.json();
+
+    // 예매 취소 내역 저장이 성공한 경우 처리
+    if (data.authenticated) {
+      return { authenticated: true, message: "예매 취소 내역 저장 성공" };
+    } else {
+      return { authenticated: false, message: data.message || "예매 취소 내역 저장 실패" };
+    }
+
+  } catch (error) {
+    // 예외가 발생하면 오류 처리
+    return { authenticated: false, message: "서버 오류가 발생했습니다." };
+  }
+};
+
+/*
+ * JWT쿠키 검사를 통해 로그인 상태를 확인한 후,
+ * 취소된 예매 내역을 조회함.
+ */
+export const getReservedCancelData = async (reservationId) => {
+  try {
+    // 예매 취소 내역 조회 API 호출
+    const response = await fetch('http://localhost:8080/user/getReservedCancelData', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include', // ✅ 쿠키 자동 포함
+    });
+
+    // 응답이 OK가 아니면 인증 실패 처리
+    if (!response.ok) {
+      const errorData = await response.json();
+      return { authenticated: false, message: errorData.message || "예매 취소 내역 조회 실패" };
+    }
+
+    // 응답 데이터 파싱
+    const data = await response.json();
+
+    // 예매 취소 내역이 존재하는 경우 처리
+    if (data.authenticated && data.data && data.data.length > 0) {
+      return { authenticated: true, data: data.data };
+    } else {
+      return { authenticated: false, message: "취소된 예매 내역이 없습니다." };
+    }
+
+  } catch (error) {
+    // 예외가 발생하면 오류 처리
+    return { authenticated: false, message: "서버 오류가 발생했습니다." };
+  }
+};
+
+
 /**
  * 이메일을 받아서 일반회원가입 User를 가져오는 API, 아이디만 가져올것
  */

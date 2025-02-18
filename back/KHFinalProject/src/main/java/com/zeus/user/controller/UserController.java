@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zeus.common.config.JwtUtil;
 import com.zeus.user.domain.Cart;
 import com.zeus.user.domain.CartDTO;
+import com.zeus.user.domain.ReservedCancelDTO;
 import com.zeus.user.domain.ReservedDTO;
 import com.zeus.user.domain.User;
 import com.zeus.user.service.UserService;
@@ -618,6 +619,90 @@ public class UserController {
             		"authenticated", false,
             		"message", "예매 취소 실패"));
         }
+    }
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+    // 예매 취소 후 내역 저장
+    @PostMapping("/saveReservedCancelData")
+    public ResponseEntity<Map<String, Object>> saveReservedCancelData(
+            @CookieValue(name = "jwt", required = false) String jwtToken,
+            @RequestBody ReservedCancelDTO reservedCancelDTO) {
+
+        // JWT 토큰 검증
+        if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken)) {
+            return ResponseEntity.ok(Map.of("authenticated", false, "message", "JWT가 없거나 만료됨"));
+        }
+
+        // JWT에서 userNo 추출
+        Integer userNo = JwtUtil.validateToken(jwtToken).get("no", Integer.class);
+ 
+        // 예매 취소 내역 저장
+        boolean isSaved = service.saveReservedCancelData(reservedCancelDTO, userNo);      
+
+        // 예매 취소 내역 저장 후 로그 출력
+        if (isSaved) {
+            System.out.println("예매 취소 내역 저장 성공: " + reservedCancelDTO);
+        } else {
+            System.out.println("예매 취소 내역 저장 실패");
+        }
+        
+        if (!isSaved)
+        {
+            return ResponseEntity.ok(Map.of(
+            		"authenticated", false,
+            		"message", "예매 취소 내역 저장 실패"));
+        }
+
+        return ResponseEntity.ok(Map.of(
+        		"authenticated", true,
+        		"message", "예매 취소 내역 저장 성공"));
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // 취소 내역 조회
+    @GetMapping("/getReservedCancelData")
+    public ResponseEntity<Map<String, Object>> getReservedCancelData(
+            @CookieValue(name = "jwt", required = false) String jwtToken)
+    {
+
+        // JWT 토큰 검증
+        if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken)) {
+            return ResponseEntity.ok(Map.of("authenticated", false, "message", "JWT가 없거나 만료됨"));
+        }
+
+        // JWT에서 userNo 추출
+        Integer userNo = JwtUtil.validateToken(jwtToken).get("no", Integer.class);
+
+        // DB에서 해당 userNo로 사용자 정보 가져오기
+        User dbUser = service.getUserByNo(userNo);
+
+        // 사용자 정보가 없다면, 예매 내역 조회하지 않음
+        if (dbUser == null)
+        {
+            return ResponseEntity.ok(Map.of(
+            		"authenticated", false,
+            		"message", "사용자 정보가 없습니다."));
+        }
+
+        // 취소 내역 조회
+        List <ReservedCancelDTO> reservedCancel = service.getReservedCancelData(userNo);
+
+        // 취소 내역 조회 후 로그 출력
+        if (reservedCancel == null || reservedCancel.isEmpty())
+        {
+            System.out.println("취소 내역 없음: userNo = " + userNo);
+        }
+
+        
+        if (reservedCancel == null || reservedCancel.isEmpty())
+        {
+            return ResponseEntity.ok(Map.of(
+            		"authenticated", false,
+            		"message", "예매 내역이 없습니다."));
+        }
+
+        return ResponseEntity.ok(Map.of(
+        		"authenticated", true,
+        		"data", reservedCancel));
     }
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	//--------------------------------------------------api메소드가 아닌 컨트롤러용 메소드
