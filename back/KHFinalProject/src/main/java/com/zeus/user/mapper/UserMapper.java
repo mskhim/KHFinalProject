@@ -5,6 +5,7 @@ import java.util.List;
 import com.zeus.user.domain.Cart;
 import com.zeus.user.domain.CartDTO;
 import com.zeus.user.domain.Reserved;
+import com.zeus.user.domain.ReservedCancelDTO;
 import com.zeus.user.domain.ReservedDTO;
 import com.zeus.user.domain.User;
 
@@ -26,7 +27,9 @@ public interface UserMapper {
 	public int deleteUserData(Integer userNo);
 	public List <CartDTO> getCartData(Integer userNo);
 	public int deleteCartData(Cart cart);
-	public List<ReservedDTO> getReservedData(int userNo);
+	public List <ReservedDTO> getReservedData(int userNo);
 	public int deleteReservedData(int no);
+	public int saveReservedCancelData(ReservedCancelDTO reservedCancelDTO);
+	public List <ReservedCancelDTO> getReservedCancelData(Integer userNo);
 	/////////////////////////////////////////////
 }
