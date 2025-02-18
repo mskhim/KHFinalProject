@@ -9,6 +9,7 @@ import com.zeus.admin.mapper.AdminMapper;
 import com.zeus.user.domain.User;
 import com.zeus.admin.domain.AdminEventDTO;
 import com.zeus.admin.domain.AdminReviewDTO;
+import com.zeus.admin.domain.AdminQnaDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -79,5 +80,17 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public void reviewDelete(List<Integer> ids) throws Exception {
 		mapper.reviewDelete(ids);
+	}
+
+	@Override
+	public List<AdminQnaDTO> qnaSelectAllBySearch(String eventName) throws Exception {
+		AdminQnaDTO qna = new AdminQnaDTO();
+		qna.setEventName(eventName);
+		return mapper.qnaSelectAllBySearch(qna);
+	}
+
+	@Override
+	public void qnaDelete(List<Integer> ids) throws Exception {
+		mapper.qnaDelete(ids);
 	}
 }

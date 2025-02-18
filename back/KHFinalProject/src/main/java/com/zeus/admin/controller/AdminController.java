@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import com.zeus.admin.service.AdminService;
 import com.zeus.user.domain.User;
 import com.zeus.admin.domain.AdminEventDTO;
+import com.zeus.admin.domain.AdminQnaDTO;
 import com.zeus.admin.domain.AdminReviewDTO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -136,6 +137,23 @@ public class AdminController {
 		} catch (Exception e) {
 			log.error("Failed to delete reviews", e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete reviews");
+		}
+	}
+
+	@GetMapping("/qnaSelectAllBySearch")
+	public List<AdminQnaDTO> qnaSelectAllBySearch(@RequestParam(name = "eventName", defaultValue = "") String eventName) throws Exception {
+		return service.qnaSelectAllBySearch(eventName);
+	}
+
+	@DeleteMapping("/qnaDelete")
+	public ResponseEntity<String> qnaDelete(@RequestBody Map<String, List<Integer>> requestData) {
+		try {
+			List<Integer> ids = requestData.get("ids");
+			service.qnaDelete(ids);
+			return ResponseEntity.ok("Success");
+		} catch (Exception e) {
+			log.error("Failed to delete QnAs", e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete QnAs");
 		}
 	}
 }

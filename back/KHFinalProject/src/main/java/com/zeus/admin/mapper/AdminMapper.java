@@ -7,6 +7,7 @@ import com.zeus.event.domain.Event;
 import com.zeus.user.domain.User;
 import com.zeus.admin.domain.AdminEventDTO;
 import com.zeus.admin.domain.AdminReviewDTO;
+import com.zeus.admin.domain.AdminQnaDTO;
 
 public interface AdminMapper {
 
@@ -43,7 +44,18 @@ public interface AdminMapper {
 	public void festivalDelete(List<Integer> ids) throws Exception;
 
 // 리뷰 관리 페이지
+	
+	// 리뷰 전체 및 검색 전체조회
 	public List<AdminReviewDTO> reviewSelectAllBySearch(AdminReviewDTO review) throws Exception;
 
+	// 리뷰 삭제
 	public void reviewDelete(List<Integer> ids) throws Exception;
+
+// QnA 관리 페이지
+	
+	// QnA 전체 및 검색 전체조회
+	public List<AdminQnaDTO> qnaSelectAllBySearch(AdminQnaDTO qna) throws Exception;
+	
+	// QnA 삭제
+	public void qnaDelete(List<Integer> ids) throws Exception;
 }
