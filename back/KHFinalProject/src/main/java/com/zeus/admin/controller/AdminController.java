@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import com.zeus.admin.service.AdminService;
+import com.zeus.notice.domain.Notice;
 import com.zeus.user.domain.User;
 import com.zeus.admin.domain.AdminEventDTO;
 import com.zeus.admin.domain.AdminQnaDTO;
@@ -154,6 +155,44 @@ public class AdminController {
 		} catch (Exception e) {
 			log.error("Failed to delete QnAs", e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete QnAs");
+		}
+	}
+
+	@GetMapping("/noticeSelectAllBySearch")
+	public List<Notice> noticeSelectAllBySearch(@RequestParam(name = "title", defaultValue = "") String title) throws Exception {
+		return service.noticeSelectAllBySearch(title);
+	}
+
+	@PostMapping("/noticeInsert")
+	public ResponseEntity<String> noticeInsert(@RequestBody Notice notice) {
+		try {
+			service.noticeInsert(notice);
+			return ResponseEntity.ok("Success");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to insert notice");
+		}
+	}
+
+	@PutMapping("/noticeUpdate")
+	public ResponseEntity<String> noticeUpdate(@RequestBody Notice notice) {
+		try {
+			service.noticeUpdate(notice);
+			return ResponseEntity.ok("Success");
+		} catch (Exception e) {
+			log.error("Failed to update notice", e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update notice");
+		}
+	}
+
+	@DeleteMapping("/noticeDelete")
+	public ResponseEntity<String> noticeDelete(@RequestBody Map<String, List<Integer>> requestData) {
+		try {
+			List<Integer> ids = requestData.get("ids");
+			service.noticeDelete(ids);
+			return ResponseEntity.ok("Success");
+		} catch (Exception e) {
+			log.error("Failed to delete notices", e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete notices");
 		}
 	}
 }

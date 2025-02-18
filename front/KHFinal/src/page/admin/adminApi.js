@@ -271,3 +271,101 @@ export const qnaDelete = async (ids) => {
     throw error;
   }
 };
+
+export const noticeSelectAllBySearch = async (title) => {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/admin/noticeSelectAllBySearch?title=${title}`,
+      {
+        method: "GET",
+        credentials: "include",
+      }
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("공지사항 정보 조회 실패:", error);
+    return null;
+  }
+};
+
+export const noticeInsert = async (notice) => {
+  try {
+    const response = await fetch("http://localhost:8080/admin/noticeInsert", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(notice),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to insert notice");
+    }
+
+    const responseData = await response.text();
+    console.log("Notice insert response:", responseData);
+    alert("추가가 완료되었습니다");
+    return responseData;
+  } catch (error) {
+    alert("입력값을 확인해주세요.");
+    console.error("공지사항 추가 실패:", error);
+    throw error;
+  }
+};
+
+export const noticeUpdate = async (notice) => {
+  try {
+    const response = await fetch("http://localhost:8080/admin/noticeUpdate", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(notice),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error("Failed to update notice:", errorData);
+      throw new Error("Failed to update notice");
+    }
+
+    const responseData = await response.text();
+    console.log("Notice update response:", responseData);
+    alert("수정이 완료되었습니다");
+    return responseData;
+  } catch (error) {
+    alert("입력값을 확인해주세요.");
+    console.error("공지사항 수정 실패:", error);
+    throw error;
+  }
+};
+
+export const noticeDelete = async (ids) => {
+  try {
+    const response = await fetch("http://localhost:8080/admin/noticeDelete", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({ ids }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete notices");
+    }
+
+    const responseData = await response.text();
+    console.log("Notice delete response:", responseData);
+    alert("삭제가 완료되었습니다");
+    return responseData;
+  } catch (error) {
+    alert("삭제 중 오류가 발생했습니다.");
+    console.error("공지사항 삭제 실패:", error);
+    throw error;
+  }
+};
