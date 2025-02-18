@@ -1,16 +1,30 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import Card from 'react-bootstrap/Card';
 import './css/Announcement.css';
 import { Context } from '../../../Context';
 import { useNavigate } from 'react-router-dom';
 import { ButtonDarkMode } from '../../../components/ui';
+import { lateNotices } from '../mainApi';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { FaChevronUp, FaChevronDown } from 'react-icons/fa';
+
 export default function Announcement() {
   const { darkMode } = useContext(Context);
   const navigate = useNavigate();
+  const [notices, setNotices] = useState([]);
+
+  // API 호출하여 최신 공지 3개 가져오기
+  useEffect(() => {
+    const fetchNotices = async () => {
+      const data = await lateNotices();
+      if (data) {
+        setNotices(data);
+      }
+    };
+    fetchNotices();
+  }, []);
 
   const CustomPrevArrow = ({ onClick }) => (
     <div className="custom-arrow custom-prev" onClick={onClick}>
@@ -44,45 +58,46 @@ export default function Announcement() {
           style={{
             width: '14%',
             maxWidth: '300px',
-            fontSize: '22px',
-            height: '70px',
+            fontSize: '30px',
+            height: '90px',
           }}
         >
           <Card.Body className="Announcement-text-center">
-            <p>공지사항</p>
+            <p>Notice</p>
           </Card.Body>
         </Card>
         <Card
           className="Announcement-content"
-          style={{ width: '85%', height: '70px' }}
+          style={{ width: '85%', height: '90px' }}
         >
           <Card.Body className="Announcement-content">
-            <Slider {...settings}>
-              <p>
-                This is some text within a card body.This is some text within a
-                card body.
-              </p>
-              <p>
-                This is some text within a card body.This is some text within a
-                card body.
-              </p>
-              <p>
-                This is some text within a card body.This is some text within a
-                card body.
-              </p>
+            <Slider
+              {...settings}
+              style={{ cursor: 'pointer' }}
+              className="Announcement-slider"
+            >
+              {notices.length > 0 ? (
+                notices.map((notice) => (
+                  <h2
+                    key={notice.no}
+                    onClick={() => navigate(`/noticeRead/${notice.no}`)}
+                  >
+                    {notice.title}
+                  </h2>
+                ))
+              ) : (
+                <p>공지사항이 없습니다.</p>
+              )}
             </Slider>
-            <div
+            <ButtonDarkMode
+              onClick={() => navigate('/noticeList')}
+              text="목록"
               className={
                 darkMode
                   ? 'Announcement-dark-mode-button'
                   : 'Announcement-light-mode-button'
               }
-            >
-              <ButtonDarkMode
-                onClick={() => navigate('/noticeList')}
-                text="목록"
-              />
-            </div>
+            />
           </Card.Body>
         </Card>
       </div>
