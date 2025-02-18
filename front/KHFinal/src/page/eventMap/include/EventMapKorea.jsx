@@ -36,32 +36,30 @@ export default function EventMapKorea({
   };
   return (
     <>
-      <Container className="EventMapKorea-container">
-        {/* 지역 선택 버튼 */}
-        <div className="EventMapKorea-buttons EventMapKorea-button-group">
-          {regions.map((region) => (
-            <Button
-              variant={darkMode ? 'outline-light' : 'outline-dark'}
-              size="lg"
-              key={region.name}
-              onClick={() => hadleClickEvent(region)}
-              className={`EventMapKorea-button-individual ${
-                clickEvent.name === region.name ? 'active' : ''
-              }`}
-            >
-              {region.name}
-            </Button>
-          ))}
-        </div>
-        <div className="EventMapKorea-mapSection">
-          <EventMapSection
-            LATITUDE={clickEvent.LATITUDE}
-            LONGITUDE={clickEvent.LONGITUDE}
-            ZOOM={clickEvent.zoom} // 지역별 줌 값 전달
-            eventList={eventList}
-          />
-        </div>
-      </Container>
+      {/* 지역 선택 버튼 */}
+      <div className="EventMapKorea-buttons EventMapKorea-button-group">
+        {regions.map((region) => (
+          <Button
+            variant={darkMode ? 'outline-light' : 'outline-dark'}
+            size="lg"
+            key={region.name}
+            onClick={() => hadleClickEvent(region)}
+            className={`EventMapKorea-button-individual ${
+              clickEvent.name === region.name ? 'active' : ''
+            }`}
+          >
+            {region.name}
+          </Button>
+        ))}
+      </div>
+      <div className="EventMapKorea-mapSection">
+        <EventMapSection
+          LATITUDE={clickEvent.LATITUDE}
+          LONGITUDE={clickEvent.LONGITUDE}
+          ZOOM={clickEvent.zoom} // 지역별 줌 값 전달
+          eventList={eventList}
+        />
+      </div>
     </>
   );
 }

@@ -9,6 +9,7 @@ import { selectEventListMonth } from './eventCalendarApi';
 import { FaChevronDown } from 'react-icons/fa';
 
 const EventCalendar = () => {
+  const [eventList, setEventList] = useState([]);
   const { getDarkMode, getDarkModeHover, darkMode } = useContext(Context);
   const [currentDate, setCurrentDate] = useState(new Date()); // 현재 달
   const [selectedDate, setSelectedDate] = useState(new Date()); // 선택된 날짜
@@ -199,6 +200,8 @@ const EventCalendar = () => {
           <EventListViewWrap
             sortOption={sortOption}
             setSortOption={setSortOption}
+            eventList={eventList}
+            setEventList={setEventList}
           />
         </Container>
       </div>

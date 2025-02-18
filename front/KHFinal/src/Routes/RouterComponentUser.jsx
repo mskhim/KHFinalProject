@@ -10,6 +10,9 @@ import {
 import NotFound from '../page/common/NotFound';
 import { useEffect } from 'react';
 import ErrorBoundary from '../components/ErrorBoundary';
+import Payment from '../components/Payment';
+import PaymentSuccess from '../components/PaymentSuccess';
+import PaymentFail from '../components/PaymentFail';
 
 const UserRoutes = () => {
   const location = useLocation(); // ✅ 현재 경로 가져오기
@@ -35,6 +38,9 @@ const UserRoutes = () => {
             <Route path="userMypage" element={<UserMypage />} />
             <Route path="userReservedList" element={<UserReservedList />} />
             <Route path="bookingList" element={<BookingList />} />
+            <Route path="payment" element={<Payment />} />
+            <Route path="paymentSuccess" element={<PaymentSuccess />} />
+            <Route path="paymentFail" element={<PaymentFail />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

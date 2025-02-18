@@ -1,16 +1,29 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import './css/EventListVisualWrap.css';
+import { useNavigate } from 'react-router-dom';
 
-const EventListVisualWrap = () => {
-  const [activeIndex, setActiveIndex] = useState(0); // 기본 활성화된 이미지
+const EventListVisualWrap = ({ eventList }) => {
+  const navigate = useNavigate();
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [images, setImages] = useState([]);
 
-  // ✅ 이미지 및 해당 이미지에 표시될 텍스트 리스트
-  const images = [
-    { src: 'https://picsum.photos/1200/600?random=1', text: '이벤트 1 설명' },
-    { src: 'https://picsum.photos/1200/600?random=2', text: '이벤트 2 설명' },
-    { src: 'https://picsum.photos/1200/600?random=3', text: '이벤트 3 설명' },
-  ];
+  useEffect(() => {
+    if (!eventList || eventList.length === 0) {
+      return;
+    }
+    const formattedImages = eventList.slice(0, 3).map((event) => ({
+      src: event?.thumbUrl || '',
+      text: event?.name || 'No Name',
+      no: event?.no || null,
+    }));
+
+    setImages(formattedImages);
+  }, [eventList]);
+
+  const handleClick = (no) => {
+    navigate('/eventRead/' + no);
+  };
 
   return (
     <Container className="EventListVisualWrap-container py-4 px-4">
@@ -30,13 +43,15 @@ const EventListVisualWrap = () => {
               src={item.src}
               alt={`Event ${index + 1}`}
               className="EventListVisualWrap-image"
+              onClick={() => handleClick(item.no)}
             />
-            {/* ✅ 활성화된 이미지에만 텍스트 표시 */}
-            {index === activeIndex && (
+
+            {/* ✅ 반투명한 배경과 함께 텍스트 표시 */}
+            <div className="EventListVisualWrap-text-container">
               <div className="EventListVisualWrap-text">
                 <h3>{item.text}</h3>
               </div>
-            )}
+            </div>
           </div>
         ))}
       </div>

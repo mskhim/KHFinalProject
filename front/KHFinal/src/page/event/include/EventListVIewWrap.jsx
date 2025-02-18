@@ -16,10 +16,14 @@ import { Context } from '../../../Context';
 import { selectEventList } from '../eventApi';
 import { BsCheckCircle, BsClock, BsXCircle } from 'react-icons/bs';
 
-const EventListViewWrap = ({ sortOption, setSortOption }) => {
+const EventListViewWrap = ({
+  sortOption,
+  setSortOption,
+  eventList,
+  setEventList,
+}) => {
   const navigate = useNavigate();
   const { getDarkModeHover } = useContext(Context);
-  const [eventList, setEventList] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false); // ✅ 로딩 상태 추가
   const observerRef = useRef(null);

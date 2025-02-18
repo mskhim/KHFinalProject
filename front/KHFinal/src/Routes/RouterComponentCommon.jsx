@@ -38,36 +38,39 @@ const RouterComponentCommon = () => {
     }
   }, [location]); // ✅ 경로 변경 시마다 실행
   return (
-    <Routes>
-      <Route path="/" element={<CommonLayout />}>
-        {/* 메인 페이지 */}
-        <Route index element={<Main />} />
-        {/* 이벤트 관련 페이지 */}
-        <Route path="eventList" element={<EventList />} />
-        <Route path="eventRead/:no" element={<EventRead />} />
-        <Route path="eventCalendar" element={<EventCalendar />} />
-        <Route path="eventMap" element={<EventMap />} />
-        {/* 공지사항 관련 페이지 */}
-        <Route path="noticeList" element={<NoticeList />} />
-        <Route path="noticeRead/:no" element={<NoticeRead />} />
-        {/* QnA 관련 페이지 */}
-        <Route path="qnaList" element={<QnaList />} />
-        <Route path="qnaInsert" element={<QnaInsert />} />
-        <Route path="qnaModify/:no" element={<QnaModify />} />
-        <Route path="qnaRead/:no" element={<QnaRead />} />
-        <Route path="qnaReInsert/:no" element={<QnaReInsert />} />
-        {/* 유저 관련 인증/가입 페이지 */}
-        <Route path="userLoginPage" element={<UserLoginPage />} />
-        <Route path="userLoginSuccess" element={<UserLoginSuccess />} />
-        <Route path="userInsert" element={<UserInsert />} />
-        <Route path="userFind" element={<UserFind />} />
-        <Route path="UserInsertCommon" element={<UserInsertCommon />} />
-        {/* 권한 없음 페이지 */}
-        <Route path="unauthorized" element={<Unauthorized />} />
-        {/* 존재하지 않는 페이지 (404) */}
-        <Route path="*" element={<NotFound />} />
-      </Route>
-    </Routes>
+    <ErrorBoundary>
+      <Routes>
+        <Route path="/" element={<CommonLayout />}>
+          {/* 메인 페이지 */}
+          <Route index element={<Main />} />
+          {/* 이벤트 관련 페이지 */}
+          <Route path="eventList" element={<EventList />} />
+          <Route path="eventRead/:no" element={<EventRead />} />
+          <Route path="eventCalendar" element={<EventCalendar />} />
+          <Route path="eventMap" element={<EventMap />} />
+          {/* 공지사항 관련 페이지 */}
+          <Route path="noticeList" element={<NoticeList />} />
+          <Route path="noticeRead/:no" element={<NoticeRead />} />
+          {/* QnA 관련 페이지 */}
+          <Route path="qnaList" element={<QnaList />} />
+          <Route path="qnaInsert" element={<QnaInsert />} />
+          <Route path="qnaModify/:no" element={<QnaModify />} />
+          <Route path="qnaRead/:no" element={<QnaRead />} />
+          <Route path="qnaReInsert/:no" element={<QnaReInsert />} />
+          {/* 유저 관련 인증/가입 페이지 */}
+          <Route path="userLoginPage" element={<UserLoginPage />} />
+          <Route path="userLoginSuccess" element={<UserLoginSuccess />} />
+          <Route path="userInsert" element={<UserInsert />} />
+          <Route path="userFind" element={<UserFind />} />
+          <Route path="UserInsertCommon" element={<UserInsertCommon />} />
+
+          {/* 권한 없음 페이지 */}
+          <Route path="unauthorized" element={<Unauthorized />} />
+          {/* 존재하지 않는 페이지 (404) */}
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
+    </ErrorBoundary>
   );
 };
 

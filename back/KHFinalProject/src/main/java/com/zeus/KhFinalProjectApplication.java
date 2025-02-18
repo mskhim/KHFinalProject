@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 		"com.zeus.notice.mapper",
 		"com.zeus.qna.mapper",
 		"com.zeus.user.mapper",
+		"com.zeus.payments.mapper",
 })
 public class KhFinalProjectApplication {
 

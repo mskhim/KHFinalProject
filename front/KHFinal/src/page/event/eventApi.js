@@ -1,4 +1,6 @@
 import { stringify } from 'uuid';
+import { fetchWithAuth } from '../user/userApi';
+import { customFetch } from '../../api/api';
 
 /**
  * 이벤트 리스트 조회
@@ -28,7 +30,7 @@ export const selectEventList = async (sortOption) => {
  */
 export const selectEventRead = async (no) => {
   try {
-    const response = await fetch(
+    const response = await customFetch(
       `http://localhost:8080/event/selectEventRead?&no=${no}`,
       {
         method: 'GET',
@@ -40,7 +42,7 @@ export const selectEventRead = async (no) => {
     const data = await response.json();
     return data.dataList;
   } catch (error) {
-    alert('오류가 발생했습니다. ' + error.message);
+    console.error('오류가 발생했습니다. ' + error.message);
     throw error;
   }
 };

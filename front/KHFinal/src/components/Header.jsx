@@ -235,25 +235,6 @@ const Header = ({ page }) => {
                   <ButtonDarkMode text="로그인" onClick={handleLogin} />
                 </div>
                 {/* )} */}
-                {isAuthenticated && (
-                  <div className="position-relative me-3">
-                    <FaBell
-                      size={24}
-                      className={`${
-                        darkMode ? 'text-light' : 'text-dark'
-                      } Header-cart-icon`}
-                    />
-                    {notifications > 0 && (
-                      <Badge
-                        pill
-                        bg="danger"
-                        className="Header-notification-badge Header-cart-icon"
-                      >
-                        {notifications}
-                      </Badge>
-                    )}
-                  </div>
-                )}
                 {/* {isAuthenticated && ( */}
                 <div className="position-relative me-3">
                   <FaCartPlus

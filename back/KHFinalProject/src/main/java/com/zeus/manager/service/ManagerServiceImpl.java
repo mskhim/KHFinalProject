@@ -31,13 +31,11 @@ public class ManagerServiceImpl implements ManagerService {
 
 	@Override
 	public Event insertEventImgByManagerThumb(EventImg eventImg) {
-		log.info(eventImg+"");
 		mapper.insertEventImgByManagerThumb(eventImg);
 		return null;
 	}
 	@Override
 	public Event insertEventImgByManagerSub(EventImg eventImg) {
-		log.info(eventImg+"");
 		mapper.insertEventImgByManagerSub(eventImg);
 		return null;
 	}
@@ -46,7 +44,6 @@ public class ManagerServiceImpl implements ManagerService {
 	public List<ManagerStats> selectEventStatsData(User user) {
 		  List<Map<String, Object>> rawData =mapper.getManagerEventStatistics(user);
 	        List<ManagerStats> statsList = new ArrayList<>();
-	        log.info(rawData+"");
 	        for (Map<String, Object> data : rawData) {
 	            ManagerStats stats = new ManagerStats();
 	            

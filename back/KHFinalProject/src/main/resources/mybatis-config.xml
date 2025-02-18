@@ -19,6 +19,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<package name="com.zeus.notice.domain" />
 		<package name="com.zeus.qna.domain" />
 		<package name="com.zeus.user.domain" />
+		<package name="com.zeus.payments.domain" />
 	</typeAliases>
 	
 </configuration>

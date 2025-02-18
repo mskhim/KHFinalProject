@@ -20,7 +20,7 @@ const EventMap = () => {
   return (
     <>
       <Header page="map" />
-      <Container>
+      <Container className="EventMapKorea-container px-4 mx-auto ">
         <EventMapKorea
           sortOption={sortOption}
           setSortOption={setSortOption}

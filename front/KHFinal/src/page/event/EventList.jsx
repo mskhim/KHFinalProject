@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import exApi from '../../api/ExceptionApi';
 
 const EventList = () => {
+  const [eventList, setEventList] = useState([]);
   //  정렬 상태
   const [sortOption, setSortOption] = useState({
     page: 1,
@@ -23,11 +24,13 @@ const EventList = () => {
         setSortOption={setSortOption}
         sortOption={sortOption}
       />
+      <EventListVisualWrap eventList={eventList} />
       <br />
-      <EventListVisualWrap />
       <EventListViewWrap
         sortOption={sortOption}
         setSortOption={setSortOption}
+        eventList={eventList}
+        setEventList={setEventList}
       />
       <Footer />
     </>

@@ -1,31 +1,26 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-class ErrorBoundary extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false };
-  }
+const ErrorBoundary = ({ children }) => {
+  const [hasError, setHasError] = useState(false);
+  const navigate = useNavigate(); // ✅ useNavigate 직접 사용
 
-  static getDerivedStateFromError(error) {
-    return { hasError: true };
-  }
-
-  componentDidCatch(error, errorInfo) {
-    console.error('🚨 Error caught by ErrorBoundary:', error, errorInfo);
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div style={{ textAlign: 'center', padding: '20px' }}>
-          <h1>🚨 오류가 발생했습니다.</h1>
-          <p>문제가 발생했습니다. 새로고침하거나 잠시 후 다시 시도해주세요.</p>
-        </div>
-      );
+  useEffect(() => {
+    if (hasError) {
+      setTimeout(() => {
+        navigate('/'); // ✅ 3초 후 홈으로 이동
+      }, 3000);
     }
+  }, [hasError, navigate]);
 
-    return this.props.children;
-  }
-}
+  return hasError ? (
+    <div style={{ textAlign: 'center', padding: '20px' }}>
+      <h1>🚨 오류 발생</h1>
+      <p>잠시 후 홈으로 이동합니다...</p>
+    </div>
+  ) : (
+    children
+  );
+};
 
 export default ErrorBoundary;
