@@ -37,6 +37,7 @@ const RouterComponentCommon = () => {
       );
     }
   }, [location]); // ✅ 경로 변경 시마다 실행
+
   return (
     <ErrorBoundary>
       <Routes>

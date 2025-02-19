@@ -40,7 +40,6 @@ export const Provider = ({ children }) => {
     setIsAuthenticated(true);
     setUserNickname(nickname);
     setLoginTime(currentTime);
-
     sessionStorage.setItem('isAuthenticated', 'true');
     sessionStorage.setItem('userNickname', nickname);
     sessionStorage.setItem('loginTime', currentTime.toString());
