@@ -35,6 +35,8 @@ function StartFestival() {
         alt={`Item ${index + 1}`}
         className="carousel-image StartFestival-image"
       />
+      <br />
+      <h4>{event.name}</h4>
     </div>
   ));
 
