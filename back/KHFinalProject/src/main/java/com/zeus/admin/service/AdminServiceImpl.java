@@ -1,6 +1,8 @@
 package com.zeus.admin.service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ import com.zeus.admin.domain.AdminEventDTO;
 import com.zeus.admin.domain.AdminReviewDTO;
 import com.zeus.admin.domain.AdminQnaDTO;
 import com.zeus.admin.domain.AdminReservedDTO;
+import com.zeus.admin.domain.ManagerFestivalAuthDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -130,5 +133,25 @@ public class AdminServiceImpl implements AdminService {
 		AdminReservedDTO canceled = new AdminReservedDTO();
 		canceled.setEventName(eventName);
 		return mapper.canceledSelectAllBySearch(canceled);
+	}
+
+	@Override
+	public List<ManagerFestivalAuthDTO> managerFestivalAuthSellectAll(int managerNo) throws Exception {
+		return mapper.managerFestivalAuthSellectAll(managerNo);
+	}
+
+	@Override
+	public void addFestivalAuth(int managerNo, int festivalNo) throws Exception {
+		Map<String, Integer> params = new HashMap<>();
+		params.put("managerNo", managerNo);
+		params.put("festivalNo", festivalNo);
+		mapper.addFestivalAuth(params);
+	}
+
+	@Override
+	public void deleteFestivalAuth(int authNo) throws Exception {
+		Map<String, Integer> params = new HashMap<>();
+		params.put("authNo", authNo);
+		mapper.deleteFestivalAuth(params);
 	}
 }

@@ -22,6 +22,7 @@ import {
   managerUpdate,
   managerDelete,
 } from "./adminApi"; // adminAPI에서 함수 임포트
+import ManagerFestivalAuth from "./ManagerFestivalAuth"; // 새로운 FestivalAuth 컴포넌트 임포트
 
 const ManagerManage = () => {
   // 객체 배열 변수
@@ -149,6 +150,21 @@ const ManagerManage = () => {
     getList("");
   };
 
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [selectedManager, setSelectedManager] = useState(null);
+
+  // 권한 추가 모달 열기
+  const handleShowAuthModal = (manager) => {
+    setSelectedManager(manager);
+    setShowAuthModal(true);
+  };
+
+  // 권한 추가 모달 닫기
+  const handleCloseAuthModal = () => {
+    setShowAuthModal(false);
+    setSelectedManager(null);
+  };
+
   return (
     <Container className="admin-page text-center">
       <div className="justify-content-end d-flex mb-3">
@@ -226,6 +242,12 @@ const ManagerManage = () => {
               className="text-bg-primary text-center"
               style={{ width: "110px" }}
             >
+              축제 권한
+            </th>
+            <th
+              className="text-bg-primary text-center"
+              style={{ width: "110px" }}
+            >
               추가/수정
             </th>
           </tr>
@@ -278,7 +300,10 @@ const ManagerManage = () => {
             <td style={{ width: "160px" }} className="align-content-center">
               {date}
             </td>
-            <td style={{ width: "96px" }}>
+            <td style={{ width: "110px" }} className="align-content-center">
+              -
+            </td>
+            <td style={{ width: "94.4px" }}>
               <Button className="btn btn-primary me-2" onClick={handleInsert}>
                 추가
               </Button>
@@ -336,7 +361,15 @@ const ManagerManage = () => {
               <td style={{ width: "160px" }} className="align-content-center">
                 {data.regDate || ""}
               </td>
-              <td style={{ width: "96px" }}>
+              <td style={{ width: "110px" }} className="center">
+                <Button
+                  className="btn btn-primary me-2"
+                  onClick={() => handleShowAuthModal(data)}
+                >
+                  권한관리
+                </Button>
+              </td>
+              <td style={{ width: "94.4px" }}>
                 <Button
                   className="btn btn-primary me-2"
                   onClick={() => handleUpdate(data.no)}
@@ -348,6 +381,16 @@ const ManagerManage = () => {
           ))}
         </tbody>
       </Table>
+
+      {/* FestivalAuth 모달 */}
+      <Modal show={showAuthModal} onHide={handleCloseAuthModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>축제 권한 관리</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedManager && <ManagerFestivalAuth manager={selectedManager} />}
+        </Modal.Body>
+      </Modal>
     </Container>
   );
 };

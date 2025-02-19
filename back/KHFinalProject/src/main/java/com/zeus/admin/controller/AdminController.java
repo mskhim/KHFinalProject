@@ -22,6 +22,7 @@ import com.zeus.user.domain.User;
 import com.zeus.admin.domain.AdminEventDTO;
 import com.zeus.admin.domain.AdminQnaDTO;
 import com.zeus.admin.domain.AdminReviewDTO;
+import com.zeus.admin.domain.ManagerFestivalAuthDTO;
 import com.zeus.admin.domain.AdminReservedDTO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -205,5 +206,35 @@ public class AdminController {
 	@GetMapping("/canceledSelectAllBySearch")
 	public List<AdminReservedDTO> canceledSelectAllBySearch(@RequestParam(name = "eventName", defaultValue = "") String eventName) throws Exception {
 		return service.canceledSelectAllBySearch(eventName);
+	}
+
+	@GetMapping("/managerFestivalAuthSellectAll")
+	public List<ManagerFestivalAuthDTO> managerFestivalAuthSellectAll(@RequestParam int managerNo) throws Exception {
+		return service.managerFestivalAuthSellectAll(managerNo);
+	}
+
+	@PostMapping("/addFestivalAuth")
+	public ResponseEntity<String> addFestivalAuth(@RequestBody Map<String, Integer> requestData) {
+		try {
+			int managerNo = requestData.get("managerNo");
+			int festivalNo = requestData.get("festivalNo");
+			service.addFestivalAuth(managerNo, festivalNo);
+			return ResponseEntity.ok("Success");
+		} catch (Exception e) {
+			log.error("Failed to add festival auth", e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add festival auth");
+		}
+	}
+
+	@DeleteMapping("/deleteFestivalAuth")
+	public ResponseEntity<String> deleteFestivalAuth(@RequestBody Map<String, Integer> requestData) {
+		try {
+			int authNo = requestData.get("authNo");
+			service.deleteFestivalAuth(authNo);
+			return ResponseEntity.ok("Success");
+		} catch (Exception e) {
+			log.error("Failed to delete festival auth", e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete festival auth");
+		}
 	}
 }

@@ -405,3 +405,75 @@ export const canceledSelectAllBySearch = async (eventName) => {
     return null;
   }
 };
+
+export const managerFestivalAuthSellectAll = async (managerNo) => {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/admin/managerFestivalAuthSellectAll?managerNo=${managerNo}`,
+      {
+        method: "GET",
+        credentials: "include",
+      }
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("축제 권한 조회 실패:", error);
+    return [];
+  }
+};
+
+export const addFestivalAuth = async (managerNo, festivalNo) => {
+  try {
+    const response = await fetch(
+      "http://localhost:8080/admin/addFestivalAuth",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ managerNo, festivalNo }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to add festival auth");
+    }
+
+    const responseData = await response.text();
+    console.log("Festival auth add response:", responseData);
+    return responseData;
+  } catch (error) {
+    console.error("축제 권한 추가 실패:", error);
+    throw error;
+  }
+};
+
+export const deleteFestivalAuth = async (authNo) => {
+  try {
+    const response = await fetch(
+      "http://localhost:8080/admin/deleteFestivalAuth",
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ authNo }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to delete festival auth");
+    }
+
+    const responseData = await response.text();
+    console.log("Festival auth delete response:", responseData);
+    return responseData;
+  } catch (error) {
+    console.error("축제 권한 삭제 실패:", error);
+    throw error;
+  }
+};
