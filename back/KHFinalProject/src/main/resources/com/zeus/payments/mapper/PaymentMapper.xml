@@ -2,14 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zeus.payments.mapper.PaymentMapper">
 
-    <!-- 특정 eventNo의 가격 조회 -->
-    <select id="findPriceByEventNo" parameterType="int" resultType="int">
-        SELECT price FROM event e join cart c on c.event_no=e.no WHERE c.no = #{id}
-    </select>
+	<!-- 예약 테이블에 삽입 -->
+	<insert id="insertReservation">
+		INSERT INTO reserved 
+		VALUES (seq_reserved_no.nextval,#{reservationId}, #{eventNo},#{userAccountNo}, #{qt},SYSDATE, #{price})
+	</insert>
 
-    <!-- 결제 정보 저장 -->
-    <insert id="insertPaymentRecord" parameterType="map">
-        INSERT INTO payment (payment_id, total_amount, created_at)
-        VALUES (#{paymentId}, #{totalAmount}, NOW())
-    </insert>
+	<!-- 장바구니에서 삭제 -->
+	<delete id="deleteCartItem">
+		DELETE FROM cart WHERE no = #{cartNo}
+	</delete>
+	<!-- 이벤트 가격 조회 -->
+	<select id="getEventPrice" resultType="Integer">
+		SELECT price FROM event WHERE no = #{eventNo}
+	</select>
 </mapper>
