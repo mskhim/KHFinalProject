@@ -53,4 +53,10 @@ public class QnaServiceImpl implements QnaService {
 		}
 	}
 
+	@Override
+	public String getReply(Qna qna) {
+		
+		return qnaMapper.getReply(qna);
+	}
+
 }

@@ -3,17 +3,18 @@
 <mapper namespace="com.zeus.qna.mapper.QnaMapper">
 
     <select id="getAllQna" resultType="QnaDTO">
-        select q.no, q.title, q.content,q.user_account_no, q.sub_date,q.qna_no, p.name as event_name,u.name as user_name  from qna q
+        select q.no,e.no as event_no, q.title, q.content,q.user_account_no, q.sub_date,q.qna_no, p.name as event_name,u.name as user_name  from qna q
 	 	join user_account u 
 	 	on q.user_account_no=u.no
 	 	join event e
 	 	on q.event_no=e.no
 	 	join public_data_event p
 	 	on e.public_data_event_no =p.no
+	 	where qna_No = 0
 	 	order by q.no desc 
     </select>
 
-    <insert id="insertQna" parameterType="Qna" useGeneratedKeys="true" keyProperty="no">
+    <insert id="insertQna" parameterType="Qna">
         INSERT INTO qna (no ,title, content, user_account_no, sub_date,event_no)
         VALUES (seq_qna_no.nextval,#{title}, #{content}, #{userAccountNo}, sysdate, #{eventNo})
     </insert>
@@ -21,26 +22,36 @@
     <insert id="insertReplyQna" parameterType="Qna">
     INSERT INTO qna (no, title, content, user_account_no, sub_date, event_no, qna_no)
     VALUES (
-        #{originalNo}, 
-        '답변: ' || (SELECT title FROM qna WHERE no = #{originalNo}),
+        seq_qna_no.nextval, 
+        '답변',
         #{content}, 
         #{userAccountNo}, 
         sysdate, 
-        #{eventNo}, 
-        (SELECT NVL(MAX(qna_no), 0) + 1 FROM qna WHERE no = #{originalNo})
+        (SELECT event_no FROM qna WHERE no = #{qnaNo}),
+        #{qnaNo}
     )
 </insert>
 
-    
+<select id="getTitleByQnaNo" resultType="String">
+    SELECT title FROM qna WHERE no = #{qnaNo}
+</select>
+
+
+<select id="getEventNoByQnaNo" resultType="int">
+    SELECT event_no FROM qna WHERE no = #{qnaNo}
+</select>
+
 
     <update id="updateQna">
         UPDATE qna SET title=#{title}, content=#{content} WHERE no=#{no}
     </update>
 
     <select id="getFestivalList" resultType="PublicDataEventDTO">
-        SELECT e.no, name FROM EVENT E 
+        SELECT e.no, name FROM EVENT E 	
         LEFT JOIN public_data_event P
         ON E.public_data_event_NO= P.NO
     </select>
-
+ <select id="getReply" parameterType="Qna" resultType="String">
+       select content from qna where qna_No=#{no}
+    </select>
 </mapper>

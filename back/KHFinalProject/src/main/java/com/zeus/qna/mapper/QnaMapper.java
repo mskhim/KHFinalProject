@@ -15,5 +15,6 @@ public interface QnaMapper {
     void updateQna(Qna qna);
     List<PublicDataEventDTO> getFestivalList();
     void insertReplyQna(Qna qna);
+	String getReply(Qna qna);
 
 }

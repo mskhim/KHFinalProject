@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../../Context";
-import { Button, Container, Form, Pagination } from "react-bootstrap";
+import { Button, Container, Form, Pagination, Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import "./css/qnaList.css";
+import { getReply } from "./qnaApi";
 
 const QNAList = () => {
   const { darkMode, setDarkMode, getDarkMode } = useContext(Context);
@@ -16,7 +17,9 @@ const QNAList = () => {
   const [searchTerm, setSearchTerm] = useState(""); // 검색어
   const [totalPages, setTotalPages] = useState(1); // 총 페이지 수
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
-
+  const [selectedReply, setSelectedReply] = useState(""); // 선택한 답변
+  const [isLoading, setIsLoading] = useState(false); // 로딩 중 여부
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // 인증 여부
   // 📌 검색 입력 핸들러
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -25,7 +28,10 @@ const QNAList = () => {
     setDarkMode(sessionStorage.getItem("darkMode") === "true");
     fetch("http://localhost:8080/qna/list")
       .then((res) => res.json())
-      .then((data) => setQnaList(data));
+      .then((data) => {
+        console.log(data);
+        return setQnaList(data);
+      });
   }, [setDarkMode]);
 
   const handlePageChange = (page) => {
@@ -35,8 +41,18 @@ const QNAList = () => {
     }
   };
 
-  const toggleAccordion = (index) => {
+  const toggleAccordion = (index, no, eventNo) => {
     setOpenIndex(openIndex === index ? null : index);
+    const getReplyData = async () => {
+      setIsLoading(true);
+      const response = await getReply(no);
+      if (response.content === null) {
+        setSelectedReply("등록된 답변이 없습니다.");
+      }
+      setSelectedReply(response.content);
+      setIsLoading(false);
+    };
+    getReplyData();
   };
 
   const handleReplySubmit = () => {
@@ -46,8 +62,8 @@ const QNAList = () => {
     }
 
     const requestData = {
-      originalNo: replyTarget,
-      replyContent: replyText,
+      qnaNo: replyTarget,
+      content: replyText,
     };
 
     console.log("전송할 데이터:", requestData);
@@ -105,7 +121,6 @@ const QNAList = () => {
                       <Button
                         variant={darkMode ? "outline-light" : "outline-dark"}
                         className="Notice-btn Notice-btn-dark"
-                        onClick={""}
                       >
                         검색 취소
                       </Button>
@@ -113,7 +128,6 @@ const QNAList = () => {
                       <Button
                         variant={darkMode ? "outline-light" : "outline-dark"}
                         className="Notice-btn Notice-btn-dark"
-                        onClick={""}
                       >
                         검색
                       </Button>
@@ -137,7 +151,11 @@ const QNAList = () => {
               <tbody>
                 {qnaList.map((data, index) => (
                   <React.Fragment key={data.no}>
-                    <tr onClick={() => toggleAccordion(index)}>
+                    <tr
+                      onClick={() =>
+                        toggleAccordion(index, data.no, data.eventNo)
+                      }
+                    >
                       <td>{data.no}</td>
                       <td>{data.eventName}</td>
                       <td>{data.title}</td>
@@ -150,31 +168,46 @@ const QNAList = () => {
                           <div>
                             <strong>게시글 내용:</strong>
                             <p>{data.content}</p>
+
                             <strong>답변:</strong>
-                            <p>{data.reply || "등록된 답변이 없습니다."}</p>
+                            {isLoading ? (
+                              <div className="d-flex justify-content-center my-4">
+                                <Spinner animation="border" role="status">
+                                  <span className="visually-hidden">
+                                    Loading...
+                                  </span>
+                                </Spinner>
+                              </div>
+                            ) : (
+                              <p>
+                                {selectedReply || "등록된 답변이 없습니다."}
+                              </p>
+                            )}
                           </div>
-                          <div className="QNA-reply-input">
-                            <Form.Control
-                              as="textarea"
-                              rows={3}
-                              placeholder="답변을 입력하세요..."
-                              value={replyText}
-                              onChange={(e) => {
-                                setReplyText(e.target.value);
-                                setReplyTarget(data.no);
-                              }}
-                              className="QNA-reply-textarea"
-                            />
-                            <Button
-                              onClick={handleReplySubmit}
-                              variant={
-                                darkMode ? "outline-light" : "outline-dark"
-                              }
-                              className="QNA-reply-submit"
-                            >
-                              답변 등록
-                            </Button>
-                          </div>
+                          {isAuthenticated && (
+                            <div className="QNA-reply-input">
+                              <Form.Control
+                                as="textarea"
+                                rows={3}
+                                placeholder="답변을 입력하세요..."
+                                value={replyText}
+                                onChange={(e) => {
+                                  setReplyText(e.target.value);
+                                  setReplyTarget(data.no);
+                                }}
+                                className="QNA-reply-textarea"
+                              />
+                              <Button
+                                onClick={handleReplySubmit}
+                                variant={
+                                  darkMode ? "outline-light" : "outline-dark"
+                                }
+                                className="QNA-reply-submit"
+                              >
+                                답변 등록
+                              </Button>
+                            </div>
+                          )}
                         </td>
                       </tr>
                     )}
