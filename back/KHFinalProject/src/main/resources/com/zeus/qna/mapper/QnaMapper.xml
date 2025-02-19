@@ -17,6 +17,21 @@
         INSERT INTO qna (no ,title, content, user_account_no, sub_date,event_no)
         VALUES (seq_qna_no.nextval,#{title}, #{content}, #{userAccountNo}, sysdate, #{eventNo})
     </insert>
+    
+    <insert id="insertReplyQna" parameterType="Qna">
+    INSERT INTO qna (no, title, content, user_account_no, sub_date, event_no, qna_no)
+    VALUES (
+        #{originalNo}, 
+        '답변: ' || (SELECT title FROM qna WHERE no = #{originalNo}),
+        #{content}, 
+        #{userAccountNo}, 
+        sysdate, 
+        #{eventNo}, 
+        (SELECT NVL(MAX(qna_no), 0) + 1 FROM qna WHERE no = #{originalNo})
+    )
+</insert>
+
+    
 
     <update id="updateQna">
         UPDATE qna SET title=#{title}, content=#{content} WHERE no=#{no}

@@ -11,7 +11,16 @@ const QNAList = () => {
   const [qnaList, setQnaList] = useState([]);
   const [openIndex, setOpenIndex] = useState(null);
   const [replyText, setReplyText] = useState("");
+  const [replyTarget, setReplyTarget] = useState(null);
+  const [isSearchMode, setIsSearchMode] = useState(false); // 검색 모드 여부
+  const [searchTerm, setSearchTerm] = useState(""); // 검색어
+  const [totalPages, setTotalPages] = useState(1); // 총 페이지 수
+  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
 
+  // 📌 검색 입력 핸들러
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
   useEffect(() => {
     setDarkMode(sessionStorage.getItem("darkMode") === "true");
     fetch("http://localhost:8080/qna/list")
@@ -19,8 +28,54 @@ const QNAList = () => {
       .then((data) => setQnaList(data));
   }, [setDarkMode]);
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    if (!isSearchMode) {
+      // loadNotices(page);
+    }
+  };
+
   const toggleAccordion = (index) => {
     setOpenIndex(openIndex === index ? null : index);
+  };
+
+  const handleReplySubmit = () => {
+    if (!replyText.trim() || replyTarget === null) {
+      alert("답변을 입력하세요.");
+      return;
+    }
+
+    const requestData = {
+      originalNo: replyTarget,
+      replyContent: replyText,
+    };
+
+    console.log("전송할 데이터:", requestData);
+
+    fetch("http://localhost:8080/qna/reply", {
+      method: "POST",
+      credentials: "include", // 쿠키 포함 필수
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestData),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("서버 응답:", data);
+        if (data.authenticated) {
+          setReplyText("");
+          setReplyTarget(null);
+          alert("답변이 등록되었습니다.");
+          window.location.reload();
+        } else {
+          alert("답변 등록 실패: " + data.message);
+        }
+      })
+      .catch((error) => {
+        console.error("오류 발생:", error);
+        alert("서버 오류 발생");
+      });
   };
 
   return (
@@ -31,34 +86,68 @@ const QNAList = () => {
           <h3 className={`QNA-title ${getDarkMode()}`}>Q&A</h3>
         </div>
         <Container>
+          {/* 검색창 */}
+          <div className="Notice-header">
+            <div className="Notice-board-search">
+              <div className="Notice-search-window">
+                <form action="">
+                  <div className="Notice-search-wrap">
+                    <label htmlFor="search" className="Notice-blind"></label>
+                    <input
+                      id="search"
+                      type="search"
+                      placeholder="검색어를 입력해주세요."
+                      className="Notice-search-input"
+                      value={searchTerm}
+                      onChange={handleSearchChange} // 검색어 변경 시 업데이트
+                    />
+                    {isSearchMode ? (
+                      <Button
+                        variant={darkMode ? "outline-light" : "outline-dark"}
+                        className="Notice-btn Notice-btn-dark"
+                        onClick={""}
+                      >
+                        검색 취소
+                      </Button>
+                    ) : (
+                      <Button
+                        variant={darkMode ? "outline-light" : "outline-dark"}
+                        className="Notice-btn Notice-btn-dark"
+                        onClick={""}
+                      >
+                        검색
+                      </Button>
+                    )}
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
           <div className="QNA-board-list">
             <table className="QNA-board-table">
               <thead>
                 <tr>
-                  <th className="QNA-th-num">번호</th>
-                  <th className="QNA-th-festival">축제</th>
-                  <th className="QNA-th-title">제목</th>
-                  <th className="QNA-th-author">작성자</th>
-                  <th className="QNA-th-date">등록일</th>
+                  <th>번호</th>
+                  <th>축제</th>
+                  <th>제목</th>
+                  <th>작성자</th>
+                  <th>등록일</th>
                 </tr>
               </thead>
               <tbody>
                 {qnaList.map((data, index) => (
                   <React.Fragment key={data.no}>
-                    <tr
-                      onClick={() => toggleAccordion(index)}
-                      className="QNA-accordion-toggle"
-                    >
-                      <td className="QNA-td-num">{data.no}</td>
-                      <td className="QNA-td-festival">{data.eventName}</td>
-                      <td className="QNA-td-title">{data.title}</td>
-                      <td className="QNA-td-author">{data.userName}</td>
-                      <td className="QNA-td-date">{data.subDate}</td>
+                    <tr onClick={() => toggleAccordion(index)}>
+                      <td>{data.no}</td>
+                      <td>{data.eventName}</td>
+                      <td>{data.title}</td>
+                      <td>{data.userName}</td>
+                      <td>{data.subDate}</td>
                     </tr>
                     {openIndex === index && (
                       <tr>
-                        <td colSpan="5" className="QNA-reply">
-                          <div className="QNA-reply-content">
+                        <td colSpan="5">
+                          <div>
                             <strong>게시글 내용:</strong>
                             <p>{data.content}</p>
                             <strong>답변:</strong>
@@ -69,11 +158,15 @@ const QNAList = () => {
                               as="textarea"
                               rows={3}
                               placeholder="답변을 입력하세요..."
-                              className="QNA-reply-textarea"
                               value={replyText}
-                              onChange={(e) => setReplyText(e.target.value)}
+                              onChange={(e) => {
+                                setReplyText(e.target.value);
+                                setReplyTarget(data.no);
+                              }}
+                              className="QNA-reply-textarea"
                             />
                             <Button
+                              onClick={handleReplySubmit}
                               variant={
                                 darkMode ? "outline-light" : "outline-dark"
                               }
@@ -102,6 +195,28 @@ const QNAList = () => {
           </Button>
         </Link>
       </div>
+      {/* 페이지네이션 (검색 모드가 아닐 때만 표시) */}
+      {!isSearchMode && totalPages > 1 && (
+        <Pagination className={`justify-content-center mt-4 ${getDarkMode()}`}>
+          <Pagination.Prev
+            disabled={currentPage === 1}
+            onClick={() => handlePageChange(currentPage - 1)}
+          />
+          {Array.from({ length: totalPages }, (_, index) => (
+            <Pagination.Item
+              key={index + 1}
+              active={index + 1 === currentPage}
+              onClick={() => handlePageChange(index + 1)}
+            >
+              {index + 1}
+            </Pagination.Item>
+          ))}
+          <Pagination.Next
+            disabled={currentPage === totalPages}
+            onClick={() => handlePageChange(currentPage + 1)}
+          />
+        </Pagination>
+      )}
       <Footer className="QNA-footer" />
     </>
   );

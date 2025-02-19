@@ -12,4 +12,6 @@ public class Qna {
     private String content;
     private LocalDateTime subDate;
     private int qnaNo;
+    private int originalNo;
+
 }
