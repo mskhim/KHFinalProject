@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class AdminReviewDTO {
 
-    private int no;
+    private Long no;
     private String content;
     private LocalDate subDate;
     private int eventNo;

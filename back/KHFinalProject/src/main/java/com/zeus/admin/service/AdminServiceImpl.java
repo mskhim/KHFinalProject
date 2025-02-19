@@ -11,6 +11,7 @@ import com.zeus.admin.mapper.AdminMapper;
 import com.zeus.notice.domain.Notice;
 import com.zeus.user.domain.User;
 import com.zeus.admin.domain.AdminEventDTO;
+import com.zeus.admin.domain.AdminPublicDataEvent;
 import com.zeus.admin.domain.AdminReviewDTO;
 import com.zeus.admin.domain.AdminQnaDTO;
 import com.zeus.admin.domain.AdminReservedDTO;
@@ -153,5 +154,10 @@ public class AdminServiceImpl implements AdminService {
 		Map<String, Integer> params = new HashMap<>();
 		params.put("authNo", authNo);
 		mapper.deleteFestivalAuth(params);
+	}
+
+	@Override
+	public List<AdminPublicDataEvent> publicDataEventSellectAll() throws Exception {
+		return mapper.publicDataEventSellectAll();
 	}
 }

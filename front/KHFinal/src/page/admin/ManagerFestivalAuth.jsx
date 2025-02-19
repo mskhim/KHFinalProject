@@ -5,7 +5,7 @@ import {
   managerFestivalAuthSellectAll,
   addFestivalAuth,
   deleteFestivalAuth,
-  festivalSelectAllBySearch,
+  publicDataEventSellectAll,
 } from "./adminApi"; // API 함수 임포트
 
 const ManagerFestivalAuth = ({ manager }) => {
@@ -27,20 +27,30 @@ const ManagerFestivalAuth = ({ manager }) => {
   useEffect(() => {
     // 축제 리스트 가져오기
     const fetchFestivalList = async () => {
-      const data = await festivalSelectAllBySearch(searchTerm);
+      const data = await publicDataEventSellectAll();
       if (data !== null) {
-        setFestivalList(data);
+        // authList에 없는 축제만 필터링
+        const filteredFestivals = data.filter(
+          (festival) =>
+            !authList.some((auth) => auth.publicDataEventNo === festival.no)
+        );
+        setFestivalList(filteredFestivals);
       }
     };
 
     fetchFestivalList();
-  }, [searchTerm]);
+  }, [authList]);
+
+  const filteredFestivalList = festivalList.filter((festival) =>
+    festival.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   // 축제 권한 추가 핸들러
   const handleAddAuth = async () => {
     await addFestivalAuth(manager.no, selectedFestival);
     const updatedAuthList = await managerFestivalAuthSellectAll(manager.no);
     setAuthList(updatedAuthList);
+    setSelectedFestival(""); // 축제 선택 초기화
   };
 
   // 축제 권한 삭제 핸들러
@@ -59,22 +69,29 @@ const ManagerFestivalAuth = ({ manager }) => {
       <Form.Group className="mb-3">
         <Container className="d-flex p-0 m-0">
           <Form.Control
+            type="text"
+            placeholder="축제 검색"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="me-2"
+          />
+          <Form.Control
             as="select"
             value={selectedFestival}
             onChange={(e) => setSelectedFestival(e.target.value)}
-            className="me-3"
+            className="me-2"
           >
             <option value="">축제 선택</option>
-            {festivalList.map((festival) => (
+            {filteredFestivalList.map((festival) => (
               <option key={festival.no} value={festival.no}>
-                {festival.eventName}
+                {festival.name}
               </option>
             ))}
           </Form.Control>
           <Button
             variant="primary"
             onClick={handleAddAuth}
-            style={{ width: "120px" }}
+            style={{ width: "200px" }}
           >
             권한 추가
           </Button>
@@ -91,7 +108,7 @@ const ManagerFestivalAuth = ({ manager }) => {
             </th>
             <th
               className="text-center align-content-center"
-              style={{ width: "265px" }}
+              style={{ width: "275px" }}
             >
               축제 이름
             </th>
@@ -109,7 +126,7 @@ const ManagerFestivalAuth = ({ manager }) => {
               </td>
               <td
                 className="text-center align-content-center"
-                style={{ width: "265px" }}
+                style={{ width: "275px" }}
               >
                 {auth.eventName}
               </td>

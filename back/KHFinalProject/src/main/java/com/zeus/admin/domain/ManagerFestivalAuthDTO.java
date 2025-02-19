@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class ManagerFestivalAuthDTO {
-	private int no;
+	private Long no;
 	private int publicDataEventNo;
 	private int userAccountNo;
 	private LocalDate regDate;

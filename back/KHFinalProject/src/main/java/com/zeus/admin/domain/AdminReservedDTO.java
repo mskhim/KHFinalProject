@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class AdminReservedDTO {
-  private int no;
+  private Long no;
   private String id;
   private String eventName;
   private String userId;

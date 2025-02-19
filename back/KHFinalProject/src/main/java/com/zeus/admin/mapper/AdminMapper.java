@@ -10,6 +10,7 @@ import com.zeus.admin.domain.AdminReviewDTO;
 import com.zeus.admin.domain.ManagerFestivalAuthDTO;
 import com.zeus.admin.domain.AdminQnaDTO;
 import com.zeus.admin.domain.AdminReservedDTO;
+import com.zeus.admin.domain.AdminPublicDataEvent;
 
 public interface AdminMapper {
 
@@ -97,4 +98,7 @@ public interface AdminMapper {
 	
 	// 취소된 예매내역 전체 및 검색 전체조회
 	public List<AdminReservedDTO> canceledSelectAllBySearch(AdminReservedDTO canceled) throws Exception;
+
+	// 공공데이터 이벤트 전체 조회
+	public List<AdminPublicDataEvent> publicDataEventSellectAll() throws Exception;
 }
