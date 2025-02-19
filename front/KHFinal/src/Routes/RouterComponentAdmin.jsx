@@ -1,8 +1,8 @@
-import { Routes, Route, useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import Header from '../page/admin/include/Header';
-import Aside from '../page/admin/include/Aside';
-import '../page/admin/include/css/RouterComponentAdmin.css';
+import { Routes, Route, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import Header from "../page/admin/include/Header";
+import Aside from "../page/admin/include/Aside";
+import "../page/admin/include/css/RouterComponentAdmin.css";
 import {
   AdminMain,
   ManagerManage,
@@ -12,51 +12,51 @@ import {
   QnAManage,
   NoticeManage,
   BannerManage,
-  PaymentHistoryManage,
-  CancellationHistoryManage,
-} from '../page/admin';
-import { ProtectedRoute, Unauthorized } from '../components';
+  ReservedManage,
+  CanceledManage,
+} from "../page/admin";
+import { ProtectedRoute, Unauthorized } from "../components";
 
-import { AdminLayout, ManagerLayout, UserLayout } from '../page/layout';
+import { AdminLayout, ManagerLayout, UserLayout } from "../page/layout";
 
-import NotFound from '../page/common/NotFound';
-import { Container } from 'react-bootstrap';
+import NotFound from "../page/common/NotFound";
+import { Container } from "react-bootstrap";
 
 const RouterComponentAdmin = () => {
   const location = useLocation();
-  const [sectionName, setSectionName] = useState('');
+  const [sectionName, setSectionName] = useState("");
 
   useEffect(() => {
-    switch (location.pathname.split('/')[2]) {
-      case 'adminmain':
-        setSectionName('관리자 메인');
+    switch (location.pathname.split("/")[2]) {
+      case "adminmain":
+        setSectionName("관리자 메인");
         break;
-      case 'managermanage':
-        setSectionName('매니저 관리');
+      case "managermanage":
+        setSectionName("매니저 관리");
         break;
-      case 'usermanage':
-        setSectionName('유저 관리');
+      case "usermanage":
+        setSectionName("유저 관리");
         break;
-      case 'festivalmanage':
-        setSectionName('축제 관리');
+      case "festivalmanage":
+        setSectionName("축제 관리");
         break;
-      case 'reviewmanage':
-        setSectionName('리뷰 관리');
+      case "reviewmanage":
+        setSectionName("리뷰 관리");
         break;
-      case 'qnamanage':
-        setSectionName('Q&A 관리');
+      case "qnamanage":
+        setSectionName("Q&A 관리");
         break;
-      case 'noticemanage':
-        setSectionName('공지사항 관리');
+      case "noticemanage":
+        setSectionName("공지사항 관리");
         break;
-      case 'bannermanage':
-        setSectionName('배너 관리');
+      case "bannermanage":
+        setSectionName("배너 관리");
         break;
-      case 'paymenthistorymanage':
-        setSectionName('예매내역 관리');
+      case "reservedmanage":
+        setSectionName("예매내역 관리");
         break;
-      case 'cancellationhistorymanage':
-        setSectionName('취소내역 관리');
+      case "canceledmanage":
+        setSectionName("취소내역 관리");
         break;
     }
   }, [location.pathname]);
@@ -85,14 +85,8 @@ const RouterComponentAdmin = () => {
               <Route path="qnamanage" element={<QnAManage />} />
               <Route path="noticemanage" element={<NoticeManage />} />
               <Route path="bannermanage" element={<BannerManage />} />
-              <Route
-                path="paymenthistorymanage"
-                element={<PaymentHistoryManage />}
-              />
-              <Route
-                path="cancellationhistorymanage"
-                element={<CancellationHistoryManage />}
-              />
+              <Route path="reservedmanage" element={<ReservedManage />} />
+              <Route path="canceledmanage" element={<CanceledManage />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>

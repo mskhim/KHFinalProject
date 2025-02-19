@@ -42,10 +42,10 @@ const Aside = () => {
         <Nav.Link as={NavLink} to="/admin/bannermanage">
           배너 관리
         </Nav.Link>
-        <Nav.Link as={NavLink} to="/admin/paymenthistorymanage">
+        <Nav.Link as={NavLink} to="/admin/reservedmanage">
           예매내역 관리
         </Nav.Link>
-        <Nav.Link as={NavLink} to="/admin/cancellationhistorymanage">
+        <Nav.Link as={NavLink} to="/admin/canceledmanage">
           취소내역 관리
         </Nav.Link>
       </Nav>

@@ -7,6 +7,7 @@ import com.zeus.admin.domain.AdminEventDTO;
 import com.zeus.admin.domain.AdminReviewDTO;
 import com.zeus.notice.domain.Notice;
 import com.zeus.admin.domain.AdminQnaDTO;
+import com.zeus.admin.domain.AdminReservedDTO;
 
 public interface AdminService {
 	
@@ -43,5 +44,9 @@ public interface AdminService {
 	public void noticeUpdate(Notice notice) throws Exception;
 	
 	public void noticeDelete(List<Integer> ids) throws Exception;
+
+	public List<AdminReservedDTO> reservedSelectAllBySearch(String eventName) throws Exception;
+
+	public List<AdminReservedDTO> canceledSelectAllBySearch(String eventName) throws Exception;
 }
 
