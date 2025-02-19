@@ -91,6 +91,8 @@ export const Provider = ({ children }) => {
       logout,
       loginTime,
       setLoginTime,
+      userRole,
+      setUserRole,
     }),
     [darkMode, isAuthenticated, userNickname, loginTime]
   );

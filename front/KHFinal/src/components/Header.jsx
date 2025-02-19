@@ -9,18 +9,14 @@ import {
   Badge,
 } from 'react-bootstrap';
 import { BsPersonCircle, BsChevronDown } from 'react-icons/bs';
-import { FaGithub, FaBell, FaMoon, FaSun, FaCartPlus } from 'react-icons/fa';
+import { FaGithub, FaMoon, FaSun, FaCartPlus } from 'react-icons/fa';
 import './Header.css';
-import {
-  getCartData,
-  handleLogout,
-  refreshAccessToken,
-} from '../page/user/userApi';
+import { getCartData } from '../page/user/userApi';
 import { Context } from '../Context';
 import ScrollToTopButton from './ui/ScrollToTopButton';
 import TokenRemain from './ui/TokenRemain';
 import ViVaFesta from '../assets/ViVaFesta.png';
-import { ButtonDarkMode, ButtonRole } from './ui';
+import { ButtonDarkMode } from './ui';
 const Header = ({ page }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -37,6 +33,7 @@ const Header = ({ page }) => {
     logout,
     tokenExpiration,
     getDarkMode,
+    userRole,
   } = useContext(Context);
 
   useEffect(() => {
@@ -178,13 +175,17 @@ const Header = ({ page }) => {
                     공지사항
                   </NavDropdown.Item>
                 </NavDropdown>
-                <Nav.Link
-                  as={NavLink}
-                  to="/manager/managerStats"
-                  className={`${darkMode ? 'text-light' : 'text-dark'}`}
-                >
-                  통계
-                </Nav.Link>
+                {userRole == '1' ? (
+                  <Nav.Link
+                    as={NavLink}
+                    to="/manager/managerStats"
+                    className={`${darkMode ? 'text-light' : 'text-dark'}`}
+                  >
+                    통계
+                  </Nav.Link>
+                ) : (
+                  ''
+                )}
               </Nav>
 
               <div className="d-flex align-items-center">
