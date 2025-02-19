@@ -114,8 +114,14 @@ const ManagerManage = () => {
       phone: phone.current.value,
       regDate: date,
     };
-    if (name.current.value === null) {
-      return alert("입력값을 확인해주세요");
+    if (
+      !name.current.value ||
+      !id.current.value ||
+      !pwd.current.value ||
+      !phone.current.value
+    ) {
+      alert("모든 필드를 입력해야 합니다.");
+      return;
     }
     await managerInsert(newManager);
     getList("");
