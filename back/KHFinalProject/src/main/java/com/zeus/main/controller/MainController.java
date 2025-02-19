@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.zeus.main.domain.Banner;
 import com.zeus.main.domain.Main;
 import com.zeus.main.service.MainService;
 
@@ -36,5 +37,11 @@ public class MainController {
     public List<Main> comeEndDate() {
         return service.getComeEndDate();
     }
+    
+    @GetMapping("/bannerImage")
+    public List<Banner> bannerImage() {
+        return service.bannerImage();
+    }
+    
 
 }

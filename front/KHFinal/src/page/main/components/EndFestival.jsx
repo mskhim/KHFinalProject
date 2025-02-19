@@ -47,7 +47,7 @@ export default function EndFestival() {
   };
   return (
     <>
-      <h3>&ensp;EndingSoon</h3>
+      <h3>&ensp;곧종료</h3>
       <div className="carousel-container .EndFestival-container">
         <AliceCarousel
           mouseTracking

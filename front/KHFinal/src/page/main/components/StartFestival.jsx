@@ -48,7 +48,7 @@ function StartFestival() {
 
   return (
     <>
-      <h3>&ensp;StartingSoon</h3>
+      <h3>&ensp;곧시작</h3>
       <div className="carousel-container StartFestival-container">
         <AliceCarousel
           mouseTracking
