@@ -28,7 +28,7 @@ const UserLoginSuccess = () => {
         const response = await handleLogin(userId, provider); // ✅ JWT는 쿠키에 자동 저장됨
         const flag = response.success;
         if (flag) {
-          login(response.nickname); // ✅ 로그인 상태로 변경
+          login(response.nickname, response.role); // ✅ 로그인 상태로 변경
           // ✅ 로그인 성공 후, 이전 페이지로 이동
           const preLoginUrl = sessionStorage.getItem('preLoginUrl') || '/';
           navigate(preLoginUrl);

@@ -33,13 +33,17 @@ export const Provider = ({ children }) => {
       ? Number(sessionStorage.getItem('loginTime'))
       : null;
   });
-
+  const [userRole, setUserRole] = useState(
+    sessionStorage.getItem('userRole') || ''
+  );
   // ✅ 로그인 함수
-  const login = (nickname) => {
+  const login = (nickname, role) => {
     const currentTime = Math.floor(Date.now() / 1000);
     setIsAuthenticated(true);
     setUserNickname(nickname);
     setLoginTime(currentTime);
+    setUserRole(role);
+    sessionStorage.setItem('userRole', role);
     sessionStorage.setItem('isAuthenticated', 'true');
     sessionStorage.setItem('userNickname', nickname);
     sessionStorage.setItem('loginTime', currentTime.toString());
@@ -51,6 +55,8 @@ export const Provider = ({ children }) => {
     setIsAuthenticated(false);
     setUserNickname('');
     setLoginTime(null);
+    setUserRole('');
+    sessionStorage.removeItem('userRole');
     sessionStorage.removeItem('isAuthenticated');
     sessionStorage.removeItem('userNickname');
     sessionStorage.removeItem('loginTime');

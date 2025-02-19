@@ -236,11 +236,7 @@ const Header = ({ page }) => {
                         className={`${getDarkMode} ms-3 Header-cart-icon`}
                         onClick={() => navigate('/user/userCart')}
                       />
-                      <ButtonRole
-                        text="통계확인"
-                        role="manager"
-                        onClick={navigate(`/manager/managerStats`)}
-                      />
+
                       {cart > 0 && (
                         <Badge
                           pill

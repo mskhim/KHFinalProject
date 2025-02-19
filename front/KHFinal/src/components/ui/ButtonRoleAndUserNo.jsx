@@ -6,6 +6,7 @@ import { authCheckRoleAndUserNo } from './uiApi';
 
 const ButtonRoleAndUserNo = ({ text, userNo, role, onClick }) => {
   const [visible, setVisible] = useState(false);
+
   const { getDarkModeHover } = useContext(Context); // 다크 모드 상태 가져오기
 
   useEffect(() => {
@@ -22,7 +23,6 @@ const ButtonRoleAndUserNo = ({ text, userNo, role, onClick }) => {
         setVisible(false);
       }
     };
-
     getJwtRole();
   }, [role, userNo]);
 
