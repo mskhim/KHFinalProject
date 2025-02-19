@@ -3,11 +3,11 @@ package com.zeus.admin.mapper;
 import java.util.List;
 import java.util.Map;
 
-import com.zeus.event.domain.Event;
 import com.zeus.notice.domain.Notice;
 import com.zeus.user.domain.User;
 import com.zeus.admin.domain.AdminEventDTO;
 import com.zeus.admin.domain.AdminReviewDTO;
+import com.zeus.admin.domain.ManagerFestivalAuthDTO;
 import com.zeus.admin.domain.AdminQnaDTO;
 import com.zeus.admin.domain.AdminReservedDTO;
 
@@ -44,6 +44,17 @@ public interface AdminMapper {
 
 	// 축제 삭제
 	public void festivalDelete(List<Integer> ids) throws Exception;
+
+// 축제 권한 관리
+
+	// 해당매니저 등록된 축제 권한 전체 조회
+	public List<ManagerFestivalAuthDTO> managerFestivalAuthSellectAll(int managerNo) throws Exception;
+
+	// 해당매니저 신규 축제 권한 추가
+	public void addFestivalAuth(Map<String, Integer> params) throws Exception;
+
+	// 해당매니저 등록된 축제 권한 삭제
+	public void deleteFestivalAuth(Map<String, Integer> params) throws Exception;
 
 // 리뷰 관리 페이지
 	
@@ -83,6 +94,7 @@ public interface AdminMapper {
 	public List<AdminReservedDTO> reservedSelectAllBySearch(AdminReservedDTO reserved) throws Exception;
 
 //	예매취소내역 관리 페이지
+	
 	// 취소된 예매내역 전체 및 검색 전체조회
 	public List<AdminReservedDTO> canceledSelectAllBySearch(AdminReservedDTO canceled) throws Exception;
 }
