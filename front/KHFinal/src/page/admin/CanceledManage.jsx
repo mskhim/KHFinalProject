@@ -1,39 +1,23 @@
-import React, { useState } from "react";
-import { Container, Table, Form, Button } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Container, Table, Form } from "react-bootstrap";
 import "./include/css/Common.css";
 import { BsSortDown, BsSortUp } from "react-icons/bs";
+import { canceledSelectAllBySearch } from "./adminApi"; // Import the function
 
-const CancellationHistoryManage = () => {
+const CanceledManage = () => {
   // 객체 배열 변수
-  const [items, setItems] = useState([
-    {
-      no: 1,
-      id: "예매번호1",
-      event_name: "2025 해돋이 행사",
-      member_id: "hgd",
-      qt: 1,
-      purchased_date: "2025-01-01",
-      total_cost: 1000,
-    },
-    {
-      no: 2,
-      id: "예매번호2",
-      event_name: "천을산 해맞이",
-      member_id: "kdj",
-      qt: 2,
-      purchased_date: "2025-01-01",
-      total_cost: 2000,
-    },
-    {
-      no: 3,
-      id: "예매번호2",
-      event_name: "해맞이축제",
-      member_id: "itw",
-      qt: 3,
-      purchased_date: "2025-01-01",
-      total_cost: 3000,
-    },
-  ]);
+  const [items, setItems] = useState([]);
+
+  const getList = async (eventName) => {
+    const data = await canceledSelectAllBySearch(eventName);
+    if (data !== null) {
+      setItems(data);
+    }
+  };
+
+  useEffect(() => {
+    getList("");
+  }, []);
 
   // 정렬할 컬럼 이름
   const [thName, setthName] = useState("");
@@ -65,11 +49,12 @@ const CancellationHistoryManage = () => {
   // 검색 함수
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
+    getList(e.target.value);
   };
 
   // 검색어에 따라 필터링된 아이템
   const filteredItems = items.filter((item) =>
-    item.event_name.toLowerCase().includes(searchTerm.toLowerCase())
+    item.eventName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -107,20 +92,20 @@ const CancellationHistoryManage = () => {
             </th>
             <th
               className="text-bg-primary text-center"
-              onClick={() => handleSort("event_name")}
+              onClick={() => handleSort("eventName")}
               style={{ width: "230px" }}
             >
               축제명
-              {thName === "event_name" &&
+              {thName === "eventName" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
               className="text-bg-primary text-center"
-              onClick={() => handleSort("member_id")}
+              onClick={() => handleSort("userId")}
               style={{ width: "230px" }}
             >
               회원아이디
-              {thName === "member_id" &&
+              {thName === "userId" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
@@ -131,35 +116,35 @@ const CancellationHistoryManage = () => {
             </th>
             <th
               className="text-bg-primary text-center"
-              onClick={() => handleSort("purchased_date")}
+              onClick={() => handleSort("reservedDate")}
               style={{ width: "200px" }}
             >
               구매일
-              {thName === "purchased_date" &&
+              {thName === "reservedDate" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
               className="text-bg-primary text-center"
-              onClick={() => handleSort("total_cost")}
+              onClick={() => handleSort("totalCost")}
               style={{ width: "190px" }}
             >
               총액
-              {thName === "total_cost" &&
+              {thName === "totalCost" &&
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
           </tr>
         </thead>
         <tbody>
           {/* 데이터 행 */}
-          {filteredItems.map((data) => (
+          {filteredItems.map((data, index) => (
             <tr key={data.no}>
-              <td style={{ width: "90px" }}>{data.no}</td>
+              <td style={{ width: "90px" }}>{index + 1}</td>
               <td style={{ width: "230px" }}>{data.id}</td>
-              <td style={{ width: "230px" }}>{data.event_name}</td>
-              <td style={{ width: "230px" }}>{data.member_id}</td>
+              <td style={{ width: "230px" }}>{data.eventName}</td>
+              <td style={{ width: "230px" }}>{data.userId}</td>
               <td style={{ width: "120px" }}>{data.qt}</td>
-              <td style={{ width: "200px" }}>{data.purchased_date}</td>
-              <td style={{ width: "175px" }}>{data.total_cost}</td>
+              <td style={{ width: "200px" }}>{data.reservedDate}</td>
+              <td style={{ width: "175px" }}>{data.totalCost}</td>
             </tr>
           ))}
         </tbody>
@@ -168,4 +153,4 @@ const CancellationHistoryManage = () => {
   );
 };
 
-export default CancellationHistoryManage;
+export default CanceledManage;

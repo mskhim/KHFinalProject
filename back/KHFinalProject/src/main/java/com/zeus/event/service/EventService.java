@@ -44,5 +44,7 @@ public interface EventService {
 	boolean insertEventToCart(Cart cart);
 	//월별 리스트 출력을 위해서
 	List<EventSelectListDTO> selectEventListMonth(SortDTO sortDTO);
+	//카트에 항목 추가전 중복되는 항목이 있는지 확인 중복되는항목 있으면 false 반환해야함
+	boolean cartDuplCheck(Cart cart);
 
 }

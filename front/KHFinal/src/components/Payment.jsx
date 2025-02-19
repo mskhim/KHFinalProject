@@ -1,5 +1,5 @@
-import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { loadTossPayments } from '@tosspayments/payment-sdk';
 import { verifyPayment } from './paymentApi';
 
@@ -7,16 +7,32 @@ const Payment = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { selectedItems, totalAmount } = location.state || {};
-  const [paymentId, setPaymentId] = useState(null); // ✅ 결제번호 상태 추가
+  const [paymentId, setPaymentId] = useState('');
+
+  // 🔹 페이지 이탈 경고 이벤트 핸들러
+  const handleBeforeUnload = (event) => {
+    event.preventDefault();
+    event.returnValue = '결제가 완료되지 않았습니다. 페이지를 떠나시겠습니까?';
+  };
 
   useEffect(() => {
     if (!selectedItems || totalAmount === undefined) {
       alert('잘못된 접근입니다.');
-      navigate('/user/userCart'); // ✅ 데이터가 없으면 장바구니로 이동
+      navigate('/user/userCart');
     }
   }, [selectedItems, totalAmount, navigate]);
 
-  const initPayment = async (verifiedPaymentId) => {
+  useEffect(() => {
+    // 🔹 이벤트 추가 (사용자가 페이지 벗어날 때 경고)
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      // 🔹 이벤트 제거 (컴포넌트 언마운트 시)
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
+  const initPayment = async (orderId) => {
     try {
       const tossPayments = await loadTossPayments(
         import.meta.env.VITE_APP_PAYMENT_MEASUREMENT_ID
@@ -24,53 +40,41 @@ const Payment = () => {
 
       tossPayments.requestPayment('카드', {
         amount: totalAmount,
-        orderId: verifiedPaymentId, // ✅ 검증된 결제번호 사용
-        orderName: Array.isArray(selectedItems)
+        orderId: orderId, // ✅ orderId 직접 사용
+        orderName: selectedItems
           ? selectedItems
               .map((item) => `${item.name} - ${item.qt}개`)
               .join(', ')
           : '상품 정보 없음',
         customerName: '홍길동',
-        successUrl: `${window.location.origin}/payment-success`,
-        failUrl: `${window.location.origin}/payment-fail`,
+        successUrl: `http://localhost:5173/user/paymentSuccess?orderId=${orderId}`,
+        failUrl: `${window.location.origin}/user/paymentFail`,
       });
 
-      // ✅ 뒤로 가기 시 결제 취소
-      const handlePopState = () => {
-        alert('결제가 취소되었습니다.');
-        navigate('/user/userCart');
-      };
-
-      window.addEventListener('popstate', handlePopState);
-
-      // ✅ 페이지 이탈 시 경고 메시지
-      const handleBeforeUnload = (event) => {
-        event.preventDefault();
-        event.returnValue = '결제를 종료하시겠습니까?';
-      };
-
-      window.addEventListener('beforeunload', handleBeforeUnload);
-
-      return () => {
-        window.removeEventListener('popstate', handlePopState);
-        window.removeEventListener('beforeunload', handleBeforeUnload);
-      };
+      // ✅ 결제 성공 후 beforeunload 이벤트 제거 (경고창 방지)
+      window.removeEventListener('beforeunload', handleBeforeUnload);
     } catch (error) {
       console.error('결제 오류:', error);
     }
   };
 
   useEffect(() => {
-    console.log(selectedItems, totalAmount);
-    const processPayment = async () => {
-      if (selectedItems && totalAmount > 0) {
+    if (selectedItems && totalAmount > 0) {
+      const processPayment = async () => {
         try {
           const verifiedPaymentId = await verifyPayment(
             selectedItems,
             totalAmount
           );
+
           if (verifiedPaymentId) {
-            initPayment(verifiedPaymentId);
+            // ✅ orderId 구성: "data_결제ID_이벤트번호-수량_이벤트번호-수량"
+            const newOrderId = `data_${verifiedPaymentId}_${selectedItems
+              .map((item) => `${item.eventNo}-${item.qt}-${item.id}`)
+              .join('_')}`;
+
+            setPaymentId(newOrderId); // ✅ 최종 orderId 저장
+            await initPayment(newOrderId); // ✅ orderId를 initPayment에 전달
           } else {
             alert('결제 검증에 실패했습니다.');
             navigate('/user/userCart');
@@ -80,10 +84,10 @@ const Payment = () => {
           alert('결제 검증 중 문제가 발생했습니다.');
           navigate('/user/userCart');
         }
-      }
-    };
+      };
 
-    processPayment();
+      processPayment();
+    }
   }, [selectedItems, totalAmount, navigate]);
 
   return (

@@ -58,7 +58,7 @@ export default function Top4() {
                   color: 'white', // 글씨색을 흰색으로
                   padding: '5px 10px', // 텍스트 주위 여백
                   display: 'inline-block',
-                  height: '120px',
+                  height: '90px',
                 }}
               >
                 <Card.Title style={{ fontSize: '30px', height: '150px' }}>

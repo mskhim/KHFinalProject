@@ -22,6 +22,7 @@ import com.zeus.user.domain.User;
 import com.zeus.admin.domain.AdminEventDTO;
 import com.zeus.admin.domain.AdminQnaDTO;
 import com.zeus.admin.domain.AdminReviewDTO;
+import com.zeus.admin.domain.AdminReservedDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -194,5 +195,15 @@ public class AdminController {
 			log.error("Failed to delete notices", e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete notices");
 		}
+	}
+
+	@GetMapping("/reservedSelectAllBySearch")
+	public List<AdminReservedDTO> reservedSelectAllBySearch(@RequestParam(name = "eventName", defaultValue = "") String eventName) throws Exception {
+		return service.reservedSelectAllBySearch(eventName);
+	}
+
+	@GetMapping("/canceledSelectAllBySearch")
+	public List<AdminReservedDTO> canceledSelectAllBySearch(@RequestParam(name = "eventName", defaultValue = "") String eventName) throws Exception {
+		return service.canceledSelectAllBySearch(eventName);
 	}
 }

@@ -13,6 +13,7 @@ import ErrorBoundary from '../components/ErrorBoundary';
 import Payment from '../components/Payment';
 import PaymentSuccess from '../components/PaymentSuccess';
 import PaymentFail from '../components/PaymentFail';
+import OrderHistory from '../components/OrderHistory';
 
 const UserRoutes = () => {
   const location = useLocation(); // ✅ 현재 경로 가져오기
@@ -34,6 +35,7 @@ const UserRoutes = () => {
       <ErrorBoundary>
         <Routes>
           <Route path="/" element={<UserLayout />}>
+            <Route path="orderHistory" element={<OrderHistory />} />
             <Route path="userCart" element={<UserCart />} />
             <Route path="userMypage" element={<UserMypage />} />
             <Route path="userReservedList" element={<UserReservedList />} />

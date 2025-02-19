@@ -96,7 +96,13 @@ function UserCart() {
         ? prev.filter((selected) => selected.id !== item.no)
         : [
             ...prev,
-            { id: item.no, name: item.name, price: item.price, qt: item.qt },
+            {
+              id: item.no,
+              name: item.name,
+              price: item.price,
+              qt: item.qt,
+              eventNo: item.eventNo,
+            },
           ];
     });
   };
@@ -111,6 +117,7 @@ function UserCart() {
             name: item.name,
             price: item.price,
             qt: item.qt,
+            eventNo: item.eventNo,
           }));
 
     setSelectedItems(newSelected);
