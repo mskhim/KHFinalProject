@@ -26,6 +26,29 @@
 			#{id}
 		</foreach>
 	</delete>
+	
+	<select id="managerFestivalAuthSellectAll" resultType="ManagerFestivalAuthDTO" parameterType="int">
+		SELECT
+		UME.NO,
+		UME.PUBLIC_DATA_EVENT_NO,
+		UME.USER_ACCOUNT_NO,
+		UME.REG_DATE,
+		PDE.NAME AS EVENT_NAME
+		FROM USER_MANAGEMENT_EVENT UME
+		LEFT JOIN PUBLIC_DATA_EVENT PDE
+		ON UME.PUBLIC_DATA_EVENT_NO = PDE.NO
+		WHERE USER_ACCOUNT_NO = #{managerNo}
+		ORDER BY UME.NO
+	</select>
+
+	<insert id="addFestivalAuth" parameterType="map">
+		INSERT INTO USER_MANAGEMENT_EVENT (NO, PUBLIC_DATA_EVENT_NO, USER_ACCOUNT_NO, REG_DATE)
+		VALUES (SEQ_USER_MANAGEMENT_EVENT_NO.NEXTVAL, #{festivalNo}, #{managerNo}, SYSDATE)
+	</insert>
+
+	<delete id="deleteFestivalAuth" parameterType="map">
+		DELETE FROM USER_MANAGEMENT_EVENT WHERE NO = #{authNo}
+	</delete>
 
 	<!-- UserManage -->
 	<select id="userSelectAllBySearch" resultType="User" parameterType="User">
@@ -157,4 +180,46 @@
 			#{id}
 		</foreach>
 	</delete>
+	
+	<!-- BannerManage -->
+	
+	<!-- ReservedManage -->
+	<select id="reservedSelectAllBySearch" resultType="AdminReservedDTO" parameterType="AdminReservedDTO">
+		SELECT
+		R.NO,
+		R.ID,
+		UA.ID AS USER_ID,
+		R.QT,
+		R.RESERVED_DATE,
+		R.TOTAL_COST,
+		PDE.NAME AS EVENT_NAME
+		FROM RESERVED R
+		LEFT JOIN USER_ACCOUNT UA
+		ON R.USER_ACCOUNT_NO = UA.NO
+		LEFT JOIN EVENT E
+		ON R.EVENT_NO = E.NO
+		LEFT JOIN PUBLIC_DATA_EVENT PDE
+		ON E.PUBLIC_DATA_EVENT_NO = PDE.NO
+		WHERE PDE.NAME LIKE '%'||#{eventName}||'%' ORDER BY R.NO ASC
+	</select>
+	
+	<!-- CanceledManage -->
+	<select id="canceledSelectAllBySearch" resultType="AdminReservedDTO" parameterType="AdminReservedDTO">
+		SELECT
+		C.NO,
+		C.ID,
+		UA.ID AS USER_ID,
+		C.QT,
+		C.RESERVED_DATE,
+		C.TOTAL_COST,
+		PDE.NAME AS EVENT_NAME
+		FROM CANCELED C
+		LEFT JOIN USER_ACCOUNT UA
+		ON C.USER_ACCOUNT_NO = UA.NO
+		LEFT JOIN EVENT E
+		ON C.EVENT_NO = E.NO
+		LEFT JOIN PUBLIC_DATA_EVENT PDE
+		ON E.PUBLIC_DATA_EVENT_NO = PDE.NO
+		WHERE PDE.NAME LIKE '%'||#{eventName}||'%' ORDER BY C.NO ASC
+	</select>
 </mapper>

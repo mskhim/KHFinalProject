@@ -5,6 +5,6 @@ export { default as ReviewManage } from "./ReviewManage";
 export { default as QnAManage } from "./QnAManage";
 export { default as NoticeManage } from "./NoticeManage";
 export { default as BannerManage } from "./BannerManage";
-export { default as PaymentHistoryManage } from "./PaymentHistoryManage";
-export { default as CancellationHistoryManage } from "./CancellationHistoryManage";
+export { default as ReservedManage } from "./ReservedManage";
+export { default as CanceledManage } from "./CanceledManage";
 export { default as AdminMain } from "./AdminMain";

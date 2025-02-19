@@ -12,8 +12,8 @@ import {
   QnAManage,
   NoticeManage,
   BannerManage,
-  PaymentHistoryManage,
-  CancellationHistoryManage,
+  ReservedManage,
+  CanceledManage,
 } from '../page/admin';
 import { ProtectedRoute, Unauthorized } from '../components';
 
@@ -21,6 +21,9 @@ import { AdminLayout, ManagerLayout, UserLayout } from '../page/layout';
 
 import NotFound from '../page/common/NotFound';
 import { Container } from 'react-bootstrap';
+import { checkAuthStatus, refreshAccessToken } from '../page/user/userApi';
+import { useContext } from 'react';
+import { Context } from '../Context';
 
 const RouterComponentAdmin = () => {
   const location = useLocation();
@@ -52,15 +55,28 @@ const RouterComponentAdmin = () => {
       case 'bannermanage':
         setSectionName('배너 관리');
         break;
-      case 'paymenthistorymanage':
+      case 'reservedmanage':
         setSectionName('예매내역 관리');
         break;
-      case 'cancellationhistorymanage':
+      case 'canceledmanage':
         setSectionName('취소내역 관리');
         break;
     }
   }, [location.pathname]);
-
+  const { login, isAuthenticated } = useContext(Context);
+  useEffect(() => {
+    if (isAuthenticated) {
+      return;
+    }
+    const checkAuth = async () => {
+      const response = await checkAuthStatus();
+      if (response.authenticated) {
+        await refreshAccessToken();
+        login(response.user.nickname, response.user.role);
+      }
+    };
+    checkAuth();
+  }, [login]);
   return (
     <Container fluid className="admin-app-container m-0 p-0">
       <Aside />
@@ -85,14 +101,8 @@ const RouterComponentAdmin = () => {
               <Route path="qnamanage" element={<QnAManage />} />
               <Route path="noticemanage" element={<NoticeManage />} />
               <Route path="bannermanage" element={<BannerManage />} />
-              <Route
-                path="paymenthistorymanage"
-                element={<PaymentHistoryManage />}
-              />
-              <Route
-                path="cancellationhistorymanage"
-                element={<CancellationHistoryManage />}
-              />
+              <Route path="reservedmanage" element={<ReservedManage />} />
+              <Route path="canceledmanage" element={<CanceledManage />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>

@@ -1,6 +1,8 @@
 package com.zeus.admin.service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,8 @@ import com.zeus.user.domain.User;
 import com.zeus.admin.domain.AdminEventDTO;
 import com.zeus.admin.domain.AdminReviewDTO;
 import com.zeus.admin.domain.AdminQnaDTO;
+import com.zeus.admin.domain.AdminReservedDTO;
+import com.zeus.admin.domain.ManagerFestivalAuthDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -115,5 +119,39 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public void noticeDelete(List<Integer> ids) throws Exception {
 		mapper.noticeDelete(ids);
+	}
+
+	@Override
+	public List<AdminReservedDTO> reservedSelectAllBySearch(String eventName) throws Exception {
+		AdminReservedDTO reserved = new AdminReservedDTO();
+		reserved.setEventName(eventName);
+		return mapper.reservedSelectAllBySearch(reserved);
+	}
+
+	@Override
+	public List<AdminReservedDTO> canceledSelectAllBySearch(String eventName) throws Exception {
+		AdminReservedDTO canceled = new AdminReservedDTO();
+		canceled.setEventName(eventName);
+		return mapper.canceledSelectAllBySearch(canceled);
+	}
+
+	@Override
+	public List<ManagerFestivalAuthDTO> managerFestivalAuthSellectAll(int managerNo) throws Exception {
+		return mapper.managerFestivalAuthSellectAll(managerNo);
+	}
+
+	@Override
+	public void addFestivalAuth(int managerNo, int festivalNo) throws Exception {
+		Map<String, Integer> params = new HashMap<>();
+		params.put("managerNo", managerNo);
+		params.put("festivalNo", festivalNo);
+		mapper.addFestivalAuth(params);
+	}
+
+	@Override
+	public void deleteFestivalAuth(int authNo) throws Exception {
+		Map<String, Integer> params = new HashMap<>();
+		params.put("authNo", authNo);
+		mapper.deleteFestivalAuth(params);
 	}
 }

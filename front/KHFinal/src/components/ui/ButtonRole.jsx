@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Context } from '../../Context'; // 다크 모드 Context 가져오기
 import { Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import { authCheckRole } from './uiApi';
 
 const ButtonRole = ({ text, role, onClick }) => {
   const [tokenRole, setTokenRole] = useState(null); // ✅ 토큰에서 role 값 가져오도록 변경
@@ -11,8 +10,8 @@ const ButtonRole = ({ text, role, onClick }) => {
 
   // ✅ 토큰에서 role 값 가져오는 함수 (예제)
   const fetchTokenRole = () => {
-    const storedTokenRole = localStorage.getItem('tokenRole'); // ✅ 실제 토큰에서 가져오도록 수정 가능
-    return storedTokenRole || 'guest'; // 기본값 설정
+    const storedTokenRole = sessionStorage.getItem('userRole'); // ✅ 실제 토큰에서 가져오도록 수정 가능
+    return storedTokenRole || 'gues'; // 기본값 설정
   };
 
   useEffect(() => {
@@ -21,21 +20,17 @@ const ButtonRole = ({ text, role, onClick }) => {
       console.warn('⚠️ role 값이 없습니다. 요청을 생략합니다.');
       return;
     }
-
     // ✅ 토큰에서 role 값을 가져옴
     setTokenRole(fetchTokenRole());
-
-    const getJwtRole = async () => {
-      try {
-        const response = await authCheckRole(role);
-        setVisible(response === true); // ✅ response가 true일 때만 버튼 보이도록 설정
-      } catch (error) {
-        console.error('❌ 권한 체크 중 오류 발생:', error);
-        setVisible(false);
-      }
-    };
-
-    getJwtRole();
+    if (role === 'admin' && tokenRole == 0) {
+      setVisible(true);
+    }
+    if (role === 'manager' && tokenRole == 1) {
+      setVisible(true);
+    }
+    if (role === 'common' && tokenRole == 2) {
+      setVisible(true);
+    }
   }, [role, tokenRole]);
 
   return (

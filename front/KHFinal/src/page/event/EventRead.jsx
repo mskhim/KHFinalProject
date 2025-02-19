@@ -18,6 +18,7 @@ import { ButtonDarkMode, ButtonRoleAndUserNo } from '../../components/ui';
 import { deleteEvent, insertEventToCart, selectEventRead } from './eventApi';
 import CartModalPage from './include/CartModalPage';
 import { getStorage, ref, deleteObject } from 'firebase/storage';
+import { deleteImageFromFirebase } from '../../utils/firebaseUtils';
 
 const EventRead = () => {
   const param = useParams();
@@ -63,28 +64,11 @@ const EventRead = () => {
 
   const handleDelete = async () => {
     try {
-      const storage = getStorage(); // ✅ Firebase Storage 초기화
-
-      const deleteImageFromStorage = async (imageUrl) => {
-        if (!imageUrl) return;
-
-        try {
-          const imagePath = extractPathFromUrl(imageUrl); // ✅ 올바른 경로 추출
-          if (!imagePath) return;
-
-          const imageRef = ref(storage, imagePath);
-          await deleteObject(imageRef);
-          console.log(`✅ Firebase Storage에서 삭제됨: ${imagePath}`);
-        } catch (error) {
-          console.error(`❌ 이미지 삭제 실패: ${imageUrl}`, error);
-        }
-      };
-
       // ✅ 메인 이미지 삭제
-      await deleteImageFromStorage(mainImage);
+      await deleteImageFromFirebase(mainImage);
 
       // ✅ 서브 이미지 삭제 (배열로 처리)
-      await Promise.all(subImages.map((img) => deleteImageFromStorage(img)));
+      await Promise.all(subImages.map((img) => deleteImageFromFirebase(img)));
 
       // ✅ 데이터베이스에서 이벤트 삭제
       const response = await deleteEvent(eventInfo.userAccountNo, eventInfo.no);
@@ -95,13 +79,6 @@ const EventRead = () => {
     } catch (error) {
       console.error('❌ 이벤트 삭제 중 오류 발생', error);
     }
-  };
-
-  // ✅ Firebase Storage 이미지 경로 추출 함수
-  const extractPathFromUrl = (imageUrl) => {
-    if (!imageUrl) return null;
-    const match = imageUrl.match(/o\/(.+)\?/);
-    return match ? decodeURIComponent(match[1]) : null; // ✅ URL 디코딩하여 경로 반환
   };
 
   const [showModal, setShowModal] = useState(false);
