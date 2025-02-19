@@ -3,13 +3,13 @@ import { Context } from '../../Context'; // 다크 모드 Context 가져오기
 import { Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
-const ButtonDarkMode = ({ text, onClick, width }) => {
+const ButtonDarkMode = ({ text, onClick, width, className }) => {
   const { getDarkModeHover } = useContext(Context); // 다크 모드 상태 가져오기
 
   return (
     <Button
       onClick={onClick}
-      className={` ${getDarkModeHover()} ${width} text-nowrap`}
+      className={` ${getDarkModeHover()} ${width} ${className} text-nowrap`}
       variant="none"
     >
       {text}
