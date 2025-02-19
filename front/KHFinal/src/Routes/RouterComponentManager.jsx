@@ -4,7 +4,9 @@ import { ManagerLayout } from '../page/layout';
 import { ManagerMain, ManagerEventInsert, ManagerStats } from '../page/manager';
 import NotFound from '../page/common/NotFound';
 import ErrorBoundary from '../components/ErrorBoundary';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
+import { Context } from '../Context';
+import { checkAuthStatus, refreshAccessToken } from '../page/user/userApi';
 
 const RouterComponentManager = () => {
   const location = useLocation(); // ✅ 현재 경로 가져오기
@@ -21,6 +23,20 @@ const RouterComponentManager = () => {
       );
     }
   }, [location]); // ✅ 경로 변경 시마다 실행
+  const { login, isAuthenticated } = useContext(Context);
+  useEffect(() => {
+    if (isAuthenticated) {
+      return;
+    }
+    const checkAuth = async () => {
+      const response = await checkAuthStatus();
+      if (response.authenticated) {
+        await refreshAccessToken();
+        login(response.user.nickname, response.user.role);
+      }
+    };
+    checkAuth();
+  }, [login]);
   return (
     <ProtectedRoute requiredRole={1} endpoint="jwtManager">
       <ErrorBoundary>

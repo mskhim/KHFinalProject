@@ -238,16 +238,14 @@ const Header = ({ page }) => {
                         onClick={() => navigate('/user/userCart')}
                       />
 
-                      {cart > 0 && (
-                        <Badge
-                          pill
-                          bg="success"
-                          className="Header-notification-badge Header-cart-icon"
-                          onClick={() => navigate('/user/userCart')}
-                        >
-                          {cart ? cart.length : 0}
-                        </Badge>
-                      )}
+                      <Badge
+                        pill
+                        bg="success"
+                        className="Header-notification-badge Header-cart-icon"
+                        onClick={() => navigate('/user/userCart')}
+                      >
+                        {cart ? cart.length : 0}
+                      </Badge>
                     </div>
                   </>
                 ) : (

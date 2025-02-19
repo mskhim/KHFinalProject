@@ -4,6 +4,7 @@ import {
   ref,
   uploadBytesResumable,
   getDownloadURL,
+  deleteObject,
 } from 'firebase/storage';
 
 // 🔹 Firebase 설정 (Firebase 콘솔에서 가져오기)
@@ -23,4 +24,4 @@ const app = initializeApp(firebaseConfig);
 // Firebase Storage 사용 설정
 const storage = getStorage(app);
 
-export { storage, ref, uploadBytesResumable, getDownloadURL };
+export { storage, ref, uploadBytesResumable, getDownloadURL, deleteObject };

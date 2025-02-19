@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Route, RouterProvider, Routes, useLocation } from 'react-router-dom';
+import { RouterProvider, useLocation } from 'react-router-dom';
 import { Provider } from './Context';
 import root from './Routes/root';
 import 'bootstrap/dist/css/bootstrap.min.css';

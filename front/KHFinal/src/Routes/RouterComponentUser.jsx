@@ -8,12 +8,14 @@ import {
   BookingList,
 } from '../page/user';
 import NotFound from '../page/common/NotFound';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import ErrorBoundary from '../components/ErrorBoundary';
 import Payment from '../components/Payment';
 import PaymentSuccess from '../components/PaymentSuccess';
 import PaymentFail from '../components/PaymentFail';
 import OrderHistory from '../components/OrderHistory';
+import { Context } from '../Context';
+import { checkAuthStatus, refreshAccessToken } from '../page/user/userApi';
 
 const UserRoutes = () => {
   const location = useLocation(); // ✅ 현재 경로 가져오기
@@ -30,6 +32,20 @@ const UserRoutes = () => {
       );
     }
   }, [location]); // ✅ 경로 변경 시마다 실행
+  const { login, isAuthenticated } = useContext(Context);
+  useEffect(() => {
+    if (isAuthenticated) {
+      return;
+    }
+    const checkAuth = async () => {
+      const response = await checkAuthStatus();
+      if (response.authenticated) {
+        await refreshAccessToken();
+        login(response.user.nickname, response.user.role);
+      }
+    };
+    checkAuth();
+  }, [login]);
   return (
     <ProtectedRoute requiredRole={2} endpoint="jwtUser">
       <ErrorBoundary>
