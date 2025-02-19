@@ -88,5 +88,14 @@ public class EventServiceImpl implements EventService {
 		return mapper.selectEventListMonth(sortDTO);
 	}
 
+	@Override
+	public boolean cartDuplCheck(Cart cart) {
+		int no = mapper.cartDuplCheck(cart);
+		if(no>=1) {
+			return false;
+		}
+		return true;
+	}
+
 	
 }

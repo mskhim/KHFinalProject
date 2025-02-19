@@ -188,5 +188,9 @@
 		<!-- 정렬 옵션 -->
 		ORDER BY P.START_DATE ASC
 	</select>
-
+<select id="cartDuplCheck" parameterType="Cart"
+		resultType="int">
+		SELECT count(*) FROM CART
+		WHERE USER_ACCOUNT_NO=#{userAccountNo} AND EVENT_NO = #{eventNo}
+	</select>
 </mapper>

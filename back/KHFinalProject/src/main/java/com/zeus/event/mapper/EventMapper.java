@@ -37,5 +37,7 @@ public interface EventMapper {
 	boolean insertEventToCart(Cart cart);
 	//sortDTO에 date 값을 읽어서 해당 날짜의 월에 해당하는 모든 이벤트 호출
 	List<EventSelectListDTO> selectEventListMonth(SortDTO sortDTO);
+	//cart 에 userno 와 eventNo 를 확인해서 중복되는 항목없게
+	int cartDuplCheck(Cart cart);
 	
 }

@@ -160,7 +160,11 @@ public class EventController {
 			return ResponseEntity.ok(Map.of("state", false, "message", "일반회원만 장바구니 이용이 가능합니다."));
 		}
 		cart.setUserAccountNo(jwtUserNo);
-		boolean flag = service.insertEventToCart(cart);
+		boolean flag = service.cartDuplCheck(cart);
+		if(!flag) {
+			return ResponseEntity.ok(Map.of("state", flag, "message", "이미 장바구니에 담긴 항목입니다."));
+		}
+		 flag = service.insertEventToCart(cart);
 		return ResponseEntity.ok(Map.of("state", flag, "message", "장바구니에 등록되었습니다."));
 	}
 }
