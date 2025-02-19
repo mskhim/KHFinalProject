@@ -35,6 +35,8 @@ export default function EndFestival() {
         alt={`Item ${index + 1}`}
         className="carousel-image EndFestival-image"
       />
+      <br />
+      <h4>{event.name}</h4>
     </div>
   ));
 

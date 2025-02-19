@@ -41,11 +41,13 @@ export default function Announcement() {
   const settings = {
     dots: false, // 네비게이션 점 표시
     infinite: true, // 무한 루프
-    speed: 500, // 애니메이션 속도
+    speed: 400, // 애니메이션 속도
     slidesToShow: 1, // 한 번에 한 개씩 보여줌
     slidesToScroll: 1, // 한 번에 한 개씩 스크롤
     vertical: true, // 세로 방향 설정
     verticalSwiping: true, // 세로 스와이프 활성화
+    autoplay: true,
+    autoplaySpeed: 5000,
     nextArrow: <CustomNextArrow />,
     prevArrow: <CustomPrevArrow />,
   };
@@ -78,12 +80,12 @@ export default function Announcement() {
             >
               {notices.length > 0 ? (
                 notices.map((notice) => (
-                  <h2
+                  <h4
                     key={notice.no}
                     onClick={() => navigate(`/noticeRead/${notice.no}`)}
                   >
                     {notice.title}
-                  </h2>
+                  </h4>
                 ))
               ) : (
                 <p>공지사항이 없습니다.</p>

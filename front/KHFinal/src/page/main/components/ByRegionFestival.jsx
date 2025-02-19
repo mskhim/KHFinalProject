@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
-import './css/RandomFestival.css';
+import './css/ByRegionFestival.css';
 import { byRegionRate } from '../mainApi.js';
 function ByRegionFestival() {
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ function ByRegionFestival() {
 
   const items = byRegionEvents.map((event, index) => (
     <div
-      className="carousel-item RandomFestival-item"
+      className="carousel-item ByRegionFestival-item"
       key={index}
       onClick={() => handleImageClick(event.no)}
       style={{ cursor: 'pointer' }}
@@ -32,8 +32,10 @@ function ByRegionFestival() {
       <img
         src={event.thumbUrl}
         alt={event.name}
-        className="carousel-image RandomFestival-image"
+        className="carousel-image ByRegionFestival-image"
       />
+      <br />
+      <h4>{event.name}</h4>
     </div>
   ));
 
@@ -45,7 +47,7 @@ function ByRegionFestival() {
   return (
     <>
       <h3>&ensp;byRegionFestival</h3>
-      <div className="carousel-container RandomFestival-container">
+      <div className="carousel-container ByRegionFestival-container">
         <AliceCarousel
           mouseTracking
           items={items}
