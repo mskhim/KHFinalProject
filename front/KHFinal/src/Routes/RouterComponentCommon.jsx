@@ -21,8 +21,11 @@ import Unauthorized from '../components/Unauthorized';
 import NotFound from '../page/common/NotFound';
 import { useEffect } from 'react';
 import ErrorBoundary from '../components/ErrorBoundary';
-
+import { useContext } from 'react';
+import { Context } from '../Context';
+import { checkAuthStatus, refreshAccessToken } from '../page/user/userApi';
 const RouterComponentCommon = () => {
+  const { login, isAuthenticated } = useContext(Context);
   const location = useLocation(); // ✅ 현재 경로 가져오기
   useEffect(() => {
     if (
@@ -37,6 +40,19 @@ const RouterComponentCommon = () => {
       );
     }
   }, [location]); // ✅ 경로 변경 시마다 실행
+  useEffect(() => {
+    if (isAuthenticated) {
+      return;
+    }
+    const checkAuth = async () => {
+      const response = await checkAuthStatus();
+      if (response.authenticated) {
+        await refreshAccessToken();
+        login(response.user.nickname, response.user.role);
+      }
+    };
+    checkAuth();
+  }, [login]);
   return (
     <ErrorBoundary>
       <Routes>

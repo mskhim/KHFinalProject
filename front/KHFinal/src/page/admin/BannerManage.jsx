@@ -1,146 +1,140 @@
-import React, { useState } from "react";
-import { Container, Table, Form, Button } from "react-bootstrap";
-import "./include/css/Common.css";
-import vivafesta from "../../assets/vivafesta.png";
-import { BsSortDown, BsSortUp } from "react-icons/bs";
+import React, { useState } from 'react';
+import { Container, Table, Form, Button, Modal } from 'react-bootstrap';
+import './include/css/Common.css';
+import { BsSortDown, BsSortUp } from 'react-icons/bs';
+import { insertBanner, deleteBanner } from './adminApi copy';
+import {
+  uploadImageToFirebase,
+  deleteImageFromFirebase,
+} from '../../utils/firebaseUtils';
 
 const BannerManage = () => {
   // 객체 배열 변수
   const [items, setItems] = useState([
     {
       no: 1,
-      event_name: "2025 해돋이 행사",
-      url: { vivafesta },
-      sub_date: "2025-01-01",
+      event_name: '2025 해돋이 행사',
+      sub_date: '2025-01-01',
     },
     {
       no: 2,
-      event_name: "천을산 해맞이",
-      url: { vivafesta },
-      sub_date: "2025-01-01",
+      event_name: '천을산 해맞이',
+      sub_date: '2025-01-01',
     },
     {
       no: 3,
-      event_name: "해맞이축제",
-      url: { vivafesta },
-      sub_date: "2025-01-01",
+      event_name: '해맞이축제',
+      sub_date: '2025-01-01',
     },
   ]);
 
   // 정렬할 컬럼 이름
-  const [thName, setthName] = useState("");
+  const [thName, setthName] = useState('');
   // 정렬 순서
-  const [sortOrder, setSortOrder] = useState("asc");
-  // 검색어
-  const [searchTerm, setSearchTerm] = useState("");
-  // 전체 선택 여부
-  const [selectAll, setSelectAll] = useState(false);
+  const [sortOrder, setSortOrder] = useState('asc');
 
   // 정렬 함수
   const handleSort = (field) => {
     const sortedItems = [...items].sort((a, b) => {
-      if (sortOrder === "asc") {
-        if (typeof a[field] === "number") {
+      if (sortOrder === 'asc') {
+        if (typeof a[field] === 'number') {
           return a[field] - b[field];
         }
         return a[field].localeCompare(b[field]);
       } else {
-        if (typeof a[field] === "number") {
+        if (typeof a[field] === 'number') {
           return b[field] - a[field];
         }
         return b[field].localeCompare(a[field]);
       }
     });
     setItems(sortedItems);
-    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     setthName(field);
   };
 
-  // 검색 함수
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
+  // ✅ 배너 추가 핸들러
+  const handleAddBanner = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const eventName = form.eventName.value;
+    const file = form.file.files[0];
+    const subDate = form.subDate.value;
+
+    if (!eventName || !file || !subDate) {
+      alert('모든 필드를 입력해야 합니다.');
+      return;
+    }
+    try {
+      const imageUrl = await uploadImageToFirebase(file, 'banners');
+      const formData = { eventName, imageUrl, subDate };
+      const success = await insertBanner(formData);
+
+      if (success) {
+        alert('배너가 추가되었습니다.');
+        // ...배너 목록 갱신 로직...
+      }
+    } catch (error) {
+      console.error('배너 추가 중 오류 발생:', error);
+    }
   };
 
-  // 체크박스 전체 선택/해제 함수
-  const handleSelectAll = () => {
-    const newSelectAll = !selectAll;
-    setSelectAll(newSelectAll);
-    setItems(items.map((item) => ({ ...item, checked: newSelectAll })));
-  };
+  // ✅ 배너 삭제 핸들러
+  const handleDeleteBanner = async (bannerId, imageUrl) => {
+    try {
+      const success = await deleteBanner(bannerId);
 
-  // 개별 체크박스 선택/해제 함수
-  const handleCheckboxChange = (no) => {
-    const updatedItems = items.map((item) =>
-      item.no === no ? { ...item, checked: !item.checked } : item
-    );
-    setItems(updatedItems);
-    setSelectAll(updatedItems.every((item) => item.checked));
+      if (success) {
+        await deleteImageFromFirebase(imageUrl);
+        alert('배너가 삭제되었습니다.');
+        // ...배너 목록 갱신 로직...
+      }
+    } catch (error) {
+      console.error('배너 삭제 중 오류 발생:', error);
+    }
   };
-
-  // 검색어에 따라 필터링된 아이템
-  const filteredItems = items.filter((item) =>
-    item.event_name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   return (
     <Container className="admin-page text-center">
-      <div className="justify-content-end d-flex mb-3">
-        <Form.Control
-          type="text"
-          placeholder="축제명 검색"
-          value={searchTerm}
-          onChange={handleSearch}
-          style={{ width: "200px" }}
-          className="me-3"
-        />
-        <Button className="btn btn-danger">삭제</Button>
-      </div>
-
       <Table bordered hover responsive className="admin-table table">
         <thead>
           <tr>
             <th
               className="text-bg-primary text-center"
-              style={{ width: "90px" }}
-            >
-              <Form.Check checked={selectAll} onChange={handleSelectAll} />
-            </th>
-            <th
-              className="text-bg-primary text-center"
-              onClick={() => handleSort("no")}
-              style={{ width: "90px" }}
+              onClick={() => handleSort('no')}
+              style={{ width: '90px' }}
             >
               NO
-              {thName === "no" &&
-                (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
+              {thName === 'no' &&
+                (sortOrder === 'asc' ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
               className="text-bg-primary text-center"
-              onClick={() => handleSort("event_name")}
-              style={{ width: "200px" }}
+              onClick={() => handleSort('event_name')}
+              style={{ width: '200px' }}
             >
               축제명
-              {thName === "event_name" &&
-                (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
+              {thName === 'event_name' &&
+                (sortOrder === 'asc' ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
               className="text-bg-primary text-center"
-              style={{ width: "200px" }}
+              style={{ width: '200px' }}
             >
               파일 경로
             </th>
             <th
               className="text-bg-primary text-center"
-              onClick={() => handleSort("sub_date")}
-              style={{ width: "200px" }}
+              onClick={() => handleSort('sub_date')}
+              style={{ width: '200px' }}
             >
               등록일
-              {thName === "sub_date" &&
-                (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
+              {thName === 'sub_date' &&
+                (sortOrder === 'asc' ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
               className="text-bg-primary text-center"
-              style={{ width: "110px" }}
+              style={{ width: '110px', paddingRight: '34px' }}
             >
               추가/수정
             </th>
@@ -149,85 +143,89 @@ const BannerManage = () => {
         <tbody>
           {/* 입력 가능한 빈 행 */}
           <tr>
-            <td className="text-center" style={{ width: "90px" }}>
-              신규 추가
-            </td>
-            <td className="text-center" style={{ width: "90px" }}>
+            <td className="text-center" style={{ width: '90px' }}>
               -
             </td>
-            <td style={{ width: "200px" }}>
+            <td style={{ width: '200px' }}>
               <Form.Control
+                name="eventName"
                 className="admin-table-td text-center"
                 type="text"
                 placeholder="축제명"
-                style={{ border: "none" }}
+                style={{ border: 'none' }}
               />
             </td>
-            <td style={{ width: "200px" }}>
+            <td style={{ width: '200px' }}>
               <Form.Control
+                name="file"
                 className="admin-table-td text-center"
                 type="file"
                 placeholder="파일경로"
-                style={{ border: "none" }}
+                style={{ border: 'none' }}
               />
             </td>
-            <td style={{ width: "200px" }}>
+            <td style={{ width: '200px' }}>
               <Form.Control
+                name="subDate"
                 className="admin-table-td text-center"
                 type="date"
-                style={{ border: "none" }}
+                style={{ border: 'none' }}
               />
             </td>
-            <td style={{ width: "99.5px" }}>
-              <Button className="btn btn-primary me-2">추가</Button>
+            <td style={{ width: '99.5px' }}>
+              <Button
+                className="btn btn-primary me-2"
+                onClick={handleAddBanner}
+              >
+                추가
+              </Button>
             </td>
           </tr>
 
           {/* 데이터 행 */}
-          {filteredItems.map((data) => (
+          {items.map((data) => (
             <tr key={data.no}>
-              <td className="text-center" style={{ width: "90px" }}>
-                <Form.Check
-                  checked={data.checked}
-                  onChange={() =>
-                    handleCheckboxChange(data.no) && handleSelectAll()
-                  }
-                />
-              </td>
-              <td className="text-center" style={{ width: "90px" }}>
+              <td className="text-center" style={{ width: '90px' }}>
                 {data.no}
               </td>
-              <td style={{ width: "200px" }}>
+              <td style={{ width: '200px' }}>
                 <Form.Control
                   className="admin-table-td text-center"
                   type="text"
                   defaultValue={data.event_name}
-                  style={{ border: "none" }}
+                  style={{ border: 'none' }}
                 />
               </td>
-              <td style={{ width: "200px" }}>
+              <td style={{ width: '200px' }}>
                 <Form.Control
                   className="admin-table-td text-center"
                   type="file"
                   ref={data.url}
-                  style={{ border: "none" }}
+                  style={{ border: 'none' }}
                 />
               </td>
-              <td style={{ width: "200px" }}>
+              <td style={{ width: '200px' }}>
                 <Form.Control
                   className="admin-table-td text-center"
                   type="date"
                   defaultValue={data.sub_date}
-                  style={{ border: "none" }}
+                  style={{ border: 'none' }}
                 />
               </td>
-              <td style={{ width: "99.5px" }}>
-                <Button className="btn btn-primary me-2">수정</Button>
+              <td style={{ width: '99.5px' }}>
+                <Button
+                  className="btn btn-danger me-2"
+                  onClick={() => handleDeleteBanner(data.no, data.url)}
+                >
+                  삭제
+                </Button>
               </td>
             </tr>
           ))}
         </tbody>
       </Table>
+
+      {/* FestivalAuth 모달 */}
     </Container>
   );
 };

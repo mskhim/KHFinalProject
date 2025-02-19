@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { memo, useContext, useEffect, useState } from 'react';
 import { Context } from '../../Context';
 import ButtonDarkMode from './ButtonDarkMode';
 import { refreshAccessToken } from '../../page/user/userApi';
@@ -68,4 +68,4 @@ const TokenRemain = () => {
   );
 };
 
-export default TokenRemain;
+export default memo(TokenRemain);

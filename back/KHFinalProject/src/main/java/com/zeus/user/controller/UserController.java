@@ -270,7 +270,7 @@ public class UserController {
 	    //  JWT를 HttpOnly 쿠키에 저장
 	    addJwtCookie(response, "jwt", accessToken, 60 * 15); // 15분 유지
 	    addJwtCookie(response, "refresh_token", refreshToken, 60 * 60 * 24 * 7); // 7일 유지
-	    return ResponseEntity.ok(Map.of("success", true, "message", "로그인 성공!","nickname",user2.getNickname()));
+	    return ResponseEntity.ok(Map.of("success", true, "message", "로그인 성공!","nickname",user2.getNickname(),"role",user2.getRole()));
 	}
 
 	//  로그아웃 API (JWT 및 리프레시 토큰 삭제)

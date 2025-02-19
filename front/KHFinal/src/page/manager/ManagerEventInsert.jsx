@@ -5,7 +5,7 @@ import Footer from '../../components/Footer';
 import { Container, Form, Button } from 'react-bootstrap';
 import { insertEventByManager, selectPublicDataEvent } from './managerApi';
 import { useNavigate } from 'react-router-dom';
-import { uploadImageToFirebase } from '../../utils/uploadToFirebase';
+import { uploadImageToFirebase } from '../../utils/firebaseUtils';
 
 const ManagerInsert = () => {
   const navigate = useNavigate();

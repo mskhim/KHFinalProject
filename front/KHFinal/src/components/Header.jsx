@@ -9,13 +9,9 @@ import {
   Badge,
 } from 'react-bootstrap';
 import { BsPersonCircle, BsChevronDown } from 'react-icons/bs';
-import { FaGithub, FaBell, FaMoon, FaSun, FaCartPlus } from 'react-icons/fa';
+import { FaGithub, FaMoon, FaSun, FaCartPlus } from 'react-icons/fa';
 import './Header.css';
-import {
-  getCartData,
-  handleLogout,
-  refreshAccessToken,
-} from '../page/user/userApi';
+import { getCartData } from '../page/user/userApi';
 import { Context } from '../Context';
 import ScrollToTopButton from './ui/ScrollToTopButton';
 import TokenRemain from './ui/TokenRemain';
@@ -25,8 +21,6 @@ const Header = ({ page }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [userName, setUserName] = useState('사용자');
-  const [notifications, setNotifications] = useState(3);
-  const [cartElement, setCartElement] = useState(2);
   const [showFestivalNav, setShowFestivalNav] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [activeTab, setActiveTab] = useState('');
@@ -39,6 +33,7 @@ const Header = ({ page }) => {
     logout,
     tokenExpiration,
     getDarkMode,
+    userRole,
   } = useContext(Context);
 
   useEffect(() => {
@@ -180,80 +175,84 @@ const Header = ({ page }) => {
                     공지사항
                   </NavDropdown.Item>
                 </NavDropdown>
-                <Nav.Link
-                  as={NavLink}
-                  to="/manager/managerStats"
-                  className={`${darkMode ? 'text-light' : 'text-dark'}`}
-                >
-                  통계
-                </Nav.Link>
+                {userRole == '1' ? (
+                  <Nav.Link
+                    as={NavLink}
+                    to="/manager/managerStats"
+                    className={`${darkMode ? 'text-light' : 'text-dark'}`}
+                  >
+                    통계
+                  </Nav.Link>
+                ) : (
+                  ''
+                )}
               </Nav>
 
               <div className="d-flex align-items-center">
-                {/* {isAuthenticated ? ( */}
-
-                <NavDropdown
-                  title={
-                    <span className="d-flex align-items-center Header-user-info">
-                      <BsPersonCircle
-                        size={24}
-                        className={`me-2 ${
-                          darkMode ? 'text-light' : 'text-dark'
-                        }`}
-                      />
-                      <span
-                        className={`Header-user-name ${
-                          darkMode ? 'text-light' : 'text-dark'
-                        }`}
-                      >
-                        {userName}
-                      </span>
-                      <BsChevronDown
-                        size={16}
-                        className={`ms-1 Header-dropdown-icon ${
-                          darkMode ? 'text-light' : 'text-dark'
-                        }`}
-                      />
-                    </span>
-                  }
-                  id="Header-user-dropdown"
-                  align="end"
-                  className="Header-user-dropdown"
-                >
-                  <NavDropdown.Item as={NavLink} to="/user/userMypage">
-                    마이페이지
-                  </NavDropdown.Item>
-                  <NavDropdown.Item as={NavLink} to="/user/bookingList">
-                    예매 내역 확인
-                  </NavDropdown.Item>
-                  <NavDropdown.Divider />
-                  <NavDropdown.Item onClick={Logout}>로그아웃</NavDropdown.Item>
-                </NavDropdown>
-                <TokenRemain initialExpiration={tokenExpiration} />
-                {/* ) : ( */}
-                <div className="me-2">
-                  <ButtonDarkMode text="로그인" onClick={handleLogin} />
-                </div>
-                {/* )} */}
-                {/* {isAuthenticated && ( */}
-                <div className="position-relative me-3">
-                  <FaCartPlus
-                    size={24}
-                    className={`${getDarkMode} ms-3 Header-cart-icon`}
-                    onClick={() => navigate('/user/userCart')}
-                  />
-                  {notifications > 0 && (
-                    <Badge
-                      pill
-                      bg="success"
-                      className="Header-notification-badge Header-cart-icon"
-                      onClick={() => navigate('/user/userCart')}
+                {isAuthenticated ? (
+                  <>
+                    <NavDropdown
+                      title={
+                        <span className="d-flex align-items-center Header-user-info">
+                          <BsPersonCircle
+                            size={24}
+                            className={`me-2 ${
+                              darkMode ? 'text-light' : 'text-dark'
+                            }`}
+                          />
+                          <span
+                            className={`Header-user-name ${
+                              darkMode ? 'text-light' : 'text-dark'
+                            }`}
+                          >
+                            {userName}
+                          </span>
+                          <BsChevronDown
+                            size={16}
+                            className={`ms-1 Header-dropdown-icon ${
+                              darkMode ? 'text-light' : 'text-dark'
+                            }`}
+                          />
+                        </span>
+                      }
+                      id="Header-user-dropdown"
+                      align="end"
+                      className="Header-user-dropdown"
                     >
-                      {cart ? cart.length : 0}
-                    </Badge>
-                  )}
-                </div>
-                {/* )} */}
+                      <NavDropdown.Item as={NavLink} to="/user/userMypage">
+                        마이페이지
+                      </NavDropdown.Item>
+                      <NavDropdown.Item as={NavLink} to="/user/bookingList">
+                        예매 내역 확인
+                      </NavDropdown.Item>
+                      <NavDropdown.Divider />
+                      <NavDropdown.Item onClick={Logout}>
+                        로그아웃
+                      </NavDropdown.Item>
+                    </NavDropdown>
+                    <TokenRemain initialExpiration={tokenExpiration} />
+                    <div className="position-relative me-3">
+                      <FaCartPlus
+                        size={24}
+                        className={`${getDarkMode} ms-3 Header-cart-icon`}
+                        onClick={() => navigate('/user/userCart')}
+                      />
+
+                      <Badge
+                        pill
+                        bg="success"
+                        className="Header-notification-badge Header-cart-icon"
+                        onClick={() => navigate('/user/userCart')}
+                      >
+                        {cart ? cart.length : 0}
+                      </Badge>
+                    </div>
+                  </>
+                ) : (
+                  <div className="me-2">
+                    <ButtonDarkMode text="로그인" onClick={handleLogin} />
+                  </div>
+                )}
                 <a
                   href="https://github.com/your-github-profile"
                   target="_blank"

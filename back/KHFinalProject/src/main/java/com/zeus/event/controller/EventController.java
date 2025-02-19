@@ -44,7 +44,7 @@ public class EventController {
 			@CookieValue(name = "jwt", required = false) String jwtToken) { // 쿠키에서 JWT 가져오기
 		if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken)) {
 			log.info("토큰만료");
-			return ResponseEntity.ok(Map.of("authenticated", false, "message", "JWT가 없거나 만료됨"));
+			return ResponseEntity.ok(Map.of("authenticated", false, "message", "로그인이 필요합니다."));
 		}
 		// JWT가 유효하면 사용자 정보 반환
 		int no = JwtUtil.validateToken(jwtToken).get("no", Integer.class);
@@ -73,7 +73,7 @@ public class EventController {
 			@RequestBody EventDTO eventDTO) { // 쿠키에서 JWT 가져오기
 		if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken)) {
 			log.info("토큰만료");
-			return ResponseEntity.ok(Map.of("authenticated", false, "message", "JWT가 없거나 만료됨"));
+			return ResponseEntity.ok(Map.of("authenticated", false, "message", "로그인이 필요합니다."));
 		}
 		String jwtRole = JwtUtil.validateToken(jwtToken).get("role", String.class);
 		int jwtUserNo = JwtUtil.validateToken(jwtToken).get("no", Integer.class);
@@ -117,7 +117,7 @@ public class EventController {
 																													// 가져오기
 		if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken)) {
 			log.info("토큰만료");
-			return ResponseEntity.ok(Map.of("authenticated", false, "message", "JWT가 없거나 만료됨"));
+			return ResponseEntity.ok(Map.of("authenticated", false, "message", "로그인이 필요합니다."));
 		}
 		String jwtRole = JwtUtil.validateToken(jwtToken).get("role", String.class);
 		if (jwtRole.equals("ROLE_1")) {
@@ -135,7 +135,7 @@ public class EventController {
 																													// 가져오기
 		if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken)) {
 			log.info("토큰만료");
-			return ResponseEntity.ok(Map.of("authenticated", false, "message", "JWT가 없거나 만료됨"));
+			return ResponseEntity.ok(Map.of("authenticated", false, "message", "로그인이 필요합니다."));
 		}
 		String jwtRole = JwtUtil.validateToken(jwtToken).get("role", String.class);
 		int jwtUserNo = JwtUtil.validateToken(jwtToken).get("no", Integer.class);
@@ -152,7 +152,7 @@ public class EventController {
 			@CookieValue(name = "jwt", required = false) String jwtToken, @RequestBody Cart cart) { // 쿠키에서
 		if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken)) {
 			log.info("토큰만료");
-			return ResponseEntity.ok(Map.of("authenticated", false, "message", "JWT가 없거나 만료됨"));
+			return ResponseEntity.ok(Map.of("authenticated", false, "message", "로그인이 필요합니다."));
 		}
 		String jwtRole = JwtUtil.validateToken(jwtToken).get("role", String.class);
 		int jwtUserNo = JwtUtil.validateToken(jwtToken).get("no", Integer.class);

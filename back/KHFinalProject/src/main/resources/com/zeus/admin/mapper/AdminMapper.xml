@@ -26,6 +26,29 @@
 			#{id}
 		</foreach>
 	</delete>
+	
+	<select id="managerFestivalAuthSellectAll" resultType="ManagerFestivalAuthDTO" parameterType="int">
+		SELECT
+		UME.NO,
+		UME.PUBLIC_DATA_EVENT_NO,
+		UME.USER_ACCOUNT_NO,
+		UME.REG_DATE,
+		PDE.NAME AS EVENT_NAME
+		FROM USER_MANAGEMENT_EVENT UME
+		LEFT JOIN PUBLIC_DATA_EVENT PDE
+		ON UME.PUBLIC_DATA_EVENT_NO = PDE.NO
+		WHERE USER_ACCOUNT_NO = #{managerNo}
+		ORDER BY UME.NO
+	</select>
+
+	<insert id="addFestivalAuth" parameterType="map">
+		INSERT INTO USER_MANAGEMENT_EVENT (NO, PUBLIC_DATA_EVENT_NO, USER_ACCOUNT_NO, REG_DATE)
+		VALUES (SEQ_USER_MANAGEMENT_EVENT_NO.NEXTVAL, #{festivalNo}, #{managerNo}, SYSDATE)
+	</insert>
+
+	<delete id="deleteFestivalAuth" parameterType="map">
+		DELETE FROM USER_MANAGEMENT_EVENT WHERE NO = #{authNo}
+	</delete>
 
 	<!-- UserManage -->
 	<select id="userSelectAllBySearch" resultType="User" parameterType="User">
