@@ -369,3 +369,39 @@ export const noticeDelete = async (ids) => {
     throw error;
   }
 };
+
+export const reservedSelectAllBySearch = async (eventName) => {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/admin/reservedSelectAllBySearch?eventName=${eventName}`,
+      {
+        method: "GET",
+        credentials: "include",
+      }
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("예약 정보 조회 실패:", error);
+    return null;
+  }
+};
+
+export const canceledSelectAllBySearch = async (eventName) => {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/admin/canceledSelectAllBySearch?eventName=${eventName}`,
+      {
+        method: "GET",
+        credentials: "include",
+      }
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("취소된 예약 정보 조회 실패:", error);
+    return null;
+  }
+};

@@ -11,6 +11,7 @@ import com.zeus.user.domain.User;
 import com.zeus.admin.domain.AdminEventDTO;
 import com.zeus.admin.domain.AdminReviewDTO;
 import com.zeus.admin.domain.AdminQnaDTO;
+import com.zeus.admin.domain.AdminReservedDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -115,5 +116,19 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public void noticeDelete(List<Integer> ids) throws Exception {
 		mapper.noticeDelete(ids);
+	}
+
+	@Override
+	public List<AdminReservedDTO> reservedSelectAllBySearch(String eventName) throws Exception {
+		AdminReservedDTO reserved = new AdminReservedDTO();
+		reserved.setEventName(eventName);
+		return mapper.reservedSelectAllBySearch(reserved);
+	}
+
+	@Override
+	public List<AdminReservedDTO> canceledSelectAllBySearch(String eventName) throws Exception {
+		AdminReservedDTO canceled = new AdminReservedDTO();
+		canceled.setEventName(eventName);
+		return mapper.canceledSelectAllBySearch(canceled);
 	}
 }

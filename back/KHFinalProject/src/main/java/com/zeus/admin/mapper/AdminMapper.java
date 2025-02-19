@@ -9,6 +9,7 @@ import com.zeus.user.domain.User;
 import com.zeus.admin.domain.AdminEventDTO;
 import com.zeus.admin.domain.AdminReviewDTO;
 import com.zeus.admin.domain.AdminQnaDTO;
+import com.zeus.admin.domain.AdminReservedDTO;
 
 public interface AdminMapper {
 
@@ -73,4 +74,15 @@ public interface AdminMapper {
 
 	// 공지사항 삭제
 	public void noticeDelete(List<Integer> ids) throws Exception;
+	
+//	배너 관리 페이지
+	
+//	예매내역 관리 페이지
+	
+	// 예매내역 전체 및 검색 전체조회
+	public List<AdminReservedDTO> reservedSelectAllBySearch(AdminReservedDTO reserved) throws Exception;
+
+//	예매취소내역 관리 페이지
+	// 취소된 예매내역 전체 및 검색 전체조회
+	public List<AdminReservedDTO> canceledSelectAllBySearch(AdminReservedDTO canceled) throws Exception;
 }

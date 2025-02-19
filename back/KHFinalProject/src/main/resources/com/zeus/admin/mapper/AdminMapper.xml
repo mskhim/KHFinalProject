@@ -157,4 +157,46 @@
 			#{id}
 		</foreach>
 	</delete>
+	
+	<!-- BannerManage -->
+	
+	<!-- ReservedManage -->
+	<select id="reservedSelectAllBySearch" resultType="AdminReservedDTO" parameterType="AdminReservedDTO">
+		SELECT
+		R.NO,
+		R.ID,
+		UA.ID AS USER_ID,
+		R.QT,
+		R.RESERVED_DATE,
+		R.TOTAL_COST,
+		PDE.NAME AS EVENT_NAME
+		FROM RESERVED R
+		LEFT JOIN USER_ACCOUNT UA
+		ON R.USER_ACCOUNT_NO = UA.NO
+		LEFT JOIN EVENT E
+		ON R.EVENT_NO = E.NO
+		LEFT JOIN PUBLIC_DATA_EVENT PDE
+		ON E.PUBLIC_DATA_EVENT_NO = PDE.NO
+		WHERE PDE.NAME LIKE '%'||#{eventName}||'%' ORDER BY R.NO ASC
+	</select>
+	
+	<!-- CanceledManage -->
+	<select id="canceledSelectAllBySearch" resultType="AdminReservedDTO" parameterType="AdminReservedDTO">
+		SELECT
+		C.NO,
+		C.ID,
+		UA.ID AS USER_ID,
+		C.QT,
+		C.RESERVED_DATE,
+		C.TOTAL_COST,
+		PDE.NAME AS EVENT_NAME
+		FROM CANCELED C
+		LEFT JOIN USER_ACCOUNT UA
+		ON C.USER_ACCOUNT_NO = UA.NO
+		LEFT JOIN EVENT E
+		ON C.EVENT_NO = E.NO
+		LEFT JOIN PUBLIC_DATA_EVENT PDE
+		ON E.PUBLIC_DATA_EVENT_NO = PDE.NO
+		WHERE PDE.NAME LIKE '%'||#{eventName}||'%' ORDER BY C.NO ASC
+	</select>
 </mapper>
