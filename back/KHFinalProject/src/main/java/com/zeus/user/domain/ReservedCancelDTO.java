@@ -1,6 +1,6 @@
 package com.zeus.user.domain;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,11 +9,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ReservedCancelDTO
 {
-    private int cancelNo;          // 취소 내역 번호
-    private int reservedNo;        // 예매 번호
-    private int userAccountNo;     // 사용자 번호
-    private int eventNo;           // 축제 번호
-    private int qt;                // 인원 수
-    private LocalDate cancelDate;           // 취소 날짜
-    private int totalCost;            // 결제 금액
+    private int no;
+    private String id;
+    private int eventNo;
+    private int userAccount;
+    private int qt;
+    private Date reservedDate;
+    private int totalCost;
+    
+    private String name;  // 축제명 추가
+    private Date endDate; // 사용 기한 추가
 }

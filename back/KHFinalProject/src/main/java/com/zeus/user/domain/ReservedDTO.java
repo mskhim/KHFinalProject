@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class ReservedDTO
 {
     private int no;        // R.NO
-    private Date sysdate;
+    private Date reservedDate;
     private String name;       // P.NAME
     private int qt;            // C.QT
     private LocalDate endDate;     // P.END_DATE

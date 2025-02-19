@@ -621,42 +621,6 @@ public class UserController {
         }
     }
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
-    // 예매 취소 후 내역 저장
-    @PostMapping("/saveReservedCancelData")
-    public ResponseEntity<Map<String, Object>> saveReservedCancelData(
-            @CookieValue(name = "jwt", required = false) String jwtToken,
-            @RequestBody ReservedCancelDTO reservedCancelDTO) {
-
-        // JWT 토큰 검증
-        if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken)) {
-            return ResponseEntity.ok(Map.of("authenticated", false, "message", "JWT가 없거나 만료됨"));
-        }
-
-        // JWT에서 userNo 추출
-        Integer userNo = JwtUtil.validateToken(jwtToken).get("no", Integer.class);
- 
-        // 예매 취소 내역 저장
-        boolean isSaved = service.saveReservedCancelData(reservedCancelDTO, userNo);      
-
-        // 예매 취소 내역 저장 후 로그 출력
-        if (isSaved) {
-            System.out.println("예매 취소 내역 저장 성공: " + reservedCancelDTO);
-        } else {
-            System.out.println("예매 취소 내역 저장 실패");
-        }
-        
-        if (!isSaved)
-        {
-            return ResponseEntity.ok(Map.of(
-            		"authenticated", false,
-            		"message", "예매 취소 내역 저장 실패"));
-        }
-
-        return ResponseEntity.ok(Map.of(
-        		"authenticated", true,
-        		"message", "예매 취소 내역 저장 성공"));
-    }
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // 취소 내역 조회
     @GetMapping("/getReservedCancelData")
@@ -686,6 +650,7 @@ public class UserController {
         // 취소 내역 조회
         List <ReservedCancelDTO> reservedCancel = service.getReservedCancelData(userNo);
 
+
         // 취소 내역 조회 후 로그 출력
         if (reservedCancel == null || reservedCancel.isEmpty())
         {
@@ -693,7 +658,7 @@ public class UserController {
         }
 
         
-        if (reservedCancel == null || reservedCancel.isEmpty())
+        if (reservedCancel == null)
         {
             return ResponseEntity.ok(Map.of(
             		"authenticated", false,
@@ -701,8 +666,9 @@ public class UserController {
         }
 
         return ResponseEntity.ok(Map.of(
-        		"authenticated", true,
-        		"data", reservedCancel));
+        	    "authenticated", true,
+        	    "reservedCancelData", reservedCancel // 'data' -> 'reservedCancelData'로 변경
+        	));
     }
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	//--------------------------------------------------api메소드가 아닌 컨트롤러용 메소드
