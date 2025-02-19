@@ -91,6 +91,7 @@ const UserInsert = () => {
       setNicknameCheck(true); // ✅ 중복 확인 성공 시 제출 가능 상태로 변경
     }
   };
+
   // 이메일 중복 확인 핸들러
   const handleEmailCheck = async () => {
     const email = formData.email.trim();
@@ -112,6 +113,7 @@ const UserInsert = () => {
       alert('사용 가능한 이메일입니다.');
     }
   };
+  
   useEffect(() => {
     setNicknameCheck(false);
   }, [formData.nickname]);

@@ -155,26 +155,24 @@ public class UserServiceImpl implements UserService {
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // 회원 정보 수정.
-	@Override
-	public User updateUserData(User user)
-	{
-		// 수정된 비밀번호를 암호화 하여 DB에 저장함.
-		user.setPwd(encodePassword(user.getPwd()));
-		
-		// Mybatis를 호출하여 회원 정보 수정 진행.
-		int rowsAffected = mapper.updateUserData(user);
-		
-		if (rowsAffected > 0)
-		{
-			// 수정된 회원 정보를 반환.
-			return user;
-		} else
-		{
-			// 회원 정보 수정 실패.
-			return null;
-		}
-	}
+    @Override
+    public User updateUserData(User user) {
+        if (user.getPwd() != null && !user.getPwd().isEmpty()) {
+            user.setPwd(encodePassword(user.getPwd()));  // 비밀번호 암호화
+        } else {
+            // 기존 사용자 데이터를 가져와서 현재 비밀번호를 유지
+            User existingUser = mapper.getUserByNo(user.getNo());
+            user.setPwd(existingUser.getPwd());
+        }
+
+        int rowsAffected = mapper.updateUserData(user);
+
+        if (rowsAffected > 0) {
+            return user;  // 업데이트 성공 시 사용자 객체 반환
+        } else {
+            return null;  // 업데이트 실패 시 null 반환
+        }
+    }
 	//////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////
 	// 회원 탈퇴.
