@@ -1,8 +1,13 @@
-import React, { useState } from "react";
-import { Container, Table, Form, Button, Modal } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Container, Table, Form, Button } from "react-bootstrap";
 import "./include/css/Common.css";
 import { BsSortDown, BsSortUp } from "react-icons/bs";
-import { insertBanner, deleteBanner } from "./adminApi";
+import {
+  insertBanner,
+  deleteBanner,
+  bannerSellectAll,
+  eventSellectAll,
+} from "./adminApi";
 import {
   uploadImageToFirebase,
   deleteImageFromFirebase,
@@ -10,23 +15,28 @@ import {
 
 const BannerManage = () => {
   // 객체 배열 변수
-  const [items, setItems] = useState([
-    {
-      no: 1,
-      event_name: "2025 해돋이 행사",
-      sub_date: "2025-01-01",
-    },
-    {
-      no: 2,
-      event_name: "천을산 해맞이",
-      sub_date: "2025-01-01",
-    },
-    {
-      no: 3,
-      event_name: "해맞이축제",
-      sub_date: "2025-01-01",
-    },
-  ]);
+  const [items, setItems] = useState([]);
+  const [festivalList, setFestivalList] = useState([]);
+  const [selectedFestival, setSelectedFestival] = useState("");
+  const [file, setFile] = useState(null);
+
+  const getList = async () => {
+    const data = await bannerSellectAll();
+    if (data !== null) {
+      setItems(data);
+    }
+  };
+
+  useEffect(() => {
+    getList();
+    const fetchFestivalList = async () => {
+      const data = await eventSellectAll();
+      if (data !== null) {
+        setFestivalList(data);
+      }
+    };
+    fetchFestivalList();
+  }, []);
 
   // 정렬할 컬럼 이름
   const [thName, setthName] = useState("");
@@ -57,22 +67,17 @@ const BannerManage = () => {
   // ✅ 배너 추가 핸들러
   const handleAddBanner = async (e) => {
     e.preventDefault();
-    const form = e.target;
-    const eventName = form.eventName.value;
-    const file = form.file.files[0];
-
-    if (!eventName || !file) {
+    if (!selectedFestival || !file) {
       alert("모든 필드를 입력해야 합니다.");
       return;
     }
     try {
-      const imageUrl = await uploadImageToFirebase(file, "banners");
-      const formData = { eventName, imageUrl };
+      const url = await uploadImageToFirebase(file, "banners");
+      const formData = { eventName: selectedFestival, url };
       const success = await insertBanner(formData);
-
       if (success) {
         alert("배너가 추가되었습니다.");
-        // ...배너 목록 갱신 로직...
+        getList(); // 배너 목록 갱신
       }
     } catch (error) {
       console.error("배너 추가 중 오류 발생:", error);
@@ -87,7 +92,7 @@ const BannerManage = () => {
       if (success) {
         await deleteImageFromFirebase(imageUrl);
         alert("배너가 삭제되었습니다.");
-        // ...배너 목록 갱신 로직...
+        getList(); // 배너 목록 갱신
       }
     } catch (error) {
       console.error("배너 삭제 중 오류 발생:", error);
@@ -151,12 +156,19 @@ const BannerManage = () => {
             </td>
             <td style={{ width: "200px" }}>
               <Form.Control
+                as="select"
                 name="eventName"
-                className="admin-table-td text-center"
-                type="text"
-                placeholder="축제명"
-                style={{ border: "none" }}
-              />
+                value={selectedFestival}
+                onChange={(e) => setSelectedFestival(e.target.value)}
+                className="me-2"
+              >
+                <option value="">축제 선택</option>
+                {festivalList.map((festival) => (
+                  <option key={festival.no} value={festival.name}>
+                    {festival.name}
+                  </option>
+                ))}
+              </Form.Control>
             </td>
             <td style={{ width: "200px" }}>
               <Form.Control
@@ -165,6 +177,7 @@ const BannerManage = () => {
                 type="file"
                 placeholder="파일경로"
                 style={{ border: "none" }}
+                onChange={(e) => setFile(e.target.files[0])}
               />
             </td>
             <td style={{ width: "200px" }} className="align-content-center">
@@ -189,24 +202,16 @@ const BannerManage = () => {
               >
                 {data.no}
               </td>
+              <td style={{ width: "200px" }}>{data.eventName}</td>
               <td style={{ width: "200px" }}>
-                <Form.Control
-                  className="admin-table-td text-center"
-                  type="text"
-                  defaultValue={data.event_name}
-                  style={{ border: "none" }}
-                />
-              </td>
-              <td style={{ width: "200px" }}>
-                <Form.Control
-                  className="admin-table-td text-center"
-                  type="file"
-                  ref={data.url}
-                  style={{ border: "none" }}
+                <img
+                  src={data.url}
+                  alt={data.eventName}
+                  style={{ width: "100%" }}
                 />
               </td>
               <td style={{ width: "200px" }} className="align-content-center">
-                {data.sub_date}
+                {data.subDate}
               </td>
               <td style={{ width: "99.5px" }}>
                 <Button
@@ -220,8 +225,6 @@ const BannerManage = () => {
           ))}
         </tbody>
       </Table>
-
-      {/* FestivalAuth 모달 */}
     </Container>
   );
 };

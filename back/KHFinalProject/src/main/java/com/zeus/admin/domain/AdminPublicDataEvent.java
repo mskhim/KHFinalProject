@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class AdminPublicDataEvent {
-	  	private int no;
+	  	private Long no;
 	    private String name; // 축제/이벤트 이름
 	    private String place; // 개최 장소
 	    private LocalDate startDate; // 시작 날짜

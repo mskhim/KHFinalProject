@@ -506,6 +506,24 @@ export const deleteBanner = async (bannerId) => {
   }
 };
 
+export const bannerSellectAll = async () => {
+  try {
+    const response = await fetch(
+      "http://localhost:8080/admin/bannerSellectAll",
+      {
+        method: "GET",
+        credentials: "include",
+      }
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("배너 정보 조회 실패:", error);
+    return null;
+  }
+};
+
 // ReservedManage 페이지
 export const reservedSelectAllBySearch = async (eventName) => {
   try {
@@ -540,6 +558,24 @@ export const canceledSelectAllBySearch = async (eventName) => {
     return data;
   } catch (error) {
     console.error("취소된 예약 정보 조회 실패:", error);
+    return null;
+  }
+};
+
+export const eventSellectAll = async () => {
+  try {
+    const response = await fetch(
+      "http://localhost:8080/admin/eventSellectAll",
+      {
+        method: "GET",
+        credentials: "include",
+      }
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("이벤트 정보 조회 실패:", error);
     return null;
   }
 };

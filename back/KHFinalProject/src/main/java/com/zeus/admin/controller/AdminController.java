@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.zeus.admin.service.AdminService;
 import com.zeus.notice.domain.Notice;
@@ -25,6 +26,7 @@ import com.zeus.admin.domain.AdminReviewDTO;
 import com.zeus.admin.domain.ManagerFestivalAuthDTO;
 import com.zeus.admin.domain.AdminReservedDTO;
 import com.zeus.admin.domain.AdminPublicDataEvent;
+import com.zeus.admin.domain.AdminBannerDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -242,5 +244,37 @@ public class AdminController {
 	@GetMapping("/publicDataEventSellectAll")
 	public List<AdminPublicDataEvent> publicDataEventSellectAll() throws Exception {
 		return service.publicDataEventSellectAll();
+	}
+
+	@GetMapping("/eventSellectAll")
+	public List<AdminPublicDataEvent> eventSellectAll() throws Exception {
+		return service.eventSellectAll();
+	}
+
+	@GetMapping("/bannerSellectAll")
+	public List<AdminBannerDTO> bannerSellectAll() throws Exception {
+		return service.bannerSellectAll();
+	}
+
+	@PostMapping("/insertBanner")
+	public ResponseEntity<String> insertBanner(@RequestBody AdminBannerDTO banner) {
+		try {
+			service.insertBanner(banner);
+			return ResponseEntity.ok("Success");
+		} catch (Exception e) {
+			log.error("Failed to insert banner", e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to insert banner");
+		}
+	}
+
+	@DeleteMapping("/deleteBanner/{bannerId}")
+	public ResponseEntity<String> deleteBanner(@PathVariable int bannerId) {
+		try {
+			service.deleteBanner(bannerId);
+			return ResponseEntity.ok("Success");
+		} catch (Exception e) {
+			log.error("Failed to delete banner", e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete banner");
+		}
 	}
 }

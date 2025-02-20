@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.zeus.notice.domain.Notice;
 import com.zeus.user.domain.User;
+import com.zeus.admin.domain.AdminBannerDTO;
 import com.zeus.admin.domain.AdminEventDTO;
 import com.zeus.admin.domain.AdminReviewDTO;
 import com.zeus.admin.domain.ManagerFestivalAuthDTO;
@@ -87,8 +88,13 @@ public interface AdminMapper {
 	// 공지사항 삭제
 	public void noticeDelete(List<Integer> ids) throws Exception;
 	
-//	배너 관리 페이지
-	
+// 배너 관리 페이지
+	public List<AdminBannerDTO> bannerSellectAll() throws Exception;
+
+	public void insertBanner(AdminBannerDTO banner) throws Exception;
+
+	public void deleteBanner(int bannerId) throws Exception;
+
 //	예매내역 관리 페이지
 	
 	// 예매내역 전체 및 검색 전체조회
@@ -101,4 +107,7 @@ public interface AdminMapper {
 
 	// 공공데이터 이벤트 전체 조회
 	public List<AdminPublicDataEvent> publicDataEventSellectAll() throws Exception;
+
+	// 이벤트 전체 조회
+	public List<AdminPublicDataEvent> eventSellectAll() throws Exception;
 }
