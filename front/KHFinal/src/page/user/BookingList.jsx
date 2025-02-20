@@ -3,7 +3,7 @@ import Footer from '../../components/Footer';
 import React, { useState, useEffect, useContext } from 'react';
 import './css/BookingList.css';
 import { Context } from '../../Context';
-import { Button } from 'react-bootstrap';
+import { Button, Spinner } from 'react-bootstrap'; // Spinner import 추가
 
 // API 함수 import
 import { getReservedData, deleteReservedData, getReservedCancelData } from './userApi'; // 'saveReservedCancelData', 'getReservedCancelData' 추가 import
@@ -15,6 +15,7 @@ function BookingList() {
   const [reservations, setReservations] = useState([]); // 서버에서 불러온 예매 내역
   const [canceledReservations, setCanceledReservations] = useState([]); // 취소된 예약들
   const { getDarkMode, getDarkModeHover } = useContext(Context);
+  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
 
   // 예매 내역을 불러오는 useEffect
   useEffect(() => {
@@ -29,6 +30,7 @@ function BookingList() {
       } else {
         alert(data.message || '예매 내역을 불러오는 데 실패했습니다.');
       }
+      setIsLoading(false); // 데이터 로딩 완료
     };
 
     fetchReservedData();
@@ -154,64 +156,78 @@ function BookingList() {
               style={{ textAlign: 'center' }}
               id="reservation-history"
             >
-              {Array.isArray(reservations) && reservations.length === 0 ? (
-                <p>예매 내역이 없습니다.</p>
-              ) : (
-                <table className="BookingList-table">
-                  <thead>
-                    <tr className="BookingList-tr">
-                      <th className="BookingList-th">예약번호</th>
-                      <th className="BookingList-th">예매일</th>
-                      <th className="BookingList-th">축제명</th>
-                      <th className="BookingList-th">인원</th>
-                      <th className="BookingList-th">사용 기한</th>
-                      <th className="BookingList-th">결제 금액</th> {/* 결제 금액 항목 추가 */}
-                      <th className="BookingList-th">선택</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {reservations.map((reservation) => (
-                      <tr key={reservation.no}>
-                        <td className="BookingList-td">{reservation.no}</td>
-                        <td className="BookingList-td">
-                          {(() => {
-                            // Date 객체로 변환
-                            const date = new Date(reservation.reservedDate);
-
-                            // yyyy-mm-dd 형식으로 변환
-                            const formattedDate = date.toISOString().split('T')[0]; // '2025-02-17'
-
-                            return formattedDate;
-
-                          })()}
-                        </td>
-                        <td className="BookingList-td">{reservation.name}</td> {/* 축제명 출력 */}
-                        <td className="BookingList-td">{reservation.qt}</td>
-                        <td className="BookingList-td">{reservation.endDate}</td> {/* 사용 기한 출력 */}
-                        <td className="BookingList-td">{new Intl.NumberFormat().format(reservation.totalCost)} 원</td> {/* 결제 금액 표시 */}
-                        <td className="BookingList-td">
-                        <input
-                          type="checkbox"
-                          onChange={() => handleReservationSelect(reservation.no)} // 'NO' -> 'no'로 수정
-                          checked={selectedReservations.includes(reservation.no)} // 'NO' -> 'no'로 수정
-                          disabled={isReservationExpired(reservation.reservedDate)} // 24시간이 경과했으면 비활성화
-                        />
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              {/* 로딩 중이면 스피너 표시 */}
+              {isLoading && reservations.length === 0 && (
+                <div className="d-flex justify-content-center my-4">
+                  <Spinner animation="border" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </Spinner>
+                </div>
               )}
-              <p className="BookingList-warning">
-                ※ 예매 취소는 예매일로부터 24시간 이내에만 가능합니다.
-              </p>
-              <Button
-                variant="none"
-                className={`${getDarkModeHover()} mt-3 w-100`}
-                onClick={handleCancelReservations}
-              >
-                예매 취소
-              </Button>
+
+              {/* 로딩이 완료되면 테이블 표시 */}
+              {!isLoading && (
+                <>
+                  {Array.isArray(reservations) && reservations.length === 0 ? (
+                    <p>예매 내역이 없습니다.</p>
+                  ) : (
+                    <table className="BookingList-table">
+                      <thead>
+                        <tr className="BookingList-tr">
+                          <th className="BookingList-th">예약번호</th>
+                          <th className="BookingList-th">예매일</th>
+                          <th className="BookingList-th">축제명</th>
+                          <th className="BookingList-th">인원</th>
+                          <th className="BookingList-th">사용 기한</th>
+                          <th className="BookingList-th">결제 금액</th> {/* 결제 금액 항목 추가 */}
+                          <th className="BookingList-th">선택</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {reservations.map((reservation) => (
+                          <tr key={reservation.no}>
+                            <td className="BookingList-td">{reservation.no}</td>
+                            <td className="BookingList-td">
+                              {(() => {
+                                // Date 객체로 변환
+                                const date = new Date(reservation.reservedDate);
+
+                                // yyyy-mm-dd 형식으로 변환
+                                const formattedDate = date.toISOString().split('T')[0]; // '2025-02-17'
+
+                                return formattedDate;
+
+                              })()}
+                            </td>
+                            <td className="BookingList-td">{reservation.name}</td> {/* 축제명 출력 */}
+                            <td className="BookingList-td">{reservation.qt}</td>
+                            <td className="BookingList-td">{reservation.endDate}</td> {/* 사용 기한 출력 */}
+                            <td className="BookingList-td">{new Intl.NumberFormat().format(reservation.totalCost)} 원</td> {/* 결제 금액 표시 */}
+                            <td className="BookingList-td">
+                            <input
+                              type="checkbox"
+                              onChange={() => handleReservationSelect(reservation.no)} // 'NO' -> 'no'로 수정
+                              checked={selectedReservations.includes(reservation.no)} // 'NO' -> 'no'로 수정
+                              disabled={isReservationExpired(reservation.reservedDate)} // 24시간이 경과했으면 비활성화
+                            />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}
+                  <p className="BookingList-warning">
+                    ※ 예매 취소는 예매일로부터 24시간 이내에만 가능합니다.
+                  </p>
+                  <Button
+                    variant="none"
+                    className={`${getDarkModeHover()} mt-3 w-100`}
+                    onClick={handleCancelReservations}
+                  >
+                    예매 취소
+                  </Button>
+                </>
+              )}
             </div>
 
             <div

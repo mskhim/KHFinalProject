@@ -361,6 +361,7 @@ public class UserController {
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//회원 정보 수정.
+	// @PreAuthorize("hasAuthority('ROLE_2')")
 	@PutMapping("/updateUserData")
 	public ResponseEntity <Map <String, Object>> updateUserData (@CookieValue (name = "jwt", required = false) String jwtToken,
 																@RequestBody User updatedUser)
@@ -401,6 +402,7 @@ public class UserController {
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
 	// 회원 탈퇴.
+	// @PreAuthorize("hasAnyAuthority('ROLE_0', 'ROLE_2')")
 	@DeleteMapping("/deleteUserData")
 	public ResponseEntity<Map <String, Object>> deleteUserData(
 	        @CookieValue(name = "jwt", required = false) String jwtToken,

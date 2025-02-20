@@ -10,16 +10,16 @@ import './css/UserLoginPage.css';
 import UserFind from './UserFind';
 
 const UserLoginPage = () => {
-  const { getDarkMode, getDarkModeHover, darkMode, login } =
-    useContext(Context);
+  const { getDarkMode, getDarkModeHover, darkMode, login } = useContext(Context);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  const [id, setId] = useState('');
-  const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
+  const [id, setId] = useState(''); // 아이디 상태
+  const [password, setPassword] = useState(''); // 비밀번호 상태
+  const [rememberMyId, setRememberMyId] = useState(false); // 아이디 저장 체크 상태
   const [showFindModal, setShowFindModal] = useState(false);
   const [modalContent, setModalContent] = useState('');
 
+  // 페이지 로드 시 실행되는 useEffect
   useEffect(() => {
     checkAuthStatus()
       .then((data) => {
@@ -29,6 +29,19 @@ const UserLoginPage = () => {
         }
       })
       .finally(() => setIsLoading(false)); // ✅ 로딩 완료
+
+    // 페이지가 로드될 때 아이디가 localStorage에 저장되어 있으면 불러오기
+    const savedRememberMyId = localStorage.getItem('rememberMyId');
+    if (savedRememberMyId === 'true') {
+      const savedId = localStorage.getItem('savedId');
+      if (savedId) {
+        setId(savedId); // localStorage에 저장된 아이디를 상태에 설정
+        setRememberMyId(true); // 아이디 저장 체크박스를 체크 상태로 설정
+      }
+    } else {
+      setRememberMyId(false); // 아이디 저장 체크박스 해제 상태
+      setId(''); // 아이디 비워두기
+    }
   }, [navigate]);
 
   // 모달 열기
@@ -39,26 +52,61 @@ const UserLoginPage = () => {
 
   // 모달 닫기
   const handleClose = () => setShowFindModal(false);
+
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
+
+    // 로그인 처리
     const response = await handleLogin(id, 'common', password);
     const flag = response.success;
     if (flag) {
       login(response.nickname, response.role); // ✅ 로그인 상태로 변경
-      // ✅ 로그인 성공 후, 이전 페이지로 이동
-      if (response.role == 1) {
+
+      // 로그인 성공 후, 이전 페이지로 이동
+      if (response.role === 1) {
         navigate('/manager/managerStats');
         return;
       }
-      if (response.role == 0) {
+      if (response.role === 0) {
         navigate('/admin/adminMain');
         return;
       }
+
       const preLoginUrl = sessionStorage.getItem('preLoginUrl') || '/';
       navigate(preLoginUrl);
       sessionStorage.removeItem('preLoginUrl');
+
+      // '아이디 저장' 체크박스가 체크된 경우, 아이디를 localStorage에 저장
+      if (rememberMyId) {
+        localStorage.setItem('rememberMyId', 'true');
+        localStorage.setItem('savedId', id); // 아이디 저장
+      } else {
+        localStorage.removeItem('rememberMyId'); // 체크 해제 시 localStorage에서 아이디 삭제
+        localStorage.removeItem('savedId'); // 저장된 아이디도 삭제
+      }
     } else {
-      navigate('/userLoginPage');
+      navigate('/userLoginPage'); // 로그인 실패 시, 로그인 페이지로 리다이렉트
+    }
+  };
+
+  // 로그아웃 시, localStorage 상태 초기화
+  const handleLogout = () => {
+    localStorage.removeItem('rememberMyId');
+    localStorage.removeItem('savedId');
+    setId('');
+    setRememberMyId(false);
+    navigate('/userLoginPage');
+  };
+
+  const handleRememberMyIdChange = (e) => {
+    const isChecked = e.target.checked;
+    setRememberMyId(isChecked);
+
+    if (!isChecked) {
+      // 아이디 저장 체크박스가 해제되면 localStorage에서 해당 항목 삭제
+      localStorage.removeItem('rememberMyId');
+      localStorage.removeItem('savedId');
+      setId(''); // 아이디 인풋 창 초기화
     }
   };
 
@@ -104,10 +152,10 @@ const UserLoginPage = () => {
           {/* 로그인 상태 유지 체크박스 */}
           <Form.Check
             type="checkbox"
-            id="rememberMe"
-            label="로그인 상태 유지"
-            checked={rememberMe}
-            onChange={(e) => setRememberMe(e.target.checked)}
+            id="rememberMyId"
+            label="아이디 저장"
+            checked={rememberMyId}
+            onChange={handleRememberMyIdChange}
             className="mb-3"
           />
 
@@ -167,6 +215,7 @@ const UserLoginPage = () => {
           <ApiLogin /> {/* 외부 API 로그인 컴포넌트 */}
         </div>
       </div>
+
       {/* 모달 (팝업창) */}
       <Modal
         show={showFindModal}
@@ -185,6 +234,7 @@ const UserLoginPage = () => {
           )}
         </Modal.Body>
       </Modal>
+
       <Footer />
     </>
   );
