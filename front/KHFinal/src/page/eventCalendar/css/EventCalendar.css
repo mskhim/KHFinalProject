@@ -12,6 +12,7 @@
   border-radius: 8px;
   box-shadow: 0px 4px 10px rgba(160, 160, 160, 0.1);
 }
+
 /* 월 타이틀 스타일 */
 .month-title {
   font-size: 24px;
@@ -62,9 +63,9 @@
   width: 60px;
   vertical-align: middle;
   cursor: pointer;
-  border-radius: 10px;
   transition: 0.3s ease-in-out;
   font-weight: bold;
+  border-radius: 0px !important;
 }
 
 .calendar-day:hover {
