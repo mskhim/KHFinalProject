@@ -103,7 +103,7 @@ const EventCalendar = () => {
           week.push(
             <td
               key={`day-${i}-${j}`}
-              className={`calendar-day text-center rounded ${getDarkMode()} ${
+              className={`calendar-day text-center ${getDarkMode()} ${
                 isToday ? 'calendar-today' : ''
               } ${isSelected ? 'calendar-selected' : ''}`}
               onClick={() => handleDateSelection(date)}
