@@ -43,7 +43,7 @@
 
 /* 검색 버튼 */
 
-.QNA-btn, QNA-btn-dark {
+.QNA-btn, .QNA-btn-dark {
   height: 40px;
   font-size: 14px;
   padding: 7px 14px;
@@ -87,10 +87,6 @@
   text-decoration: none;
 }
 
-.QNA-td-title a:hover {
-  color: #9c9c9c;
-}
-
 .QNA-td-author {
   text-align: left;
   padding-left: 20px;
@@ -115,9 +111,15 @@
 }
 
 /* Q&A 아코디언 */
-.QNA-accordion-toggle {
+.QNA-board-tbody {
   cursor: pointer;
 }
+
+.QNA-accordion:hover {
+  background-color: #afafaf;
+  transition: background-color 0.5s ease-in-out;
+}
+
 
 /* 답변 입력 영역 가로 정렬 */
 .QNA-reply-input {

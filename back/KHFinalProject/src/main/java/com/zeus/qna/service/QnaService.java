@@ -16,5 +16,5 @@ public interface QnaService {
 	String getReply(Qna qna);
 	int getPageCount(SortDTO sortDTO);
 	boolean getisAuthenticated(Qna qna);
-
+	void deletePostAndReplies(int no);
 }

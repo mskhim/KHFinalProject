@@ -14,5 +14,4 @@ public class Qna {
     private LocalDate subDate;
     private int qnaNo;
     private int originalNo;
-
 }
