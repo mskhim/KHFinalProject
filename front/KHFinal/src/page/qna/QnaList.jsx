@@ -20,10 +20,12 @@ const QNAList = () => {
   const [selectedReply, setSelectedReply] = useState(""); // 선택한 답변
   const [isLoading, setIsLoading] = useState(false); // 로딩 중 여부
   const [isAuthenticated, setIsAuthenticated] = useState(false); // 인증 여부
+
   // 📌 검색 입력 핸들러
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
+
   useEffect(() => {
     setDarkMode(sessionStorage.getItem("darkMode") === "true");
     fetch("http://localhost:8080/qna/list")
@@ -31,6 +33,15 @@ const QNAList = () => {
       .then((data) => {
         console.log(data);
         return setQnaList(data);
+      });
+
+    // 인증 상태 확인
+    fetch("http://localhost:8080/auth/status", {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setIsAuthenticated(data.isAuthenticated);
       });
   }, [setDarkMode]);
 
@@ -229,27 +240,29 @@ const QNAList = () => {
         </Link>
       </div>
       {/* 페이지네이션 (검색 모드가 아닐 때만 표시) */}
-      {!isSearchMode && totalPages > 1 && (
-        <Pagination className={`justify-content-center mt-4 ${getDarkMode()}`}>
-          <Pagination.Prev
-            disabled={currentPage === 1}
-            onClick={() => handlePageChange(currentPage - 1)}
-          />
-          {Array.from({ length: totalPages }, (_, index) => (
-            <Pagination.Item
-              key={index + 1}
-              active={index + 1 === currentPage}
-              onClick={() => handlePageChange(index + 1)}
-            >
-              {index + 1}
-            </Pagination.Item>
-          ))}
-          <Pagination.Next
-            disabled={currentPage === totalPages}
-            onClick={() => handlePageChange(currentPage + 1)}
-          />
-        </Pagination>
-      )}
+
+      <Pagination
+        className={`justify-content-center mt-4 ${getDarkMode()} custom-pagination`}
+      >
+        <Pagination.Prev
+          disabled={currentPage === 1}
+          onClick={() => handlePageChange(currentPage - 1)}
+        />
+        {Array.from({ length: totalPages }, (_, index) => (
+          <Pagination.Item
+            key={index + 1}
+            active={index + 1 === currentPage}
+            onClick={() => handlePageChange(index + 1)}
+          >
+            {index + 1}
+          </Pagination.Item>
+        ))}
+        <Pagination.Next
+          disabled={currentPage === totalPages}
+          onClick={() => handlePageChange(currentPage + 1)}
+        />
+      </Pagination>
+
       <Footer className="QNA-footer" />
     </>
   );
