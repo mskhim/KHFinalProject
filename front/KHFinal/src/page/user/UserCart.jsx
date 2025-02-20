@@ -2,10 +2,10 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import React, { useState, useEffect, useContext } from 'react';
 import { Context } from '../../Context';
-import { getCartData, deleteCartData } from './userApi'; //
+import { getCartData, deleteCartData } from './userApi';
 import './css/UserCart.css';
 import { useNavigate } from 'react-router-dom';
-// deleteCartData를 import합니다.
+import { Spinner } from 'react-bootstrap'; // ✅ Spinner import
 
 function UserCart() {
   const navigate = useNavigate(); // ✅ 네비게이션 훅 사용
@@ -20,6 +20,8 @@ function UserCart() {
 
   // 총 결제 금액을 저장하는 상태
   const [totalAmount, setTotalAmount] = useState(0); // 결제 금액 초기화
+
+  const [isLoading, setIsLoading] = useState(true); // ✅ 로딩 상태 추가
 
   // 수량 변경 시 호출되는 함수
   const handleQuantityChange = (id, change) => {
@@ -144,6 +146,7 @@ function UserCart() {
       if (cartData && cartData.length > 0) {
         setCartItems(cartData); // 받아온 장바구니 데이터 상태에 설정
       }
+      setIsLoading(false); // ✅ 데이터 로딩 완료
     };
 
     fetchCartData(); // 장바구니 데이터 호출
@@ -168,110 +171,122 @@ function UserCart() {
         </header>
 
         <div className={`Cart-wrapper ${getDarkMode()}`}>
-          <table className={`Cart-table ${getDarkMode()}`}>
-            <thead className={`Cart-thead ${getDarkMode()}`}>
-              <tr>
-                <th>
-                  {/* 전체 선택 체크박스 */}
-                  <input
-                    type="checkbox"
-                    checked={selectedItems.length === cartItems.length} // 모든 항목이 선택되었을 때 체크박스 선택
-                    onChange={handleSelectAll} // 체크박스 클릭 시 모든 항목 선택
-                    disabled={cartItems.length === 0} // 장바구니에 항목이 없으면 체크박스 비활성화
-                  />
-                </th>
-                <th>상품명</th>
-                <th>가격</th>
-                <th>수량</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {cartItems.length > 0 ? (
-                cartItems.map((item) => (
-                  <tr key={item.no} className={getDarkMode()}>
-                    <td>
-                      {/* 개별 항목 선택 체크박스 */}
-                      <input
-                        type="checkbox"
-                        checked={selectedItems.some(
-                          (selected) => selected.id === item.no
-                        )} // 객체 리스트에서 ID 비교
-                        onChange={() => handleSelectItem(item)} // `item` 전체 객체 전달
-                        disabled={cartItems.length === 0} // 장바구니에 항목이 없으면 체크박스 비활성화
-                      />
-                    </td>
-                    <td>
-                      <div className="Cart-festival-info">
-                        <div className="Cart-festival-text">
-                          <h3>
-                            <span
-                              onClick={() => handleItemClick(item.eventNo)} // 클릭 시 handleItemClick 함수 호출
-                              className={`Cart-festival-link ${getDarkMode()}`}
-                              style={{ cursor: 'pointer' }} // 클릭 가능한 스타일 추가
-                            >
-                              {item.name}
-                            </span>
-                          </h3>
-                          <p className={`Cart-festival-date ${getDarkMode()}`}>
-                            축제 일시 : {item.startDate} ~ {item.endDate}
-                          </p>
-                          <p
-                            className={`Cart-festival-description ${getDarkMode()}`}
-                          >
-                            상세 설명 : {item.content}
-                          </p>
-                        </div>
-                      </div>
-                    </td>
+          {/* ✅ 로딩 중이면 스피너 표시 */}
+          {isLoading && cartItems.length === 0 && (
+            <div className="d-flex justify-content-center my-4">
+              <Spinner animation="border" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </Spinner>
+            </div>
+          )}
 
-                    {/* 가격 * 수량 출력 */}
-                    <td className={getDarkMode()} style={{ width: '20%' }}>
-                      {(item.price * item.qt).toLocaleString()} 원
-                    </td>
-                    <td>
-                      <div className="Cart-item-quantity">
-                        {/* 수량 조절 버튼 */}
+          {/* ✅ 로딩이 완료되면 테이블 표시 */}
+          {!isLoading && (
+            <table className={`Cart-table ${getDarkMode()}`}>
+              <thead className={`Cart-thead ${getDarkMode()}`}>
+                <tr>
+                  <th>
+                    {/* 전체 선택 체크박스 */}
+                    <input
+                      type="checkbox"
+                      checked={selectedItems.length === cartItems.length} // 모든 항목이 선택되었을 때 체크박스 선택
+                      onChange={handleSelectAll} // 체크박스 클릭 시 모든 항목 선택
+                      disabled={cartItems.length === 0} // 장바구니에 항목이 없으면 체크박스 비활성화
+                    />
+                  </th>
+                  <th>상품명</th>
+                  <th>가격</th>
+                  <th>수량</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {cartItems.length > 0 ? (
+                  cartItems.map((item) => (
+                    <tr key={item.no} className={getDarkMode()}>
+                      <td>
+                        {/* 개별 항목 선택 체크박스 */}
+                        <input
+                          type="checkbox"
+                          checked={selectedItems.some(
+                            (selected) => selected.id === item.no
+                          )} // 객체 리스트에서 ID 비교
+                          onChange={() => handleSelectItem(item)} // `item` 전체 객체 전달
+                          disabled={cartItems.length === 0} // 장바구니에 항목이 없으면 체크박스 비활성화
+                        />
+                      </td>
+                      <td>
+                        <div className="Cart-festival-info">
+                          <div className="Cart-festival-text">
+                            <h3>
+                              <span
+                                onClick={() => handleItemClick(item.eventNo)} // 클릭 시 handleItemClick 함수 호출
+                                className={`Cart-festival-link ${getDarkMode()}`}
+                                style={{ cursor: 'pointer' }} // 클릭 가능한 스타일 추가
+                              >
+                                {item.name}
+                              </span>
+                            </h3>
+                            <p className={`Cart-festival-date ${getDarkMode()}`}>
+                              축제 일시 : {item.startDate} ~ {item.endDate}
+                            </p>
+                            <p
+                              className={`Cart-festival-description ${getDarkMode()}`}
+                            >
+                              상세 설명 : {item.content}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* 가격 * 수량 출력 */}
+                      <td className={getDarkMode()} style={{ width: '20%' }}>
+                        {(item.price * item.qt).toLocaleString()} 원
+                      </td>
+                      <td>
+                        <div className="Cart-item-quantity">
+                          {/* 수량 조절 버튼 */}
+                          <button
+                            className={`Cart-quantity-btn ${getDarkModeHover()}`}
+                            onClick={() => handleQuantityChange(item.no, -1)} // 수량 -1
+                          >
+                            -
+                          </button>
+                          <span className="Cart-quantity-display">{item.qt}</span>
+                          <button
+                            className={`Cart-quantity-btn ${getDarkModeHover()}`}
+                            onClick={() => handleQuantityChange(item.no, 1)} // 수량 +1
+                          >
+                            +
+                          </button>
+                        </div>
+                      </td>
+                      <td>
+                        {/* 아이템 삭제 버튼 */}
                         <button
-                          className={`Cart-quantity-btn ${getDarkModeHover()}`}
-                          onClick={() => handleQuantityChange(item.no, -1)} // 수량 -1
+                          className={`Cart-remove-btn ${getDarkMode()}`}
+                          onClick={() => handleRemoveItem(item.no)} // 아이템 삭제
+                          style={{ width: '50px' }}
                         >
-                          -
+                          삭제
                         </button>
-                        <span className="Cart-quantity-display">{item.qt}</span>
-                        <button
-                          className={`Cart-quantity-btn ${getDarkModeHover()}`}
-                          onClick={() => handleQuantityChange(item.no, 1)} // 수량 +1
-                        >
-                          +
-                        </button>
-                      </div>
-                    </td>
-                    <td>
-                      {/* 아이템 삭제 버튼 */}
-                      <button
-                        className={`Cart-remove-btn ${getDarkMode()}`}
-                        onClick={() => handleRemoveItem(item.no)} // 아이템 삭제
-                        style={{ width: '50px' }}
-                      >
-                        삭제
-                      </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="5"
+                      align="center"
+                      style={{ textAlign: 'center' }}
+                    >
+                      장바구니에 항목이 없습니다.
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan="5"
-                    align="center"
-                    style={{ textAlign: 'center' }}
-                  >
-                    장바구니에 항목이 없습니다.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                )}
+              </tbody>
+            </table>
+          )}
 
           <div className={`Cart-summary ${getDarkMode()}`}>
             <p className={getDarkMode()}>
