@@ -29,7 +29,6 @@ export default function Top4() {
       <div className="Top4-head">
         {top4Events.length === 4 ? (
           <>
-            {/* 첫 번째 그룹 (index 0, 1) */}
             <div className="Top4-row-1">
               {top4Events.slice(0, 2).map((event, index) => (
                 <Card
@@ -49,33 +48,18 @@ export default function Top4() {
                     className="top4-image"
                     style={{
                       width: '100%',
-                      height: '90%',
+                      height: '100%',
                       objectPosition: 'center',
                       cursor: 'pointer',
                     }}
                   />
                   <Card.ImgOverlay>
-                    <Card.Title className="Top4-titlename">
-                      <Badge bg="secondary">{`Top ${index + 1}`}</Badge>
-                    </Card.Title>
+                    <div className="Top4-card-overlay">
+                      <Card.Title className="Top4-card-name">
+                        {event.name}
+                      </Card.Title>
+                    </div>
                   </Card.ImgOverlay>
-                  <div
-                    className="Top4-card-name"
-                    style={{
-                      backgroundColor: 'transparent',
-                      color: 'white',
-                      padding: '5px 10px',
-                      display: 'inline-block',
-                      height: '50px',
-                    }}
-                  >
-                    <Card.Title
-                      className="Top4-card-name"
-                      style={{ fontSize: '30px', height: '150px' }}
-                    >
-                      {event.name}
-                    </Card.Title>
-                  </div>
                 </Card>
               ))}
             </div>
@@ -100,33 +84,18 @@ export default function Top4() {
                     className="top4-image"
                     style={{
                       width: '100%',
-                      height: '90%',
+                      height: '100%',
                       objectPosition: 'center',
                       cursor: 'pointer',
                     }}
                   />
                   <Card.ImgOverlay>
-                    <Card.Title className="Top4-titlename">
-                      <Badge bg="secondary">{`Top ${index + 3}`}</Badge>
-                    </Card.Title>
+                    <div className="Top4-card-overlay">
+                      <Card.Title className="Top4-card-name">
+                        {event.name}
+                      </Card.Title>
+                    </div>
                   </Card.ImgOverlay>
-                  <div
-                    className="Top4-card-name"
-                    style={{
-                      backgroundColor: 'transparent',
-                      color: 'white',
-                      padding: '5px 10px',
-                      display: 'inline-block',
-                      height: '50px',
-                    }}
-                  >
-                    <Card.Title
-                      className="Top4-card-name"
-                      style={{ fontSize: '30px', height: '150px' }}
-                    >
-                      {event.name}
-                    </Card.Title>
-                  </div>
                 </Card>
               ))}
             </div>

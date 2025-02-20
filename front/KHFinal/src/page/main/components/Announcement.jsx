@@ -58,7 +58,7 @@ export default function Announcement() {
       <div className="Announcement">
         <Card
           className="Announcement-content"
-          style={{ width: '98%', height: '30px' }}
+          style={{ width: '98%', height: '50px' }}
         >
           <Card.Body className="Announcement-content-body">
             <Slider
