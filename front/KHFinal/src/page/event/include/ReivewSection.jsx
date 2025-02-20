@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState, useRef } from 'react';
-import { Form, Button, Row, Col, Pagination } from 'react-bootstrap';
+import { Form, Button, Row, Col, Pagination, Spinner } from 'react-bootstrap';
 import { ButtonDarkMode, ButtonRoleAndUserNo } from '../../../components/ui';
 import { Context } from '../../../Context';
 import {
@@ -227,7 +227,11 @@ const ReviewSection = () => {
 
       {/* 리뷰 목록 */}
       {isLoading ? (
-        <div>Loading...</div>
+        <div className="d-flex justify-content-center my-4">
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        </div>
       ) : eventReview.length === 0 ? (
         <div>리뷰가 존재하지 않습니다.</div>
       ) : (

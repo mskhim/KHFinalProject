@@ -54,10 +54,10 @@
 		ORDER BY
 		<choose>
 			<when test="sort == 'subDate'">
-			CASE
+				CASE
 				WHEN END_DATE >= SYSDATE THEN 1  <!-- 진행 중인 이벤트 우선 -->
 				ELSE 2  <!-- 종료된 이벤트는 맨 뒤 -->
-				END, 
+				END,
 				E.NO DESC  <!-- 등록일 순 -->
 			</when>
 			<when test="sort == 'rating'">
@@ -188,9 +188,27 @@
 		<!-- 정렬 옵션 -->
 		ORDER BY P.START_DATE ASC
 	</select>
-<select id="cartDuplCheck" parameterType="Cart"
-		resultType="int">
+	<select id="cartDuplCheck" parameterType="Cart" resultType="int">
 		SELECT count(*) FROM CART
-		WHERE USER_ACCOUNT_NO=#{userAccountNo} AND EVENT_NO = #{eventNo}
+		WHERE USER_ACCOUNT_NO=#{userAccountNo} AND
+		EVENT_NO = #{eventNo}
+	</select>
+	<select id="checkReplyAlready" parameterType="EventReview"
+		resultType="int">
+		SELECT count(*) FROM event_review
+		WHERE
+		USER_ACCOUNT_NO=#{userAccountNo} AND EVENT_NO = #{eventNo}
+	</select>
+	<select id="checkReserved" parameterType="EventReview"
+		resultType="int">
+		SELECT count(*) FROM RESERVED
+		WHERE
+		USER_ACCOUNT_NO=#{userAccountNo} AND EVENT_NO = #{eventNo}
+	</select>
+		<select id="checkEventPrice" parameterType="EventReview"
+		resultType="int">
+		SELECT price FROM EVENT
+		WHERE
+		NO = #{eventNo}
 	</select>
 </mapper>

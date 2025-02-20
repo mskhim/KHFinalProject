@@ -64,13 +64,13 @@ const EventListSearchWrap = ({ setSortOption, sortOption }) => {
 
   return (
     <Container
-      className={`EventListSearchWrap-search-bar py-3 px-4 rounded shadow-none `}
+      className={`EventListSearchWrap-search-bar py-3 px-1 rounded shadow-none `}
     >
       <Row className="align-items-center justify-content-center">
         {/* ✅ 날짜 입력 */}
         <Col
           xs={12}
-          md={4}
+          md={3}
           className={`mb-2 mb-md-0 border-0 ${getDarkMode()}`}
         >
           <Form.Control

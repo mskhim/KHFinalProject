@@ -10,7 +10,8 @@ import './css/UserLoginPage.css';
 import UserFind from './UserFind';
 
 const UserLoginPage = () => {
-  const { getDarkMode, getDarkModeHover, darkMode, login } = useContext(Context);
+  const { getDarkMode, getDarkModeHover, darkMode, login } =
+    useContext(Context);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [id, setId] = useState('');
@@ -38,7 +39,6 @@ const UserLoginPage = () => {
 
   // 모달 닫기
   const handleClose = () => setShowFindModal(false);
-
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     const response = await handleLogin(id, 'common', password);
@@ -46,6 +46,14 @@ const UserLoginPage = () => {
     if (flag) {
       login(response.nickname, response.role); // ✅ 로그인 상태로 변경
       // ✅ 로그인 성공 후, 이전 페이지로 이동
+      if (response.role == 1) {
+        navigate('/manager/managerStats');
+        return;
+      }
+      if (response.role == 0) {
+        navigate('/admin/adminMain');
+        return;
+      }
       const preLoginUrl = sessionStorage.getItem('preLoginUrl') || '/';
       navigate(preLoginUrl);
       sessionStorage.removeItem('preLoginUrl');
@@ -63,7 +71,9 @@ const UserLoginPage = () => {
       <Header />
 
       {/* 로그인 폼 */}
-      <div className={`UserLoginPage-form-container p-5 ${getDarkMode()} form-container`}>
+      <div
+        className={`UserLoginPage-form-container p-5 ${getDarkMode()} form-container`}
+      >
         <Form onSubmit={handleLoginSubmit}>
           {/* 아이디 입력 */}
           <Form.Floating className="mb-3">
@@ -119,7 +129,9 @@ const UserLoginPage = () => {
               <Nav.Item>
                 <Nav.Link
                   onClick={() => handleShow('아이디 찾기')}
-                  className={`mx-2 UserLoginPage-nav-link-hover ${darkMode ? 'text-light dark-mode' : 'text-dark'}`}
+                  className={`mx-2 UserLoginPage-nav-link-hover ${
+                    darkMode ? 'text-light dark-mode' : 'text-dark'
+                  }`}
                 >
                   아이디 찾기
                 </Nav.Link>
@@ -128,7 +140,9 @@ const UserLoginPage = () => {
               <Nav.Item>
                 <Nav.Link
                   onClick={() => handleShow('비밀번호 찾기')}
-                  className={`mx-2 UserLoginPage-nav-link-hover ${darkMode ? 'text-light dark-mode' : 'text-dark'}`}
+                  className={`mx-2 UserLoginPage-nav-link-hover ${
+                    darkMode ? 'text-light dark-mode' : 'text-dark'
+                  }`}
                 >
                   비밀번호 찾기
                 </Nav.Link>
@@ -137,7 +151,9 @@ const UserLoginPage = () => {
               <Nav.Item>
                 <Nav.Link
                   onClick={() => navigate('/userInsertCommon')}
-                  className={`mx-2 UserLoginPage-nav-link-hover ${darkMode ? 'text-light dark-mode' : 'text-dark'}`}
+                  className={`mx-2 UserLoginPage-nav-link-hover ${
+                    darkMode ? 'text-light dark-mode' : 'text-dark'
+                  }`}
                 >
                   회원가입
                 </Nav.Link>

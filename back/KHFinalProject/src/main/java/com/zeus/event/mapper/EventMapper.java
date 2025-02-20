@@ -39,5 +39,11 @@ public interface EventMapper {
 	List<EventSelectListDTO> selectEventListMonth(SortDTO sortDTO);
 	//cart 에 userno 와 eventNo 를 확인해서 중복되는 항목없게
 	int cartDuplCheck(Cart cart);
+	//event_review 에 userAccountNo, eventNo 를 이용해서 이미 작성한 댓글이 있는지 확인
+	int checkReplyAlready(EventReview eventReview);
+	//reserved 에 userAccountNo, eventNo 를 이용해서 예매한 축제인지 확인.
+	int checkReserved(EventReview eventReview);
+	//event 페이지에 eventNo 를 이용해서 가격 추출
+	int checkEventPrice(EventReview eventReview);
 	
 }

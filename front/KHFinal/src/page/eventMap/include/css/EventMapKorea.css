@@ -35,7 +35,11 @@
 .EventMapKorea-mapSection {
   max-width: 1300px;
   border-radius: 8px;
+  padding: 0px 24px;
 }
 .EventMapKorea-button-group:first-child {
   border-top-left-radius: 0px !important;
+}
+.EventMapKorea-button-group {
+  padding: 0px 24px;
 }

@@ -97,7 +97,7 @@ const EventRead = () => {
       <Container className={`EventReadTitle-container ${getDarkMode()}`}>
         <Row className="align-items-center">
           {/* 📌 좌측: 메인 이미지 + 서브 이미지 */}
-          <Col md={8} className="position-relative">
+          <Col md={7} className="position-relative">
             <Card className="border-0 align-items-center mb-2 h-100">
               <Card.Img
                 src={mainImage}
@@ -107,81 +107,72 @@ const EventRead = () => {
             </Card>
 
             {/* ✅ 서브 이미지: 좌우 버튼으로 이동 */}
-            <div className="position-relative d-flex align-items-center">
-              {/* 좌측 버튼 */}
-              <Button
-                variant="none"
-                className={`position-absolute start-0 z-3 ${getDarkModeHover()} border`}
-                style={{ opacity: 0.9 }}
-                onClick={scrollLeft}
-              >
-                ◀
-              </Button>
+            <div className="event-sub-images position-relative align-items-center">
+              <div className="EventReadTitle-container-sub">
+                {/* 좌측 버튼 */}
+                <Button
+                  variant="none"
+                  className={`EventReadTitle-scroll-button EventReadTitle-scroll-left ${getDarkModeHover()}`}
+                  onClick={scrollLeft}
+                >
+                  ◀
+                </Button>
 
-              <div
-                ref={scrollRef}
-                className="d-flex w-100 mt-2 overflow-hidden"
-                style={{
-                  whiteSpace: 'nowrap',
-                  overflowX: 'auto',
-                  scrollBehavior: 'smooth',
-                }}
-              >
-                <img
-                  src={eventInfo.thumburl}
-                  alt={`Sub 1`}
-                  className="mx-1"
+                <div
+                  ref={scrollRef}
+                  className="d-flex w-100 mt-2 overflow-hidden EventReadTitle-sub-container ms-1 me-1"
                   style={{
-                    width: '100px',
-                    height: 'auto',
-                    cursor: 'pointer',
-                    borderRadius: '8px',
-                    transition: '0.3s ease-in-out',
-                    boxShadow:
-                      mainImage === eventInfo.thumburl
-                        ? '0px 4px 8px rgba(0, 0, 0, 0.2)'
-                        : 'none',
-                    opacity: mainImage === eventInfo.thumburl ? '0.6' : '1',
+                    whiteSpace: 'nowrap',
+                    overflowX: 'auto',
+                    scrollBehavior: 'smooth',
+                    position: 'relative',
                   }}
-                  onClick={() => setMainImage(eventInfo.thumburl)}
-                />
-                {subImages.map((img, index) => (
+                >
                   <img
-                    key={index}
-                    src={img}
-                    alt={`Sub ${index + 2}`}
-                    className="mx-1"
+                    src={eventInfo.thumburl}
+                    alt="Sub 1"
+                    className="EventReadTitle-sub-image"
+                    onClick={() => setMainImage(eventInfo.thumburl)}
                     style={{
-                      width: '100px',
-                      height: 'auto',
-                      cursor: 'pointer',
-                      borderRadius: '8px',
-                      transition: '0.3s ease-in-out',
                       boxShadow:
-                        mainImage === img
+                        mainImage === eventInfo.thumburl
                           ? '0px 4px 8px rgba(0, 0, 0, 0.2)'
                           : 'none',
-                      opacity: mainImage === img ? '0.6' : '1',
+                      opacity: mainImage === eventInfo.thumburl ? '0.6' : '1',
                     }}
-                    onClick={() => setMainImage(img)}
                   />
-                ))}
-              </div>
+                  {subImages.map((img, index) => (
+                    <img
+                      key={index}
+                      src={img}
+                      alt={`Sub ${index + 2}`}
+                      className="EventReadTitle-sub-image"
+                      onClick={() => setMainImage(img)}
+                      style={{
+                        boxShadow:
+                          mainImage === img
+                            ? '0px 4px 8px rgba(0, 0, 0, 0.2)'
+                            : 'none',
+                        opacity: mainImage === img ? '0.6' : '1',
+                      }}
+                    />
+                  ))}
+                </div>
 
-              {/* 우측 버튼 */}
-              <Button
-                variant="none"
-                className={`position-absolute end-0 z-3 ${getDarkModeHover()} border button`}
-                style={{ opacity: 0.7 }}
-                onClick={scrollRight}
-              >
-                ▶
-              </Button>
+                {/* 우측 버튼 */}
+                <Button
+                  variant="none"
+                  className={`EventReadTitle-scroll-button EventReadTitle-scroll-right ${getDarkModeHover()}`}
+                  onClick={scrollRight}
+                >
+                  ▶
+                </Button>
+              </div>
             </div>
           </Col>
 
           {/* 📌 우측: 축제 정보 + 예매 */}
-          <Col md={4} className="d-flex flex-column justify-content-center p-4">
+          <Col md={5} className="d-flex flex-column justify-content-center p-4">
             {' '}
             <div className="d-flex justify-content-between align-items-center mb-3">
               <h2 className="EventReadTitle-title me-5 text-nowrap">
@@ -195,30 +186,31 @@ const EventRead = () => {
               />
             </div>
             <p className="EventReadTitle-location">
-              <strong>장소:</strong> {eventInfo.place}
+              <strong>장소 :</strong> {eventInfo.place}
             </p>
             <p className="EventReadTitle-dates">
-              <strong>일정:</strong> {eventInfo.startDate} ~ {eventInfo.endDate}
+              <strong>일정 :</strong> {eventInfo.startDate} ~{' '}
+              {eventInfo.endDate}
               {eventInfo.END_DATE}
             </p>
             <p className="EventReadTitle-content">{eventInfo.content}</p>
             <hr />
             <p className="EventReadTitle-host">
-              <strong>주최:</strong> {eventInfo.host} / <strong>주관:</strong>{' '}
+              <strong>주최 :</strong> {eventInfo.host} / <strong>주관 :</strong>{' '}
               {eventInfo.governing}
             </p>
             <p className="EventReadTitle-contact">
-              <strong>문의:</strong>{' '}
+              <strong>문의 :</strong>{' '}
               <a href={`tel:${eventInfo.tel}`}>{eventInfo.tel}</a>
             </p>
             <p className="EventReadTitle-homepage">
-              <strong>공식 홈페이지:</strong>{' '}
+              <strong>공식 홈페이지 :</strong>{' '}
               <a
                 href={eventInfo.homepage}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {eventInfo.HOMEPAGE}
+                {eventInfo.homepage || '-'}
               </a>
             </p>
             {/* 🎟 티켓 수량 선택 */}
@@ -286,10 +278,10 @@ const EventRead = () => {
         </Row>
         {/* 리뷰 창과 맵 */}
         <Row>
-          <Col md={8}>
+          <Col md={7}>
             <ReviewSection rating={eventInfo.rating} eventNo={eventInfo.no} />
           </Col>
-          <Col md={4}>
+          <Col md={5}>
             <MapSection
               LATITUDE={eventInfo.latitude}
               LONGITUDE={eventInfo.longitude}

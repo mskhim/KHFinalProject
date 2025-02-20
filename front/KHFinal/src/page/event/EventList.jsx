@@ -4,6 +4,7 @@ import EventListSearchWrap from './include/EventListSearchWrap';
 import EventListViewWrap from './include/EventListViewWrap';
 import { useEffect, useState } from 'react';
 import exApi from '../../api/ExceptionApi';
+import { Container } from 'react-bootstrap';
 
 const EventList = () => {
   const [eventList, setEventList] = useState([]);
