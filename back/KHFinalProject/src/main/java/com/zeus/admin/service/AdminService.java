@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.zeus.user.domain.User;
 import com.zeus.admin.domain.AdminEventDTO;
+import com.zeus.admin.domain.AdminPublicDataEvent;
 import com.zeus.admin.domain.AdminReviewDTO;
 import com.zeus.admin.domain.ManagerFestivalAuthDTO;
 import com.zeus.notice.domain.Notice;
@@ -55,5 +56,7 @@ public interface AdminService {
 	public void addFestivalAuth(int managerNo, int festivalNo) throws Exception;
 
 	public void deleteFestivalAuth(int authNo) throws Exception;
+
+	public List<AdminPublicDataEvent> publicDataEventSellectAll() throws Exception;
 }
 

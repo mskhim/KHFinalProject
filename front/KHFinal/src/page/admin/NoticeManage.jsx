@@ -96,7 +96,7 @@ const NoticeManage = () => {
       subDate: date,
     };
     if (!newNotice.title || !newNotice.content) {
-      return alert("입력값을 확인해주세요");
+      return alert("모든 필드를 입력해야 합니다.");
     }
     await noticeInsert(newNotice);
     getList("");

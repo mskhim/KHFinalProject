@@ -24,6 +24,7 @@ import com.zeus.admin.domain.AdminQnaDTO;
 import com.zeus.admin.domain.AdminReviewDTO;
 import com.zeus.admin.domain.ManagerFestivalAuthDTO;
 import com.zeus.admin.domain.AdminReservedDTO;
+import com.zeus.admin.domain.AdminPublicDataEvent;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -236,5 +237,10 @@ public class AdminController {
 			log.error("Failed to delete festival auth", e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete festival auth");
 		}
+	}
+
+	@GetMapping("/publicDataEventSellectAll")
+	public List<AdminPublicDataEvent> publicDataEventSellectAll() throws Exception {
+		return service.publicDataEventSellectAll();
 	}
 }

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class AdminQnaDTO {
-    private int questionNo;
+    private Long questionNo;
     private String eventName;
     private String questionTitle;
     private String questionContent;

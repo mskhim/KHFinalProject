@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class AdminEventDTO {
-    private int no;
+    private Long no;
     private String publicDataEventNo;
     private int userAccountNo;
     private String price;

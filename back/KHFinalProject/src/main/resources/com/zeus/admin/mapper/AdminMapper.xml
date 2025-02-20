@@ -49,6 +49,10 @@
 	<delete id="deleteFestivalAuth" parameterType="map">
 		DELETE FROM USER_MANAGEMENT_EVENT WHERE NO = #{authNo}
 	</delete>
+	
+	<select id="publicDataEventSellectAll" resultType="AdminPublicDataEvent" parameterType="AdminPublicDataEvent">
+		SELECT * FROM PUBLIC_DATA_EVENT ORDER BY NO ASC
+	</select>
 
 	<!-- UserManage -->
 	<select id="userSelectAllBySearch" resultType="User" parameterType="User">
@@ -182,6 +186,9 @@
 	</delete>
 	
 	<!-- BannerManage -->
+	<select id="bannerSelectAll" resultType="Notice" parameterType="Notice">
+	
+	</select>
 	
 	<!-- ReservedManage -->
 	<select id="reservedSelectAllBySearch" resultType="AdminReservedDTO" parameterType="AdminReservedDTO">
