@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.zeus.main.domain.Banner;
 import com.zeus.main.domain.Main;
 import com.zeus.main.mapper.MainMapper;
 import com.zeus.notice.service.NoticeServiceImpl;
@@ -36,5 +37,10 @@ public class MainServiceImpl implements MainService {
     @Override
     public List<Main> getComeEndDate() {
         return mainMapper.comeEndDate();
+    }
+    
+    @Override
+    public List<Banner> bannerImage() {
+        return mainMapper.bannerImage();
     }
 }

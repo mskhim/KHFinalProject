@@ -1,8 +1,16 @@
 .Top4-head {
+  margin-top: 30px;
+  margin-bottom: 50px;
+}
+
+.Top4-row-1 {
   display: flex;
   flex-wrap: nowrap;
-  margin-top: 50px;
-  margin-bottom: 50px;
+}
+
+.Top4-row-2 {
+  display: flex;
+  flex-wrap: nowrap;
 }
 
 .Top4-card {
@@ -11,4 +19,11 @@
 
 .Top4-titlename {
   font-size: 30px;
+  text-align: right; /* 배지를 오른쪽으로 정렬 */
+  padding-right: 10px; /* 오른쪽 여백 추가 */
+  background-color: transparent;
+}
+
+.Top4-card-name {
+  background-color: transparent;
 }

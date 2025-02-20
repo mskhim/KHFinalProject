@@ -1,59 +1,53 @@
 .Announcement {
-  margin-top: 50px;
+  margin-top: 40px;
   display: flex;
   justify-content: center;
 }
 
-.Announcement-title {
-  margin-right: 5px;
-  display: flex;
-  align-items: center;
-  align-content: flex-end;
-}
-
 .Announcement-content {
+  width: 100%;
+  height: 30px;
   position: relative;
   display: flex;
 }
-.Announcement-slider {
-  width: 95%;
+.Announcement-content-body {
   display: flex;
-  align-content: center;
-  align-items: center;
 }
 
-.Announcement-dark-mode-button {
-  border: 1px solid rgb(0, 0, 0) !important;
-  border-radius: 5px;
+.Announcement-slider {
+  width: 100%;
+  height: 30px;
+  position: sticky;
+  bottom: 16px;
 }
 
+.Announcement-plus {
+  position: absolute;
+  bottom: 3px;
+  right: 1%;
+}
 .custom-arrow {
   position: absolute;
-  right: 10px; /* 버튼을 오른쪽에 정렬 */
+  right: -90%; /* 버튼을 오른쪽에 정렬 */
   z-index: 10;
   cursor: pointer;
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
+  background: none;
+  color: rgb(0, 0, 0);
   padding: 5px 10px;
   border-radius: 5px;
+  pointer-events: none;
+}
+
+.custom-arrow svg {
+  pointer-events: auto;
 }
 
 .custom-prev {
-  bottom: 30px;
-}
-
-.custom-prev:hover {
-  background-color: black;
-  color: white;
-  transition: all 0.3s ease-in-out;
+  bottom: 1%;
+  right: -95%;
 }
 
 .custom-next {
-  top: 30px;
-}
-
-.custom-next:hover {
-  background-color: black;
-  color: white;
-  transition: all 0.3s ease-in-out;
+  top: -15%;
+  right: -98%;
 }

@@ -9,6 +9,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { FaChevronUp, FaChevronDown } from 'react-icons/fa';
+import plus from '../../../assets/plus.png';
 
 export default function Announcement() {
   const { darkMode } = useContext(Context);
@@ -56,49 +57,38 @@ export default function Announcement() {
     <>
       <div className="Announcement">
         <Card
-          className="Announcement-title"
-          style={{
-            width: '14%',
-            maxWidth: '300px',
-            fontSize: '30px',
-            height: '90px',
-          }}
-        >
-          <Card.Body className="Announcement-text-center">
-            <p>Notice</p>
-          </Card.Body>
-        </Card>
-        <Card
           className="Announcement-content"
-          style={{ width: '85%', height: '90px' }}
+          style={{ width: '98%', height: '30px' }}
         >
-          <Card.Body className="Announcement-content">
+          <Card.Body className="Announcement-content-body">
             <Slider
               {...settings}
-              style={{ cursor: 'pointer' }}
+              style={{
+                cursor: 'pointer',
+                width: '50%',
+                fontSize: '15px',
+              }}
               className="Announcement-slider"
             >
               {notices.length > 0 ? (
                 notices.map((notice) => (
-                  <h4
+                  <h5
                     key={notice.no}
                     onClick={() => navigate(`/noticeRead/${notice.no}`)}
                   >
                     {notice.title}
-                  </h4>
+                  </h5>
                 ))
               ) : (
                 <p>공지사항이 없습니다.</p>
               )}
             </Slider>
-            <ButtonDarkMode
+            <img
+              className="Announcement-plus"
+              src={plus}
+              alt=""
               onClick={() => navigate('/noticeList')}
-              text="목록"
-              className={
-                darkMode
-                  ? 'Announcement-dark-mode-button'
-                  : 'Announcement-light-mode-button'
-              }
+              style={{ cursor: 'pointer', width: '20px', height: '20px' }}
             />
           </Card.Body>
         </Card>

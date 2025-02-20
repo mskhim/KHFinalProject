@@ -2,6 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zeus.main.mapper.MainMapper">
 
+<select id="bannerImage" resultType="Banner">
+SELECT NO, URL FROM BANNER
+</select>
+
 <select id="topSeries" resultType="Main">
     SELECT 
     E.NO, 
