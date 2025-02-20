@@ -105,7 +105,7 @@ const BannerManage = () => {
         <thead>
           <tr>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("no")}
               style={{ width: "90px" }}
             >
@@ -114,7 +114,7 @@ const BannerManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("event_name")}
               style={{ width: "200px" }}
             >
@@ -123,13 +123,13 @@ const BannerManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               style={{ width: "200px" }}
             >
               파일 경로
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("sub_date")}
               style={{ width: "200px" }}
             >
@@ -138,7 +138,7 @@ const BannerManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               style={{ width: "110px", paddingRight: "34px" }}
             >
               추가/수정
@@ -154,7 +154,7 @@ const BannerManage = () => {
             >
               -
             </td>
-            <td style={{ width: "200px" }}>
+            <td className="align-content-center" style={{ width: "200px" }}>
               <Form.Control
                 as="select"
                 name="eventName"
@@ -170,7 +170,7 @@ const BannerManage = () => {
                 ))}
               </Form.Control>
             </td>
-            <td style={{ width: "200px" }}>
+            <td className="align-content-center" style={{ width: "200px" }}>
               <Form.Control
                 name="file"
                 className="admin-table-td text-center"
@@ -180,10 +180,10 @@ const BannerManage = () => {
                 onChange={(e) => setFile(e.target.files[0])}
               />
             </td>
-            <td style={{ width: "200px" }} className="align-content-center">
+            <td className="align-content-center" style={{ width: "200px" }}>
               {date}
             </td>
-            <td style={{ width: "99.5px" }}>
+            <td className="align-content-center" style={{ width: "99.5px" }}>
               <Button
                 className="btn btn-primary me-2"
                 onClick={handleAddBanner}
@@ -194,26 +194,28 @@ const BannerManage = () => {
           </tr>
 
           {/* 데이터 행 */}
-          {items.map((data) => (
+          {items.map((data, index) => (
             <tr key={data.no}>
               <td
                 className="text-center align-content-center"
                 style={{ width: "90px" }}
               >
-                {data.no}
+                {index + 1}
               </td>
-              <td style={{ width: "200px" }}>{data.eventName}</td>
-              <td style={{ width: "200px" }}>
+              <td className="align-content-center" style={{ width: "200px" }}>
+                {data.eventName}
+              </td>
+              <td className="align-content-center" style={{ width: "200px" }}>
                 <img
                   src={data.url}
                   alt={data.eventName}
                   style={{ width: "100%" }}
                 />
               </td>
-              <td style={{ width: "200px" }} className="align-content-center">
+              <td className="align-content-center" style={{ width: "200px" }}>
                 {data.subDate}
               </td>
-              <td style={{ width: "99.5px" }}>
+              <td className="align-content-center" style={{ width: "99.5px" }}>
                 <Button
                   className="btn btn-danger me-2"
                   onClick={() => handleDeleteBanner(data.no, data.url)}

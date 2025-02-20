@@ -108,13 +108,13 @@ const QnAManage = () => {
         <thead>
           <tr>
             <th
-              className="text-bg-primary text-center "
+              className="text-bg-primary text-center align-content-center"
               style={{ width: "50px" }}
             >
               <Form.Check checked={selectAll} onChange={handleSelectAll} />
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("questionNo")}
               style={{ width: "60px" }}
             >
@@ -123,7 +123,7 @@ const QnAManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("eventName")}
               style={{ width: "200px" }}
             >
@@ -132,7 +132,7 @@ const QnAManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("questionTitle")}
               style={{ width: "200px" }}
             >
@@ -141,13 +141,13 @@ const QnAManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               style={{ width: "200px" }}
             >
               질문 내용
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("questionWriter")}
               style={{ width: "150px" }}
             >
@@ -156,7 +156,7 @@ const QnAManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("questionDate")}
               style={{ width: "150px" }}
             >
@@ -165,13 +165,13 @@ const QnAManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               style={{ width: "200px" }}
             >
               답변 내용
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("answerWriter")}
               style={{ width: "150px" }}
             >
@@ -180,7 +180,7 @@ const QnAManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("answerDate")}
               style={{ width: "150px" }}
             >
@@ -194,21 +194,42 @@ const QnAManage = () => {
           {/* 데이터 행 */}
           {filteredItems.map((data, index) => (
             <tr key={data.questionNo}>
-              <td className="text-center" style={{ width: "50px" }}>
+              <td
+                className="text-center align-content-center"
+                style={{ width: "50px" }}
+              >
                 <Form.Check
                   checked={data.checked || false}
                   onChange={() => handleCheckboxChange(data.questionNo)}
                 />
               </td>
-              <td style={{ width: "60px" }}>{index + 1}</td>
-              <td style={{ width: "200px" }}>{data.eventName}</td>
-              <td style={{ width: "200px" }}>{data.questionTitle}</td>
-              <td style={{ width: "200px" }}>{data.questionContent}</td>
-              <td style={{ width: "150px" }}>{data.questionWriter}</td>
-              <td style={{ width: "150px" }}>{data.questionDate}</td>
-              <td style={{ width: "200px" }}>{data.answerContent}</td>
-              <td style={{ width: "150px" }}>{data.answerWriter}</td>
-              <td style={{ width: "134px" }}>{data.answerDate}</td>
+              <td className="align-content-center" style={{ width: "60px" }}>
+                {index + 1}
+              </td>
+              <td className="align-content-center" style={{ width: "200px" }}>
+                {data.eventName}
+              </td>
+              <td className="align-content-center" style={{ width: "200px" }}>
+                {data.questionTitle}
+              </td>
+              <td className="align-content-center" style={{ width: "200px" }}>
+                {data.questionContent}
+              </td>
+              <td className="align-content-center" style={{ width: "150px" }}>
+                {data.questionWriter}
+              </td>
+              <td className="align-content-center" style={{ width: "150px" }}>
+                {data.questionDate}
+              </td>
+              <td className="align-content-center" style={{ width: "200px" }}>
+                {data.answerContent}
+              </td>
+              <td className="align-content-center" style={{ width: "150px" }}>
+                {data.answerWriter}
+              </td>
+              <td className="align-content-center" style={{ width: "134px" }}>
+                {data.answerDate}
+              </td>
             </tr>
           ))}
         </tbody>

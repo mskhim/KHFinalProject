@@ -14,7 +14,7 @@
 
 	<insert id="managerInsert" parameterType="User">
 		INSERT INTO
-		USER_ACCOUNT (NO, ID, PWD, PHONE, REG_DATE, ROLE, NAME, PROVICER,
+		USER_ACCOUNT (NO, ID, PWD, PHONE, REG_DATE, ROLE, NAME, PROVIDER,
 		NICKNAME)
 		VALUES (SEQ_USER_ACCOUNT_NO.NEXTVAL, #{id}, #{pwd}, #{phone},
 		SYSDATE,
