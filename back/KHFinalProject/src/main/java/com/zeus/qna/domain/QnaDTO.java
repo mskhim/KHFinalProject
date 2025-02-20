@@ -1,18 +1,19 @@
 package com.zeus.qna.domain;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+
 import lombok.Data;
 
 @Data
 public class QnaDTO {
     private int no;
     private int userAccountNo;
-    private String userName;
+    private String userName; 	
     private String eventName;
     private int eventNo;
     private String title;
     private String content;
-    private LocalDateTime subDate;
+    private LocalDate subDate;
     private int qnaNo;
     private int originalNo;
 

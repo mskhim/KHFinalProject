@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zeus.common.config.JwtUtil;
@@ -87,5 +88,18 @@ public class QnaController {
 			return ResponseEntity.status(500).body(Map.of("authenticated", false, "message", "서버 오류 발생"));
 		}
 	}
-	
+
+	@GetMapping("/getReply")
+	public ResponseEntity<?> getReply(@RequestParam int no) {
+
+		log.info("답변 등록 요청: {}", no);
+		Qna qna = new Qna();
+		qna.setNo(no);
+		try {
+			String content = qnaService.getReply(qna);
+			return ResponseEntity.ok(Map.of("content", content));
+		} catch (Exception e) {
+			return ResponseEntity.status(500).body(Map.of("authenticated", false, "message", "서버 오류 발생"));
+		}
+	}
 }
