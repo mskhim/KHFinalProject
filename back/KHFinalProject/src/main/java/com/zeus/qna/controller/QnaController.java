@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zeus.common.config.JwtUtil;
+import com.zeus.event.domain.SortDTO;
 import com.zeus.qna.domain.Qna;
 import com.zeus.qna.domain.QnaDTO;
 import com.zeus.qna.service.QnaService;
 
+import jakarta.mail.Service;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -31,9 +33,11 @@ public class QnaController {
 	@Autowired
 	private JwtUtil JwtUtil;
 
-	@GetMapping("/list")
-	public List<QnaDTO> getAllQna() {
-		return qnaService.getAllQna();
+	@PostMapping("/list")
+	public ResponseEntity<?> getAllQna(@RequestBody SortDTO sortDTO) {
+		int totalPages = qnaService.getPageCount(sortDTO);
+		log.info(totalPages+"");
+		return ResponseEntity.ok(Map.of("authenticated", "true","totalPages",totalPages,"ListData",qnaService.getAllQna(sortDTO)));
 	}
 
 	@PostMapping("/insert")
@@ -97,9 +101,31 @@ public class QnaController {
 		qna.setNo(no);
 		try {
 			String content = qnaService.getReply(qna);
+			if (content==null) {
+				return ResponseEntity.ok(Map.of("content", "등록된 답변이 없습니다."));
+			} 
 			return ResponseEntity.ok(Map.of("content", content));
 		} catch (Exception e) {
 			return ResponseEntity.status(500).body(Map.of("authenticated", false, "message", "서버 오류 발생"));
 		}
 	}
+	
+	@GetMapping("/getisAuthenticated")
+	public ResponseEntity<?> getisAuthenticated(@CookieValue(name = "jwt", required = false) String jwtToken,
+			@RequestParam int eventNo) {
+		// 쿠키에서 가져온 토큰(@CookieValue (name = "jwt", required = false) String jwtToken) 가
+		// 유효한지 확인
+		if (jwtToken == null || JwtUtil.isTokenExpired(jwtToken)) {
+			return ResponseEntity.ok(Map.of("authenticated", false, "message", "JWT가 없거나 만료됨"));
+		}
+		// JWT가 유효하면 사용자 정보 반환 userNo 들어있는거 반환
+		int userNo = JwtUtil.validateToken(jwtToken).get("no", Integer.class);
+		Qna qna= new Qna();
+		qna.setEventNo(eventNo);
+		qna.setUserAccountNo(userNo);
+		boolean flag = qnaService.getisAuthenticated(qna);
+		log.info(flag+"");
+		return ResponseEntity.ok(Map.of("authenticated", "true","flag",flag));
+	}
+
 }

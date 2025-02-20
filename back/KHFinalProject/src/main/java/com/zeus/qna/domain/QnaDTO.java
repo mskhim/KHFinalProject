@@ -6,6 +6,8 @@ import lombok.Data;
 
 @Data
 public class QnaDTO {
+	
+	private int rowNo;
     private int no;
     private int userAccountNo;
     private String userName; 	

@@ -16,4 +16,6 @@ public class SortDTO {
     private LocalDate date;
     private String region;
     private String sort;
+    private String searchOption;
+    
 }

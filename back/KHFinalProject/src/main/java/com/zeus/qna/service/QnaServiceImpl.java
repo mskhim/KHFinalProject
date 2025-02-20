@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.zeus.event.domain.PublicDataEventDTO;
+import com.zeus.event.domain.SortDTO;
 import com.zeus.qna.domain.Qna;
 import com.zeus.qna.domain.QnaDTO;
 import com.zeus.qna.mapper.QnaMapper;
@@ -20,8 +21,8 @@ public class QnaServiceImpl implements QnaService {
 	private QnaMapper qnaMapper;
 
 	@Override
-	public List<QnaDTO> getAllQna() {
-		return qnaMapper.getAllQna();
+	public List<QnaDTO> getAllQna(SortDTO sortDTO) {
+		return qnaMapper.getAllQna(sortDTO);
 	}
 
 	@Override
@@ -57,6 +58,20 @@ public class QnaServiceImpl implements QnaService {
 	public String getReply(Qna qna) {
 		
 		return qnaMapper.getReply(qna);
+	}
+
+	@Override
+	public int getPageCount(SortDTO sortDTO) {
+		return qnaMapper.getPageCount(sortDTO);
+	}
+
+	@Override
+	public boolean getisAuthenticated(Qna qna) {
+		int no = qnaMapper.getisAuthenticated(qna);
+		if(no>=1) {
+			return true;
+		}
+		return false;
 	}
 
 }

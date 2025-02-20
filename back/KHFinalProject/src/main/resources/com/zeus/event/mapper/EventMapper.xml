@@ -205,10 +205,12 @@
 		WHERE
 		USER_ACCOUNT_NO=#{userAccountNo} AND EVENT_NO = #{eventNo}
 	</select>
-		<select id="checkEventPrice" parameterType="EventReview"
+	<select id="checkEventPrice" parameterType="EventReview"
 		resultType="int">
 		SELECT price FROM EVENT
 		WHERE
 		NO = #{eventNo}
 	</select>
+	
+
 </mapper>
