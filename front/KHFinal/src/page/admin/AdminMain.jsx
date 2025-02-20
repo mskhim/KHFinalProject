@@ -7,11 +7,11 @@ import { getStats } from './adminApi'; // API 함수 파일 추가
 const mockData = {
   ageGroupData: {
     labels: ['10대', '20대', '30대', '40대', '50대', '60대 이상'],
-    values: [150, 300, 450, 200, 100, 50],
+    values: [],
   },
   genderData: {
     labels: ['남성', '여성'],
-    values: [600, 650],
+    values: [],
   },
   monthlyData: {
     labels: [
@@ -28,8 +28,8 @@ const mockData = {
       '11월',
       '12월',
     ],
-    bookingValues: [50, 70, 100, 80, 120, 150, 130, 110, 90, 60, 40, 30],
-    festivalValues: [5, 7, 10, 8, 12, 15, 13, 11, 9, 6, 4, 3],
+    bookingValues: [],
+    festivalValues: [],
   },
 };
 
@@ -41,7 +41,6 @@ const AdminMain = () => {
   useEffect(() => {
     const getStatsData = async () => {
       const response = await getStats();
-      console.log(response);
       setData({
         ageGroupData: {
           ...data.ageGroupData,

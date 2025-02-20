@@ -137,7 +137,8 @@
 		ER.USER_ACCOUNT_NO,
 		ER.RATING,
 		UA.NAME AS USER_NAME,
-		PDE.NAME AS EVENT_NAME
+		PDE.NAME AS
+		EVENT_NAME
 		FROM EVENT_REVIEW ER
 		LEFT JOIN USER_ACCOUNT UA
 		ON
@@ -335,18 +336,18 @@
 	<!-- 성별 통계 (genderData) -->
 	<select id="getGenderStats" resultType="integer">
 		SELECT COUNT(*)
-		FROM user_account
-		WHERE gender = #{gender}
+		FROM
+		user_account
+		WHERE gender = #{gender} and role=2
 	</select>
 
 	<!-- 연령대 통계 (avgData) -->
 	<select id="getAgeGroupStats" resultMap="ageGroupResultMap">
 		SELECT
 		CASE
-		WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) BETWEEN 10 AND
-		19 THEN '10대'
-		WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) BETWEEN 20 AND
-		29 THEN '20대'
+		WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) <![CDATA[<]]> 20 THEN '10대'
+		WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) BETWEEN 20
+		AND 29 THEN '20대'
 		WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) BETWEEN 30 AND
 		39 THEN '30대'
 		WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) BETWEEN 40 AND
@@ -357,12 +358,12 @@
 		END AS age_group,
 		COUNT(*) AS count
 		FROM user_account
+		WHERE role = 2 -- ✅ role이 2인 사용자만 선택
 		GROUP BY
 		CASE
-		WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) BETWEEN 10 AND
-		19 THEN '10대'
-		WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) BETWEEN 20 AND
-		29 THEN '20대'
+		WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) <![CDATA[<]]> 20 THEN '10대'
+		WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) BETWEEN 20
+		AND 29 THEN '20대'
 		WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) BETWEEN 30 AND
 		39 THEN '30대'
 		WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) BETWEEN 40 AND
@@ -379,9 +380,11 @@
 		SELECT
 		TO_CHAR(reserved_date, 'YYYY-MM') AS month,
 		COUNT(*) AS count
-		FROM reserved
+		FROM
+		reserved
 		WHERE reserved_date IS NOT NULL
-		GROUP BY TO_CHAR(reserved_date, 'YYYY-MM')
+		GROUP BY TO_CHAR(reserved_date,
+		'YYYY-MM')
 		ORDER BY month
 	</select>
 
@@ -390,9 +393,11 @@
 		SELECT
 		TO_CHAR(p.start_date, 'YYYY-MM') AS month,
 		COUNT(*) AS count
-		FROM event e
+		FROM event
+		e
 		JOIN public_data_event p ON e.public_data_event_no = p.no
-		WHERE p.start_date IS NOT NULL
+		WHERE
+		p.start_date IS NOT NULL
 		GROUP BY TO_CHAR(p.start_date, 'YYYY-MM')
 		ORDER BY month
 	</select>
