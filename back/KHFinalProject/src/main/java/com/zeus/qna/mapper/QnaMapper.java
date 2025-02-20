@@ -19,5 +19,5 @@ public interface QnaMapper {
 	String getReply(Qna qna);
 	int getPageCount(SortDTO sortDTO);
 	int getisAuthenticated(Qna qna);
-
+	void deletePostAndReplies(int no);
 }

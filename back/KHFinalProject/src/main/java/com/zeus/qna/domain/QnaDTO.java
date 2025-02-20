@@ -18,5 +18,4 @@ public class QnaDTO {
     private LocalDate subDate;
     private int qnaNo;
     private int originalNo;
-
 }

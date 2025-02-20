@@ -127,5 +127,14 @@ public class QnaController {
 		log.info(flag+"");
 		return ResponseEntity.ok(Map.of("authenticated", "true","flag",flag));
 	}
+	@PostMapping("/delete")
+    public ResponseEntity<?> deleteQna(@RequestParam int no) {
+        try {
+            qnaService.deletePostAndReplies(no);
+            return ResponseEntity.ok(Map.of("success", true, "message", "게시글 및 답변 삭제 완료"));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("success", false, "message", "삭제 중 오류 발생"));
+        }
+    }
 
 }
