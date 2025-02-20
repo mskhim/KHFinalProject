@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,13 +59,15 @@ public class EventController {
 		List<EventSelectListDTO> dataList = service.selectEventList(sortDTO);
 		return ResponseEntity.ok(Map.of("state", true, "dataList", dataList));
 	}
+
 	// 축제 리스트 출력
-		@PostMapping("/selectEventListMonth")
-		public ResponseEntity<Map<String, Object>> selectEventListMonth(@RequestBody SortDTO sortDTO) {
-			log.info(sortDTO.getDate()+"");
-			List<EventSelectListDTO> dataList = service.selectEventListMonth(sortDTO);
-			return ResponseEntity.ok(Map.of("state", true, "dataList", dataList));
-		}
+	@PostMapping("/selectEventListMonth")
+	public ResponseEntity<Map<String, Object>> selectEventListMonth(@RequestBody SortDTO sortDTO) {
+		log.info(sortDTO.getDate() + "");
+		List<EventSelectListDTO> dataList = service.selectEventListMonth(sortDTO);
+		return ResponseEntity.ok(Map.of("state", true, "dataList", dataList));
+	}
+
 	// 축제 삭제
 	@DeleteMapping("/deleteEvent")
 	public ResponseEntity<Map<String, Object>> deleteEvent(@CookieValue(name = "jwt", required = false) String jwtToken,
@@ -120,12 +121,26 @@ public class EventController {
 			return ResponseEntity.ok(Map.of("authenticated", false, "message", "로그인이 필요합니다."));
 		}
 		String jwtRole = JwtUtil.validateToken(jwtToken).get("role", String.class);
+		int userAccountNo = JwtUtil.validateToken(jwtToken).get("no", Integer.class);
+		eventReview.setUserAccountNo(userAccountNo);
 		if (jwtRole.equals("ROLE_1")) {
-			return ResponseEntity.ok(Map.of("state", false, "message", "일반 유저만 리뷰 작성 가능."));
+			return ResponseEntity.ok(Map.of("state", false, "message", "일반 유저만 리뷰 작성 가능합니다."));
+		}
+
+		if (service.checkEventPrice(eventReview)) {
+			service.insertEventReview(eventReview);
+			return ResponseEntity.ok(Map.of("state", true, "message", "리뷰를 등록해주셔서 감사합니다."));
+		}
+		if (!service.checkReplyAlready(eventReview)) {
+			return ResponseEntity.ok(Map.of("state", false, "message", "이미 리뷰를 작성한 축제입니다."));
+
+		}
+		if (!service.checkReserved(eventReview)) {
+			return ResponseEntity.ok(Map.of("state", false, "message", "예매한 축제만 리뷰 작성 가능합니다."));
 		}
 		service.insertEventReview(eventReview);
+		return ResponseEntity.ok(Map.of("state", true, "message", "리뷰를 등록해주셔서 감사합니다."));
 
-		return ResponseEntity.ok(Map.of("state", true, "message", "리뷰등록에 성공했습니다."));
 	}
 
 	// 축제 리뷰 삭제
@@ -146,6 +161,7 @@ public class EventController {
 		}
 		return ResponseEntity.ok(Map.of("state", false, "message", "자신의 리뷰만 삭제 가능합니다."));
 	}
+
 	// 축제 장바구니에 추가
 	@PostMapping("/insertEventToCart")
 	public ResponseEntity<Map<String, Object>> insertEventToCart(
@@ -156,15 +172,15 @@ public class EventController {
 		}
 		String jwtRole = JwtUtil.validateToken(jwtToken).get("role", String.class);
 		int jwtUserNo = JwtUtil.validateToken(jwtToken).get("no", Integer.class);
-		if (jwtRole.equals("ROLE_0")||jwtRole.equals("ROLE_1")) {
+		if (jwtRole.equals("ROLE_0") || jwtRole.equals("ROLE_1")) {
 			return ResponseEntity.ok(Map.of("state", false, "message", "일반회원만 장바구니 이용이 가능합니다."));
 		}
 		cart.setUserAccountNo(jwtUserNo);
 		boolean flag = service.cartDuplCheck(cart);
-		if(!flag) {
+		if (!flag) {
 			return ResponseEntity.ok(Map.of("state", flag, "message", "이미 장바구니에 담긴 항목입니다."));
 		}
-		 flag = service.insertEventToCart(cart);
+		flag = service.insertEventToCart(cart);
 		return ResponseEntity.ok(Map.of("state", flag, "message", "장바구니에 등록되었습니다."));
 	}
 }

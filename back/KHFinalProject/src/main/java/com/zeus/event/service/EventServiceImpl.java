@@ -97,5 +97,33 @@ public class EventServiceImpl implements EventService {
 		return true;
 	}
 
+	@Override
+	public boolean checkReserved(EventReview eventReview) {
+		int no = mapper.checkReserved(eventReview);
+		if(no>=1) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean checkReplyAlready(EventReview eventReview) {
+		int no = mapper.checkReplyAlready(eventReview);
+		if(no>=1) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public boolean checkEventPrice(EventReview eventReview) {
+		int price = mapper.checkEventPrice(eventReview);
+		log.info(price+"");
+		if(price==0) {
+			return true;
+		}
+		return false;
+	}
+
 	
 }

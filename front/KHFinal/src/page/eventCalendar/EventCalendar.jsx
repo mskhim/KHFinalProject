@@ -149,7 +149,7 @@ const EventCalendar = () => {
           {/* 월 이동 버튼 */}
           <Row className="justify-content-between mb-4 col-12 d-flex align-items-center">
             <Col className="col-auto">
-              <span className="month-title fs-4 fw-semibold px-3 py-2 rounded  border shadow-sm">
+              <span className="month-title">
                 {currentDate.toLocaleString('ko-KR', {
                   year: 'numeric',
                   month: 'long',
