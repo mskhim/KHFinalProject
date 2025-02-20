@@ -126,25 +126,24 @@
 	<!-- ################################################################################################## -->
 	<!-- 취소내역 조회. -->
 	<select id="getReservedCancelData" parameterType="ReservedCancelDTO">
-     SELECT 
-        R.NO AS no,
-        R.EVENT_NO AS eventNo,
-        R.RESERVED_DATE AS reservedDate, 
-        P.NAME AS name, 
-        C.QT AS qt, 
-        P.END_DATE AS endDate, 
-        (E.PRICE * C.QT) AS totalCost
-    FROM 
-        CANCELED R
-    JOIN 
-        CART C ON R.EVENT_NO = C.EVENT_NO AND R.USER_ACCOUNT_NO = C.USER_ACCOUNT_NO
-    JOIN 
-        EVENT E ON R.EVENT_NO = E.NO
-    JOIN 
-        PUBLIC_DATA_EVENT P ON E.PUBLIC_DATA_EVENT_NO = P.NO
-    WHERE 
-        R.USER_ACCOUNT_NO = #{userAccountNo}
-	ORDER BY R.NO DESC
+		SELECT 
+		    R.NO AS no,
+		    R.EVENT_NO AS eventNo,
+		    R.RESERVED_DATE AS reservedDate, 
+		    P.NAME AS name, 
+		    R.QT AS qt,  -- Changed to use QT from CANCELED table
+		    P.END_DATE AS endDate, 
+		    (E.PRICE * R.QT) AS totalCost  -- Updated to use QT from CANCELED table
+		FROM 
+		    CANCELED R
+		JOIN 
+		    EVENT E ON R.EVENT_NO = E.NO
+		JOIN 
+		    PUBLIC_DATA_EVENT P ON E.PUBLIC_DATA_EVENT_NO = P.NO
+		WHERE 
+		    R.USER_ACCOUNT_NO = #{userAccountNo}
+		ORDER BY 
+		    R.NO DESC
 	</select>
 	<!-- ################################################################################################## -->
 	<!-- 아이디, 제공자를 토대로 로그인 유저 반환후 비밀번호 헤싱해서 로그인 확인 확인-->
