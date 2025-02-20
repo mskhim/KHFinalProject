@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { checkEmail, checkId, checkNickName, handleRegister } from './userApi';
-import { Button, Container } from 'react-bootstrap';
+import { Button, Container, Form } from 'react-bootstrap';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import './css/UserInsert.css';
@@ -212,8 +212,8 @@ const UserInsert = () => {
                       확인완료
                     </Button>
                   )}
+                
                 </div>
-
                 {/* 비밀번호 입력 필드 (선택 사항) */}
                 <div className="UserInsert-input-group">
                   <label htmlFor="pwd">비밀번호</label>
@@ -227,11 +227,12 @@ const UserInsert = () => {
                     required
                   />
                   {/* 비밀번호 길이 확인 메시지 출력 */}
-                  <p className="UserInsertCommon-text-danger">
-                    {passwordLengthError}
-                  </p>
+                  {passwordLengthError && (
+                    <Form.Text className="text-danger">
+                      {passwordLengthError} {/* 빨간색 텍스트 */}
+                    </Form.Text>
+                  )}
                 </div>
-
                 {/* 비밀번호 확인 입력 필드 */}
                 <div className="UserInsert-input-group">
                   <label htmlFor="confirmPwd">비밀번호 확인</label>
@@ -245,18 +246,19 @@ const UserInsert = () => {
                     required
                   />
                   {/* 비밀번호 일치 시 초록색 메시지 출력 */}
-                  {passwordError && (
-                    <p className="UserInsertCommon-text-danger">
-                      {passwordError}
-                    </p>
-                  )}
-                  {passwordSuccess && (
-                    <p className="UserInsertCommon-text-success">
-                      {passwordSuccess}
-                    </p>
-                  )}
+                    {/* 비밀번호 확인 오류 메시지 */}
+                    {passwordError && (
+                      <Form.Text className="text-danger">
+                        {passwordError} {/* 빨간색 텍스트 */}
+                      </Form.Text>
+                    )}
+                    {/* 비밀번호 확인 성공 메시지 */}
+                    {passwordSuccess && (
+                      <Form.Text className="text-success">
+                        {passwordSuccess} {/* 초록색 텍스트 */}
+                      </Form.Text>
+                    )}
                 </div>
-
                 {/* 이름 입력 필드 */}
                 <div className="UserInsert-input-group">
                   <label htmlFor="name">이름</label>
