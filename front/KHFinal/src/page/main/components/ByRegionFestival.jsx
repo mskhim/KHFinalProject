@@ -46,7 +46,9 @@ function ByRegionFestival() {
   };
   return (
     <>
-      <h3>&ensp;지역별1등</h3>
+      <br />
+      <h3>&ensp;지역축제</h3>
+      <br />
       <div className="carousel-container ByRegionFestival-container">
         <AliceCarousel
           mouseTracking
@@ -59,6 +61,9 @@ function ByRegionFestival() {
           disableButtonsControls={false}
         />
       </div>
+      <br />
+      <hr />
+      <br />
     </>
   );
 }

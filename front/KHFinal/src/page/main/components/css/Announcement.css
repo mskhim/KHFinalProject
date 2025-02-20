@@ -19,11 +19,12 @@
   height: 30px;
   position: sticky;
   bottom: 16px;
+  margin-top: 10px;
 }
 
 .Announcement-plus {
   position: absolute;
-  bottom: 3px;
+  bottom: 13px;
   right: 1%;
 }
 .custom-arrow {
@@ -43,11 +44,11 @@
 }
 
 .custom-prev {
-  bottom: 1%;
-  right: -95%;
+  bottom: 2%;
+  right: -92%;
 }
 
 .custom-next {
   top: -15%;
-  right: -98%;
+  right: -96%;
 }

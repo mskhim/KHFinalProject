@@ -15,15 +15,47 @@
 
 .Top4-card {
   margin: 10px;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.top4-image {
+  width: 100%;
+  height: 100%;
+  object-position: center;
+  transition: transform 0.2s ease-in-out; /* 부드러운 확대 효과 */
+}
+
+.Top4-card:hover .top4-image {
+  transform: scale(1.1); /* 1.1배 확대 */
+}
+
+.Top4-card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60%; /* 음영 크기 조절 */
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
 }
 
 .Top4-titlename {
-  font-size: 30px;
   text-align: right; /* 배지를 오른쪽으로 정렬 */
   padding-right: 10px; /* 오른쪽 여백 추가 */
-  background-color: transparent;
+  font-size: 50px;
+  opacity: 0.4;
 }
 
 .Top4-card-name {
-  background-color: transparent;
+  position: absolute;
+  display: flex;
+  bottom: 20px;
+  color: white;
+  font-size: 40px;
+  font-weight: 5px;
+  padding: 20px;
 }

@@ -9,8 +9,12 @@
   align-items: center;
   flex-direction: column;
   padding: 10px;
+  transition: transform 0.3s ease-in-out;
 }
 
+.EndFestival-item:hover {
+  transform: translateY(-10px); /* 마우스 올리면 위로 10px 이동 */
+}
 .EndFestival-item h4 {
   width: 100%;
   white-space: nowrap; /* 한 줄 유지 */
