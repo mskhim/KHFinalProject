@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.zeus.admin.mapper.AdminMapper;
@@ -16,6 +18,7 @@ import com.zeus.admin.domain.AdminReviewDTO;
 import com.zeus.admin.domain.AdminQnaDTO;
 import com.zeus.admin.domain.AdminReservedDTO;
 import com.zeus.admin.domain.ManagerFestivalAuthDTO;
+import com.zeus.admin.domain.AdminBannerDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,6 +27,11 @@ import lombok.extern.slf4j.Slf4j;
 public class AdminServiceImpl implements AdminService {
 	@Autowired
 	private AdminMapper mapper;
+	private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+	public String encodePassword(String rawPassword) {
+		return passwordEncoder.encode(rawPassword); // ✅ 비밀번호 해싱
+	}
 
 	@Override
 	public void insert(String name) {
@@ -39,11 +47,13 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public void managerInsert(User user) throws Exception {
+		user.setPwd(encodePassword(user.getPwd()));
 		mapper.managerInsert(user);
 	}
 
 	@Override
 	public void managerUpdate(User user) throws Exception {
+		user.setPwd(encodePassword(user.getPwd()));
 		mapper.managerUpdate(user);
 	}
 
@@ -159,5 +169,25 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public List<AdminPublicDataEvent> publicDataEventSellectAll() throws Exception {
 		return mapper.publicDataEventSellectAll();
+	}
+
+	@Override
+	public List<AdminBannerDTO> bannerSellectAll() throws Exception {
+		return mapper.bannerSellectAll();
+	}
+
+	@Override
+	public void insertBanner(AdminBannerDTO banner) throws Exception {
+		mapper.insertBanner(banner);
+	}
+
+	@Override
+	public void deleteBanner(int bannerId) throws Exception {
+		mapper.deleteBanner(bannerId);
+	}
+
+	@Override
+	public List<AdminPublicDataEvent> eventSellectAll() throws Exception {
+		return mapper.eventSellectAll();
 	}
 }

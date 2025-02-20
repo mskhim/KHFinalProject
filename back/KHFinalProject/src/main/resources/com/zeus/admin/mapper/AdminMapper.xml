@@ -11,9 +11,9 @@
 	</select>
 	
 	<insert id="managerInsert" parameterType="User">
-		INSERT INTO USER_ACCOUNT (NO, ID, PWD, PHONE, REG_DATE, ROLE, NAME)
+		INSERT INTO USER_ACCOUNT (NO, ID, PWD, PHONE, REG_DATE, ROLE, NAME, PROVICER, NICKNAME)
 		VALUES (SEQ_USER_ACCOUNT_NO.NEXTVAL, #{id}, #{pwd}, #{phone}, SYSDATE,
-		1, #{name})
+		1, #{name},'common',#{name})
 	</insert>
 
 	<update id="managerUpdate" parameterType="User">
@@ -51,7 +51,10 @@
 	</delete>
 	
 	<select id="publicDataEventSellectAll" resultType="AdminPublicDataEvent" parameterType="AdminPublicDataEvent">
-		SELECT * FROM PUBLIC_DATA_EVENT ORDER BY NO ASC
+		SELECT *
+		FROM PUBLIC_DATA_EVENT
+		WHERE END_DATE >= TRUNC(SYSDATE)
+		ORDER BY NO ASC
 	</select>
 
 	<!-- UserManage -->
@@ -186,8 +189,37 @@
 	</delete>
 	
 	<!-- BannerManage -->
-	<select id="bannerSelectAll" resultType="Notice" parameterType="Notice">
+	<select id="bannerSellectAll" resultType="AdminBannerDTO" parameterType="AdminBannerDTO">
+		SELECT
+		B.NO,
+		B.URL,
+		B.SUB_DATE,
+		PDE.NAME AS EVENT_NAME
+		FROM BANNER B
+		LEFT JOIN EVENT E ON B.EVENT_NO = E.NO
+		LEFT JOIN PUBLIC_DATA_EVENT PDE ON E.PUBLIC_DATA_EVENT_NO = PDE.NO
+		ORDER BY B.NO ASC
+	</select>
+
+	<insert id="insertBanner" parameterType="AdminBannerDTO">
+		INSERT INTO BANNER (NO, URL, SUB_DATE, EVENT_NO)
+		VALUES (SEQ_BANNER_NO.NEXTVAL, #{url}, SYSDATE,
+		(SELECT E.NO
+		FROM EVENT E
+		JOIN PUBLIC_DATA_EVENT P ON E.PUBLIC_DATA_EVENT_NO = P.NO
+		WHERE P.NAME = #{eventName} FETCH FIRST 1 ROWS ONLY))
+	</insert>
+
+	<delete id="deleteBanner" parameterType="int">
+		DELETE FROM BANNER WHERE NO = #{bannerId}
+	</delete>
 	
+	<select id="eventSellectAll" resultType="AdminPublicDataEvent" parameterType="AdminPublicDataEvent">
+		SELECT PDE.*
+		FROM PUBLIC_DATA_EVENT PDE
+		JOIN EVENT E ON PDE.NO = E.PUBLIC_DATA_EVENT_NO
+		WHERE PDE.END_DATE >= TRUNC(SYSDATE)
+		ORDER BY PDE.NO ASC
 	</select>
 	
 	<!-- ReservedManage -->
