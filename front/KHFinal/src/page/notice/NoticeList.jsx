@@ -183,7 +183,7 @@ const NoticeList = () => {
         {/* 페이지네이션 (검색 모드가 아닐 때만 표시) */}
         {!isSearchMode && totalPages > 1 && (
           <Pagination
-            className={`justify-content-center mt-4 ${getDarkMode()}`}
+            className={`justify-content-center mt-4 ${getDarkMode()} custom-pagination`}
           >
             <Pagination.Prev
               disabled={currentPage === 1}

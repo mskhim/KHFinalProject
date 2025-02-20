@@ -84,7 +84,6 @@ public class ManagerController {
 		User user = new User();
 		user.setNo(no);
 		List<ManagerStats> dataList = service.selectEventStatsData(user);
-		log.info(dataList+"");
 		return ResponseEntity.ok(Map.of("authenticated", true, "message", "JWT 유효", "dataList", dataList));
 	}
 	

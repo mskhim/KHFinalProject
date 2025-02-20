@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { Spinner } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const PaymentSuccess = () => {
@@ -55,8 +56,12 @@ const PaymentSuccess = () => {
 
   return (
     <div style={{ textAlign: 'center', padding: '20px' }}>
-      <h1>결제 검증 중...</h1>
-      <p>잠시만 기다려 주세요.</p>
+      <h1>결제 진행 중...</h1>
+      <div className="d-flex justify-content-center my-4">
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </div>
     </div>
   );
 };

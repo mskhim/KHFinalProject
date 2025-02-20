@@ -17,7 +17,7 @@ const OrderHistory = () => {
     <div style={styles.container}>
       <Header />
       <div style={styles.content}>
-        <h1 style={styles.title}>🎟️ 예매 완료</h1>
+        <h1 style={styles.title}>예매 완료</h1>
         <p style={styles.message}>잠시 후 예매 내역 페이지로 이동합니다...</p>
       </div>
       <Footer />

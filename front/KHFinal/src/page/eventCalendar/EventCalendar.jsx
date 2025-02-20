@@ -37,7 +37,6 @@ const EventCalendar = () => {
   useEffect(() => {
     const fetchMonthEventList = async () => {
       const response = await selectEventListMonth(sortOption);
-      console.log(response);
       setFestivals(response);
     };
     fetchMonthEventList();
