@@ -5,6 +5,7 @@ import './css/UserMypage.css';
 import { Context } from '../../Context';
 import { Button, Container, Modal } from 'react-bootstrap';
 import { getUserData, checkNickName, updateUserData, deleteUserData } from './userApi';
+import { useNavigate } from 'react-router-dom';
 
 function UserMypage() {
   const { getDarkMode, getDarkModeHover, logout } = useContext(Context);
@@ -16,6 +17,8 @@ function UserMypage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false); // 회원 탈퇴 확인 모달
   const [deleteEmail, setDeleteEmail] = useState(''); // 탈퇴 시 이메일 상태
   const [deletePassword, setDeletePassword] = useState(''); // 탈퇴 시 비밀번호 상태
+  const [emailError, setEmailError] = useState(''); // 이메일 오류 상태
+  const navigate = useNavigate(); // useNavigate 훅 추가
 
   /**userApi.js의 getUserData()함수를 호출하여
    * setUserInfo, setFormData에 data(data.user 회원 정보)를 저장. */
@@ -27,14 +30,6 @@ function UserMypage() {
       console.log(data);
     };
     setData();
-  }, []);
-
-  useEffect(() => {
-    const getData = async () => {
-      return await getUserData();
-    };
-    console.log(getData());
-    setUserInfo(getData());
   }, []);
 
   // 아이디 input에 대한 참조 추가
@@ -61,6 +56,24 @@ function UserMypage() {
     }
   };
 
+  // 제출 핸들러
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (nicknameCheck === false) {
+      alert('닉네임 중복 확인이 필요합니다.');
+      return;
+    }
+    try {
+      await updateUserData(formData); // ✅ 회원가입 API 호출 수정
+      const preLoginUrl = sessionStorage.getItem('preLoginUrl') || '/';
+      navigate(preLoginUrl);
+      sessionStorage.removeItem('preLoginUrl');
+    } catch (error) {
+      console.error('회원가입 실패:', error);
+      alert('회원가입 중 오류가 발생했습니다.');
+    }
+  };
+
   // 메뉴 항목 클릭 시 호출되는 함수
   const showSection = (sectionId) => {
     setSelectedSection(sectionId);
@@ -82,19 +95,48 @@ function UserMypage() {
 
   // Save changes after editing
   const handleSave = async () => {
+    if (!validateEmail(formData.email)) {
+      setEmailError('올바른 이메일 형식을 입력해주세요.');
+      return;
+    }
+    if (!/^\d{3}-\d{4}-\d{4}$/.test(formData.phone)) {
+      alert('휴대폰 번호를 다시 입력해주세요. \nex) 010-XXXX-XXXX');
+      return;
+    }
+    if (formData.region === '') {
+      alert('지역을 선택해 주세요.');
+      return;
+    }
+    if (formData.gender === '' || formData.gender === '선택 없음') {
+      alert('성별을 선택해 주세요.');
+      return;
+    }
+
+    // Remove password field if it is empty
+    const updatedFormData = { ...formData };
+    if (!updatedFormData.pwd) {
+      delete updatedFormData.pwd;
+    }
 
     // 서버로 회원 정보 업데이트 요청.
-    const updateResponse = await updateUserData(formData);
+    try {
+      const updateResponse = await updateUserData({
+        ...updatedFormData,
+        provider: userInfo.provider, // provider 필드 추가
+        no: userInfo.no, // no 필드 추가
+      });
 
-    // 서버 응답에 따른 처리.
-    if (updateResponse.authenticated)
-    {
-      setUserInfo(formData); // 서버에서 수정된 데이터로 회원 정보 업데이트.
-      alert('회원 정보 수정이 완료되었습니다.');
-      toggleEdit(); // 수정 모드 종료.
-    } else
-    {
-      alert('회원 정보 수정에 실패했습니다. 다시 시도해주세요.');
+      // 서버 응답에 따른 처리.
+      if (updateResponse.authenticated) {
+        setUserInfo(updatedFormData); // 서버에서 수정된 데이터로 회원 정보 업데이트.
+        alert('회원 정보 수정이 완료되었습니다.');
+        toggleEdit(); // 수정 모드 종료.
+      } else {
+        alert('회원 정보 수정에 실패했습니다. 다시 시도해주세요.');
+      }
+    } catch (error) {
+      console.error('회원 정보 수정 실패:', error);
+      alert('회원 정보 수정 중 오류가 발생했습니다.');
     }
   };
 
@@ -111,63 +153,43 @@ function UserMypage() {
     }
   }, [isEditable]); // isEditable 상태가 변할 때마다 실행
 
+  // 이메일 유효성 검사 함수 추가
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
+
   // 회원 탈퇴 확인 모달 열기
   const openDeleteModal = () => setShowDeleteModal(true);
 
   // 회원 탈퇴 확인 모달 닫기
   const closeDeleteModal = () => setShowDeleteModal(false);
 
-  // // 탈퇴 확인 모달에서 탈퇴 처리
-  // const handleDeleteAccount = (deleteEmail, deletePassword) => {
-  //   if (deleteEmail === userInfo.email && deletePassword === userInfo.pwd) {
-  //     const confirmDelete = window.confirm('정말 탈퇴하시겠습니까?');
-  //     if (confirmDelete) {
-  //       alert('탈퇴가 완료되었습니다. 이용해주셔서 감사합니다.');
-  //       setUserInfo({}); // 회원 정보 삭제
-  //       closeDeleteModal();
-  //       setSelectedSection('info-view'); // 내 정보 조회로 전환
-  //     }
-  //   } else {
-  //     alert('입력한 정보가 맞지 않습니다. 다시 시도해주세요.');
-  //   }
-  // };
-
   // 탈퇴 확인 처리 (이메일과 비밀번호를 백엔드로 전송)
-  const handleDeleteAccount = async () =>
-  {
-
-    if (!deleteEmail || !deletePassword)
-    {
+  const handleDeleteAccount = async () => {
+    if (!deleteEmail || !deletePassword) {
       alert('이메일과 비밀번호를 모두 입력해주세요.');
-    
       return;
     }
 
-    if (deleteEmail === userInfo.email)
-    {
+    if (deleteEmail === userInfo.email) {
       const confirmDelete = window.confirm('정말 탈퇴하시겠습니까?');
-      if (confirmDelete)
-      {
-        const response = await deleteUserData({email: deleteEmail, pwd: deletePassword});
-        
-        if (response)
-        {
+      if (confirmDelete) {
+        const response = await deleteUserData({ email: deleteEmail, pwd: deletePassword });
+
+        if (response) {
           setUserInfo({});  // 회원 정보 삭제
           closeDeleteModal();
-          // 민석이
           logout();
-        } else
-        {
+        } else {
           alert('회원 탈퇴에 실패했습니다. 다시 시도해주세요.');
         }
-      } else
-      {
+      } else {
         alert('입력한 이메일이 일치하지 않습니다.');
       }
     }
   };
-  
- 
+
   return (
     <>
       <Header />
@@ -211,48 +233,46 @@ function UserMypage() {
               </>
             )}
             <div
-              className={`MyPageMain-section ${
-                selectedSection === 'info-view' ? 'active' : ''
-              }`}
+              className={`MyPageMain-section ${selectedSection === 'info-view' ? 'active' : ''}`}
               id="info-view"
             >
               {/* 내 정보 카드 */}
               {Object.keys(userInfo).length > 0 ? (
-              <div className="MyPageMain-card">
-                <div
-                  className={`MyPageMain-card-body ${getDarkMode()} form-container`}
+                <div className="MyPageMain-card">
+                  <div
+                    className={`MyPageMain-card-body ${getDarkMode()} form-container`}
                   >
-                  <div className="MyPageMain-info-group">
-                    {/* 사용자 정보 입력 필드 */}
-                    {formData.provider === 'common' && (
-                      <div>
+                    <div className="MyPageMain-info-group">
+                      {/* 사용자 정보 입력 필드 */}
+                      {formData.provider === 'common' && (
+                        <div>
                           {/* 수정 가능 항목 */}
                           <div className="MyPageMain-input-group">
-                          <label
-                            htmlFor="id"
-                            className="MyPageMain-input-label"
+                            <label
+                              htmlFor="id"
+                              className="MyPageMain-input-label"
                             >
-                            아이디
-                          </label>
-                          {isEditable ? (
-                            <input
-                              ref={idInputRef} // 아이디 input에 ref 연결
-                              type="text"
-                              name="id"
-                              value={formData.id}
-                              onChange={handleInputChange}
-                              className="MyPageMain-input-field"
+                              아이디
+                            </label>
+                            {isEditable ? (
+                              <input
+                                ref={idInputRef} // 아이디 input에 ref 연결
+                                type="text"
+                                name="id"
+                                value={formData.id}
+                                onChange={handleInputChange}
+                                className="MyPageMain-input-field"
                               />
-                              ) : (
-                                <p>{formData.id}</p>
+                            ) : (
+                              <p>{formData.id}</p>
                             )}
-                        </div>
+                          </div>
 
-                        <div className="MyPageMain-input-group">
+                          <div className="MyPageMain-input-group">
                             <label
                               htmlFor="password"
                               className="MyPageMain-input-label"
-                              >
+                            >
                               비밀번호
                             </label>
                             {isEditable ? (
@@ -266,33 +286,38 @@ function UserMypage() {
                             ) : (
                               <p>비밀번호</p>
                             )}
-                        </div>
+                          </div>
 
-                        <div className="MyPageMain-input-group">
+                          <div className="MyPageMain-input-group">
                             <label
                               htmlFor="email"
                               className="MyPageMain-input-label"
-                              >
+                            >
                               이메일
                             </label>
                             {isEditable ? (
-                              <input
-                                type="email"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleInputChange}
-                                className="MyPageMain-input-field"
-                              />
+                              <>
+                                <input
+                                  type="email"
+                                  name="email"
+                                  value={formData.email}
+                                  onChange={handleInputChange}
+                                  className="MyPageMain-input-field"
+                                />
+                                {emailError && (
+                                  <small className="text-danger">{emailError}</small>
+                                )}
+                              </>
                             ) : (
                               <p>{formData.email}</p>
                             )}
                           </div>
-                      </div> 
+                        </div>
                       )}
 
                       {/* 닉네임 */}
                       <div className="MyPageMain-input-group">
-                         <div className='w-100'>
+                        <div className='w-100'>
                           <label htmlFor="nickname" className="MyPageMain-input-label">
                             닉네임
                           </label>
@@ -312,7 +337,7 @@ function UserMypage() {
                                   variant="none"
                                   className={`${getDarkModeHover()} ml-2 w-5`}
                                   style={{ marginTop: '0px' }}
-                                  >
+                                >
                                   중복확인
                                 </Button>
                               ) : (
@@ -394,7 +419,8 @@ function UserMypage() {
                             name="gender"
                             value={formData.gender}
                             onChange={handleInputChange}
-                            >
+                            className="MyPageMain-input-field"
+                          >
                             <option value="">선택 없음</option>
                             <option value="M">M</option>
                             <option value="F">F</option>
@@ -403,13 +429,13 @@ function UserMypage() {
                           <p>{formData.gender}</p>
                         )}
                       </div>
-                      {/* 휴대폰 번호 */} 
+                      {/* 휴대폰 번호 */}
                       <div className="MyPageMain-input-group">
                         <label
                           htmlFor="phone"
                           className="MyPageMain-input-label"
-                          >
-                        휴대폰 번호
+                        >
+                          휴대폰 번호
                         </label>
                         {isEditable ? (
                           <input
@@ -429,7 +455,7 @@ function UserMypage() {
                         <label
                           htmlFor="region"
                           className="MyPageMain-input-label"
-                          >
+                        >
                           지역
                         </label>
                         {isEditable ? (
@@ -438,7 +464,7 @@ function UserMypage() {
                             value={formData.region}
                             onChange={handleInputChange}
                             className="MyPageMain-input-field"
-                            >
+                          >
                             <option value="">선택 없음</option>
                             <option value="서울">서울</option>
                             <option value="경기">경기</option>
@@ -455,9 +481,9 @@ function UserMypage() {
                           <p>{formData.region}</p>
                         )}
                       </div>
+                    </div>
                   </div>
                 </div>
-              </div>
               ) : null}
 
               <div className="MyPageMain-button-container">
@@ -465,9 +491,7 @@ function UserMypage() {
                   <>
                     <Button
                       variant="none"
-                      className={`${getDarkModeHover()} ${
-                        isEditable ? 'w-50' : 'w-100'
-                      }`}
+                      className={`${getDarkModeHover()} ${isEditable ? 'w-50' : 'w-100'}`}
                       onClick={isEditable ? handleSave : toggleEdit}
                     >
                       {isEditable ? '완료' : '수정하기'}
@@ -490,9 +514,7 @@ function UserMypage() {
 
             {/* 회원 탈퇴 섹션 */}
             <div
-              className={`MyPageMain-section ${
-                selectedSection === 'account-delete' ? 'active' : ''
-              }`}
+              className={`MyPageMain-section ${selectedSection === 'account-delete' ? 'active' : ''}`}
               id="account-delete"
             >
               <h2>회원 탈퇴</h2>

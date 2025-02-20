@@ -25,7 +25,6 @@
 		#{nickname}
 		)
 	</insert>
-	
 	<!-- ################################################################################################## -->
 	<!-- 회원 정보를 수정. -->
 	<!-- resultType="User" -->
@@ -103,19 +102,17 @@
 		    E.NO,
 		    RESERVED_DATE, 
 		    P.NAME, 
-		    C.QT, 
+		    R.QT, -- RESERVED 테이블에서 QT 값을 사용
 		    P.END_DATE, 
-		    (E.PRICE * C.QT) AS TOTAL_COST
+		    (E.PRICE * R.QT) AS TOTAL_COST -- RESERVED 테이블의 QT를 사용
 		FROM 
 		    RESERVED R
-		JOIN 
-		    CART C ON R.EVENT_NO = C.EVENT_NO AND R.USER_ACCOUNT_NO = C.USER_ACCOUNT_NO
 		JOIN 
 		    EVENT E ON R.EVENT_NO = E.NO
 		JOIN 
 		    PUBLIC_DATA_EVENT P ON E.PUBLIC_DATA_EVENT_NO = P.NO
 		WHERE 
-		    R.USER_ACCOUNT_NO = #{no} AND END_DATE >= SYSDATE
+		    R.USER_ACCOUNT_NO = #{no} AND P.END_DATE >= SYSDATE
 		ORDER BY R.NO DESC
 	</select>
 	<!-- ################################################################################################## -->
