@@ -126,7 +126,9 @@ const ManagerInsert = () => {
 
           {/* ✅ 티켓 가격 입력 */}
           <Form.Group className="mb-3">
-            <Form.Label>티켓 가격 (원)</Form.Label>
+            <Form.Label>
+              티켓 가격 (무료축제의 경우 0 입력해 주세요){' '}
+            </Form.Label>
             <Form.Control
               type="number"
               placeholder="0 ~ 1,000,000원"

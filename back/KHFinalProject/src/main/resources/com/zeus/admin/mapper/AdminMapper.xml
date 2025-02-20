@@ -2,82 +2,104 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zeus.admin.mapper.AdminMapper">
 	<insert id="insert">
-	insert into test values(test_seq.NEXTVAl,#{name})
+		insert into test values(test_seq.NEXTVAl,#{name})
 	</insert>
-	
+
 	<!-- ManagerManage -->
-	<select id="managerSelectAllBySearch" resultType="User" parameterType="User">
-		SELECT * FROM USER_ACCOUNT WHERE ROLE = 1 AND NAME LIKE '%'||#{name}||'%' ORDER BY NO ASC
+	<select id="managerSelectAllBySearch" resultType="User"
+		parameterType="User">
+		SELECT * FROM USER_ACCOUNT WHERE ROLE = 1 AND NAME LIKE
+		'%'||#{name}||'%' ORDER BY NO ASC
 	</select>
-	
+
 	<insert id="managerInsert" parameterType="User">
-		INSERT INTO USER_ACCOUNT (NO, ID, PWD, PHONE, REG_DATE, ROLE, NAME, PROVICER, NICKNAME)
-		VALUES (SEQ_USER_ACCOUNT_NO.NEXTVAL, #{id}, #{pwd}, #{phone}, SYSDATE,
+		INSERT INTO
+		USER_ACCOUNT (NO, ID, PWD, PHONE, REG_DATE, ROLE, NAME, PROVICER,
+		NICKNAME)
+		VALUES (SEQ_USER_ACCOUNT_NO.NEXTVAL, #{id}, #{pwd}, #{phone},
+		SYSDATE,
 		1, #{name},'common',#{name})
 	</insert>
 
 	<update id="managerUpdate" parameterType="User">
-		UPDATE USER_ACCOUNT SET ID=#{id}, PWD=#{pwd}, PHONE=#{phone}, NAME=#{name} WHERE NO=#{no}
+		UPDATE USER_ACCOUNT SET
+		ID=#{id}, PWD=#{pwd}, PHONE=#{phone}, NAME=#{name} WHERE NO=#{no}
 	</update>
-	
+
 	<delete id="managerDelete" parameterType="map">
 		DELETE FROM USER_ACCOUNT WHERE NO IN
-		<foreach item="id" collection="ids" open="(" separator="," close=")">
+		<foreach item="id" collection="ids" open="(" separator=","
+			close=")">
 			#{id}
 		</foreach>
 	</delete>
-	
-	<select id="managerFestivalAuthSellectAll" resultType="ManagerFestivalAuthDTO" parameterType="int">
+
+	<select id="managerFestivalAuthSellectAll"
+		resultType="ManagerFestivalAuthDTO" parameterType="int">
 		SELECT
 		UME.NO,
 		UME.PUBLIC_DATA_EVENT_NO,
 		UME.USER_ACCOUNT_NO,
 		UME.REG_DATE,
-		PDE.NAME AS EVENT_NAME
+		PDE.NAME AS
+		EVENT_NAME
 		FROM USER_MANAGEMENT_EVENT UME
-		LEFT JOIN PUBLIC_DATA_EVENT PDE
+		LEFT JOIN PUBLIC_DATA_EVENT
+		PDE
 		ON UME.PUBLIC_DATA_EVENT_NO = PDE.NO
-		WHERE USER_ACCOUNT_NO = #{managerNo}
+		WHERE USER_ACCOUNT_NO =
+		#{managerNo}
 		ORDER BY UME.NO
 	</select>
 
 	<insert id="addFestivalAuth" parameterType="map">
-		INSERT INTO USER_MANAGEMENT_EVENT (NO, PUBLIC_DATA_EVENT_NO, USER_ACCOUNT_NO, REG_DATE)
-		VALUES (SEQ_USER_MANAGEMENT_EVENT_NO.NEXTVAL, #{festivalNo}, #{managerNo}, SYSDATE)
+		INSERT INTO
+		USER_MANAGEMENT_EVENT (NO, PUBLIC_DATA_EVENT_NO, USER_ACCOUNT_NO,
+		REG_DATE)
+		VALUES (SEQ_USER_MANAGEMENT_EVENT_NO.NEXTVAL, #{festivalNo},
+		#{managerNo}, SYSDATE)
 	</insert>
 
 	<delete id="deleteFestivalAuth" parameterType="map">
-		DELETE FROM USER_MANAGEMENT_EVENT WHERE NO = #{authNo}
+		DELETE FROM
+		USER_MANAGEMENT_EVENT WHERE NO = #{authNo}
 	</delete>
-	
-	<select id="publicDataEventSellectAll" resultType="AdminPublicDataEvent" parameterType="AdminPublicDataEvent">
+
+	<select id="publicDataEventSellectAll"
+		resultType="AdminPublicDataEvent" parameterType="AdminPublicDataEvent">
 		SELECT *
-		FROM PUBLIC_DATA_EVENT
+		FROM
+		PUBLIC_DATA_EVENT
 		WHERE END_DATE >= TRUNC(SYSDATE)
 		ORDER BY NO ASC
 	</select>
 
 	<!-- UserManage -->
-	<select id="userSelectAllBySearch" resultType="User" parameterType="User">
-		SELECT * FROM USER_ACCOUNT WHERE ROLE = 2 AND NAME LIKE '%'||#{id}||'%' ORDER BY NO ASC
+	<select id="userSelectAllBySearch" resultType="User"
+		parameterType="User">
+		SELECT * FROM USER_ACCOUNT WHERE ROLE = 2 AND NAME LIKE
+		'%'||#{id}||'%' ORDER BY NO ASC
 	</select>
 
 	<delete id="userDelete" parameterType="map">
 		DELETE FROM USER_ACCOUNT WHERE NO IN
-		<foreach item="id" collection="ids" open="(" separator="," close=")">
+		<foreach item="id" collection="ids" open="(" separator=","
+			close=")">
 			#{id}
 		</foreach>
 	</delete>
 
 	<!-- FestivalManage -->
-	<select id="festivalSelectAllBySearch" resultType="AdminEventDTO" parameterType="AdminEventDTO">
+	<select id="festivalSelectAllBySearch"
+		resultType="AdminEventDTO" parameterType="AdminEventDTO">
 		SELECT
 		E.NO,
 		E.PUBLIC_DATA_EVENT_NO,
 		E.USER_ACCOUNT_NO,
 		E.PRICE,
 		E.RATING,
-		UA.NAME AS USER_NAME,
+		UA.NAME AS
+		USER_NAME,
 		PDE.NAME AS EVENT_NAME,
 		PDE.PLACE,
 		PDE.START_DATE,
@@ -86,179 +108,310 @@
 		PDE.TEL,
 		PDE.HOMEPAGE
 		FROM EVENT E
-		LEFT JOIN ADMIN.USER_ACCOUNT UA
+		LEFT JOIN
+		ADMIN.USER_ACCOUNT UA
 		ON E.USER_ACCOUNT_NO = UA.NO
-		LEFT JOIN ADMIN.PUBLIC_DATA_EVENT PDE
+		LEFT JOIN
+		ADMIN.PUBLIC_DATA_EVENT PDE
 		ON E.PUBLIC_DATA_EVENT_NO = PDE.NO
-		WHERE PDE.NAME LIKE '%'||#{eventName}||'%' ORDER BY E.NO ASC
+		WHERE
+		PDE.NAME LIKE '%'||#{eventName}||'%' ORDER BY E.NO ASC
 	</select>
 
 	<delete id="festivalDelete" parameterType="map">
 		DELETE FROM EVENT WHERE NO IN
-		<foreach item="id" collection="ids" open="(" separator="," close=")">
+		<foreach item="id" collection="ids" open="(" separator=","
+			close=")">
 			#{id}
 		</foreach>
 	</delete>
-	
-	<!-- FestivalReviewManage-->
-	<select id="reviewSelectAllBySearch" resultType="AdminReviewDTO" parameterType="AdminReviewDTO">
+
+	<!-- FestivalReviewManage -->
+	<select id="reviewSelectAllBySearch" resultType="AdminReviewDTO"
+		parameterType="AdminReviewDTO">
 		SELECT
-			ER.NO,
-			ER.CONTENT,
-			ER.SUB_DATE,
-			ER.EVENT_NO,
-			ER.USER_ACCOUNT_NO,
-			ER.RATING,
-			UA.NAME AS USER_NAME,
-			PDE.NAME AS EVENT_NAME
+		ER.NO,
+		ER.CONTENT,
+		ER.SUB_DATE,
+		ER.EVENT_NO,
+		ER.USER_ACCOUNT_NO,
+		ER.RATING,
+		UA.NAME AS USER_NAME,
+		PDE.NAME AS EVENT_NAME
 		FROM EVENT_REVIEW ER
 		LEFT JOIN USER_ACCOUNT UA
-		ON ER.USER_ACCOUNT_NO = UA.NO
+		ON
+		ER.USER_ACCOUNT_NO = UA.NO
 		LEFT JOIN EVENT E
 		ON ER.EVENT_NO = E.NO
-		LEFT JOIN PUBLIC_DATA_EVENT PDE
+		LEFT
+		JOIN PUBLIC_DATA_EVENT PDE
 		ON E.PUBLIC_DATA_EVENT_NO = PDE.NO
-		WHERE PDE.NAME LIKE '%'||#{eventName}||'%' ORDER BY ER.NO ASC
+		WHERE
+		PDE.NAME LIKE '%'||#{eventName}||'%' ORDER BY ER.NO ASC
 	</select>
 
 	<delete id="reviewDelete" parameterType="map">
 		DELETE FROM EVENT_REVIEW WHERE NO IN
-		<foreach item="id" collection="ids" open="(" separator="," close=")">
+		<foreach item="id" collection="ids" open="(" separator=","
+			close=")">
 			#{id}
 		</foreach>
 	</delete>
-	
+
 	<!-- FestivalQnAManage -->
-	<select id="qnaSelectAllBySearch" resultType="AdminQnaDTO" parameterType="AdminQnaDTO">
+	<select id="qnaSelectAllBySearch" resultType="AdminQnaDTO"
+		parameterType="AdminQnaDTO">
 		SELECT
 		Q1.NO AS QUESTION_NO,
 		PDE.NAME AS EVENT_NAME,
 		Q1.TITLE AS QUESTION_TITLE,
 		Q1.CONTENT AS QUESTION_CONTENT,
-		UA1.NAME AS QUESTION_WRITER,
+		UA1.NAME AS
+		QUESTION_WRITER,
 		Q1.SUB_DATE AS QUESTION_DATE,
 		Q2.NO AS ANSWER_NO,
 		Q2.CONTENT AS ANSWER_CONTENT,
 		UA2.NAME AS ANSWER_WRITER,
-		Q2.SUB_DATE AS ANSWER_DATE
+		Q2.SUB_DATE AS
+		ANSWER_DATE
 		FROM QNA Q1
 		LEFT JOIN QNA Q2
 		ON Q1.NO = Q2.QNA_NO
-		INNER JOIN USER_ACCOUNT UA1
+		INNER JOIN
+		USER_ACCOUNT UA1
 		ON Q1.USER_ACCOUNT_NO = UA1.NO
-		LEFT JOIN ADMIN.USER_ACCOUNT UA2
+		LEFT JOIN
+		ADMIN.USER_ACCOUNT UA2
 		ON Q2.USER_ACCOUNT_NO = UA2.NO
-		LEFT JOIN ADMIN.EVENT E
+		LEFT JOIN
+		ADMIN.EVENT E
 		ON Q1.EVENT_NO = E.NO
-		LEFT JOIN ADMIN.PUBLIC_DATA_EVENT PDE
+		LEFT JOIN ADMIN.PUBLIC_DATA_EVENT
+		PDE
 		ON E.PUBLIC_DATA_EVENT_NO = PDE.NO
-		WHERE Q1.QNA_NO=0 AND PDE.NAME LIKE '%'||#{eventName}||'%'
+		WHERE Q1.QNA_NO=0 AND PDE.NAME
+		LIKE '%'||#{eventName}||'%'
 		ORDER BY Q1.NO asc
 	</select>
-	
+
 	<delete id="qnaDelete" parameterType="map">
 		DELETE FROM QNA WHERE NO IN
-		<foreach item="id" collection="ids" open="(" separator="," close=")">
+		<foreach item="id" collection="ids" open="(" separator=","
+			close=")">
 			#{id}
 		</foreach>
 		OR QNA_NO IN
-		<foreach item="id" collection="ids" open="(" separator="," close=")">
+		<foreach item="id" collection="ids" open="(" separator=","
+			close=")">
 			#{id}
 		</foreach>
 	</delete>
-	
+
 	<!-- NoticeManage -->
-	<select id="noticeSelectAllBySearch" resultType="Notice" parameterType="Notice">
-		SELECT * FROM NOTICE WHERE TITLE LIKE '%'||#{title}||'%' ORDER BY NO ASC
+	<select id="noticeSelectAllBySearch" resultType="Notice"
+		parameterType="Notice">
+		SELECT * FROM NOTICE WHERE TITLE LIKE '%'||#{title}||'%'
+		ORDER BY NO ASC
 	</select>
 
 	<insert id="noticeInsert" parameterType="Notice">
-		INSERT INTO NOTICE (NO, TITLE, CONTENT, SUB_DATE)
-		VALUES (SEQ_NOTICE_NO.NEXTVAL, #{title}, #{content}, SYSDATE)
+		INSERT INTO NOTICE (NO,
+		TITLE, CONTENT, SUB_DATE)
+		VALUES (SEQ_NOTICE_NO.NEXTVAL, #{title},
+		#{content}, SYSDATE)
 	</insert>
 
 	<update id="noticeUpdate" parameterType="Notice">
-		UPDATE NOTICE SET TITLE=#{title}, CONTENT=#{content}, SUB_DATE=#{subDate} WHERE NO=#{no}
+		UPDATE NOTICE SET
+		TITLE=#{title}, CONTENT=#{content}, SUB_DATE=#{subDate} WHERE NO=#{no}
 	</update>
 
 	<delete id="noticeDelete" parameterType="map">
 		DELETE FROM NOTICE WHERE NO IN
-		<foreach item="id" collection="ids" open="(" separator="," close=")">
+		<foreach item="id" collection="ids" open="(" separator=","
+			close=")">
 			#{id}
 		</foreach>
 	</delete>
-	
+
 	<!-- BannerManage -->
-	<select id="bannerSellectAll" resultType="AdminBannerDTO" parameterType="AdminBannerDTO">
+	<select id="bannerSellectAll" resultType="AdminBannerDTO"
+		parameterType="AdminBannerDTO">
 		SELECT
 		B.NO,
 		B.URL,
 		B.SUB_DATE,
 		PDE.NAME AS EVENT_NAME
-		FROM BANNER B
+		FROM
+		BANNER B
 		LEFT JOIN EVENT E ON B.EVENT_NO = E.NO
-		LEFT JOIN PUBLIC_DATA_EVENT PDE ON E.PUBLIC_DATA_EVENT_NO = PDE.NO
-		ORDER BY B.NO ASC
+		LEFT JOIN
+		PUBLIC_DATA_EVENT PDE ON E.PUBLIC_DATA_EVENT_NO = PDE.NO
+		ORDER BY B.NO
+		ASC
 	</select>
 
 	<insert id="insertBanner" parameterType="AdminBannerDTO">
-		INSERT INTO BANNER (NO, URL, SUB_DATE, EVENT_NO)
-		VALUES (SEQ_BANNER_NO.NEXTVAL, #{url}, SYSDATE,
+		INSERT INTO BANNER (NO,
+		URL, SUB_DATE, EVENT_NO)
+		VALUES (SEQ_BANNER_NO.NEXTVAL, #{url},
+		SYSDATE,
 		(SELECT E.NO
 		FROM EVENT E
-		JOIN PUBLIC_DATA_EVENT P ON E.PUBLIC_DATA_EVENT_NO = P.NO
-		WHERE P.NAME = #{eventName} FETCH FIRST 1 ROWS ONLY))
+		JOIN PUBLIC_DATA_EVENT P ON
+		E.PUBLIC_DATA_EVENT_NO = P.NO
+		WHERE P.NAME = #{eventName} FETCH FIRST 1
+		ROWS ONLY))
 	</insert>
 
 	<delete id="deleteBanner" parameterType="int">
-		DELETE FROM BANNER WHERE NO = #{bannerId}
+		DELETE FROM BANNER WHERE
+		NO = #{bannerId}
 	</delete>
-	
-	<select id="eventSellectAll" resultType="AdminPublicDataEvent" parameterType="AdminPublicDataEvent">
+
+	<select id="eventSellectAll" resultType="AdminPublicDataEvent"
+		parameterType="AdminPublicDataEvent">
 		SELECT PDE.*
 		FROM PUBLIC_DATA_EVENT PDE
-		JOIN EVENT E ON PDE.NO = E.PUBLIC_DATA_EVENT_NO
+		JOIN EVENT E ON
+		PDE.NO = E.PUBLIC_DATA_EVENT_NO
 		WHERE PDE.END_DATE >= TRUNC(SYSDATE)
 		ORDER BY PDE.NO ASC
 	</select>
-	
+
 	<!-- ReservedManage -->
-	<select id="reservedSelectAllBySearch" resultType="AdminReservedDTO" parameterType="AdminReservedDTO">
+	<select id="reservedSelectAllBySearch"
+		resultType="AdminReservedDTO" parameterType="AdminReservedDTO">
 		SELECT
 		R.NO,
 		R.ID,
-		UA.ID AS USER_ID,
+		UA.ID AS
+		USER_ID,
 		R.QT,
 		R.RESERVED_DATE,
 		R.TOTAL_COST,
 		PDE.NAME AS EVENT_NAME
-		FROM RESERVED R
+		FROM
+		RESERVED R
 		LEFT JOIN USER_ACCOUNT UA
 		ON R.USER_ACCOUNT_NO = UA.NO
-		LEFT JOIN EVENT E
+		LEFT
+		JOIN EVENT E
 		ON R.EVENT_NO = E.NO
 		LEFT JOIN PUBLIC_DATA_EVENT PDE
-		ON E.PUBLIC_DATA_EVENT_NO = PDE.NO
-		WHERE PDE.NAME LIKE '%'||#{eventName}||'%' ORDER BY R.NO ASC
+		ON
+		E.PUBLIC_DATA_EVENT_NO = PDE.NO
+		WHERE PDE.NAME LIKE
+		'%'||#{eventName}||'%' ORDER BY R.NO ASC
 	</select>
-	
+
 	<!-- CanceledManage -->
-	<select id="canceledSelectAllBySearch" resultType="AdminReservedDTO" parameterType="AdminReservedDTO">
+	<select id="canceledSelectAllBySearch"
+		resultType="AdminReservedDTO" parameterType="AdminReservedDTO">
 		SELECT
 		C.NO,
 		C.ID,
-		UA.ID AS USER_ID,
+		UA.ID AS
+		USER_ID,
 		C.QT,
 		C.RESERVED_DATE,
 		C.TOTAL_COST,
 		PDE.NAME AS EVENT_NAME
-		FROM CANCELED C
+		FROM
+		CANCELED C
 		LEFT JOIN USER_ACCOUNT UA
 		ON C.USER_ACCOUNT_NO = UA.NO
-		LEFT JOIN EVENT E
+		LEFT
+		JOIN EVENT E
 		ON C.EVENT_NO = E.NO
 		LEFT JOIN PUBLIC_DATA_EVENT PDE
-		ON E.PUBLIC_DATA_EVENT_NO = PDE.NO
-		WHERE PDE.NAME LIKE '%'||#{eventName}||'%' ORDER BY C.NO ASC
+		ON
+		E.PUBLIC_DATA_EVENT_NO = PDE.NO
+		WHERE PDE.NAME LIKE
+		'%'||#{eventName}||'%' ORDER BY C.NO ASC
 	</select>
+
+	<!-- 성별 통계 (genderData) -->
+	<select id="getGenderStats" resultType="integer">
+		SELECT COUNT(*)
+		FROM user_account
+		WHERE gender = #{gender}
+	</select>
+
+	<!-- 연령대 통계 (avgData) -->
+	<select id="getAgeGroupStats" resultMap="ageGroupResultMap">
+		SELECT
+		CASE
+		WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) BETWEEN 10 AND
+		19 THEN '10대'
+		WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) BETWEEN 20 AND
+		29 THEN '20대'
+		WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) BETWEEN 30 AND
+		39 THEN '30대'
+		WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) BETWEEN 40 AND
+		49 THEN '40대'
+		WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) BETWEEN 50 AND
+		59 THEN '50대'
+		ELSE '60대 이상'
+		END AS age_group,
+		COUNT(*) AS count
+		FROM user_account
+		GROUP BY
+		CASE
+		WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) BETWEEN 10 AND
+		19 THEN '10대'
+		WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) BETWEEN 20 AND
+		29 THEN '20대'
+		WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) BETWEEN 30 AND
+		39 THEN '30대'
+		WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) BETWEEN 40 AND
+		49 THEN '40대'
+		WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) BETWEEN 50 AND
+		59 THEN '50대'
+		ELSE '60대 이상'
+		END
+		ORDER BY age_group
+	</select>
+
+	<!-- 예약 통계 (reservedData) -->
+	<select id="getReservedStats" resultMap="reservedResultMap">
+		SELECT
+		TO_CHAR(reserved_date, 'YYYY-MM') AS month,
+		COUNT(*) AS count
+		FROM reserved
+		WHERE reserved_date IS NOT NULL
+		GROUP BY TO_CHAR(reserved_date, 'YYYY-MM')
+		ORDER BY month
+	</select>
+
+	<!-- 축제 통계 (eventData) -->
+	<select id="getEventStats" resultMap="eventResultMap">
+		SELECT
+		TO_CHAR(p.start_date, 'YYYY-MM') AS month,
+		COUNT(*) AS count
+		FROM event e
+		JOIN public_data_event p ON e.public_data_event_no = p.no
+		WHERE p.start_date IS NOT NULL
+		GROUP BY TO_CHAR(p.start_date, 'YYYY-MM')
+		ORDER BY month
+	</select>
+
+	<!-- 연령대 통계 ResultMap -->
+	<resultMap id="ageGroupResultMap" type="map">
+		<result property="age_group" column="age_group" />
+		<result property="count" column="count" />
+	</resultMap>
+
+	<!-- 예약 통계 ResultMap -->
+	<resultMap id="reservedResultMap" type="map">
+		<result property="month" column="month" />
+		<result property="count" column="count" />
+	</resultMap>
+
+	<!-- 축제 통계 ResultMap -->
+	<resultMap id="eventResultMap" type="map">
+		<result property="month" column="month" />
+		<result property="count" column="count" />
+	</resultMap>
 </mapper>

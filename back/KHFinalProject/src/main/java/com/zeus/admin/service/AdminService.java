@@ -6,6 +6,7 @@ import com.zeus.user.domain.User;
 import com.zeus.admin.domain.AdminEventDTO;
 import com.zeus.admin.domain.AdminPublicDataEvent;
 import com.zeus.admin.domain.AdminReviewDTO;
+import com.zeus.admin.domain.AdminStatsDTO;
 import com.zeus.admin.domain.ManagerFestivalAuthDTO;
 import com.zeus.notice.domain.Notice;
 import com.zeus.admin.domain.AdminQnaDTO;
@@ -67,5 +68,7 @@ public interface AdminService {
 	public void deleteBanner(int bannerId) throws Exception;
 
 	public List<AdminPublicDataEvent> eventSellectAll() throws Exception;
+
+	public AdminStatsDTO getAdminStats() throws Exception;
 }
 

@@ -29,8 +29,8 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // ✅ 세션 사용 안함 (JWT 기반 인증)
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ OPTIONS 요청 허용 (CORS preflight 요청 처리)
-                .requestMatchers("/admin/**").hasAuthority("ROLE_0")   // ✅ 관리자(ROLE_0)만 접근 가능
-                .requestMatchers("/manager/**").hasAnyAuthority("ROLE_0", "ROLE_1")   // ✅ 관리자(ROLE_0)와 매니저(ROLE_1)만 접근 가능
+//                .requestMatchers("/admin/**").hasAuthority("ROLE_0")   // ✅ 관리자(ROLE_0)만 접근 가능
+//                .requestMatchers("/manager/**").hasAnyAuthority("ROLE_0", "ROLE_1")   // ✅ 관리자(ROLE_0)와 매니저(ROLE_1)만 접근 가능
                 .requestMatchers("/auth/jwtAdmin").hasAuthority("ROLE_0") // ✅ ROLE_0만 접근 가능
                 .requestMatchers("/auth/jwtManager").hasAnyAuthority("ROLE_0", "ROLE_1") // ✅ ROLE_0, ROLE_1 접근 가능
                 .requestMatchers("/auth/jwtUser").hasAnyAuthority("ROLE_0", "ROLE_1", "ROLE_2") // ✅ ROLE_0, ROLE_1, ROLE_2 접근 가능

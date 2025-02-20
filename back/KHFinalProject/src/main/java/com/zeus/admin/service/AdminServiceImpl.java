@@ -1,24 +1,27 @@
 package com.zeus.admin.service;
 
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.zeus.admin.domain.AdminBannerDTO;
+import com.zeus.admin.domain.AdminEventDTO;
+import com.zeus.admin.domain.AdminPublicDataEvent;
+import com.zeus.admin.domain.AdminQnaDTO;
+import com.zeus.admin.domain.AdminReservedDTO;
+import com.zeus.admin.domain.AdminReviewDTO;
+import com.zeus.admin.domain.AdminStatsDTO;
+import com.zeus.admin.domain.ManagerFestivalAuthDTO;
 import com.zeus.admin.mapper.AdminMapper;
 import com.zeus.notice.domain.Notice;
 import com.zeus.user.domain.User;
-import com.zeus.admin.domain.AdminEventDTO;
-import com.zeus.admin.domain.AdminPublicDataEvent;
-import com.zeus.admin.domain.AdminReviewDTO;
-import com.zeus.admin.domain.AdminQnaDTO;
-import com.zeus.admin.domain.AdminReservedDTO;
-import com.zeus.admin.domain.ManagerFestivalAuthDTO;
-import com.zeus.admin.domain.AdminBannerDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -190,4 +193,72 @@ public class AdminServiceImpl implements AdminService {
 	public List<AdminPublicDataEvent> eventSellectAll() throws Exception {
 		return mapper.eventSellectAll();
 	}
+
+	@Override
+	public AdminStatsDTO getAdminStats() throws Exception {
+	    AdminStatsDTO statsDTO = new AdminStatsDTO();
+
+	    // ✅ 성별 통계 (남성, 여성)
+	    List<Integer> genderStats = List.of(
+	        mapper.getGenderStats("M").isEmpty() ? 0 : mapper.getGenderStats("M").get(0), 
+	        mapper.getGenderStats("F").isEmpty() ? 0 : mapper.getGenderStats("F").get(0)
+	    );
+	    statsDTO.setGenderData(genderStats);
+
+	    // ✅ 연령대 통계 (10대, 20대, 30대, 40대, 50대, 60대 이상)
+	    List<Map<String, Object>> ageStats = mapper.getAgeGroupStats();
+	    Map<String, Integer> ageMap = new HashMap<>();
+	    List<String> ageGroups = List.of("10대", "20대", "30대", "40대", "50대", "60대 이상");
+
+	    // 기존 데이터 매핑
+	    for (Map<String, Object> stat : ageStats) {
+	        ageMap.put((String) stat.get("age_group"), ((Number) stat.get("count")).intValue());
+	    }
+	    // 모든 연령대가 존재하도록 0으로 채움
+	    List<Integer> ageValues = ageGroups.stream()
+	            .map(group -> ageMap.getOrDefault(group, 0))
+	            .collect(Collectors.toList());
+	    statsDTO.setAvgData(ageValues);
+
+	    // ✅ 예약 통계 (매월 데이터 누락 시 0으로 채움)
+	    List<Map<String, Object>> reservedStats = mapper.getReservedStats();
+	    Map<String, Integer> reservedMap = reservedStats.stream()
+	            .collect(Collectors.toMap(
+	                stat -> (String) stat.get("month"),
+	                stat -> ((Number) stat.get("count")).intValue()
+	            ));
+
+	    List<Integer> reservedValues = generateMonthlyData(reservedMap);
+	    statsDTO.setReservedData(reservedValues);
+
+	    // ✅ 축제 통계 (매월 데이터 누락 시 0으로 채움)
+	    List<Map<String, Object>> eventStats = mapper.getEventStats();
+	    Map<String, Integer> eventMap = eventStats.stream()
+	            .collect(Collectors.toMap(
+	                stat -> (String) stat.get("month"),
+	                stat -> ((Number) stat.get("count")).intValue()
+	            ));
+
+	    List<Integer> eventValues = generateMonthlyData(eventMap);
+	    statsDTO.setEventData(eventValues);
+
+	    return statsDTO;
+	}
+
+	/**
+	 * 1월 ~ 12월까지 모든 월이 포함되도록 0으로 채워주는 메서드
+	 */
+	private List<Integer> generateMonthlyData(Map<String, Integer> dataMap) {
+	    int currentYear = LocalDate.now().getYear(); // 현재 연도 자동 가져오기
+
+	    List<String> months = List.of(
+	        "01", "02", "03", "04", "05", "06", 
+	        "07", "08", "09", "10", "11", "12"
+	    );
+
+	    return months.stream()
+	            .map(month -> dataMap.getOrDefault(currentYear + "-" + month, 0)) // 현재 연도 적용
+	            .collect(Collectors.toList());
+	}
+
 }

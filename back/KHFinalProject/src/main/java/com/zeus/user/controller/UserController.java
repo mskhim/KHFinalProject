@@ -311,6 +311,7 @@ public class UserController {
 	@PostMapping("/refresh-token")
 	public ResponseEntity<Map<String, Object>> refreshToken(
 	    @CookieValue(name = "refresh_token", required = false) String refreshToken,
+	    @CookieValue(name = "jwt", required = false) String jwt,
 	    HttpServletResponse response) {
 	    log.info("🔹 JWT 갱신 요청");
 	    if (refreshToken == null || JwtUtil.isTokenExpired(refreshToken)) {
@@ -321,6 +322,7 @@ public class UserController {
 	    String provider = JwtUtil.validateToken(refreshToken).get("provider", String.class);
 	    String pwd = JwtUtil.validateToken(refreshToken).get("pwd", String.class);
 	    User user = new User();
+	    
 	    user.setId(userId);
 	    user.setProvider(provider);
 	    user.setPwd(pwd);
@@ -333,7 +335,7 @@ public class UserController {
 	    String newAccessToken = JwtUtil.createAccessToken(dbUser);
 	    //  새로운 JWT를 HttpOnly 쿠키에 저장
 	    addJwtCookie(response, "jwt", newAccessToken, 60 * 15); // 15분 유지
-
+	    log.info(newAccessToken);
 	    return ResponseEntity.ok(Map.of("success", true, "message", "액세스 토큰 갱신 완료"));
 	}
 

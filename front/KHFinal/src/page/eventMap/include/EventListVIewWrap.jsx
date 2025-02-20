@@ -221,15 +221,6 @@ const EventListViewWrap = ({
 
       <br />
       <br />
-      <div className="d-flex justify-content-end">
-        <ButtonRole
-          text="추가 forManager"
-          role="manager"
-          onClick={() => {
-            navigate('/manager/managerEventInsert');
-          }}
-        />
-      </div>
     </Container>
   );
 };

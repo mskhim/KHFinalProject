@@ -3,15 +3,17 @@ package com.zeus.admin.mapper;
 import java.util.List;
 import java.util.Map;
 
-import com.zeus.notice.domain.Notice;
-import com.zeus.user.domain.User;
+import org.apache.ibatis.annotations.Param;
+
 import com.zeus.admin.domain.AdminBannerDTO;
 import com.zeus.admin.domain.AdminEventDTO;
-import com.zeus.admin.domain.AdminReviewDTO;
-import com.zeus.admin.domain.ManagerFestivalAuthDTO;
+import com.zeus.admin.domain.AdminPublicDataEvent;
 import com.zeus.admin.domain.AdminQnaDTO;
 import com.zeus.admin.domain.AdminReservedDTO;
-import com.zeus.admin.domain.AdminPublicDataEvent;
+import com.zeus.admin.domain.AdminReviewDTO;
+import com.zeus.admin.domain.ManagerFestivalAuthDTO;
+import com.zeus.notice.domain.Notice;
+import com.zeus.user.domain.User;
 
 public interface AdminMapper {
 
@@ -110,4 +112,8 @@ public interface AdminMapper {
 
 	// 이벤트 전체 조회
 	public List<AdminPublicDataEvent> eventSellectAll() throws Exception;
+	List<Integer> getGenderStats(@Param("gender") String gender);  // 성별 통계
+    List<Map<String, Object>> getAgeGroupStats();  // 연령대 통계
+    List<Map<String, Object>> getReservedStats();  // 예약 통계
+    List<Map<String, Object>> getEventStats();  // 축제 통계
 }

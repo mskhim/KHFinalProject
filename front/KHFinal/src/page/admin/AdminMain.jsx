@@ -1,31 +1,32 @@
-import { useState, useEffect } from "react";
-import { Container, Row, Col } from "react-bootstrap";
-import { Bar, Line, Pie } from "react-chartjs-2";
-import "./include/css/StatHistory.css"; // 스타일 파일 추가
+import { useState, useEffect } from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
+import { Bar, Line, Pie } from 'react-chartjs-2';
+import './include/css/StatHistory.css'; // 스타일 파일 추가
+import { getStats } from './adminApi'; // API 함수 파일 추가
 
 const mockData = {
   ageGroupData: {
-    labels: ["10대", "20대", "30대", "40대", "50대", "60대 이상"],
+    labels: ['10대', '20대', '30대', '40대', '50대', '60대 이상'],
     values: [150, 300, 450, 200, 100, 50],
   },
   genderData: {
-    labels: ["남성", "여성"],
+    labels: ['남성', '여성'],
     values: [600, 650],
   },
   monthlyData: {
     labels: [
-      "1월",
-      "2월",
-      "3월",
-      "4월",
-      "5월",
-      "6월",
-      "7월",
-      "8월",
-      "9월",
-      "10월",
-      "11월",
-      "12월",
+      '1월',
+      '2월',
+      '3월',
+      '4월',
+      '5월',
+      '6월',
+      '7월',
+      '8월',
+      '9월',
+      '10월',
+      '11월',
+      '12월',
     ],
     bookingValues: [50, 70, 100, 80, 120, 150, 130, 110, 90, 60, 40, 30],
     festivalValues: [5, 7, 10, 8, 12, 15, 13, 11, 9, 6, 4, 3],
@@ -33,29 +34,31 @@ const mockData = {
 };
 
 const AdminMain = () => {
-  const [test, setTest] = useState("");
-  const [inputValue, setInputValue] = useState(""); // input 필드 값
+  const [test, setTest] = useState('');
+  const [inputValue, setInputValue] = useState(''); // input 필드 값
   const [data, setData] = useState(mockData);
 
   useEffect(() => {
-    fetch("http://localhost:8080/admin/test", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json", // 요청 헤더 설정
-      },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        return res.json(); // JSON 응답 처리
-      })
-      .then((data) => {
-        setTest(data.test); // 서버에서 "test" 키의 값을 설정
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
+    const getStatsData = async () => {
+      const response = await getStats();
+      console.log(response);
+      setData({
+        ageGroupData: {
+          ...data.ageGroupData,
+          values: response.avgData,
+        },
+        genderData: {
+          ...data.genderData,
+          values: response.genderData,
+        },
+        monthlyData: {
+          ...data.monthlyData,
+          bookingValues: response.reservedData,
+          festivalValues: response.eventData,
+        },
       });
+    };
+    getStatsData();
   }, []);
 
   // 버튼 클릭 이벤트 핸들러
@@ -63,14 +66,14 @@ const AdminMain = () => {
     e.preventDefault(); // 폼의 기본 동작(페이지 새로고침)을 막음
 
     if (!inputValue.trim()) {
-      alert("Input field cannot be empty!");
+      alert('Input field cannot be empty!');
       return;
     }
 
-    fetch("http://localhost:8080/admin/insert", {
-      method: "POST", // POST 요청으로 데이터 전송
+    fetch('http://localhost:8080/admin/insert', {
+      method: 'POST', // POST 요청으로 데이터 전송
       headers: {
-        "Content-Type": "application/json", // JSON 형식으로 데이터 전송
+        'Content-Type': 'application/json', // JSON 형식으로 데이터 전송
       },
       body: JSON.stringify({ name: inputValue }), // 입력 값 전송
     });
@@ -87,9 +90,9 @@ const AdminMain = () => {
                 labels: data.ageGroupData.labels,
                 datasets: [
                   {
-                    label: "유저수",
+                    label: '유저수',
                     data: data.ageGroupData.values,
-                    backgroundColor: "rgba(75, 192, 192, 0.6)",
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
                   },
                 ],
               }}
@@ -105,11 +108,11 @@ const AdminMain = () => {
                 labels: data.genderData.labels,
                 datasets: [
                   {
-                    label: "유저수",
+                    label: '유저수',
                     data: data.genderData.values,
                     backgroundColor: [
-                      "rgba(54, 162, 235, 0.6)",
-                      "rgba(255, 99, 132, 0.6)",
+                      'rgba(54, 162, 235, 0.6)',
+                      'rgba(255, 99, 132, 0.6)',
                     ],
                   },
                 ],
@@ -128,20 +131,20 @@ const AdminMain = () => {
                 labels: data.monthlyData.labels,
                 datasets: [
                   {
-                    type: "line",
-                    label: "예매수",
+                    type: 'line',
+                    label: '예매수',
                     data: data.monthlyData.bookingValues,
-                    backgroundColor: "rgba(153, 102, 255, 0.6)",
-                    borderColor: "rgba(153, 102, 255, 1)",
+                    backgroundColor: 'rgba(153, 102, 255, 0.6)',
+                    borderColor: 'rgba(153, 102, 255, 1)',
                     fill: false,
-                    yAxisID: "y-axis-1",
+                    yAxisID: 'y-axis-1',
                   },
                   {
-                    type: "bar",
-                    label: "축제수",
+                    type: 'bar',
+                    label: '축제수',
                     data: data.monthlyData.festivalValues,
-                    backgroundColor: "rgba(255, 206, 86, 0.6)",
-                    yAxisID: "y-axis-2",
+                    backgroundColor: 'rgba(255, 206, 86, 0.6)',
+                    yAxisID: 'y-axis-2',
                   },
                 ],
               }}

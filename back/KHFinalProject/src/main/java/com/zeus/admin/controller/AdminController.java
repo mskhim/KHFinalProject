@@ -23,6 +23,7 @@ import com.zeus.user.domain.User;
 import com.zeus.admin.domain.AdminEventDTO;
 import com.zeus.admin.domain.AdminQnaDTO;
 import com.zeus.admin.domain.AdminReviewDTO;
+import com.zeus.admin.domain.AdminStatsDTO;
 import com.zeus.admin.domain.ManagerFestivalAuthDTO;
 import com.zeus.admin.domain.AdminReservedDTO;
 import com.zeus.admin.domain.AdminPublicDataEvent;
@@ -277,4 +278,8 @@ public class AdminController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete banner");
 		}
 	}
+	  @GetMapping("/stats")
+	    public AdminStatsDTO getAdminStats() throws Exception {
+	        return service.getAdminStats();
+	    }
 }

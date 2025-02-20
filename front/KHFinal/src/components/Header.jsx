@@ -16,7 +16,7 @@ import { Context } from '../Context';
 import ScrollToTopButton from './ui/ScrollToTopButton';
 import TokenRemain from './ui/TokenRemain';
 import ViVaFesta from '../assets/ViVaFesta.png';
-import { ButtonDarkMode } from './ui';
+import { ButtonDarkMode, ButtonRole } from './ui';
 const Header = ({ page }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -230,7 +230,15 @@ const Header = ({ page }) => {
                         로그아웃
                       </NavDropdown.Item>
                     </NavDropdown>
+                    <div className="d-flex justify-content-end"></div>
                     <TokenRemain initialExpiration={tokenExpiration} />
+                    <ButtonRole
+                      text="축제 추가하기"
+                      role="manager"
+                      onClick={() => {
+                        navigate('/manager/managerEventInsert');
+                      }}
+                    />
                     <div className="position-relative me-3">
                       <FaCartPlus
                         size={24}
