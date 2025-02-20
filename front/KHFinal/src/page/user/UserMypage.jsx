@@ -16,7 +16,6 @@ function UserMypage() {
   const [formData, setFormData] = useState(userInfo); // 수정을 위한 form data.
   const [showDeleteModal, setShowDeleteModal] = useState(false); // 회원 탈퇴 확인 모달
   const [deleteEmail, setDeleteEmail] = useState(''); // 탈퇴 시 이메일 상태
-  const [deletePassword, setDeletePassword] = useState(''); // 탈퇴 시 비밀번호 상태
   const [emailError, setEmailError] = useState(''); // 이메일 오류 상태
   const [isLoading, setIsLoading] = useState(true); // Loading state
   const navigate = useNavigate(); // useNavigate 훅 추가
@@ -167,24 +166,23 @@ function UserMypage() {
   // 회원 탈퇴 확인 모달 열기
   const openDeleteModal = () => {
     setDeleteEmail(''); // 이메일 초기화
-    setDeletePassword(''); // 비밀번호 초기화
     setShowDeleteModal(true);
   };
 
   // 회원 탈퇴 확인 모달 닫기
   const closeDeleteModal = () => setShowDeleteModal(false);
 
-  // 탈퇴 확인 처리 (이메일과 비밀번호를 백엔드로 전송)
+  // 탈퇴 확인 처리 (이메일을 백엔드로 전송)
   const handleDeleteAccount = async () => {
-    if (!deleteEmail || !deletePassword) {
-      alert('이메일과 비밀번호를 모두 입력해주세요.');
+    if (!deleteEmail) {
+      alert('이메일을 입력해주세요.');
       return;
     }
 
     if (deleteEmail === userInfo.email) {
       const confirmDelete = window.confirm('정말 탈퇴하시겠습니까?');
       if (confirmDelete) {
-        const response = await deleteUserData({ email: deleteEmail, pwd: deletePassword });
+        const response = await deleteUserData({ email: deleteEmail });
 
         if (response) {
           setUserInfo({});  // 회원 정보 삭제
@@ -570,21 +568,12 @@ function UserMypage() {
               value={deleteEmail} // value로 상태를 바인딩
               onChange={(e) => setDeleteEmail(e.target.value)} // 상태 업데이트
             />
-            <br></br>
-            <label>비밀번호</label>
-            <input
-              type="password"
-              className="form-control"
-              placeholder="비밀번호를 입력하세요"
-              value={deletePassword} // value로 상태를 바인딩
-              onChange={(e) => setDeletePassword(e.target.value)} // 상태 업데이트
-            />
           </div>
         </Modal.Body>
         <Modal.Footer>
           <Button
             variant="primary"
-            onClick={() => handleDeleteAccount(deleteEmail, deletePassword)}
+            onClick={() => handleDeleteAccount(deleteEmail)}
           >
             확인
           </Button>

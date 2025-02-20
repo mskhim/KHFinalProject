@@ -440,15 +440,15 @@ public class UserController {
 					"message", "이메일이 일치하지 않습니다."));
 		}
 		
-		// 비밀번호 비교(DB에 저장된 암호화된 비밀번호와 비교).
-		 BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		    
-		 if (!passwordEncoder.matches(deleteUser.getPwd(), dbUser.getPwd()))
-		 {
-		     return ResponseEntity.ok(Map.of(
-		             "authenticated", false,
-		             "message", "비밀번호가 일치하지 않습니다."));
-		 }
+//		// 비밀번호 비교(DB에 저장된 암호화된 비밀번호와 비교).
+//		 BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//		    
+//		 if (!passwordEncoder.matches(deleteUser.getPwd(), dbUser.getPwd()))
+//		 {
+//		     return ResponseEntity.ok(Map.of(
+//		             "authenticated", false,
+//		             "message", "비밀번호가 일치하지 않습니다."));
+//		 }
 		    
 		 // 비밀번호와 이메일이 일치하면 회원 탈퇴 진행.
 		 boolean isDeleted = service.deleteUserData(userNo); // 사용자 삭제 서비스 호출 (userNo로 삭제)
