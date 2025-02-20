@@ -30,6 +30,14 @@ const UserLoginSuccess = () => {
         if (flag) {
           login(response.nickname, response.role); // ✅ 로그인 상태로 변경
           // ✅ 로그인 성공 후, 이전 페이지로 이동
+          if (response.role == 1) {
+            navigate('/manager/managerStats');
+            return;
+          }
+          if (response.role == 0) {
+            navigate('/admin/adminMain');
+            return;
+          }
           const preLoginUrl = sessionStorage.getItem('preLoginUrl') || '/';
           navigate(preLoginUrl);
           sessionStorage.removeItem('preLoginUrl');

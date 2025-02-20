@@ -97,7 +97,7 @@ const EventRead = () => {
       <Container className={`EventReadTitle-container ${getDarkMode()}`}>
         <Row className="align-items-center">
           {/* 📌 좌측: 메인 이미지 + 서브 이미지 */}
-          <Col md={8} className="position-relative">
+          <Col md={7} className="position-relative">
             <Card className="border-0 align-items-center mb-2 h-100">
               <Card.Img
                 src={mainImage}
@@ -181,7 +181,7 @@ const EventRead = () => {
           </Col>
 
           {/* 📌 우측: 축제 정보 + 예매 */}
-          <Col md={4} className="d-flex flex-column justify-content-center p-4">
+          <Col md={5} className="d-flex flex-column justify-content-center p-4">
             {' '}
             <div className="d-flex justify-content-between align-items-center mb-3">
               <h2 className="EventReadTitle-title me-5 text-nowrap">
@@ -195,30 +195,31 @@ const EventRead = () => {
               />
             </div>
             <p className="EventReadTitle-location">
-              <strong>장소:</strong> {eventInfo.place}
+              <strong>장소 :</strong> {eventInfo.place}
             </p>
             <p className="EventReadTitle-dates">
-              <strong>일정:</strong> {eventInfo.startDate} ~ {eventInfo.endDate}
+              <strong>일정 :</strong> {eventInfo.startDate} ~{' '}
+              {eventInfo.endDate}
               {eventInfo.END_DATE}
             </p>
             <p className="EventReadTitle-content">{eventInfo.content}</p>
             <hr />
             <p className="EventReadTitle-host">
-              <strong>주최:</strong> {eventInfo.host} / <strong>주관:</strong>{' '}
+              <strong>주최 :</strong> {eventInfo.host} / <strong>주관 :</strong>{' '}
               {eventInfo.governing}
             </p>
             <p className="EventReadTitle-contact">
-              <strong>문의:</strong>{' '}
+              <strong>문의 :</strong>{' '}
               <a href={`tel:${eventInfo.tel}`}>{eventInfo.tel}</a>
             </p>
             <p className="EventReadTitle-homepage">
-              <strong>공식 홈페이지:</strong>{' '}
+              <strong>공식 홈페이지 :</strong>{' '}
               <a
                 href={eventInfo.homepage}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {eventInfo.HOMEPAGE}
+                {eventInfo.homepage || '-'}
               </a>
             </p>
             {/* 🎟 티켓 수량 선택 */}
