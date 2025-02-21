@@ -73,7 +73,7 @@ const CanceledManage = () => {
         <thead>
           <tr>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("no")}
               style={{ width: "90px" }}
             >
@@ -82,7 +82,7 @@ const CanceledManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("id")}
               style={{ width: "230px" }}
             >
@@ -91,7 +91,7 @@ const CanceledManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("eventName")}
               style={{ width: "230px" }}
             >
@@ -100,7 +100,7 @@ const CanceledManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("userId")}
               style={{ width: "230px" }}
             >
@@ -109,13 +109,13 @@ const CanceledManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               style={{ width: "120px" }}
             >
               수량
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("reservedDate")}
               style={{ width: "200px" }}
             >
@@ -124,7 +124,7 @@ const CanceledManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("totalCost")}
               style={{ width: "190px" }}
             >
@@ -138,13 +138,27 @@ const CanceledManage = () => {
           {/* 데이터 행 */}
           {filteredItems.map((data, index) => (
             <tr key={data.no}>
-              <td style={{ width: "90px" }}>{index + 1}</td>
-              <td style={{ width: "230px" }}>{data.id}</td>
-              <td style={{ width: "230px" }}>{data.eventName}</td>
-              <td style={{ width: "230px" }}>{data.userId}</td>
-              <td style={{ width: "120px" }}>{data.qt}</td>
-              <td style={{ width: "200px" }}>{data.reservedDate}</td>
-              <td style={{ width: "175px" }}>{data.totalCost}</td>
+              <td className="align-content-center" style={{ width: "90px" }}>
+                {index + 1}
+              </td>
+              <td className="align-content-center" style={{ width: "230px" }}>
+                {data.id}
+              </td>
+              <td className="align-content-center" style={{ width: "230px" }}>
+                {data.eventName}
+              </td>
+              <td className="align-content-center" style={{ width: "230px" }}>
+                {data.userId}
+              </td>
+              <td className="align-content-center" style={{ width: "120px" }}>
+                {data.qt}
+              </td>
+              <td className="align-content-center" style={{ width: "200px" }}>
+                {data.reservedDate}
+              </td>
+              <td className="align-content-center" style={{ width: "175px" }}>
+                {data.totalCost}
+              </td>
             </tr>
           ))}
         </tbody>

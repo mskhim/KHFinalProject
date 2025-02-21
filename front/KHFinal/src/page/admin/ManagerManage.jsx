@@ -261,13 +261,13 @@ const ManagerManage = () => {
         <tbody>
           {/* 입력 가능한 빈 행 */}
           <tr>
-            <td className="align-content-center" style={{ width: "80px" }}>
+            <td className="align-content-center " style={{ width: "80px" }}>
               신규 추가
             </td>
             <td className="align-content-center" style={{ width: "80px" }}>
               -
             </td>
-            <td style={{ width: "170px" }}>
+            <td className="align-content-center" style={{ width: "170px" }}>
               <Form.Control
                 className="admin-table-td text-center"
                 type="text"
@@ -276,7 +276,7 @@ const ManagerManage = () => {
                 style={{ border: "none" }}
               />
             </td>
-            <td style={{ width: "160px" }}>
+            <td className="align-content-center" style={{ width: "160px" }}>
               <Form.Control
                 className="admin-table-td text-center"
                 type="text"
@@ -285,7 +285,7 @@ const ManagerManage = () => {
                 style={{ border: "none" }}
               />
             </td>
-            <td style={{ width: "160px" }}>
+            <td className="align-content-center" style={{ width: "160px" }}>
               <Form.Control
                 className="admin-table-td text-center"
                 type="text"
@@ -294,7 +294,7 @@ const ManagerManage = () => {
                 style={{ border: "none" }}
               />
             </td>
-            <td style={{ width: "160px" }}>
+            <td className="align-content-center" style={{ width: "160px" }}>
               <Form.Control
                 className="admin-table-td text-center"
                 type="text"
@@ -303,13 +303,13 @@ const ManagerManage = () => {
                 style={{ border: "none" }}
               />
             </td>
-            <td style={{ width: "160px" }} className="align-content-center">
+            <td className="align-content-center" style={{ width: "160px" }}>
               {date}
             </td>
-            <td style={{ width: "110px" }} className="align-content-center">
+            <td className="align-content-center" style={{ width: "110px" }}>
               -
             </td>
-            <td style={{ width: "94.4px" }}>
+            <td className="align-content-center" style={{ width: "93px" }}>
               <Button className="btn btn-primary me-2" onClick={handleInsert}>
                 추가
               </Button>
@@ -328,7 +328,7 @@ const ManagerManage = () => {
               <td className="align-content-center" style={{ width: "80px" }}>
                 {index + 1}
               </td>
-              <td style={{ width: "170px" }}>
+              <td className="align-content-center" style={{ width: "170px" }}>
                 <Form.Control
                   id={`name-${data.no}`}
                   className="admin-table-td text-center"
@@ -337,7 +337,7 @@ const ManagerManage = () => {
                   style={{ border: "none" }}
                 />
               </td>
-              <td style={{ width: "160px" }}>
+              <td className="align-content-center" style={{ width: "160px" }}>
                 <Form.Control
                   id={`id-${data.no}`}
                   className="admin-table-td text-center"
@@ -346,7 +346,7 @@ const ManagerManage = () => {
                   style={{ border: "none" }}
                 />
               </td>
-              <td style={{ width: "160px" }}>
+              <td className="align-content-center" style={{ width: "160px" }}>
                 <Form.Control
                   id={`pwd-${data.no}`}
                   className="admin-table-td text-center"
@@ -355,7 +355,7 @@ const ManagerManage = () => {
                   style={{ border: "none" }}
                 />
               </td>
-              <td style={{ width: "160px" }}>
+              <td className="align-content-center" style={{ width: "160px" }}>
                 <Form.Control
                   id={`phone-${data.no}`}
                   className="admin-table-td text-center"
@@ -364,10 +364,10 @@ const ManagerManage = () => {
                   style={{ border: "none" }}
                 />
               </td>
-              <td style={{ width: "160px" }} className="align-content-center">
+              <td className="align-content-center" style={{ width: "160px" }}>
                 {data.regDate || ""}
               </td>
-              <td style={{ width: "110px" }} className="center">
+              <td className="align-content-center" style={{ width: "110px" }}>
                 <Button
                   className="btn btn-primary me-2"
                   onClick={() => handleShowAuthModal(data)}
@@ -375,7 +375,7 @@ const ManagerManage = () => {
                   권한관리
                 </Button>
               </td>
-              <td style={{ width: "94.4px" }}>
+              <td className="align-content-center" style={{ width: "93px" }}>
                 <Button
                   className="btn btn-primary me-2"
                   onClick={() => handleUpdate(data.no)}
