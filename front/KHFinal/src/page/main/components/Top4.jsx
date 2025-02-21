@@ -3,7 +3,6 @@ import Card from 'react-bootstrap/Card';
 import './css/Top4.css';
 import { useNavigate } from 'react-router-dom';
 import { topSeries } from '../mainApi.js';
-import { Badge } from 'react-bootstrap';
 
 export default function Top4() {
   const navigate = useNavigate();
@@ -29,58 +28,59 @@ export default function Top4() {
       <div className="Top4-head">
         {top4Events.length === 4 ? (
           <>
-            <div className="Top4-row-1">
-              {top4Events.slice(0, 2).map((event, index) => (
-                <Card
-                  key={event.no}
-                  className="bg-dark text-black Top4-card"
+            {/* 첫 번째 카드 */}
+            <div className="Top4-left">
+              <Card
+                key={top4Events[0].no}
+                className="bg-dark text-black Top4-card"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  cursor: 'pointer',
+                  border: 'none',
+                }}
+                onClick={() => handleImageClick(top4Events[0].no)}
+              >
+                <Card.Img
+                  src={top4Events[0].thumbUrl}
+                  alt="Card image 1"
+                  className="top4-image"
                   style={{
-                    width: '50%',
-                    height: '500px',
+                    width: '100%',
+                    height: '100%',
+                    objectPosition: 'center',
                     cursor: 'pointer',
-                    border: 'none',
                   }}
-                  onClick={() => handleImageClick(event.no)}
-                >
-                  <Card.Img
-                    src={event.thumbUrl}
-                    alt={`Card image ${index + 1}`}
-                    className="top4-image"
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectPosition: 'center',
-                      cursor: 'pointer',
-                    }}
-                  />
-                  <Card.ImgOverlay>
-                    <div className="Top4-card-overlay">
-                      <Card.Title className="Top4-card-name">
-                        {event.name}
-                      </Card.Title>
-                    </div>
-                  </Card.ImgOverlay>
-                </Card>
-              ))}
+                />
+                <Card.ImgOverlay>
+                  <div className="Top4-card-overlay">
+                    <Card.Title className="Top4-card-name">
+                      {top4Events[0].name}
+                    </Card.Title>
+                    <h3 className="Top4-card-address">
+                      {top4Events[0].address}
+                    </h3>
+                  </div>
+                </Card.ImgOverlay>
+              </Card>
             </div>
 
-            {/* 두 번째 그룹 (index 2, 3) */}
-            <div className="Top4-row-2">
-              {top4Events.slice(2, 4).map((event, index) => (
+            <div className="Top4-right">
+              <div className="Top4-rightTop">
                 <Card
-                  key={event.no}
+                  key={top4Events[1].no}
                   className="bg-dark text-black Top4-card"
                   style={{
-                    width: '50%',
-                    height: '500px',
+                    width: '100%',
+                    height: '100%',
                     cursor: 'pointer',
                     border: 'none',
                   }}
-                  onClick={() => handleImageClick(event.no)}
+                  onClick={() => handleImageClick(top4Events[1].no)}
                 >
                   <Card.Img
-                    src={event.thumbUrl}
-                    alt={`Card image ${index + 3}`} // 2번째 그룹이므로 index 보정
+                    src={top4Events[1].thumbUrl}
+                    alt="Card image 2"
                     className="top4-image"
                     style={{
                       width: '100%',
@@ -92,12 +92,87 @@ export default function Top4() {
                   <Card.ImgOverlay>
                     <div className="Top4-card-overlay">
                       <Card.Title className="Top4-card-name">
-                        {event.name}
+                        {top4Events[1].name}
                       </Card.Title>
+                      <h4 className="Top4-card-address">
+                        {top4Events[1].address}
+                      </h4>
                     </div>
                   </Card.ImgOverlay>
                 </Card>
-              ))}
+              </div>
+              <div className="Top4-rightBottom">
+                <div className="Top4-bottom-left">
+                  <Card
+                    key={top4Events[2].no}
+                    className="bg-dark text-black Top4-card"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      cursor: 'pointer',
+                      border: 'none',
+                    }}
+                    onClick={() => handleImageClick(top4Events[2].no)}
+                  >
+                    <Card.Img
+                      src={top4Events[2].thumbUrl}
+                      alt="Card image 3"
+                      className="top4-image"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectPosition: 'center',
+                        cursor: 'pointer',
+                      }}
+                    />
+                    <Card.ImgOverlay>
+                      <div className="Top4-card-overlay">
+                        <Card.Title className="Top4-card-name">
+                          {top4Events[2].name}
+                        </Card.Title>
+                        <h4 className="Top4-card-address">
+                          {top4Events[2].address}
+                        </h4>
+                      </div>
+                    </Card.ImgOverlay>
+                  </Card>
+                </div>
+                <div className="Top4-bottom-right">
+                  <Card
+                    key={top4Events[3].no}
+                    className="bg-dark text-black Top4-card"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      cursor: 'pointer',
+                      border: 'none',
+                    }}
+                    onClick={() => handleImageClick(top4Events[3].no)}
+                  >
+                    <Card.Img
+                      src={top4Events[3].thumbUrl}
+                      alt="Card image 4"
+                      className="top4-image"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectPosition: 'center',
+                        cursor: 'pointer',
+                      }}
+                    />
+                    <Card.ImgOverlay>
+                      <div className="Top4-card-overlay">
+                        <Card.Title className="Top4-card-name">
+                          {top4Events[3].name}
+                        </Card.Title>
+                        <h4 className="Top4-card-address">
+                          {top4Events[3].address}
+                        </h4>
+                      </div>
+                    </Card.ImgOverlay>
+                  </Card>
+                </div>
+              </div>
             </div>
           </>
         ) : (

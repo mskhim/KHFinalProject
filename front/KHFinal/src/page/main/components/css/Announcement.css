@@ -1,13 +1,13 @@
 .Announcement {
-  margin-top: 40px;
+  margin-top: 20px;
   display: flex;
   justify-content: center;
+  position: relative;
 }
 
 .Announcement-content {
   width: 100%;
   height: 30px;
-  position: relative;
   display: flex;
 }
 .Announcement-content-body {
@@ -24,8 +24,8 @@
 
 .Announcement-plus {
   position: absolute;
-  bottom: 13px;
-  right: 1%;
+  bottom: 40px;
+  right: -1%;
 }
 .custom-arrow {
   position: absolute;
@@ -33,7 +33,6 @@
   z-index: 10;
   cursor: pointer;
   background: none;
-  color: rgb(0, 0, 0);
   padding: 5px 10px;
   border-radius: 5px;
   pointer-events: none;
@@ -44,11 +43,11 @@
 }
 
 .custom-prev {
-  bottom: 2%;
-  right: -92%;
+  bottom: 50%;
+  right: -100%;
 }
 
 .custom-next {
-  top: -15%;
-  right: -96%;
+  top: 60%;
+  right: -100%;
 }

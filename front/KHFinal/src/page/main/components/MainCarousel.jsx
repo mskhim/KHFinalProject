@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Carousel } from 'react-bootstrap';
-import wallPaper001 from './include/wall_paper_001.jpg';
-import wallPaper002 from './include/wall_paper_002.jpg';
-import wallPaper003 from './include/wall_paper_003.jpg';
+import image01 from './include/image01.jpg';
+import image02 from './include/image02.jpg';
+import image03 from './include/image03.jpg';
 import { bannerImage } from '../mainApi';
+import './css/MainCarousel.css';
 
 function MainCarousel() {
   const [images, setImages] = useState(null);
@@ -21,20 +22,16 @@ function MainCarousel() {
   }, []);
 
   // 기본 이미지 리스트
-  const defaultImages = [wallPaper001, wallPaper002, wallPaper003];
+  const defaultImages = [image01, image02, image03];
 
   return (
-    <Carousel style={{ marginTop: '20px' }}>
+    <Carousel className="MainCarousel-container">
       {images === null ? ( // 데이터 로딩 중일 때
         <p>Loading...</p>
       ) : images.length > 0 ? ( // API에서 데이터가 있을 때
         images.map((img, index) => (
-          <Carousel.Item key={index}>
-            <img
-              className="d-block w-100"
-              src={img.url}
-              alt={`Slide ${index + 1}`}
-            />
+          <Carousel.Item className="MainCarousel-item" key={index}>
+            <img src={img.url} alt={`Slide ${index + 1}`} />
           </Carousel.Item>
         ))
       ) : (

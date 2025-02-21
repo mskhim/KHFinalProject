@@ -12,7 +12,7 @@ import { FaChevronUp, FaChevronDown } from 'react-icons/fa';
 import plus from '../../../assets/plus.png';
 
 export default function Announcement() {
-  const { darkMode } = useContext(Context);
+  const { getDarkMode } = useContext(Context);
   const navigate = useNavigate();
   const [notices, setNotices] = useState([]);
 
@@ -55,10 +55,16 @@ export default function Announcement() {
 
   return (
     <>
+      <hr />
       <div className="Announcement">
         <Card
+          bg="transparent"
           className="Announcement-content"
-          style={{ width: '98%', height: '50px' }}
+          style={{
+            width: '98%',
+            height: '50px',
+            border: 'none',
+          }}
         >
           <Card.Body className="Announcement-content-body">
             <Slider
@@ -68,16 +74,17 @@ export default function Announcement() {
                 width: '50%',
                 fontSize: '15px',
               }}
-              className="Announcement-slider"
+              className={`Announcement-slider ${getDarkMode()}`}
             >
               {notices.length > 0 ? (
                 notices.map((notice) => (
-                  <h5
+                  <h6
                     key={notice.no}
                     onClick={() => navigate(`/noticeRead/${notice.no}`)}
+                    className={getDarkMode()}
                   >
                     {notice.title}
-                  </h5>
+                  </h6>
                 ))
               ) : (
                 <p>공지사항이 없습니다.</p>
@@ -93,6 +100,7 @@ export default function Announcement() {
           </Card.Body>
         </Card>
       </div>
+      <hr />
     </>
   );
 }

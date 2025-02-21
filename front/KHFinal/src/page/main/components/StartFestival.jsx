@@ -49,8 +49,7 @@ function StartFestival() {
   return (
     <>
       <br />
-      <h3>&ensp;시작하는 축제</h3>
-      <br />
+      <h3 className="StartFestival-name">&ensp;시작하는 축제</h3>
       <div className="carousel-container StartFestival-container">
         <AliceCarousel
           mouseTracking
@@ -63,7 +62,6 @@ function StartFestival() {
           disableButtonsControls={false}
         />
       </div>
-      <br />
       <hr />
       <br />
     </>
