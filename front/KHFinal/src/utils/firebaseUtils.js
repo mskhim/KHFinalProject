@@ -7,7 +7,11 @@ import {
 } from '../firebase';
 import { v4 as uuidv4 } from 'uuid';
 // ✅ Firebase에 유니크한 파일명으로 업로드 후 URL 반환
-export const uploadImageToFirebase = async (file, folder = 'events') => {
+export const uploadImageToFirebase = async (
+  file,
+  folder = 'events',
+  setUploadProgress
+) => {
   return new Promise((resolve, reject) => {
     if (!file) {
       reject('No file provided');
@@ -23,7 +27,10 @@ export const uploadImageToFirebase = async (file, folder = 'events') => {
       (snapshot) => {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log(`Upload is ${progress}% done`);
+        console.log(`Upload is ${progress.toFixed(2)}% done`);
+        if (setUploadProgress) {
+          setUploadProgress(progress.toFixed(2)); // Format progress to two decimal places
+        }
       },
       (error) => {
         reject(error);

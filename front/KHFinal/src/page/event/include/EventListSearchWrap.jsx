@@ -70,7 +70,7 @@ const EventListSearchWrap = ({ setSortOption, sortOption }) => {
         {/* ✅ 날짜 입력 */}
         <Col
           xs={12}
-          md={3}
+          md={4}
           className={`mb-2 mb-md-0 border-0 ${getDarkMode()}`}
         >
           <Form.Control
@@ -113,7 +113,7 @@ const EventListSearchWrap = ({ setSortOption, sortOption }) => {
         </Col>
 
         {/* ✅ 검색 버튼 */}
-        <Col xs={12} md="auto">
+        <Col xs={12} md={'auto'}>
           <ButtonDarkMode
             text={isSearching ? '검색 취소' : '검색'}
             onClick={handleSearch}

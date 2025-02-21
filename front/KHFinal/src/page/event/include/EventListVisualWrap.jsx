@@ -15,11 +15,20 @@ const EventListVisualWrap = ({ eventList }) => {
     const formattedImages = eventList.slice(0, 3).map((event) => ({
       src: event?.thumbUrl || '',
       text: event?.name || 'No Name',
+      address: formatAddress(event?.address) || 'No Address',
+      date: event.startDate + ' ~ ' + event.endDate || 'No Date',
       no: event?.no || null,
     }));
 
     setImages(formattedImages);
+    console.log(eventList);
   }, [eventList]);
+
+  const formatAddress = (address) => {
+    if (!address) return '';
+    const parts = address.split(' ');
+    return parts.slice(0, 2).join(' ');
+  };
 
   const handleClick = (no) => {
     navigate('/eventRead/' + no);
@@ -50,6 +59,8 @@ const EventListVisualWrap = ({ eventList }) => {
             <div className="EventListVisualWrap-text-container">
               <div className="EventListVisualWrap-text">
                 <h3>{item.text}</h3>
+                <p>{item.address}</p>
+                <p className="EventListVisualWrap-date">{item.date}</p>
               </div>
             </div>
           </div>

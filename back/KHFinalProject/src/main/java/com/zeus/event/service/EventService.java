@@ -1,5 +1,7 @@
 package com.zeus.event.service;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import com.zeus.event.domain.EventDTO;
@@ -52,7 +54,7 @@ public interface EventService {
 	boolean checkReplyAlready(EventReview eventReview);
 	//가격이 0원이면 true
 	boolean checkEventPrice(EventReview eventReview);
-
+	 void fetchAndSaveEvents() throws  Exception; // 공공데이터 API 호출 후 DB 저장
 
 
 }

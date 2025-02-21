@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+} from 'react';
 import { Container, Row, Col, Table, Button, Badge } from 'react-bootstrap';
 import { Header, Footer } from '../../components';
 import './css/EventCalendar.css';
@@ -10,7 +16,7 @@ import { FaChevronDown } from 'react-icons/fa';
 
 const EventCalendar = () => {
   const [eventList, setEventList] = useState([]);
-  const { getDarkMode, getDarkModeHover, darkMode } = useContext(Context);
+  const { getDarkMode, darkMode } = useContext(Context);
   const [currentDate, setCurrentDate] = useState(new Date()); // 현재 달
   const [selectedDate, setSelectedDate] = useState(new Date()); // 선택된 날짜
   const [sortOption, setSortOption] = useState({
@@ -23,15 +29,18 @@ const EventCalendar = () => {
   });
 
   // ✅ 월 이동 함수
-  const changeMonth = (offset) => {
-    const newDate = new Date(currentDate);
-    newDate.setMonth(currentDate.getMonth() + offset);
-    setCurrentDate(newDate);
-    setSortOption((prev) => ({
-      ...prev,
-      date: newDate.toISOString().split('T')[0],
-    }));
-  };
+  const changeMonth = useCallback((offset) => {
+    setCurrentDate((prevDate) => {
+      const newDate = new Date(prevDate);
+      newDate.setMonth(prevDate.getMonth() + offset);
+      setSortOption((prev) => ({
+        ...prev,
+        date: newDate.toISOString().split('T')[0],
+      }));
+      return newDate;
+    });
+  }, []);
+
   const [festivals, setFestivals] = useState([]);
 
   useEffect(() => {
@@ -40,22 +49,24 @@ const EventCalendar = () => {
       setFestivals(response);
     };
     fetchMonthEventList();
-  }, [currentDate]);
+  }, [sortOption]);
 
   // ✅ 특정 날짜에 해당하는 축제 개수 반환
-  const countFestivalsOnDate = (date) => {
-    const dateString = `${date.getFullYear()}-${String(
-      date.getMonth() + 1
-    ).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-    console.log(dateString);
-    return festivals.filter(
-      (festival) =>
-        festival.startDate <= dateString && festival.endDate >= dateString
-    ).length;
-  };
+  const countFestivalsOnDate = useCallback(
+    (date) => {
+      const dateString = `${date.getFullYear()}-${String(
+        date.getMonth() + 1
+      ).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+      return festivals.filter(
+        (festival) =>
+          festival.startDate <= dateString && festival.endDate >= dateString
+      ).length;
+    },
+    [festivals]
+  );
 
   // ✅ 날짜 선택 시 이벤트 리스트 업데이트
-  const handleDateSelection = (date) => {
+  const handleDateSelection = useCallback((date) => {
     const localDate = new Date(
       date.getTime() - date.getTimezoneOffset() * 60000
     )
@@ -68,10 +79,10 @@ const EventCalendar = () => {
       date: localDate,
       toggle: !prev.toggle,
     }));
-  };
+  }, []);
 
   // ✅ 달력 렌더링
-  const renderCalendar = () => {
+  const renderCalendar = useMemo(() => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
     const firstDay = new Date(year, month, 1);
@@ -129,7 +140,13 @@ const EventCalendar = () => {
       if (day > totalDays) break;
     }
     return calendar;
-  };
+  }, [
+    currentDate,
+    selectedDate,
+    countFestivalsOnDate,
+    getDarkMode,
+    handleDateSelection,
+  ]);
 
   return (
     <>
@@ -190,7 +207,7 @@ const EventCalendar = () => {
                     <th className="text-primary">토</th>
                   </tr>
                 </thead>
-                <tbody>{renderCalendar()}</tbody>
+                <tbody>{renderCalendar}</tbody>
               </Table>
             </Col>
           </Row>

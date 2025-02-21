@@ -11,6 +11,7 @@
 import React, { createContext, useState, useMemo, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { handleLogout } from './page/user/userApi';
+import { useNavigate } from 'react-router-dom';
 
 export const Context = createContext();
 
@@ -48,7 +49,7 @@ export const Provider = ({ children }) => {
     sessionStorage.setItem('userNickname', nickname);
     sessionStorage.setItem('loginTime', currentTime.toString());
   };
-
+  const navigate = useNavigate;
   // ✅ 로그아웃 함수
   const logout = () => {
     handleLogout();

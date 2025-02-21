@@ -2,10 +2,13 @@ package com.zeus.event.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.zeus.event.domain.EventDTO;
 import com.zeus.event.domain.EventReview;
 import com.zeus.event.domain.EventSelectListDTO;
 import com.zeus.event.domain.EventSelectRead;
+import com.zeus.event.domain.PublicDataEvent;
 import com.zeus.event.domain.PublicDataEventDTO;
 import com.zeus.event.domain.SortDTO;
 import com.zeus.user.domain.Cart;
@@ -45,5 +48,9 @@ public interface EventMapper {
 	int checkReserved(EventReview eventReview);
 	//event 페이지에 eventNo 를 이용해서 가격 추출
 	int checkEventPrice(EventReview eventReview);
+    int checkExistingEvent(@Param("name") String name, @Param("startDate") String startDate);
+    void insertEvent(PublicDataEvent event);
+    List<PublicDataEvent> getAllEvents();
+    List<String> getAllEventNamesAndDates();
 	
 }

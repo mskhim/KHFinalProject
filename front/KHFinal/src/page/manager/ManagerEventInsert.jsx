@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { Context } from '../../Context';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import { Container, Form, Button } from 'react-bootstrap';
+import { Container, Form, Button, Modal, ProgressBar } from 'react-bootstrap';
 import { insertEventByManager, selectPublicDataEvent } from './managerApi';
 import { useNavigate } from 'react-router-dom';
 import { uploadImageToFirebase } from '../../utils/firebaseUtils';
@@ -17,6 +17,10 @@ const ManagerInsert = () => {
   const [mainImage, setMainImage] = useState(null); // 대표 이미지
   const [subImages, setSubImages] = useState([]); // 서브 이미지 리스트 (최대 20장)
   const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0); // 업로드 진행 상황
+  const [uploadedFiles, setUploadedFiles] = useState(0); // 업로드된 파일 수
+  const [showModal, setShowModal] = useState(false); // 모달 표시 여부
+
   // ✅ 공공데이터 API에서 축제 리스트 가져오기
   useEffect(() => {
     const getSelectPublicDataEvent = async () => {
@@ -65,13 +69,25 @@ const ManagerInsert = () => {
 
     try {
       setUploading(true);
+      setShowModal(true);
 
       // ✅ 대표 이미지 Firebase 업로드 후 URL 가져오기
-      const thumbUrl = await uploadImageToFirebase(mainImage, 'events/main');
+      const thumbUrl = await uploadImageToFirebase(
+        mainImage,
+        'events/main',
+        (progress) => {
+          setUploadProgress(progress);
+        }
+      );
+      setUploadedFiles((prev) => prev + 1);
 
       // ✅ 서브 이미지 Firebase 업로드 후 URL 가져오기
       const url = await Promise.all(
-        subImages.map((file) => uploadImageToFirebase(file, 'events/sub'))
+        subImages.map((file) =>
+          uploadImageToFirebase(file, 'events/sub', (progress) => {
+            setUploadProgress(progress);
+          }).then(() => setUploadedFiles((prev) => prev + 1))
+        )
       );
 
       // ✅ Firebase에서 받은 URL만 백엔드에 전송
@@ -90,8 +106,10 @@ const ManagerInsert = () => {
       console.error('업로드 중 오류 발생:', error);
     } finally {
       setUploading(false);
+      setShowModal(false);
     }
   };
+
   // ✅ 축제 선택 핸들러
   const handleSelectChange = (e) => {
     setSelectedFestival(e.target.value);
@@ -197,6 +215,19 @@ const ManagerInsert = () => {
         </Form>
       </Container>
       <Footer />
+
+      {/* ✅ 업로드 진행 상황 모달 */}
+      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>업로드 진행 중</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ProgressBar now={uploadProgress} label={`${uploadProgress}%`} />
+          <div className="mt-3">
+            {uploadedFiles} / {subImages.length + 1} 파일 업로드 완료
+          </div>
+        </Modal.Body>
+      </Modal>
     </>
   );
 };

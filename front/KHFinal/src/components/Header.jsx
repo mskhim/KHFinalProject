@@ -17,6 +17,7 @@ import ScrollToTopButton from './ui/ScrollToTopButton';
 import TokenRemain from './ui/TokenRemain';
 import ViVaFesta from '../assets/ViVaFesta.png';
 import { ButtonDarkMode, ButtonRole } from './ui';
+
 const Header = ({ page }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -31,7 +32,6 @@ const Header = ({ page }) => {
     isAuthenticated,
     userNickname,
     logout,
-    tokenExpiration,
     getDarkMode,
     userRole,
   } = useContext(Context);
@@ -73,28 +73,21 @@ const Header = ({ page }) => {
       document.head.appendChild(style);
     };
 
-    // ✅ transition 복구 (300ms 뒤에 다시 활성화)
     const enableTransitions = () => {
       const style = document.getElementById('disable-transitions');
       if (style) {
         setTimeout(() => {
           style.remove();
-        }, 300); // 300ms 후 원래 상태로 복구
+        }, 300);
       }
     };
 
     setDarkMode((prev) => {
       const newDarkMode = !prev;
-      // ✅ 애니메이션 비활성화
       disableTransitions();
-
-      // ✅ 다크 모드 전환 적용
       sessionStorage.setItem('darkMode', newDarkMode);
       document.body.classList.toggle('Header-dark-mode', newDarkMode);
-
-      // ✅ 애니메이션 복구
       enableTransitions();
-
       return newDarkMode;
     });
   };
@@ -112,7 +105,7 @@ const Header = ({ page }) => {
           expand="lg"
           className={`py-3 ${
             darkMode ? 'bg-dark text-light dark-mode' : 'bg-white text-dark'
-          } Header-navbar-all${showFestivalNav ? '-active' : ''}`} // ✅ 축제 네비게이션 활성화 여부에 따라 클래스 추가
+          } Header-navbar-all${showFestivalNav ? '-active' : ''}`}
         >
           <Container
             fluid
@@ -158,19 +151,19 @@ const Header = ({ page }) => {
                   id="Header-user-dropdown"
                   align="end"
                   className="Header-user-dropdown"
-                  menuVariant={darkMode ? 'dark' : 'light'} // ✅ 다크 모드에 따라 메뉴 스타일 변경
+                  menuVariant={darkMode ? 'dark' : 'light'}
                 >
                   <NavDropdown.Item
                     as={NavLink}
                     to="/qnaList"
-                    className={darkMode ? 'text-light' : 'text-dark'} // ✅ 다크 모드 적용
+                    className={darkMode ? 'text-light' : 'text-dark'}
                   >
                     QNA
                   </NavDropdown.Item>
                   <NavDropdown.Item
                     as={NavLink}
                     to="/noticeList"
-                    className={darkMode ? 'text-light' : 'text-dark'} // ✅ 다크 모드 적용
+                    className={darkMode ? 'text-light' : 'text-dark'}
                   >
                     공지사항
                   </NavDropdown.Item>
@@ -231,7 +224,7 @@ const Header = ({ page }) => {
                       </NavDropdown.Item>
                     </NavDropdown>
                     <div className="d-flex justify-content-end"></div>
-                    <TokenRemain initialExpiration={tokenExpiration} />
+                    <TokenRemain />
                     <ButtonRole
                       text="축제 추가하기"
                       role="manager"

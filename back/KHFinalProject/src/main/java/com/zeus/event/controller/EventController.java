@@ -1,5 +1,6 @@
 package com.zeus.event.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -183,4 +184,9 @@ public class EventController {
 		flag = service.insertEventToCart(cart);
 		return ResponseEntity.ok(Map.of("state", flag, "message", "장바구니에 등록되었습니다."));
 	}
+	  @GetMapping("/fetch")
+	    public String fetchAndSaveEvents() throws Exception {
+	        service.fetchAndSaveEvents();
+	        return "공공데이터 API에서 새로운 데이터를 가져와 추가했습니다.";
+	    }
 }
