@@ -36,7 +36,7 @@ export default function EndFestival() {
         className="carousel-image EndFestival-image"
       />
       <br />
-      <h4>{event.name}</h4>
+      <h5>{event.name}</h5>
     </div>
   ));
 

@@ -4,9 +4,12 @@ import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
 import './css/ByRegionFestival.css';
 import { byRegionRate } from '../mainApi.js';
+import useEmblaCarousel from 'embla-carousel-react';
+
 function ByRegionFestival() {
   const navigate = useNavigate();
   const [byRegionEvents, setbyRegionEvents] = useState([]);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'start' });
 
   useEffect(() => {
     const fetchbyRagionRate = async () => {
@@ -35,7 +38,7 @@ function ByRegionFestival() {
         className="carousel-image ByRegionFestival-image"
       />
       <br />
-      <h4>{event.name}</h4>
+      <h5>{event.name}</h5>
     </div>
   ));
 
@@ -60,8 +63,6 @@ function ByRegionFestival() {
           disableButtonsControls={false}
         />
       </div>
-      <hr />
-      <br />
     </>
   );
 }
