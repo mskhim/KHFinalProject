@@ -46,6 +46,7 @@ const RouterComponentCommon = () => {
   }, [location]);
 
   useEffect(() => {
+    window.scrollTo(0, 0); // ✅ 페이지 로드 후 최상단 고정
     if (isAuthenticated) return;
 
     const checkAuth = async () => {

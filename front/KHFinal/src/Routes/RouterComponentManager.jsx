@@ -25,6 +25,7 @@ const RouterComponentManager = () => {
   }, [location]); // ✅ 경로 변경 시마다 실행
   const { login, isAuthenticated } = useContext(Context);
   useEffect(() => {
+    window.scrollTo(0, 0); // ✅ 페이지 로드 후 최상단 고정
     if (isAuthenticated) {
       return;
     }

@@ -65,6 +65,7 @@ const RouterComponentAdmin = () => {
   }, [location.pathname]);
   const { login, isAuthenticated } = useContext(Context);
   useEffect(() => {
+    window.scrollTo(0, 0); // ✅ 페이지 로드 후 최상단 고정
     if (isAuthenticated) {
       return;
     }
@@ -77,6 +78,7 @@ const RouterComponentAdmin = () => {
     };
     checkAuth();
   }, [login]);
+
   return (
     <Container fluid className="admin-app-container m-0 p-0">
       <Aside />

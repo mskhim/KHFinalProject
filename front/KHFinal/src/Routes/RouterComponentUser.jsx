@@ -20,6 +20,7 @@ import { checkAuthStatus, refreshAccessToken } from '../page/user/userApi';
 const UserRoutes = () => {
   const location = useLocation(); // ✅ 현재 경로 가져오기
   useEffect(() => {
+    window.scrollTo(0, 0); // ✅ 페이지 로드 후 최상단 고정
     if (
       location.pathname !== '/userLoginPage' &&
       location.pathname !== '/userLoginSuccess' &&

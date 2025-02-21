@@ -61,23 +61,32 @@ const Main = () => {
 
           ScrollTrigger.create({
             trigger: arrow,
-            start: 'top 70%', // ✅ scroller-start와 start가 만나면 실행
-            end: 'top 50%',
-            markers: true, // ✅ 디버깅용 마커
+            start: 'top 50%', // ✅ scroller-start와 start가 만나면 실행
             onEnter: () => {
               const nextSection = sectionRefs.current[index + 1];
+
+              if (!nextSection) {
+                console.warn(`❌ 다음 섹션이 존재하지 않음 (index: ${index})`);
+                return; // ✅ 마지막 섹션 이후에는 실행되지 않도록 방지
+              }
+
               console.log(
                 `➡️ 자동 스크롤 실행! index: ${index}, 다음 섹션:`,
                 nextSection
               );
 
-              if (nextSection) {
-                gsap.to(window, {
-                  duration: 1.5, // ✅ 부드러운 스크롤 이동
-                  scrollTo: { y: nextSection, autoKill: true },
-                  ease: 'power2.inOut',
-                });
-              }
+              // ✅ 다음 섹션이 보이도록 애니메이션 먼저 적용 후 스크롤
+              gsap.to(nextSection, {
+                opacity: 1,
+                ease: 'power2.out',
+                onComplete: () => {
+                  gsap.to(window, {
+                    duration: 1.5, // ✅ 부드러운 스크롤 이동
+                    scrollTo: { y: nextSection, autoKill: true },
+                    ease: 'power2.inOut',
+                  });
+                },
+              });
             },
             toggleActions: 'play none none none',
             once: false, // ✅ 여러 번 실행 가능
@@ -109,7 +118,7 @@ const Main = () => {
 
         {/* ✅ 첫 번째 섹션 */}
         <div
-          ref={(el) => (sectionRefs.current[0] = el)}
+          ref={(el) => (sectionRefs.current[1] = el)}
           className="fade-in-section section"
         >
           <Top4 />
@@ -125,7 +134,7 @@ const Main = () => {
 
         {/* ✅ 두 번째 섹션 */}
         <div
-          ref={(el) => (sectionRefs.current[1] = el)}
+          ref={(el) => (sectionRefs.current[2] = el)}
           className="fade-in-section section"
         >
           <Announcement />
@@ -143,7 +152,7 @@ const Main = () => {
 
         {/* ✅ 마지막 섹션 */}
         <div
-          ref={(el) => (sectionRefs.current[2] = el)}
+          ref={(el) => (sectionRefs.current[3] = el)}
           className="fade-in-section section"
         >
           <StartFestival />
