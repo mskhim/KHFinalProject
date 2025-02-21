@@ -3,10 +3,11 @@
   margin: 60px 0;
   position: relative;
   height: 70px;
+  opacity: 1;
 }
 
 .arrow {
-  font-size: 3rem;
+  font-size: 4rem;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
@@ -40,9 +41,11 @@
 
 .fade-in-section {
   opacity: 0;
-  transition: opacity 1.5s ease-in-out;
+  transition: opacity 1.5s ease-in-out, transform 1.5s ease-in-out;
+  transform: translateY(50px);
 }
 
 .fade-in-section.visible {
   opacity: 1;
+  transform: translateY(0);
 }

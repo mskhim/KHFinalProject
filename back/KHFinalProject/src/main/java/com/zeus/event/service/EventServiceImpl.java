@@ -16,7 +16,6 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import com.zeus.event.domain.EventDTO;
 import com.zeus.event.domain.EventReview;
@@ -36,9 +35,9 @@ import lombok.extern.slf4j.Slf4j;
 public class EventServiceImpl implements EventService {
 	@Autowired
 	private EventMapper mapper;
+	
 	@Value("${public.api.key}") // ✅ application.properties에서 설정한 API 키 사용
 	private String apiKey;
-
 
 	@Override
 	public List<PublicDataEventDTO> selectPublicDataEvent(User user) {
@@ -144,7 +143,6 @@ public class EventServiceImpl implements EventService {
 	}
 
 	public void fetchAndSaveEvents() throws Exception {
-	    String apiKey = "R1aXUY1vkohw4omiMvjBE9MfSgRp8Osgl4Fs1VnOabPAFRMl0Nj0oSBMQ3V5h5Dv2zqjcBuzpDmm5e77Y0hkkg%3D%3D";
 	    int pageNo = 1;
 	    int numOfRows = 100;
 	    int totalCount = Integer.MAX_VALUE;
@@ -161,7 +159,7 @@ public class EventServiceImpl implements EventService {
 	        urlBuilder.append("&" + URLEncoder.encode("type", "UTF-8") + "=" + URLEncoder.encode("json", "UTF-8"));
 	        urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + numOfRows);
 	        urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + pageNo);
-
+	        
 	        URL url = new URL(urlBuilder.toString());
 	        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 	        conn.setRequestMethod("GET");

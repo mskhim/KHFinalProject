@@ -61,7 +61,9 @@ const EventRead = () => {
     if (ticketCount > 1) setTicketCount(ticketCount - 1);
   };
   // 삭제 핸들러
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const handleDelete = async () => {
     try {
       // ✅ 메인 이미지 삭제

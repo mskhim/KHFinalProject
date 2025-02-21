@@ -187,7 +187,6 @@ public class EventController {
 	
 	  @GetMapping("/fetchPublicData")
 	    public String fetchAndSaveEvents() throws Exception {
-		
 	        service.fetchAndSaveEvents();
 	        return "공공데이터 API에서 새로운 데이터를 가져와 추가했습니다.";
 	    }
