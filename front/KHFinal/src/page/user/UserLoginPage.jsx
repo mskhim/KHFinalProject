@@ -55,13 +55,22 @@ const UserLoginPage = () => {
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
-
+  
     // 로그인 처리
-    const response = await handleLogin(id, 'common', password);
+    const response = await handleLogin(id, 'common',  password);
     const flag = response.success;
     if (flag) {
       login(response.nickname, response.role); // ✅ 로그인 상태로 변경
-
+  
+      // '아이디 저장' 체크박스가 체크된 경우, 아이디를 localStorage에 저장
+      if (rememberMyId) {
+        localStorage.setItem('rememberMyId', 'true');
+        localStorage.setItem('savedId', id); // 아이디 저장
+      } else {
+        localStorage.removeItem('rememberMyId'); // 체크 해제 시 localStorage에서 아이디 삭제
+        localStorage.removeItem('savedId'); // 저장된 아이디도 삭제
+      }
+  
       // 로그인 성공 후, 이전 페이지로 이동
       if (response.role === 1) {
         navigate('/manager/managerStats');
@@ -71,23 +80,15 @@ const UserLoginPage = () => {
         navigate('/admin/adminMain');
         return;
       }
-
+  
       const preLoginUrl = sessionStorage.getItem('preLoginUrl') || '/';
       navigate(preLoginUrl);
       sessionStorage.removeItem('preLoginUrl');
-
-      // '아이디 저장' 체크박스가 체크된 경우, 아이디를 localStorage에 저장
-      if (rememberMyId) {
-        localStorage.setItem('rememberMyId', 'true');
-        localStorage.setItem('savedId', id); // 아이디 저장
-      } else {
-        localStorage.removeItem('rememberMyId'); // 체크 해제 시 localStorage에서 아이디 삭제
-        localStorage.removeItem('savedId'); // 저장된 아이디도 삭제
-      }
     } else {
       navigate('/userLoginPage'); // 로그인 실패 시, 로그인 페이지로 리다이렉트
     }
   };
+  
 
   // 로그아웃 시, localStorage 상태 초기화
   const handleLogout = () => {
