@@ -3,7 +3,7 @@ import Footer from '../../components/Footer';
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { handleRegister, checkNickName, checkEmail } from './userApi';
-import { Button, Container } from 'react-bootstrap';
+import { Button, Container, FormText } from 'react-bootstrap';
 import './css/UserInsert.css';
 import { Context } from '../../Context';
 
@@ -13,6 +13,8 @@ const UserInsert = () => {
   const [formData, setFormData] = useState({}); // ✅ 초기 상태를 `null`로 설정
   const [nicknameCheck, setNicknameCheck] = useState(false);
   const [emailCheck, setEmailCheck] = useState(false);
+  const [birthError, setBirthError] = useState(''); // 생년월일 오류 상태
+  const [phoneError, setPhoneError] = useState(''); // 전화번호 오류 상태
   useEffect(() => {
     const storedUser = sessionStorage.getItem('user'); // ✅ 세션 스토리지에서 사용자 정보 가져오기
     if (!storedUser) {
@@ -47,10 +49,35 @@ const UserInsert = () => {
   // 제출 핸들러
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // 만 14세 미만일 경우 가입 불가 처리
+    const currentDate = new Date();
+    const birthDate = new Date(formData.birth);
+    const age = currentDate.getFullYear() - birthDate.getFullYear();
+    const month = currentDate.getMonth() - birthDate.getMonth();
+    const day = currentDate.getDate() - birthDate.getDate();
+
+    if (age < 14 || (age === 14 && (month < 0 || (month === 0 && day < 0)))) {
+      setBirthError('만 14세 이상의 회원만 가입 가능합니다. \n생년월일을 다시 입력해주세요.');
+      return;
+    } else {
+      setBirthError(''); // 나이가 14세 이상일 경우 오류 메시지 초기화
+    }
+    
+    
     if (nicknameCheck === false || emailCheck === false) {
       alert('중복 확인이 필요합니다.');
       return;
     }
+
+    // 휴대폰 번호 유효성 검사
+    if (!/^\d{3}-\d{4}-\d{4}$/.test(formData.phone)) {
+      setPhoneError('휴대폰 번호를 다시 입력해주세요. \nex) 010-XXXX-XXXX');
+      return;
+    } else {
+      setPhoneError('');
+    }
+
     try {
       await handleRegister(formData); // ✅ 회원가입 API 호출
       const preLoginUrl = sessionStorage.getItem('preLoginUrl') || '/';
@@ -251,6 +278,8 @@ const UserInsert = () => {
                     className="UserInsert-input-field"
                     required
                   />
+                  {/* 전화번호 형식 오류 메시지 */}
+                  {phoneError && <FormText className="text-danger">{phoneError}</FormText>}
                 </div>
 
                 {/* 성별 입력 필드 */}
@@ -280,6 +309,8 @@ const UserInsert = () => {
                     className="UserInsert-input-field"
                     required
                   />
+                  {/* 생년월일 오류 메시지 */}
+                  {birthError && <FormText className="text-danger">{birthError}</FormText>}
                 </div>
 
                 {/* 지역 코드 입력 필드 */}
