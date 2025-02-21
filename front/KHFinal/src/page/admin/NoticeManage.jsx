@@ -229,8 +229,8 @@ const NoticeManage = () => {
             <td className="align-content-center" style={{ width: "200px" }}>
               {date}
             </td>
-            <td className="align-content-center" style={{ width: "99.5px" }}>
-              <Button className="btn btn-primary me-2" onClick={handleInsert}>
+            <td className="align-content-center" style={{ width: "97.1px" }}>
+              <Button className="btn btn-primary" onClick={handleInsert}>
                 추가
               </Button>
             </td>
@@ -275,9 +275,9 @@ const NoticeManage = () => {
               <td className="align-content-center" style={{ width: "200px" }}>
                 {data.subDate}
               </td>
-              <td className="align-content-center" style={{ width: "99.5px" }}>
+              <td className="align-content-center" style={{ width: "97.1px" }}>
                 <Button
-                  className="btn btn-primary me-2"
+                  className="btn btn-primary"
                   onClick={() => handleUpdate(data.no)}
                 >
                   수정

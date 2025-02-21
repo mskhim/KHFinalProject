@@ -156,7 +156,7 @@ const CanceledManage = () => {
               <td className="align-content-center" style={{ width: "200px" }}>
                 {data.reservedDate}
               </td>
-              <td className="align-content-center" style={{ width: "175px" }}>
+              <td className="align-content-center" style={{ width: "173px" }}>
                 {data.totalCost}
               </td>
             </tr>

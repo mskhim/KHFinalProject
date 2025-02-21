@@ -227,7 +227,7 @@ const QnAManage = () => {
               <td className="align-content-center" style={{ width: "150px" }}>
                 {data.answerWriter}
               </td>
-              <td className="align-content-center" style={{ width: "131.4px" }}>
+              <td className="align-content-center" style={{ width: "131.5px" }}>
                 {data.answerDate}
               </td>
             </tr>

@@ -67,11 +67,13 @@
 
 	<select id="publicDataEventSellectAll"
 		resultType="AdminPublicDataEvent" parameterType="AdminPublicDataEvent">
-		SELECT *
-		FROM
-		PUBLIC_DATA_EVENT
-		WHERE END_DATE >= TRUNC(SYSDATE)
-		ORDER BY NO ASC
+		SELECT PDE.*
+		FROM PUBLIC_DATA_EVENT PDE
+		LEFT JOIN USER_MANAGEMENT_EVENT UME
+		ON PDE.NO = UME.PUBLIC_DATA_EVENT_NO
+		WHERE UME.PUBLIC_DATA_EVENT_NO IS NULL
+		AND PDE.END_DATE >= TRUNC(SYSDATE)
+		ORDER BY PDE.NO ASC
 	</select>
 
 	<!-- UserManage -->
