@@ -1,20 +1,14 @@
 package com.zeus.event.service;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.json.JSONArray;
@@ -36,7 +30,6 @@ import com.zeus.user.domain.Cart;
 import com.zeus.user.domain.User;
 
 import lombok.extern.slf4j.Slf4j;
-import reactor.core.publisher.Mono;
 
 @Slf4j
 @Service
@@ -46,14 +39,6 @@ public class EventServiceImpl implements EventService {
 	@Value("${public.api.key}") // ✅ application.properties에서 설정한 API 키 사용
 	private String apiKey;
 
-	private final WebClient webClient;
-
-	public EventServiceImpl(WebClient.Builder webClientBuilder) {
-		this.webClient = webClientBuilder.baseUrl("http://api.data.go.kr/openapi/tn_pubr_public_cltur_fstvl_api")
-				.defaultHeader("User-Agent",
-						"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3")
-				.build();
-	}
 
 	@Override
 	public List<PublicDataEventDTO> selectPublicDataEvent(User user) {
