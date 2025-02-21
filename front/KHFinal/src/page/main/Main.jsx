@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import './Main.css';
@@ -15,115 +16,141 @@ import { Container } from 'react-bootstrap';
 import ScrollDownArrow from './components/ScrollDownArrow';
 
 // GSAP 플러그인 등록
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 const Main = () => {
   const sectionRefs = useRef([]);
-  const arrowRef = useRef(null);
+  const arrowRefs = useRef([]);
 
   useEffect(() => {
-    // ✅ GSAP의 context() 사용하여 React 환경에서도 안전하게 실행
-    const ctx = gsap.context(() => {
-      // 🔹 페이지 로드 시 최상단으로 이동
-      window.scrollTo(0, 0);
+    window.scrollTo(0, 0); // ✅ 페이지 로드 후 최상단 고정
 
-      // 🔹 화살표가 보이는 애니메이션
-      gsap.to(arrowRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: '.main-carousel',
-          start: 'bottom 80%',
-          toggleActions: 'play none none reverse',
-        },
-      });
+    setTimeout(() => {
+      console.log('📌 sectionRefs:', sectionRefs.current);
+      console.log('📌 arrowRefs:', arrowRefs.current);
 
-      // 🔹 각 섹션에 페이드인 애니메이션 적용
-      sectionRefs.current.forEach((section) => {
-        if (!section) return;
-        gsap.fromTo(
-          section,
-          { opacity: 0, y: 50 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: section,
-              start: 'top 80%',
-              toggleActions: 'play none none reverse',
-            },
-          }
-        );
-      });
-
-      // 🔹 스크롤하면 자동으로 다음 섹션으로 이동
-      sectionRefs.current.forEach((section, index) => {
-        if (!section) return;
-        ScrollTrigger.create({
-          trigger: section,
-          start: 'top 80%',
-          onEnter: () => {
-            window.scrollTo({
-              top: section.offsetTop,
-              behavior: 'smooth',
-            });
-          },
+      const ctx = gsap.context(() => {
+        // 🔹 각 섹션 페이드인 애니메이션 적용
+        sectionRefs.current.forEach((section) => {
+          if (!section) return;
+          gsap.fromTo(
+            section,
+            { opacity: 0, y: 100 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 1.2,
+              ease: 'power2.out',
+              scrollTrigger: {
+                trigger: section,
+                start: 'top 70%', // ✅ 트리거가 더 빨리 작동하도록 조정
+                toggleActions: 'play none none reverse',
+              },
+            }
+          );
         });
-      });
-    });
 
-    return () => ctx.revert(); // 🚀 GSAP 컨텍스트 정리 (React에서 필요)
+        // 🔹 화살표 감지 & 자동 스크롤
+        arrowRefs.current.forEach((arrow, index) => {
+          if (!arrow) {
+            console.warn(`❌ arrowRefs[${index}]가 존재하지 않음`);
+            return;
+          }
+
+          console.log(`🟢 ScrollTrigger 생성됨: arrowRefs[${index}]`, arrow);
+
+          ScrollTrigger.create({
+            trigger: arrow,
+            start: 'top 70%', // ✅ scroller-start와 start가 만나면 실행
+            end: 'top 50%',
+            markers: true, // ✅ 디버깅용 마커
+            onEnter: () => {
+              const nextSection = sectionRefs.current[index + 1];
+              console.log(
+                `➡️ 자동 스크롤 실행! index: ${index}, 다음 섹션:`,
+                nextSection
+              );
+
+              if (nextSection) {
+                gsap.to(window, {
+                  duration: 1.5, // ✅ 부드러운 스크롤 이동
+                  scrollTo: { y: nextSection, autoKill: true },
+                  ease: 'power2.inOut',
+                });
+              }
+            },
+            toggleActions: 'play none none none',
+            once: false, // ✅ 여러 번 실행 가능
+          });
+        });
+
+        ScrollTrigger.refresh();
+      });
+
+      return () => ctx.revert();
+    }, 500); // ✅ 0.5초 지연 후 실행 (렌더링 완료 후)
   }, []);
 
   return (
     <>
       <Header />
-      <MainCarousel className="main-carousel" />
-      <div ref={arrowRef}>
-        <ScrollDownArrow />
+      <div className="main-carousel-wrapper">
+        <MainCarousel className="main-carousel" />
       </div>
+
       <Container className="container-sm">
+        {/* ✅ 첫 번째 화살표 */}
+        <div
+          ref={(el) => (arrowRefs.current[0] = el)}
+          className="arrow-container"
+        >
+          <ScrollDownArrow />
+        </div>
+
+        {/* ✅ 첫 번째 섹션 */}
         <div
           ref={(el) => (sectionRefs.current[0] = el)}
-          className="fade-in-section"
+          className="fade-in-section section"
         >
           <Top4 />
         </div>
+
+        {/* ✅ 두 번째 화살표 */}
+        <div
+          ref={(el) => (arrowRefs.current[1] = el)}
+          className="arrow-container"
+        >
+          <ScrollDownArrow />
+        </div>
+
+        {/* ✅ 두 번째 섹션 */}
         <div
           ref={(el) => (sectionRefs.current[1] = el)}
-          className="fade-in-section"
+          className="fade-in-section section"
         >
           <Announcement />
-        </div>
-        <div
-          ref={(el) => (sectionRefs.current[2] = el)}
-          className="fade-in-section"
-        >
+          <SubCarousel />
           <ByRegionFestival />
         </div>
+
+        {/* ✅ 세 번째 화살표 */}
         <div
-          ref={(el) => (sectionRefs.current[3] = el)}
-          className="fade-in-section"
+          ref={(el) => (arrowRefs.current[2] = el)}
+          className="arrow-container"
         >
-          <SubCarousel />
+          <ScrollDownArrow />
         </div>
+
+        {/* ✅ 마지막 섹션 */}
         <div
-          ref={(el) => (sectionRefs.current[4] = el)}
-          className="fade-in-section"
+          ref={(el) => (sectionRefs.current[2] = el)}
+          className="fade-in-section section"
         >
           <StartFestival />
-        </div>
-        <div
-          ref={(el) => (sectionRefs.current[5] = el)}
-          className="fade-in-section"
-        >
           <EndFestival />
         </div>
       </Container>
+
       <Footer />
     </>
   );

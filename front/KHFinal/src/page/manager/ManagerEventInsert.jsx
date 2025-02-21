@@ -86,7 +86,10 @@ const ManagerInsert = () => {
         subImages.map((file) =>
           uploadImageToFirebase(file, 'events/sub', (progress) => {
             setUploadProgress(progress);
-          }).then(() => setUploadedFiles((prev) => prev + 1))
+          }).then((downloadURL) => {
+            setUploadedFiles((prev) => prev + 1);
+            return downloadURL; // ✅ URL 반환!
+          })
         )
       );
 

@@ -1,32 +1,36 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import CommonLayout from '../page/layout/CommonLayout';
-import Main from '../page/main/Main';
-import EventList from '../page/event/EventList';
-import EventRead from '../page/event/EventRead';
-import EventCalendar from '../page/eventCalendar/EventCalendar';
-import EventMap from '../page/eventMap/EventMap';
-import NoticeList from '../page/notice/NoticeList';
-import NoticeRead from '../page/notice/NoticeRead';
-import QnaList from '../page/qna/QnaList';
-import QnaInsert from '../page/qna/QnaInsert';
-import QnaModify from '../page/qna/QnaModify';
-import QnaRead from '../page/qna/QnaRead';
-import QnaReInsert from '../page/qna/QnaReInsert';
-import UserLoginPage from '../page/user/UserLoginPage';
-import UserLoginSuccess from '../page/user/UserLoginSuccess';
-import UserInsert from '../page/user/UserInsert';
-import UserInsertCommon from '../page/user/UserInsertCommon';
-import UserFind from '../page/user/UserFind';
-import Unauthorized from '../components/Unauthorized';
-import NotFound from '../page/common/NotFound';
-import { useEffect } from 'react';
+import Main from '../page/main/Main'; // ✅ 레이지 로딩 제거 (일반 import)
+import { lazy, useEffect, useContext, Suspense } from 'react';
 import ErrorBoundary from '../components/ErrorBoundary';
-import { useContext } from 'react';
 import { Context } from '../Context';
 import { checkAuthStatus, refreshAccessToken } from '../page/user/userApi';
+import Loading from '../page/Loading';
+
+// ✅ 나머지 페이지는 레이지 로딩 유지
+const EventList = lazy(() => import('../page/event/EventList'));
+const EventRead = lazy(() => import('../page/event/EventRead'));
+const EventCalendar = lazy(() => import('../page/eventCalendar/EventCalendar'));
+const EventMap = lazy(() => import('../page/eventMap/EventMap'));
+const NoticeList = lazy(() => import('../page/notice/NoticeList'));
+const NoticeRead = lazy(() => import('../page/notice/NoticeRead'));
+const QnaList = lazy(() => import('../page/qna/QnaList'));
+const QnaInsert = lazy(() => import('../page/qna/QnaInsert'));
+const QnaModify = lazy(() => import('../page/qna/QnaModify'));
+const QnaRead = lazy(() => import('../page/qna/QnaRead'));
+const QnaReInsert = lazy(() => import('../page/qna/QnaReInsert'));
+const UserLoginPage = lazy(() => import('../page/user/UserLoginPage'));
+const UserLoginSuccess = lazy(() => import('../page/user/UserLoginSuccess'));
+const UserInsert = lazy(() => import('../page/user/UserInsert'));
+const UserInsertCommon = lazy(() => import('../page/user/UserInsertCommon'));
+const UserFind = lazy(() => import('../page/user/UserFind'));
+const Unauthorized = lazy(() => import('../components/Unauthorized'));
+const NotFound = lazy(() => import('../page/common/NotFound'));
+
 const RouterComponentCommon = () => {
   const { login, isAuthenticated } = useContext(Context);
-  const location = useLocation(); // ✅ 현재 경로 가져오기
+  const location = useLocation();
+
   useEffect(() => {
     if (
       location.pathname !== '/userLoginPage' &&
@@ -39,11 +43,11 @@ const RouterComponentCommon = () => {
         location.pathname + location.search
       );
     }
-  }, [location]); // ✅ 경로 변경 시마다 실행
+  }, [location]);
+
   useEffect(() => {
-    if (isAuthenticated) {
-      return;
-    }
+    if (isAuthenticated) return;
+
     const checkAuth = async () => {
       const response = await checkAuthStatus();
       if (response.authenticated) {
@@ -51,39 +55,162 @@ const RouterComponentCommon = () => {
         login(response.user.nickname, response.user.role);
       }
     };
+
     checkAuth();
   }, [login]);
+
   return (
     <ErrorBoundary>
       <Routes>
         <Route path="/" element={<CommonLayout />}>
-          {/* 메인 페이지 */}
+          {/* ✅ 메인 페이지 (레이지 로딩 제거) */}
           <Route index element={<Main />} />
-          {/* 이벤트 관련 페이지 */}
-          <Route path="eventList" element={<EventList />} />
-          <Route path="eventRead/:no" element={<EventRead />} />
-          <Route path="eventCalendar" element={<EventCalendar />} />
-          <Route path="eventMap" element={<EventMap />} />
-          {/* 공지사항 관련 페이지 */}
-          <Route path="noticeList" element={<NoticeList />} />
-          <Route path="noticeRead/:no" element={<NoticeRead />} />
-          {/* QnA 관련 페이지 */}
-          <Route path="qnaList" element={<QnaList />} />
-          <Route path="qnaInsert" element={<QnaInsert />} />
-          <Route path="qnaModify/:no" element={<QnaModify />} />
-          <Route path="qnaRead/:no" element={<QnaRead />} />
-          <Route path="qnaReInsert/:no" element={<QnaReInsert />} />
-          {/* 유저 관련 인증/가입 페이지 */}
-          <Route path="userLoginPage" element={<UserLoginPage />} />
-          <Route path="userLoginSuccess" element={<UserLoginSuccess />} />
-          <Route path="userInsert" element={<UserInsert />} />
-          <Route path="userFind" element={<UserFind />} />
-          <Route path="UserInsertCommon" element={<UserInsertCommon />} />
 
-          {/* 권한 없음 페이지 */}
-          <Route path="unauthorized" element={<Unauthorized />} />
-          {/* 존재하지 않는 페이지 (404) */}
-          <Route path="*" element={<NotFound />} />
+          {/* ✅ 레이지 로딩이 적용된 페이지들 */}
+          <Route
+            path="eventList"
+            element={
+              <Suspense fallback={<Loading />}>
+                <EventList />
+              </Suspense>
+            }
+          />
+          <Route
+            path="eventRead/:no"
+            element={
+              <Suspense fallback={<Loading />}>
+                <EventRead />
+              </Suspense>
+            }
+          />
+          <Route
+            path="eventCalendar"
+            element={
+              <Suspense fallback={<Loading />}>
+                <EventCalendar />
+              </Suspense>
+            }
+          />
+          <Route
+            path="eventMap"
+            element={
+              <Suspense fallback={<Loading />}>
+                <EventMap />
+              </Suspense>
+            }
+          />
+          <Route
+            path="noticeList"
+            element={
+              <Suspense fallback={<Loading />}>
+                <NoticeList />
+              </Suspense>
+            }
+          />
+          <Route
+            path="noticeRead/:no"
+            element={
+              <Suspense fallback={<Loading />}>
+                <NoticeRead />
+              </Suspense>
+            }
+          />
+          <Route
+            path="qnaList"
+            element={
+              <Suspense fallback={<Loading />}>
+                <QnaList />
+              </Suspense>
+            }
+          />
+          <Route
+            path="qnaInsert"
+            element={
+              <Suspense fallback={<Loading />}>
+                <QnaInsert />
+              </Suspense>
+            }
+          />
+          <Route
+            path="qnaModify/:no"
+            element={
+              <Suspense fallback={<Loading />}>
+                <QnaModify />
+              </Suspense>
+            }
+          />
+          <Route
+            path="qnaRead/:no"
+            element={
+              <Suspense fallback={<Loading />}>
+                <QnaRead />
+              </Suspense>
+            }
+          />
+          <Route
+            path="qnaReInsert/:no"
+            element={
+              <Suspense fallback={<Loading />}>
+                <QnaReInsert />
+              </Suspense>
+            }
+          />
+          <Route
+            path="userLoginPage"
+            element={
+              <Suspense fallback={<Loading />}>
+                <UserLoginPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="userLoginSuccess"
+            element={
+              <Suspense fallback={<Loading />}>
+                <UserLoginSuccess />
+              </Suspense>
+            }
+          />
+          <Route
+            path="userInsert"
+            element={
+              <Suspense fallback={<Loading />}>
+                <UserInsert />
+              </Suspense>
+            }
+          />
+          <Route
+            path="userFind"
+            element={
+              <Suspense fallback={<Loading />}>
+                <UserFind />
+              </Suspense>
+            }
+          />
+          <Route
+            path="UserInsertCommon"
+            element={
+              <Suspense fallback={<Loading />}>
+                <UserInsertCommon />
+              </Suspense>
+            }
+          />
+          <Route
+            path="unauthorized"
+            element={
+              <Suspense fallback={<Loading />}>
+                <Unauthorized />
+              </Suspense>
+            }
+          />
+          <Route
+            path="*"
+            element={
+              <Suspense fallback={<Loading />}>
+                <NotFound />
+              </Suspense>
+            }
+          />
         </Route>
       </Routes>
     </ErrorBoundary>

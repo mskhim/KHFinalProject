@@ -1,6 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import Loading from '../page/Loading';
+import RouterComponentCommon from './RouterComponentCommon'; // ✅ lazy() 제거하고 일반 import 사용
 
 const Unauthorized = lazy(() => import('../components/Unauthorized'));
 const NotFound = lazy(() => import('../page/common/NotFound'));
@@ -8,16 +9,12 @@ const NotFound = lazy(() => import('../page/common/NotFound'));
 const AdminRoutes = lazy(() => import('./RouterComponentAdmin'));
 const ManagerRoutes = lazy(() => import('./RouterComponentManager'));
 const UserRoutes = lazy(() => import('./RouterComponentUser'));
-const RouterComponentCommon = lazy(() => import('./RouterComponentCommon'));
+
 const root = createBrowserRouter([
-  // ✅ 일반 페이지
+  // ✅ 일반 페이지 (메인 페이지 포함)
   {
     path: '/*',
-    element: (
-      <Suspense fallback={<Loading />}>
-        <RouterComponentCommon />
-      </Suspense>
-    ),
+    element: <RouterComponentCommon />, // ✅ Suspense 제거 (즉시 로드됨)
   },
 
   // ✅ 유저 내부 페이지 레이아웃

@@ -8,10 +8,8 @@
 
 .arrow {
   font-size: 4rem;
-  position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  animation: blink 1.5s infinite;
 }
 
 .arrow:nth-child(1) {
