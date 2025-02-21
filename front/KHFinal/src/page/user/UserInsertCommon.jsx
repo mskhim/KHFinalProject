@@ -33,6 +33,7 @@ const UserInsert = () => {
   const [passwordError, setPasswordError] = useState(''); // 비밀번호 불일치 오류 메시지 상태
   const [passwordLengthError, setPasswordLengthError] = useState(''); // 비밀번호 길이 오류 메시지 상태로 변경
   const [passwordSuccess, setPasswordSuccess] = useState(''); // 비밀번호 일치 메시지 상태
+  const [birthError, setBirthError] = useState(''); // 생년월일 오류 메시지 상태 추가
 
   // 닉네임 중복 확인 핸들러
   const handleNicknameCheck = async () => {
@@ -123,6 +124,25 @@ const UserInsert = () => {
     }
   };
 
+  // 생년월일 체크 및 만 14세 미만 확인
+  const handleBirthChange = (e) => {
+    const { value } = e.target;
+    setFormData({ ...formData, birth: value });
+
+    // 생년월일로 만 14세 미만인지 체크
+    const today = new Date();
+    const birthDate = new Date(value);
+    const age = today.getFullYear() - birthDate.getFullYear();
+    const month = today.getMonth() - birthDate.getMonth();
+    const day = today.getDate() - birthDate.getDate();
+
+    if (age < 14 || (age === 14 && (month < 0 || (month === 0 && day < 0)))) {
+      setBirthError('만 14세 이상의 회원만 가입 가능합니다. \n생년월일을 다시 입력해주세요.');
+    } else {
+      setBirthError('');
+    }
+  };
+
   // 제출 핸들러
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -134,6 +154,12 @@ const UserInsert = () => {
       alert('비밀번호가 일치하지 않습니다.');
       return;
     }
+
+    if (birthError) {
+      alert(birthError); // 만약 만 14세 미만이면 에러 메세지 출력
+      return;
+    }
+
     try {
       await handleRegister(formData); // ✅ 회원가입 API 호출
       const preLoginUrl = sessionStorage.getItem('preLoginUrl') || '/';
@@ -390,10 +416,16 @@ const UserInsert = () => {
                     type="date"
                     name="birth"
                     value={formData.birth}
-                    onChange={handleChange}
+                    onChange={handleBirthChange} // 생년월일 체크 함수 연결
                     className="UserInsert-input-field"
                     required
                   />
+                   {/* 만약 만 14세 미만이면 에러 메시지 출력 */}
+                   {birthError && (
+                    <Form.Text className="text-danger">
+                      {birthError} {/* 빨간색 텍스트 */}
+                    </Form.Text>
+                  )}
                 </div>
 
                 {/* 지역 코드 입력 필드를 select로 변경 */}

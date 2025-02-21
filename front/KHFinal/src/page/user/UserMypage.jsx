@@ -11,7 +11,7 @@ function UserMypage() {
   const { getDarkMode, getDarkModeHover, logout } = useContext(Context);
   const [selectedSection, setSelectedSection] = useState('info-view');
   const [isEditable, setIsEditable] = useState(false); // Edit Mode
-  const [userInfo, setUserInfo] = useState({});
+  const [userInfo, setUserInfo] = useState({}); // 사용자 정보.
   const [nicknameCheck, setNicknameCheck] = useState(false);  // 닉네임 중복 확인 상태
   const [formData, setFormData] = useState(userInfo); // 수정을 위한 form data.
   const [showDeleteModal, setShowDeleteModal] = useState(false); // 회원 탈퇴 확인 모달
@@ -27,7 +27,7 @@ function UserMypage() {
       const data = await getUserData();
       setUserInfo(data);
       setFormData(data);
-      setIsLoading(false); // Set loading to false after data is fetched
+      setIsLoading(false); // 데이터 로딩 후 로딩 상태를 변경.
       console.log(data);
     };
     setData();
@@ -80,12 +80,12 @@ function UserMypage() {
     setSelectedSection(sectionId);
   };
 
-  // Toggle edit mode
+  // 수정하기 버튼.
   const toggleEdit = () => {
     setIsEditable(!isEditable);
   };
 
-  // Handle form input changes
+  // 폼 입력 변화 처리.
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -94,7 +94,7 @@ function UserMypage() {
     });
   };
 
-  // Save changes after editing
+  // 수정된 변경내역 저장.
   const handleSave = async () => {
     // if (!validateEmail(formData.email)) {
     //   setEmailError('올바른 이메일 형식을 입력해주세요.');
@@ -102,6 +102,19 @@ function UserMypage() {
     // } else {
     //   setEmailError(''); // Clear email error if valid
     // }
+
+    // 생년월일을 기준으로 만 14세 이상인지 확인
+    const birthDate = new Date(formData.birth);
+    const age = new Date().getFullYear() - birthDate.getFullYear();
+    const monthDiff = new Date().getMonth() - birthDate.getMonth();
+    const dayDiff = new Date().getDate() - birthDate.getDate();
+    
+    if (age < 14 || (age === 14 && (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0))))
+    {
+      alert('만 14세 이상의 회원만 이용 가능합니다. \n생년월일을 다시 입력해주세요.');
+      return;
+    }
+
     if (!/^\d{3}-\d{4}-\d{4}$/.test(formData.phone)) {
       alert('휴대폰 번호를 다시 입력해주세요. \nex) 010-XXXX-XXXX');
       return;
@@ -115,7 +128,7 @@ function UserMypage() {
       return;
     }
 
-    // Remove password field if it is empty
+    // 비밀번호란이 공백인 경우 삭제.
     const updatedFormData = { ...formData };
     if (!updatedFormData.pwd) {
       delete updatedFormData.pwd;
@@ -144,7 +157,7 @@ function UserMypage() {
     }
   };
 
-  // Cancel editing
+  // 수정 취소.
   const handleCancel = () => {
     setFormData(userInfo); // Restore original data
     toggleEdit(); // Disable editing
@@ -469,7 +482,7 @@ function UserMypage() {
                         </div>
 
                         {/* 지역 */}
-                        <div className="MyPageMain-input-group">
+                        <div className="MyPageMain-input-group form-container mb-2">
                           <label
                             htmlFor="region"
                             className="MyPageMain-input-label"
@@ -560,7 +573,7 @@ function UserMypage() {
         </Modal.Header>
         <Modal.Body>
           <div>
-            <label>이메일</label>
+            <label>{formData.provider === 'common' ? '이메일' : '소셜계정 이메일 입력'}</label>
             <input
               type="email"
               className="form-control"
@@ -582,6 +595,7 @@ function UserMypage() {
           </Button>
         </Modal.Footer>
       </Modal>
+
       <Footer />
     </>
   );
