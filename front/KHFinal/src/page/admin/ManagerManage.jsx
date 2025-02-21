@@ -309,8 +309,8 @@ const ManagerManage = () => {
             <td className="align-content-center" style={{ width: "110px" }}>
               -
             </td>
-            <td className="align-content-center" style={{ width: "93px" }}>
-              <Button className="btn btn-primary me-2" onClick={handleInsert}>
+            <td className="align-content-center" style={{ width: "94.4px" }}>
+              <Button className="btn btn-primary" onClick={handleInsert}>
                 추가
               </Button>
             </td>
@@ -367,17 +367,17 @@ const ManagerManage = () => {
               <td className="align-content-center" style={{ width: "160px" }}>
                 {data.regDate || ""}
               </td>
-              <td className="align-content-center" style={{ width: "110px" }}>
+              <td className="align-content-center " style={{ width: "110px" }}>
                 <Button
-                  className="btn btn-primary me-2"
+                  className="btn btn-primary "
                   onClick={() => handleShowAuthModal(data)}
                 >
                   권한관리
                 </Button>
               </td>
-              <td className="align-content-center" style={{ width: "93px" }}>
+              <td className="align-content-center" style={{ width: "94.4px" }}>
                 <Button
-                  className="btn btn-primary me-2"
+                  className="btn btn-primary "
                   onClick={() => handleUpdate(data.no)}
                 >
                   수정

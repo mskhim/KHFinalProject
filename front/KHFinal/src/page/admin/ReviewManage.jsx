@@ -192,7 +192,7 @@ const ReviewManage = () => {
               <td className="align-content-center" style={{ width: "90px" }}>
                 {data.rating}
               </td>
-              <td className="align-content-center" style={{ width: "146.4px" }}>
+              <td className="align-content-center" style={{ width: "148px" }}>
                 {data.subDate}
               </td>
             </tr>

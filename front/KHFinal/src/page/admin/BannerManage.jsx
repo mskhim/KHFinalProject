@@ -189,10 +189,7 @@ const BannerManage = () => {
               {date}
             </td>
             <td className="align-content-center" style={{ width: "99.5px" }}>
-              <Button
-                className="btn btn-primary me-2"
-                onClick={handleAddBanner}
-              >
+              <Button className="btn btn-primary" onClick={handleAddBanner}>
                 추가
               </Button>
             </td>
@@ -222,7 +219,7 @@ const BannerManage = () => {
               </td>
               <td className="align-content-center" style={{ width: "99.5px" }}>
                 <Button
-                  className="btn btn-danger me-2"
+                  className="btn btn-danger"
                   onClick={() => handleDeleteBanner(data.no, data.url)}
                 >
                   삭제

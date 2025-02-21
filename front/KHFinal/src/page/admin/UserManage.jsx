@@ -204,7 +204,7 @@ const UserManage = () => {
               <td className="align-content-center" style={{ width: "135px" }}>
                 {data.region}
               </td>
-              <td className="align-content-center" style={{ width: "161.3px" }}>
+              <td className="align-content-center" style={{ width: "163px" }}>
                 {data.regDate}
               </td>
             </tr>
