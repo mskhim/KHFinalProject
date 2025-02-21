@@ -593,3 +593,17 @@ export const getStats = async () => {
     return null;
   }
 };
+export const updatePublicData = async () => {
+  alert('업데이트를 시작합니다.');
+  try {
+    const response = await fetch(
+      'http://localhost:8080/event/fetchPublicData',
+      {
+        method: 'GET',
+        credentials: 'include',
+      }
+    );
+  } catch (error) {
+    return null;
+  }
+};
