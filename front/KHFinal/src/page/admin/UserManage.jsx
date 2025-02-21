@@ -109,13 +109,13 @@ const UserManage = () => {
         <thead>
           <tr>
             <th
-              className="text-bg-primary text-center "
+              className="text-bg-primary text-center align-content-center"
               style={{ width: "90px" }}
             >
               <Form.Check checked={selectAll} onChange={handleSelectAll} />
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("no")}
               style={{ width: "90px" }}
             >
@@ -124,7 +124,7 @@ const UserManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("id")}
               style={{ width: "200px" }}
             >
@@ -133,7 +133,7 @@ const UserManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("provider")}
               style={{ width: "200px" }}
             >
@@ -142,19 +142,19 @@ const UserManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               style={{ width: "200px" }}
             >
               전화번호
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               style={{ width: "200px" }}
             >
               생년월일
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("region")}
               style={{ width: "135px" }}
             >
@@ -163,7 +163,7 @@ const UserManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("regDate")}
               style={{ width: "180px" }}
             >
@@ -177,19 +177,36 @@ const UserManage = () => {
           {/* 데이터 행 */}
           {filteredItems.map((data, index) => (
             <tr key={data.no}>
-              <td className="text-center" style={{ width: "90px" }}>
+              <td
+                className="align-content-center text-center"
+                style={{ width: "90px" }}
+              >
                 <Form.Check
                   checked={data.checked || false}
                   onChange={() => handleCheckboxChange(data.no)}
                 />
               </td>
-              <td style={{ width: "90px" }}>{index + 1}</td>
-              <td style={{ width: "200px" }}>{data.id}</td>
-              <td style={{ width: "200px" }}>{data.provider}</td>
-              <td style={{ width: "200px" }}>{data.phone}</td>
-              <td style={{ width: "200px" }}>{data.birth}</td>
-              <td style={{ width: "135px" }}>{data.region}</td>
-              <td style={{ width: "163px" }}>{data.regDate}</td>
+              <td className="align-content-center" style={{ width: "90px" }}>
+                {index + 1}
+              </td>
+              <td className="align-content-center" style={{ width: "200px" }}>
+                {data.id}
+              </td>
+              <td className="align-content-center" style={{ width: "200px" }}>
+                {data.provider}
+              </td>
+              <td className="align-content-center" style={{ width: "200px" }}>
+                {data.phone}
+              </td>
+              <td className="align-content-center" style={{ width: "200px" }}>
+                {data.birth}
+              </td>
+              <td className="align-content-center" style={{ width: "135px" }}>
+                {data.region}
+              </td>
+              <td className="align-content-center" style={{ width: "161.3px" }}>
+                {data.regDate}
+              </td>
             </tr>
           ))}
         </tbody>

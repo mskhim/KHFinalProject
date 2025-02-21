@@ -106,13 +106,13 @@ const ReviewManage = () => {
         <thead>
           <tr>
             <th
-              className="text-bg-primary text-center "
+              className="text-bg-primary text-center align-content-center"
               style={{ width: "90px" }}
             >
               <Form.Check checked={selectAll} onChange={handleSelectAll} />
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("no")}
               style={{ width: "90px" }}
             >
@@ -121,7 +121,7 @@ const ReviewManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("eventName")}
               style={{ width: "230px" }}
             >
@@ -130,7 +130,7 @@ const ReviewManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("userName")}
               style={{ width: "150px" }}
             >
@@ -139,13 +139,13 @@ const ReviewManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               style={{ width: "480px" }}
             >
               리뷰 내용
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("rating")}
               style={{ width: "90px" }}
             >
@@ -154,7 +154,7 @@ const ReviewManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("subDate")}
               style={{ width: "165px" }}
             >
@@ -168,18 +168,33 @@ const ReviewManage = () => {
           {/* 데이터 행 */}
           {filteredItems.map((data, index) => (
             <tr key={data.no}>
-              <td className="text-center" style={{ width: "90px" }}>
+              <td
+                className="text-center align-content-center"
+                style={{ width: "90px" }}
+              >
                 <Form.Check
                   checked={data.checked || false}
                   onChange={() => handleCheckboxChange(data.no)}
                 />
               </td>
-              <td style={{ width: "90px" }}>{index + 1}</td>
-              <td style={{ width: "230px" }}>{data.eventName}</td>
-              <td style={{ width: "150px" }}>{data.userName}</td>
-              <td style={{ width: "480px" }}>{data.content}</td>
-              <td style={{ width: "90px" }}>{data.rating}</td>
-              <td style={{ width: "148px" }}>{data.subDate}</td>
+              <td className="align-content-center" style={{ width: "90px" }}>
+                {index + 1}
+              </td>
+              <td className="align-content-center" style={{ width: "230px" }}>
+                {data.eventName}
+              </td>
+              <td className="align-content-center" style={{ width: "150px" }}>
+                {data.userName}
+              </td>
+              <td className="align-content-center" style={{ width: "480px" }}>
+                {data.content}
+              </td>
+              <td className="align-content-center" style={{ width: "90px" }}>
+                {data.rating}
+              </td>
+              <td className="align-content-center" style={{ width: "146.4px" }}>
+                {data.subDate}
+              </td>
             </tr>
           ))}
         </tbody>

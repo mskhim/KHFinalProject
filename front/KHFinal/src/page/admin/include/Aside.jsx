@@ -1,23 +1,23 @@
 import React from "react";
 import "./css/Aside.css";
-import { Link, NavLink } from "react-router";
+import { NavLink } from "react-router";
 import { Navbar, Nav } from "react-bootstrap";
 import ViVaFesta from "../../../assets/vivafesta.png";
 
 const Aside = () => {
   return (
     <Navbar className="admin-aside">
-      <div className="admin-aside-brand">
-        <h2>
+      <div className="admin-aside-brand pb-3">
+        <h2 className="mt-3">
           <NavLink to="/admin/adminmain" className="brand-link">
             <img
               src={ViVaFesta}
               alt="ViVaFesta"
-              className="Header-logo align-content-center pb-1"
+              className="Header-logo align-content-center"
               height={20}
             />
           </NavLink>
-          <hr />
+          <hr className="mt-4" />
         </h2>
       </div>
       <Nav className="admin-aside-nav flex-column">

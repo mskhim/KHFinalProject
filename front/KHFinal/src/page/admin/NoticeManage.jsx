@@ -147,13 +147,13 @@ const NoticeManage = () => {
         <thead>
           <tr>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               style={{ width: "90px" }}
             >
               <Form.Check checked={selectAll} onChange={handleSelectAll} />
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("no")}
               style={{ width: "90px" }}
             >
@@ -162,7 +162,7 @@ const NoticeManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("title")}
               style={{ width: "200px" }}
             >
@@ -171,13 +171,13 @@ const NoticeManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               style={{ width: "200px" }}
             >
               공지사항 내용
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("subDate")}
               style={{ width: "200px" }}
             >
@@ -186,7 +186,7 @@ const NoticeManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               style={{ width: "110px" }}
             >
               추가/수정
@@ -196,13 +196,19 @@ const NoticeManage = () => {
         <tbody>
           {/* 입력 가능한 빈 행 */}
           <tr>
-            <td className="text-center" style={{ width: "90px" }}>
+            <td
+              className="text-center align-content-center"
+              style={{ width: "90px" }}
+            >
               신규 추가
             </td>
-            <td className="text-center" style={{ width: "90px" }}>
+            <td
+              className="text-center align-content-center"
+              style={{ width: "90px" }}
+            >
               -
             </td>
-            <td style={{ width: "200px" }}>
+            <td className="align-content-center" style={{ width: "200px" }}>
               <Form.Control
                 className="admin-table-td text-center"
                 type="text"
@@ -211,7 +217,7 @@ const NoticeManage = () => {
                 style={{ border: "none" }}
               />
             </td>
-            <td style={{ width: "200px" }}>
+            <td className="align-content-center" style={{ width: "200px" }}>
               <Form.Control
                 className="admin-table-td text-center"
                 type="text"
@@ -220,8 +226,10 @@ const NoticeManage = () => {
                 style={{ border: "none" }}
               />
             </td>
-            <td style={{ width: "200px" }}>{date}</td>
-            <td style={{ width: "99.5px" }}>
+            <td className="align-content-center" style={{ width: "200px" }}>
+              {date}
+            </td>
+            <td className="align-content-center" style={{ width: "99.5px" }}>
               <Button className="btn btn-primary me-2" onClick={handleInsert}>
                 추가
               </Button>
@@ -231,16 +239,22 @@ const NoticeManage = () => {
           {/* 데이터 행 */}
           {filteredItems.map((data, index) => (
             <tr key={data.no}>
-              <td className="text-center" style={{ width: "90px" }}>
+              <td
+                className="text-center align-content-center"
+                style={{ width: "90px" }}
+              >
                 <Form.Check
                   checked={data.checked}
                   onChange={() => handleCheckboxChange(data.no)}
                 />
               </td>
-              <td className="text-center" style={{ width: "90px" }}>
+              <td
+                className="text-center align-content-center"
+                style={{ width: "90px" }}
+              >
                 {index + 1}
               </td>
-              <td style={{ width: "200px" }}>
+              <td className="align-content-center" style={{ width: "200px" }}>
                 <Form.Control
                   id={`title-${data.no}`}
                   className="admin-table-td text-center"
@@ -249,7 +263,7 @@ const NoticeManage = () => {
                   style={{ border: "none" }}
                 />
               </td>
-              <td style={{ width: "200px" }}>
+              <td className="align-content-center" style={{ width: "200px" }}>
                 <Form.Control
                   id={`content-${data.no}`}
                   className="admin-table-td text-center"
@@ -258,8 +272,10 @@ const NoticeManage = () => {
                   style={{ border: "none" }}
                 />
               </td>
-              <td style={{ width: "200px" }}>{data.subDate}</td>
-              <td style={{ width: "99.5px" }}>
+              <td className="align-content-center" style={{ width: "200px" }}>
+                {data.subDate}
+              </td>
+              <td className="align-content-center" style={{ width: "99.5px" }}>
                 <Button
                   className="btn btn-primary me-2"
                   onClick={() => handleUpdate(data.no)}

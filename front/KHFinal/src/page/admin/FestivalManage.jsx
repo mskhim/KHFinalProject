@@ -107,13 +107,13 @@ const FestivalManage = () => {
         <thead>
           <tr>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               style={{ width: "90px" }}
             >
               <Form.Check checked={selectAll} onChange={handleSelectAll} />
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("no")}
               style={{ width: "90px" }}
             >
@@ -122,7 +122,7 @@ const FestivalManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("eventName")}
               style={{ width: "150px" }}
             >
@@ -131,19 +131,19 @@ const FestivalManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               style={{ width: "150px" }}
             >
               개최 장소
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               style={{ width: "150px" }}
             >
               세부 내용
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("startDate")}
               style={{ width: "130px" }}
             >
@@ -152,7 +152,7 @@ const FestivalManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("endDate")}
               style={{ width: "130px" }}
             >
@@ -161,19 +161,19 @@ const FestivalManage = () => {
                 (sortOrder === "asc" ? <BsSortDown /> : <BsSortUp />)}
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               style={{ width: "130px" }}
             >
               담당자 번호
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               style={{ width: "130px" }}
             >
               홈페이지
             </th>
             <th
-              className="text-bg-primary text-center"
+              className="text-bg-primary text-center align-content-center"
               onClick={() => handleSort("userName")}
               style={{ width: "140px" }}
             >
@@ -187,21 +187,42 @@ const FestivalManage = () => {
           {/* 데이터 행 */}
           {filteredItems.map((data, index) => (
             <tr key={data.no}>
-              <td className="text-center" style={{ width: "90px" }}>
+              <td
+                className="text-center align-content-center"
+                style={{ width: "90px" }}
+              >
                 <Form.Check
                   checked={data.checked || false}
                   onChange={() => handleCheckboxChange(data.no)}
                 />
               </td>
-              <td style={{ width: "90px" }}>{index + 1}</td>
-              <td style={{ width: "150px" }}>{data.eventName}</td>
-              <td style={{ width: "150px" }}>{data.place}</td>
-              <td style={{ width: "150px" }}>{data.content}</td>
-              <td style={{ width: "130px" }}>{data.startDate}</td>
-              <td style={{ width: "130px" }}>{data.endDate}</td>
-              <td style={{ width: "130px" }}>{data.tel}</td>
-              <td style={{ width: "130px" }}>{data.homepage}</td>
-              <td style={{ width: "123px" }}>{data.userName}</td>
+              <td className="align-content-center" style={{ width: "90px" }}>
+                {index + 1}
+              </td>
+              <td className="align-content-center" style={{ width: "150px" }}>
+                {data.eventName}
+              </td>
+              <td className="align-content-center" style={{ width: "150px" }}>
+                {data.place}
+              </td>
+              <td className="align-content-center" style={{ width: "150px" }}>
+                {data.content}
+              </td>
+              <td className="align-content-center" style={{ width: "130px" }}>
+                {data.startDate}
+              </td>
+              <td className="align-content-center" style={{ width: "130px" }}>
+                {data.endDate}
+              </td>
+              <td className="align-content-center" style={{ width: "130px" }}>
+                {data.tel}
+              </td>
+              <td className="align-content-center" style={{ width: "130px" }}>
+                {data.homepage}
+              </td>
+              <td className="align-content-center" style={{ width: "121.4px" }}>
+                {data.userName}
+              </td>
             </tr>
           ))}
         </tbody>
