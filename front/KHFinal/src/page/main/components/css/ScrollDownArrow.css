@@ -1,0 +1,48 @@
+.scroll-down-arrow {
+  text-align: center;
+  margin: 60px 0;
+  position: relative;
+  height: 70px;
+}
+
+.arrow {
+  font-size: 3rem;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: blink 1.5s infinite;
+}
+
+.arrow:nth-child(1) {
+  top: 0;
+  animation-delay: 0s;
+}
+
+.arrow:nth-child(2) {
+  top: 25px;
+  animation-delay: 0.5s;
+}
+
+.arrow:nth-child(3) {
+  top: 50px;
+  animation-delay: 1s;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.fade-in-section {
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+}
+
+.fade-in-section.visible {
+  opacity: 1;
+}
