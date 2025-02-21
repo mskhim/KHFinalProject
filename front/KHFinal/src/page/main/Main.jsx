@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import './Main.css';
@@ -8,17 +8,19 @@ import Announcement from './components/Announcement';
 import ByRegionFestival from './components/ByRegionFestival';
 import StartFestival from './components/StartFestival';
 import EndFestival from './components/EndFestival';
-import { Container } from 'react-bootstrap';
+import SubCarousel from './components/SubCarousel';
+import { Container, Row } from 'react-bootstrap';
 import './Main.css';
 const Main = () => {
   return (
     <>
       <Header />
-      <Container className="Main-container">
-        <MainCarousel />
-        <Announcement />
+      <MainCarousel />
+      <Container className="container-sm">
         <Top4 />
+        <Announcement />
         <ByRegionFestival />
+        <SubCarousel />
         <StartFestival />
         <EndFestival />
       </Container>

@@ -1,29 +1,71 @@
 .Top4-head {
-  margin-top: 30px;
+  width: 100%;
+  height: auto;
+  margin-top: 20px;
   margin-bottom: 50px;
-}
-
-.Top4-row-1 {
+  gap: 10px;
   display: flex;
-  flex-wrap: nowrap;
 }
 
-.Top4-row-2 {
+.Top4-left {
+  flex: 1;
   display: flex;
-  flex-wrap: nowrap;
-}
-
-.Top4-card {
-  margin: 10px;
   overflow: hidden;
-  transition: box-shadow 0.3s ease-in-out;
+  border-radius: 10px;
+}
+
+.Top4-left .top4-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.Top4-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.Top4-rightTop {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.Top4-rightTop .top4-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.Top4-rightBottom {
+  flex: 1;
+  display: flex;
+  gap: 10px;
+}
+
+.Top4-bottom-left,
+.Top4-bottom-right {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.Top4-bottom-left .top4-image,
+.Top4-bottom-right .top4-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .top4-image {
   width: 100%;
   height: 100%;
   object-position: center;
-  transition: transform 0.2s ease-in-out; /* 부드러운 확대 효과 */
+  transition: transform 0.3s ease-in-out; /* 부드러운 확대 효과 */
 }
 
 .Top4-card:hover .top4-image {
@@ -35,7 +77,7 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 60%; /* 음영 크기 조절 */
+  height: 60%;
   background: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0) 0%,
@@ -55,7 +97,16 @@
   display: flex;
   bottom: 20px;
   color: white;
-  font-size: 40px;
+  font-size: 25px;
   font-weight: 5px;
   padding: 20px;
+}
+
+.Top4-card-address {
+  position: absolute;
+  bottom: 10px; /* 카드 하단에서 10px 만큼 띄우기 */
+  left: 20px; /* 카드 왼쪽에서 20px 만큼 띄우기 */
+  color: white;
+  font-size: 15px; /* 폰트 크기 조정 */
+  font-weight: bold; /* 텍스트 강조 */
 }

@@ -1,0 +1,14 @@
+.MainCarousel-container {
+  margin-top: -50px;
+  max-width: 100%;
+  width: 100%;
+
+  /* 넘치는 부분은 잘리도록 */
+  overflow: hidden;
+}
+
+.MainCarousel-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}

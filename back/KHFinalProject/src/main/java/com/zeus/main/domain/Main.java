@@ -14,4 +14,5 @@ public class Main {
     private String name;
     private String thumbUrl;
     private double avgRating;
+    private String address;
 }
