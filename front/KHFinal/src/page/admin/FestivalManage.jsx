@@ -220,7 +220,7 @@ const FestivalManage = () => {
               <td className="align-content-center" style={{ width: "130px" }}>
                 {data.homepage}
               </td>
-              <td className="align-content-center" style={{ width: "123px" }}>
+              <td className="align-content-center" style={{ width: "121.4px" }}>
                 {data.userName}
               </td>
             </tr>

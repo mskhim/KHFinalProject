@@ -101,6 +101,11 @@ const BannerManage = () => {
 
   return (
     <Container className="admin-page text-center">
+      <div className="text-end">
+        <span style={{ color: "red" }}>
+          ※ 권장 이미지 비율 : 가로 = 1850, 세로 = 950
+        </span>
+      </div>
       <Table bordered hover responsive className="admin-table table">
         <thead>
           <tr>

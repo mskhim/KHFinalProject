@@ -309,7 +309,7 @@ const ManagerManage = () => {
             <td className="align-content-center" style={{ width: "110px" }}>
               -
             </td>
-            <td className="align-content-center" style={{ width: "94.4px" }}>
+            <td className="align-content-center" style={{ width: "93px" }}>
               <Button className="btn btn-primary me-2" onClick={handleInsert}>
                 추가
               </Button>
@@ -375,7 +375,7 @@ const ManagerManage = () => {
                   권한관리
                 </Button>
               </td>
-              <td className="align-content-center" style={{ width: "94.4px" }}>
+              <td className="align-content-center" style={{ width: "93px" }}>
                 <Button
                   className="btn btn-primary me-2"
                   onClick={() => handleUpdate(data.no)}
