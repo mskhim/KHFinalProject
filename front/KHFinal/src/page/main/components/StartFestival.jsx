@@ -36,7 +36,7 @@ function StartFestival() {
         className="carousel-image StartFestival-image"
       />
       <br />
-      <h4>{event.name}</h4>
+      <h5>{event.name}</h5>
     </div>
   ));
 
