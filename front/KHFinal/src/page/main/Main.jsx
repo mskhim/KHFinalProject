@@ -1,6 +1,5 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
@@ -16,90 +15,76 @@ import { Container } from 'react-bootstrap';
 import ScrollDownArrow from './components/ScrollDownArrow';
 
 // GSAP 플러그인 등록
-gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+gsap.registerPlugin(ScrollToPlugin);
 
 const Main = () => {
   const sectionRefs = useRef([]);
   const arrowRefs = useRef([]);
+  const [isScrolling, setIsScrolling] = useState(false);
 
   useEffect(() => {
-    window.scrollTo(0, 0); // ✅ 페이지 로드 후 최상단 고정
-
-    setTimeout(() => {
-      console.log('📌 sectionRefs:', sectionRefs.current);
-      console.log('📌 arrowRefs:', arrowRefs.current);
-
-      const ctx = gsap.context(() => {
-        // 🔹 각 섹션 페이드인 애니메이션 적용
-        sectionRefs.current.forEach((section) => {
-          if (!section) return;
-          gsap.fromTo(
-            section,
-            { opacity: 0, y: 100 },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 1.2,
-              ease: 'power2.out',
-              scrollTrigger: {
-                trigger: section,
-                start: 'top 70%', // ✅ 트리거가 더 빨리 작동하도록 조정
-                toggleActions: 'play none none reverse',
-              },
-            }
-          );
-        });
-
-        // 🔹 화살표 감지 & 자동 스크롤
-        arrowRefs.current.forEach((arrow, index) => {
-          if (!arrow) {
-            console.warn(`❌ arrowRefs[${index}]가 존재하지 않음`);
-            return;
-          }
-
-          console.log(`🟢 ScrollTrigger 생성됨: arrowRefs[${index}]`, arrow);
-
-          ScrollTrigger.create({
-            trigger: arrow,
-            start: 'top 50%', // ✅ scroller-start와 start가 만나면 실행
-            onEnter: () => {
-              const nextSection = sectionRefs.current[index + 1];
-
-              if (!nextSection) {
-                console.warn(`❌ 다음 섹션이 존재하지 않음 (index: ${index})`);
-                return; // ✅ 마지막 섹션 이후에는 실행되지 않도록 방지
-              }
-
-              console.log(
-                `➡️ 자동 스크롤 실행! index: ${index}, 다음 섹션:`,
-                nextSection
-              );
-
-              // ✅ 다음 섹션이 보이도록 애니메이션 먼저 적용 후 스크롤
-              gsap.to(nextSection, {
-                opacity: 1,
-                ease: 'power2.out',
-                onComplete: () => {
-                  gsap.to(window, {
-                    duration: 1.5, // ✅ 부드러운 스크롤 이동
-                    scrollTo: { y: nextSection, autoKill: true },
-                    ease: 'power2.inOut',
-                  });
-                },
-              });
-            },
-            toggleActions: 'play none none none',
-            once: false, // ✅ 여러 번 실행 가능
-          });
-        });
-
-        ScrollTrigger.refresh();
-      });
-
-      return () => ctx.revert();
-    }, 500); // ✅ 0.5초 지연 후 실행 (렌더링 완료 후)
+    window.scrollTo(0, 0); // ✅ 페이지 로드 후 최상단 이동
+    sectionRefs.current = sectionRefs.current.filter(Boolean);
+    arrowRefs.current = arrowRefs.current.filter(Boolean);
   }, []);
 
+  useEffect(() => {
+    const handleScroll = (event) => {
+      if (isScrolling) {
+        event.preventDefault(); // ✅ 스크롤 중 추가 입력 방지
+        return;
+      }
+
+      // ✅ 현재 보고 있는 화살표 찾기 (감지 위치 조정)
+      let activeArrowIndex = arrowRefs.current.findLastIndex(
+        (arrow) => arrow && window.scrollY + 1000 >= arrow.offsetTop // ✅ 감지 영역을 아래로 조정
+      );
+
+      activeArrowIndex = Math.max(activeArrowIndex, 0); // ✅ 최소 index 보장
+
+      if (activeArrowIndex === -1) {
+        console.warn(`❌ 현재 보이는 화살표를 찾을 수 없음`);
+        return;
+      }
+
+      // ✅ 이동할 섹션 찾기
+      const targetSection = sectionRefs.current[activeArrowIndex];
+
+      if (!targetSection) {
+        console.warn(
+          `❌ 이동할 섹션이 존재하지 않음 (index: ${activeArrowIndex})`
+        );
+        return;
+      }
+
+      console.log(
+        `➡️ 자동 스크롤 실행! 화살표 index: ${activeArrowIndex}, 이동할 섹션:`,
+        targetSection
+      );
+
+      setIsScrolling(true);
+      gsap.to(window, {
+        duration: 1.2,
+        scrollTo: { y: targetSection.offsetTop - 100 }, // ✅ 이동 위치 최적화
+        ease: 'power2.inOut',
+        onComplete: () => {
+          setTimeout(() => {
+            setIsScrolling(false);
+            window.dispatchEvent(new Event('scroll')); // ✅ 강제 scroll 이벤트 발생
+          }, 500);
+        },
+      });
+    };
+
+    // ✅ 이벤트 리스너 추가
+    window.addEventListener('wheel', handleScroll, { passive: false });
+    window.addEventListener('touchmove', handleScroll, { passive: false });
+
+    return () => {
+      window.removeEventListener('wheel', handleScroll);
+      window.removeEventListener('touchmove', handleScroll);
+    };
+  }, [isScrolling]);
   return (
     <>
       <Header />
@@ -115,46 +100,25 @@ const Main = () => {
         >
           <ScrollDownArrow />
         </div>
+        <div className="spacer"></div>
 
-        {/* ✅ 첫 번째 섹션 */}
-        <div
-          ref={(el) => (sectionRefs.current[1] = el)}
-          className="fade-in-section section"
-        >
+        {/* ✅ 개별 섹션 */}
+        <div ref={(el) => (sectionRefs.current[0] = el)} className="section">
+          <Announcement />
           <Top4 />
         </div>
 
-        {/* ✅ 두 번째 화살표 */}
         <div
           ref={(el) => (arrowRefs.current[1] = el)}
           className="arrow-container"
         >
           <ScrollDownArrow />
         </div>
+        <div className="spacer"></div>
 
-        {/* ✅ 두 번째 섹션 */}
-        <div
-          ref={(el) => (sectionRefs.current[2] = el)}
-          className="fade-in-section section"
-        >
-          <Announcement />
-          <SubCarousel />
+        <div ref={(el) => (sectionRefs.current[1] = el)} className="section">
           <ByRegionFestival />
-        </div>
-
-        {/* ✅ 세 번째 화살표 */}
-        <div
-          ref={(el) => (arrowRefs.current[2] = el)}
-          className="arrow-container"
-        >
-          <ScrollDownArrow />
-        </div>
-
-        {/* ✅ 마지막 섹션 */}
-        <div
-          ref={(el) => (sectionRefs.current[3] = el)}
-          className="fade-in-section section"
-        >
+          <hr />
           <StartFestival />
           <EndFestival />
         </div>

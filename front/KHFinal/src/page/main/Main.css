@@ -1,17 +1,5 @@
 /* ✅ 섹션 간격 추가 */
 
-/* ✅ 기존 애니메이션 유지 */
-.fade-in-section {
-  opacity: 0;
-  transform: translateY(100px);
-  transition: opacity 1.2s ease-in-out, transform 1.2s ease-in-out;
-}
-
-.fade-in-section.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
 /* ✅ 깜빡이는 화살표 효과 */
 .scroll-down-arrow {
   text-align: center;
@@ -37,37 +25,22 @@
     opacity: 0;
   }
 }
-/* ✅ 로딩 화면 스타일 */
-/* ✅ 로딩 화면 스타일 */
-.loading-screen {
-  position: fixed;
-  top: 0;
-  left: 0;
+.section {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+.arrow-container {
+  position: relative;
+  text-align: center;
+  margin: 50px 0;
+}
+
+/* ✅ 간격을 벌리기 위한 가짜 div */
+.spacer {
+  height: 2000px; /* ✅ 각 섹션 사이에 150px 여백 추가 */
   width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.9);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10000;
-}
-
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 5px solid rgba(255, 255, 255, 0.3);
-  border-top: 5px solid white;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
 }
 
 /* ✅ MainCarousel 높이 강제 설정 */
@@ -82,7 +55,5 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 80px; /* ✅ 위쪽 간격 추가 */
-  margin-bottom: 200px; /* ✅ 아래쪽 간격 추가 */
   position: relative;
 }

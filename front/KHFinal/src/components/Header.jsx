@@ -15,7 +15,8 @@ import { getCartData } from '../page/user/userApi';
 import { Context } from '../Context';
 import ScrollToTopButton from './ui/ScrollToTopButton';
 import TokenRemain from './ui/TokenRemain';
-import ViVaFesta from '../assets/ViVaFesta.png';
+import ViVaFestaW from '../assets/VIVAFESTAW.png';
+import ViVaFestaB from '../assets/VIVAFESTAB.png';
 import { ButtonDarkMode, ButtonRole } from './ui';
 
 const Header = ({ page }) => {
@@ -115,13 +116,14 @@ const Header = ({ page }) => {
             <Navbar.Brand
               as={NavLink}
               to="/"
-              className={`${darkMode ? 'text-light' : 'text-dark'} `}
+              className={`${darkMode ? 'text-light' : 'text-dark'} d-flex
+              align-items-center`}
             >
               <img
-                src={ViVaFesta}
+                src={`${darkMode ? ViVaFestaB : ViVaFestaW} `}
                 alt="ViVaFesta"
-                className="Header-logo align-content-center pb-1"
-                height={20}
+                className="Header-logo align-content-center "
+                height={30}
               />
             </Navbar.Brand>
 
