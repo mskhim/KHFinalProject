@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { Context } from "../../Context";
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { Context } from '../../Context';
 import {
   Button,
   Col,
@@ -7,42 +7,47 @@ import {
   Form,
   Pagination,
   Spinner,
-} from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
-import "./css/qnaList.css";
+} from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+import './css/qnaList.css';
 import {
+  deleteQna,
   getisAuthenticated,
   getQnaList,
   getReply,
   submitReply,
-} from "./qnaApi";
-import { ButtonDarkMode, ButtonRole } from "../../components/ui";
+} from './qnaApi';
+import {
+  ButtonDarkMode,
+  ButtonRole,
+  ButtonRoleAndUserNo,
+} from '../../components/ui';
 
 const QNAList = () => {
   const navigate = useNavigate();
   const { darkMode, setDarkMode, getDarkMode, userRole } = useContext(Context);
   const [qnaList, setQnaList] = useState([]);
   const [openIndex, setOpenIndex] = useState(null);
-  const [replyText, setReplyText] = useState("");
+  const [replyText, setReplyText] = useState('');
   const [replyTarget, setReplyTarget] = useState(null);
   const [isSearchMode, setIsSearchMode] = useState(false); // 검색 모드 여부
-  const [searchTerm, setSearchTerm] = useState(""); // 검색어
+  const [searchTerm, setSearchTerm] = useState(''); // 검색어
   const [totalPages, setTotalPages] = useState(1); // 총 페이지 수
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
-  const [selectedReply, setSelectedReply] = useState(""); // 선택한 답변
+  const [selectedReply, setSelectedReply] = useState(''); // 선택한 답변
   const [isLoading, setIsLoading] = useState(false); // 로딩 중 여부
   const [isAuthenticated, setIsAuthenticated] = useState(false); // 인증 여부
   const searchRef = useRef(null);
   const searchOptionRef = useRef(null);
   const [sortDTO, setSortDTO] = useState({
     page: 1,
-    search: "",
-    searchOption: "title",
+    search: '',
+    searchOption: 'title',
   });
   useEffect(() => {
-    setDarkMode(sessionStorage.getItem("darkMode") === "true");
+    setDarkMode(sessionStorage.getItem('darkMode') === 'true');
     const getQnaListData = async () => {
       const data = await getQnaList(sortDTO);
       console.log(data);
@@ -65,8 +70,8 @@ const QNAList = () => {
     const getReplyData = async () => {
       setIsLoading(true);
       const response = await getReply(no);
-      if (response.content === "등록된 답변이 없습니다.") {
-        setSelectedReply("등록된 답변이 없습니다.");
+      if (response.content === '등록된 답변이 없습니다.') {
+        setSelectedReply('등록된 답변이 없습니다.');
         const getisAuthenticatedData = await getisAuthenticated(eventNo);
         setIsAuthenticated(getisAuthenticatedData.flag);
         setIsLoading(false);
@@ -81,7 +86,7 @@ const QNAList = () => {
 
   const handleReplySubmit = async () => {
     if (!replyText.trim() || replyTarget === null) {
-      alert("답변을 입력하세요.");
+      alert('답변을 입력하세요.');
       return;
     }
 
@@ -90,18 +95,18 @@ const QNAList = () => {
       content: replyText,
     };
 
-    console.log("전송할 데이터:", requestData);
+    console.log('전송할 데이터:', requestData);
 
     const data = await submitReply(requestData);
     if (data.authenticated) {
-      setReplyText("");
+      setReplyText('');
       setReplyTarget(null);
-      alert("답변이 등록되었습니다.");
+      alert('답변이 등록되었습니다.');
       setIsAuthenticated(false);
       const response = await getReply(replyTarget);
       setSelectedReply(response.content);
     } else {
-      alert("답변 등록 실패: " + data.message);
+      alert('답변 등록 실패: ' + data.message);
     }
   };
   const handleSearch = () => {
@@ -109,7 +114,7 @@ const QNAList = () => {
       const searchOption = searchOptionRef.current.value;
       const searchValue = searchRef.current.value.trim();
       if (!searchValue) {
-        alert("검색어를 입력해주세요.");
+        alert('검색어를 입력해주세요.');
         return;
       }
       setSortDTO({
@@ -122,11 +127,18 @@ const QNAList = () => {
       setIsSearchMode(false);
       setSortDTO({
         page: 1,
-        search: "",
-        searchOption: "title",
+        search: '',
+        searchOption: 'title',
       });
-      searchOptionRef.current.value = "title";
-      searchRef.current.value = "";
+      searchOptionRef.current.value = 'title';
+      searchRef.current.value = '';
+    }
+  };
+  const handleDelete = async (no) => {
+    const response = await deleteQna(no);
+    if (response) {
+      alert('게시글이 삭제되었습니다.');
+      navigate('/QnaList');
     }
   };
 
@@ -167,7 +179,7 @@ const QNAList = () => {
                       {/* 검색 버튼 */}
                       <Col md={2}>
                         <ButtonDarkMode
-                          text={!isSearchMode ? "검색" : "검색취소"}
+                          text={!isSearchMode ? '검색' : '검색취소'}
                           onClick={handleSearch}
                         />
                       </Col>
@@ -223,10 +235,15 @@ const QNAList = () => {
                             ) : (
                               <div>
                                 <p>
-                                  {selectedReply || "등록된 답변이 없습니다."}
+                                  {selectedReply || '등록된 답변이 없습니다.'}
                                 </p>
                                 <div className="d-flex justify-content-center">
-                                  <ButtonDarkMode text="게시글 삭제" />
+                                  <ButtonRoleAndUserNo
+                                    text="게시글 삭제"
+                                    role="user"
+                                    userNo={data.userAccountNo}
+                                    onClick={() => handleDelete(data.no)}
+                                  />
                                 </div>
                               </div>
                             )}
@@ -247,7 +264,7 @@ const QNAList = () => {
                               <Button
                                 onClick={handleReplySubmit}
                                 variant={
-                                  darkMode ? "outline-light" : "outline-dark"
+                                  darkMode ? 'outline-light' : 'outline-dark'
                                 }
                                 className="QNA-reply-submit"
                               >
@@ -266,10 +283,10 @@ const QNAList = () => {
         </Container>
       </section>
       <div className="QNA-write-button-container">
-        {userRole == "2" && (
+        {userRole == '2' && (
           <Link to="/QnaInsert">
             <Button
-              variant={darkMode ? "outline-light" : "outline-dark"}
+              variant={darkMode ? 'outline-light' : 'outline-dark'}
               className="QNA-btn QNA-btn-dark"
             >
               글쓰기

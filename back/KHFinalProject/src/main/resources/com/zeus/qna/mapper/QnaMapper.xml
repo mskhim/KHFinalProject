@@ -118,9 +118,11 @@
 		#{userAccountNo} AND
 		E.NO=#{eventNo}
 	</select>
-	<delete id="deletePostAndReplies" parameterType="int">
-	    DELETE FROM reply WHERE qna_no = #{no}
-	    DELETE FROM post WHERE no = #{no}
+	<delete id="deletePost" parameterType="int">
+	    DELETE FROM QNA WHERE no = #{no}
+	</delete>
+	<delete id="deleteReply" parameterType="int">
+	    DELETE FROM QNA WHERE qna_no = #{no}
 	</delete>
 
 </mapper>

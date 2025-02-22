@@ -13,6 +13,7 @@ import StartFestival from './components/StartFestival';
 import EndFestival from './components/EndFestival';
 import { Container } from 'react-bootstrap';
 import ScrollDownArrow from './components/ScrollDownArrow';
+import ScrollUpArrow from './components/ScrollUpArrow';
 
 // GSAP 플러그인 등록
 gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
@@ -21,14 +22,15 @@ const Main = () => {
   const sectionRefs = useRef([]);
   const arrowRefs = useRef([]);
   const [isScrolling, setIsScrolling] = useState(false);
-  const [hasScrolled, setHasScrolled] = useState(false); // ✅ 한 번만 실행되도록 제어
+  const [isInBottomSection, setIsInBottomSection] = useState(false);
+  const scrollTimeout = useRef(null);
 
-  // ✅ 페이지 로드 후 최상단 이동
+  // 페이지 로드 후 최상단 이동
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  // ✅ 페이드인 애니메이션 추가
+  // 페이드인 애니메이션 추가
   useLayoutEffect(() => {
     if (sectionRefs.current.length === 0) return;
 
@@ -46,101 +48,128 @@ const Main = () => {
             ease: 'power2.out',
             scrollTrigger: {
               trigger: section,
-              start: 'top 85%', // ✅ 페이드인 실행 위치
+              start: 'top 85%',
               toggleActions: 'play none none reverse',
             },
           }
         );
       });
-
-      ScrollTrigger.refresh(); // ✅ 강제 업데이트
     });
 
-    return () => ctx.revert(); // ✅ 컴포넌트 언마운트 시 클린업
+    return () => ctx.revert();
   }, []);
 
-  // ✅ 자동 스크롤 기능 (한 번 실행 후 비활성화)
+  // 자동 스크롤 이벤트 추가 (하단부 자유 스크롤 허용 + 위로 이동 감지 개선)
   useEffect(() => {
     const handleScroll = (event) => {
-      if (isScrolling || hasScrolled) {
-        event.preventDefault();
-        return;
+      if (isScrolling) return;
+
+      const bottomSection = sectionRefs.current[1];
+      if (!bottomSection) return;
+
+      const sectionTop = bottomSection.offsetTop;
+      const scrollPosition = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const sectionHeight = bottomSection.offsetHeight;
+
+      if (
+        scrollPosition >= sectionTop - 10 &&
+        scrollPosition < sectionTop + sectionHeight - windowHeight
+      ) {
+        setIsInBottomSection(true);
+      } else {
+        setIsInBottomSection(false);
       }
 
-      // ✅ 현재 보고 있는 화살표 찾기
-      let activeArrowIndex = arrowRefs.current.findLastIndex(
-        (arrow) =>
-          arrow && window.scrollY + window.innerHeight * 0.5 >= arrow.offsetTop
-      );
-
-      activeArrowIndex = Math.max(activeArrowIndex, 0);
-
-      if (activeArrowIndex === -1) {
-        console.warn(`❌ 현재 보이는 화살표를 찾을 수 없음`);
-        return;
+      if (scrollTimeout.current) {
+        clearTimeout(scrollTimeout.current);
       }
 
-      // ✅ 이동할 섹션 찾기
-      const targetSection = sectionRefs.current[activeArrowIndex];
-
-      if (!targetSection) {
-        console.warn(`❌ 이동할 섹션이 존재하지 않음`);
-        return;
-      }
-
-      console.log(
-        `➡️ 자동 스크롤 실행! 화살표 index: ${activeArrowIndex}, 이동할 섹션:`,
-        targetSection
-      );
-
-      setIsScrolling(true);
-      gsap.to(window, {
-        duration: 1.2,
-        delay: 0.5,
-        scrollTo: { y: targetSection.offsetTop - 100 },
-        ease: 'power2.inOut',
-        onComplete: () => {
-          setIsScrolling(false);
-          setHasScrolled(true); // ✅ 자동 스크롤 한 번 실행 후 비활성화
-        },
-      });
+      scrollTimeout.current = setTimeout(() => {
+        // 메인에서 아래로 스크롤하면 하단부 이동
+        if (!isInBottomSection && event.deltaY > 50) {
+          setIsScrolling(true);
+          gsap.to(window, {
+            duration: 1.2,
+            scrollTo: { y: sectionTop },
+            ease: 'power2.inOut',
+            onComplete: () => setIsScrolling(false),
+          });
+        }
+      }, 300); // ✅ 0.3초 대기 후 자동 스크롤 실행
     };
 
-    if (!hasScrolled) {
-      window.addEventListener('wheel', handleScroll, { passive: false });
-      window.addEventListener('touchmove', handleScroll, { passive: false });
-    }
+    window.addEventListener('wheel', handleScroll, { passive: false });
+    window.addEventListener('touchmove', handleScroll, { passive: false });
 
     return () => {
       window.removeEventListener('wheel', handleScroll);
       window.removeEventListener('touchmove', handleScroll);
+      if (scrollTimeout.current) {
+        clearTimeout(scrollTimeout.current);
+      }
     };
-  }, [isScrolling, hasScrolled]);
+  }, [isScrolling, isInBottomSection]);
+
+  // 위로 이동 감지 (스크롤 업 감지 정확하게 적용)
+  useEffect(() => {
+    const handleUpScroll = (event) => {
+      if (isScrolling || !isInBottomSection) return;
+
+      const scrollPosition = window.scrollY;
+      const sectionTop = sectionRefs.current[1]?.offsetTop || 0;
+
+      if (scrollPosition <= sectionTop + 50 && event.deltaY < -50) {
+        setIsScrolling(true);
+        gsap.to(window, {
+          duration: 1.2,
+          scrollTo: { y: 0 },
+          ease: 'power2.inOut',
+          onComplete: () => {
+            setIsScrolling(false);
+            setIsInBottomSection(false);
+          },
+        });
+      }
+    };
+
+    window.addEventListener('wheel', handleUpScroll, { passive: false });
+    return () => {
+      window.removeEventListener('wheel', handleUpScroll);
+    };
+  }, [isScrolling, isInBottomSection]);
 
   return (
     <>
       <Header />
-      <div className="main-carousel-wrapper">
+      <div
+        className="main-carousel-wrapper"
+        ref={(el) => (sectionRefs.current[0] = el)}
+      >
         <Container fluid>
-          <div className="main-carousel-wrapper">
-            <MainCarousel className="main-carousel" />
-          </div>
+          <MainCarousel className="main-carousel" />
         </Container>
       </div>
 
       <Container className="container-sm">
-        {/* ✅ 첫 번째 화살표 */}
         <div
           ref={(el) => (arrowRefs.current[0] = el)}
           className="arrow-container"
         >
           <ScrollDownArrow />
         </div>
+
         <div className="spacer"></div>
 
-        {/* ✅ 개별 섹션 */}
         <div
-          ref={(el) => (sectionRefs.current[0] = el)}
+          ref={(el) => (arrowRefs.current[1] = el)}
+          className="arrow-container"
+        >
+          <ScrollUpArrow />
+        </div>
+
+        <div
+          ref={(el) => (sectionRefs.current[1] = el)}
           className="section fade-in-section"
         >
           <Announcement />

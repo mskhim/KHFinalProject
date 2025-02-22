@@ -1,11 +1,11 @@
 package com.zeus.qna.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -17,10 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.zeus.common.config.JwtUtil;
 import com.zeus.event.domain.SortDTO;
 import com.zeus.qna.domain.Qna;
-import com.zeus.qna.domain.QnaDTO;
 import com.zeus.qna.service.QnaService;
 
-import jakarta.mail.Service;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -127,8 +125,9 @@ public class QnaController {
 		log.info(flag+"");
 		return ResponseEntity.ok(Map.of("authenticated", "true","flag",flag));
 	}
-	@PostMapping("/delete")
+	@DeleteMapping("/delete")
     public ResponseEntity<?> deleteQna(@RequestParam int no) {
+		log.info(no+"");
         try {
             qnaService.deletePostAndReplies(no);
             return ResponseEntity.ok(Map.of("success", true, "message", "게시글 및 답변 삭제 완료"));
