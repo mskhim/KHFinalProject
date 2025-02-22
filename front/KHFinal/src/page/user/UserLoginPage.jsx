@@ -1,6 +1,6 @@
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ApiLogin from './components/ApiLogin';
 import { checkAuthStatus, handleLogin } from './userApi.js'; // ✅ 로그인 상태 확인 API 호출
@@ -10,7 +10,8 @@ import './css/UserLoginPage.css';
 import UserFind from './UserFind';
 
 const UserLoginPage = () => {
-  const { getDarkMode, getDarkModeHover, darkMode, login } = useContext(Context);
+  const { getDarkMode, getDarkModeHover, darkMode, login } =
+    useContext(Context);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [id, setId] = useState(''); // 아이디 상태
@@ -45,61 +46,63 @@ const UserLoginPage = () => {
   }, [navigate]);
 
   // 모달 열기
-  const handleShow = (type) => {
+  const handleShow = useCallback((type) => {
     setModalContent(type);
     setShowFindModal(true);
-  };
+  }, []);
 
   // 모달 닫기
-  const handleClose = () => setShowFindModal(false);
+  const handleClose = useCallback(() => setShowFindModal(false), []);
 
-  const handleLoginSubmit = async (e) => {
-    e.preventDefault();
-  
-    // 로그인 처리
-    const response = await handleLogin(id, 'common',  password);
-    const flag = response.success;
-    if (flag) {
-      login(response.nickname, response.role); // ✅ 로그인 상태로 변경
-  
-      // '아이디 저장' 체크박스가 체크된 경우, 아이디를 localStorage에 저장
-      if (rememberMyId) {
-        localStorage.setItem('rememberMyId', 'true');
-        localStorage.setItem('savedId', id); // 아이디 저장
+  const handleLoginSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+
+      // 로그인 처리
+      const response = await handleLogin(id, 'common', password);
+      const flag = response.success;
+      if (flag) {
+        login(response.nickname, response.role); // ✅ 로그인 상태로 변경
+
+        // '아이디 저장' 체크박스가 체크된 경우, 아이디를 localStorage에 저장
+        if (rememberMyId) {
+          localStorage.setItem('rememberMyId', 'true');
+          localStorage.setItem('savedId', id); // 아이디 저장
+        } else {
+          localStorage.removeItem('rememberMyId'); // 체크 해제 시 localStorage에서 아이디 삭제
+          localStorage.removeItem('savedId'); // 저장된 아이디도 삭제
+        }
+
+        // 로그인 성공 후, 이전 페이지로 이동
+        if (response.role === 1) {
+          navigate('/manager/managerStats');
+          return;
+        }
+        if (response.role === 0) {
+          navigate('/admin/adminMain');
+          return;
+        }
+
+        const preLoginUrl = sessionStorage.getItem('preLoginUrl') || '/';
+        navigate(preLoginUrl);
+        sessionStorage.removeItem('preLoginUrl');
       } else {
-        localStorage.removeItem('rememberMyId'); // 체크 해제 시 localStorage에서 아이디 삭제
-        localStorage.removeItem('savedId'); // 저장된 아이디도 삭제
+        navigate('/userLoginPage'); // 로그인 실패 시, 로그인 페이지로 리다이렉트
       }
-  
-      // 로그인 성공 후, 이전 페이지로 이동
-      if (response.role === 1) {
-        navigate('/manager/managerStats');
-        return;
-      }
-      if (response.role === 0) {
-        navigate('/admin/adminMain');
-        return;
-      }
-  
-      const preLoginUrl = sessionStorage.getItem('preLoginUrl') || '/';
-      navigate(preLoginUrl);
-      sessionStorage.removeItem('preLoginUrl');
-    } else {
-      navigate('/userLoginPage'); // 로그인 실패 시, 로그인 페이지로 리다이렉트
-    }
-  };
-  
+    },
+    [id, password, rememberMyId, login, navigate]
+  );
 
   // 로그아웃 시, localStorage 상태 초기화
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     localStorage.removeItem('rememberMyId');
     localStorage.removeItem('savedId');
     setId('');
     setRememberMyId(false);
     navigate('/userLoginPage');
-  };
+  }, [navigate]);
 
-  const handleRememberMyIdChange = (e) => {
+  const handleRememberMyIdChange = useCallback((e) => {
     const isChecked = e.target.checked;
     setRememberMyId(isChecked);
 
@@ -109,7 +112,10 @@ const UserLoginPage = () => {
       localStorage.removeItem('savedId');
       setId(''); // 아이디 인풋 창 초기화
     }
-  };
+  }, []);
+
+  const header = useMemo(() => <Header />, []);
+  const footer = useMemo(() => <Footer />, []);
 
   if (isLoading) {
     return <div>로딩 중...</div>;
@@ -117,7 +123,7 @@ const UserLoginPage = () => {
 
   return (
     <>
-      <Header />
+      {header}
 
       {/* 로그인 폼 */}
       <div
@@ -236,7 +242,7 @@ const UserLoginPage = () => {
         </Modal.Body>
       </Modal>
 
-      <Footer />
+      {footer}
     </>
   );
 };

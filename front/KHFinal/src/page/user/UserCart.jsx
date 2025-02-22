@@ -1,6 +1,12 @@
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import React, { useState, useEffect, useContext } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useMemo,
+  useCallback,
+} from 'react';
 import { Context } from '../../Context';
 import { getCartData, deleteCartData } from './userApi';
 import './css/UserCart.css';
@@ -24,7 +30,7 @@ function UserCart() {
   const [isLoading, setIsLoading] = useState(true); // ✅ 로딩 상태 추가
 
   // 수량 변경 시 호출되는 함수
-  const handleQuantityChange = (id, change) => {
+  const handleQuantityChange = useCallback((id, change) => {
     setCartItems((prevCartItems) => {
       // 장바구니 아이템 중에서 해당 id를 가진 아이템의 수량을 변경
       const updatedCart = prevCartItems.map((item) =>
@@ -43,74 +49,80 @@ function UserCart() {
           : selected
       )
     );
-  };
+  }, []);
 
-  const handleRemoveItem = async (id) => {
-    // 삭제 확인을 위한 alert
-    const confirmDelete = window.confirm('해당 항목을 삭제하시겠습니까?');
+  const handleRemoveItem = useCallback(
+    async (id) => {
+      // 삭제 확인을 위한 alert
+      const confirmDelete = window.confirm('해당 항목을 삭제하시겠습니까?');
 
-    if (confirmDelete) {
-      // 서버에서 해당 아이템을 삭제하는 API 호출
-      const result = await deleteCartData({ no: id }); // Cart 객체를 전달
+      if (confirmDelete) {
+        // 서버에서 해당 아이템을 삭제하는 API 호출
+        const result = await deleteCartData({ no: id }); // Cart 객체를 전달
 
-      if (result.authenticated) {
-        // 성공적으로 삭제되면 UI에서 해당 아이템을 제거
-        const updatedCart = cartItems.filter((item) => item.no !== id);
-        setCartItems(updatedCart);
+        if (result.authenticated) {
+          // 성공적으로 삭제되면 UI에서 해당 아이템을 제거
+          const updatedCart = cartItems.filter((item) => item.no !== id);
+          setCartItems(updatedCart);
 
-        // 삭제된 아이템을 선택된 아이템 목록에서 제거
-        setSelectedItems((prevSelectedItems) => {
-          const updatedSelectedItems = prevSelectedItems.filter(
-            (itemId) => itemId !== id
-          );
-          // 삭제 후, 선택된 항목들의 총 금액을 다시 계산
-          calculateTotalAmount(updatedSelectedItems); // 삭제된 항목을 제외하고 계산
-          return updatedSelectedItems; // 상태 업데이트 후 리턴
-        });
+          // 삭제된 아이템을 선택된 아이템 목록에서 제거
+          setSelectedItems((prevSelectedItems) => {
+            const updatedSelectedItems = prevSelectedItems.filter(
+              (itemId) => itemId !== id
+            );
+            // 삭제 후, 선택된 항목들의 총 금액을 다시 계산
+            calculateTotalAmount(updatedSelectedItems); // 삭제된 항목을 제외하고 계산
+            return updatedSelectedItems; // 상태 업데이트 후 리턴
+          });
 
-        alert('삭제가 완료되었습니다.'); // 성공 메시지
-      } else {
-        alert(result.message || '아이템 삭제 실패'); // 실패 메시지
+          alert('삭제가 완료되었습니다.'); // 성공 메시지
+        } else {
+          alert(result.message || '아이템 삭제 실패'); // 실패 메시지
+        }
       }
-    }
-    // else {
-    //   // 사용자가 삭제를 취소한 경우
-    //   alert("삭제가 취소되었습니다.");
-    // }
-  };
+      // else {
+      //   // 사용자가 삭제를 취소한 경우
+      //   alert("삭제가 취소되었습니다.");
+      // }
+    },
+    [cartItems]
+  );
 
-  const handleCheckout = () => {
+  const handleCheckout = useCallback(() => {
     if (!selectedItems || selectedItems.length === 0) {
       alert('❌ 결제할 상품을 선택하세요!');
       return; // ✅ 선택된 아이템이 없으면 실행 중단
     }
 
     navigate('/user/payment', { state: { selectedItems, totalAmount } }); // ✅ 선택된 아이템이 있으면 페이지 이동
-  };
+  }, [selectedItems, totalAmount, navigate]);
 
   // 개별 아이템을 선택하거나 선택 해제하는 함수
-  const handleSelectItem = (item) => {
-    setSelectedItems((prev) => {
-      const exists = prev.some((selected) => selected.id === item.no);
+  const handleSelectItem = useCallback(
+    (item) => {
+      setSelectedItems((prev) => {
+        const exists = prev.some((selected) => selected.id === item.no);
 
-      // 이미 선택된 경우 → 제거, 선택되지 않은 경우 → 추가
-      return exists
-        ? prev.filter((selected) => selected.id !== item.no)
-        : [
-            ...prev,
-            {
-              id: item.no,
-              name: item.name,
-              price: item.price,
-              qt: item.qt,
-              eventNo: item.eventNo,
-            },
-          ];
-    });
-  };
+        // 이미 선택된 경우 → 제거, 선택되지 않은 경우 → 추가
+        return exists
+          ? prev.filter((selected) => selected.id !== item.no)
+          : [
+              ...prev,
+              {
+                id: item.no,
+                name: item.name,
+                price: item.price,
+                qt: item.qt,
+                eventNo: item.eventNo,
+              },
+            ];
+      });
+    },
+    [selectedItems]
+  );
 
   // 모든 아이템을 선택하거나 선택 해제하는 함수
-  const handleSelectAll = () => {
+  const handleSelectAll = useCallback(() => {
     const newSelected =
       selectedItems.length === cartItems.length
         ? [] // 이미 다 선택되어 있으면 전체 해제
@@ -123,16 +135,16 @@ function UserCart() {
           }));
 
     setSelectedItems(newSelected);
-  };
+  }, [cartItems, selectedItems]);
 
   // 선택된 항목들의 총 결제 금액을 계산하는 함수
-  const calculateTotalAmount = () => {
+  const calculateTotalAmount = useCallback(() => {
     const total = selectedItems.reduce(
       (sum, item) => sum + item.price * item.qt,
       0
     );
     setTotalAmount(total);
-  };
+  }, [selectedItems]);
 
   // selectedItems가 변경될 때마다 총 결제 금액을 자동으로 계산
   useEffect(() => {
@@ -157,14 +169,19 @@ function UserCart() {
   }, [selectedItems]);
 
   // item.name 클릭 시 호출되는 함수
-  const handleItemClick = (eventNo) => {
-    navigate(`/eventRead/${eventNo}`); // eventRead 페이지로 이동
-  };
+  const handleItemClick = useCallback(
+    (eventNo) => {
+      navigate(`/eventRead/${eventNo}`); // eventRead 페이지로 이동
+    },
+    [navigate]
+  );
+
+  const header = useMemo(() => <Header />, []);
+  const footer = useMemo(() => <Footer />, []);
 
   return (
     <>
-      {/* Header 컴포넌트 */}
-      <Header />
+      {header}
       <div className={`Cart-container ${getDarkMode()}`}>
         <header className={`Cart-header ${getDarkMode()}`}>
           <h1>장바구니</h1>
@@ -227,7 +244,9 @@ function UserCart() {
                                 {item.name}
                               </span>
                             </h3>
-                            <p className={`Cart-festival-date ${getDarkMode()}`}>
+                            <p
+                              className={`Cart-festival-date ${getDarkMode()}`}
+                            >
                               축제 일시 : {item.startDate} ~ {item.endDate}
                             </p>
                             <p
@@ -252,7 +271,9 @@ function UserCart() {
                           >
                             -
                           </button>
-                          <span className="Cart-quantity-display">{item.qt}</span>
+                          <span className="Cart-quantity-display">
+                            {item.qt}
+                          </span>
                           <button
                             className={`Cart-quantity-btn ${getDarkModeHover()}`}
                             onClick={() => handleQuantityChange(item.no, 1)} // 수량 +1
@@ -305,8 +326,7 @@ function UserCart() {
           </div>
         </div>
       </div>
-      {/* Footer 컴포넌트 */}
-      <Footer />
+      {footer}
     </>
   );
 }

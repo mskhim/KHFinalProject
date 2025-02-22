@@ -1,12 +1,16 @@
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+import { useMemo } from 'react';
 
 const UserReservedList = () => {
+  const header = useMemo(() => <Header />, []);
+  const footer = useMemo(() => <Footer />, []);
+
   return (
     <>
-      <Header />
+      {header}
       <h1>UserReservedList</h1>
-      <Footer />
+      {footer}
     </>
   );
 };

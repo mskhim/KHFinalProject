@@ -1,6 +1,6 @@
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { handleRegister, checkNickName, checkEmail } from './userApi';
 import { Button, Container, FormText } from 'react-bootstrap';
@@ -47,59 +47,63 @@ const UserInsert = () => {
   }, [navigate]);
 
   // 제출 핸들러
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    // 만 14세 미만일 경우 가입 불가 처리
-    const currentDate = new Date();
-    const birthDate = new Date(formData.birth);
-    const age = currentDate.getFullYear() - birthDate.getFullYear();
-    const month = currentDate.getMonth() - birthDate.getMonth();
-    const day = currentDate.getDate() - birthDate.getDate();
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
 
-    if (age < 14 || (age === 14 && (month < 0 || (month === 0 && day < 0)))) {
-      setBirthError('만 14세 이상의 회원만 가입 가능합니다. \n생년월일을 다시 입력해주세요.');
-      return;
-    } else {
-      setBirthError(''); // 나이가 14세 이상일 경우 오류 메시지 초기화
-    }
-    
-    
-    if (nicknameCheck === false || emailCheck === false) {
-      alert('중복 확인이 필요합니다.');
-      return;
-    }
+      // 만 14세 미만일 경우 가입 불가 처리
+      const currentDate = new Date();
+      const birthDate = new Date(formData.birth);
+      const age = currentDate.getFullYear() - birthDate.getFullYear();
+      const month = currentDate.getMonth() - birthDate.getMonth();
+      const day = currentDate.getDate() - birthDate.getDate();
 
-    // 휴대폰 번호 유효성 검사
-    if (!/^\d{3}-\d{4}-\d{4}$/.test(formData.phone)) {
-      setPhoneError('휴대폰 번호를 다시 입력해주세요. \nex) 010-XXXX-XXXX');
-      return;
-    } else {
-      setPhoneError('');
-    }
+      if (age < 14 || (age === 14 && (month < 0 || (month === 0 && day < 0)))) {
+        setBirthError(
+          '만 14세 이상의 회원만 가입 가능합니다. \n생년월일을 다시 입력해주세요.'
+        );
+        return;
+      } else {
+        setBirthError(''); // 나이가 14세 이상일 경우 오류 메시지 초기화
+      }
 
-    try {
-      await handleRegister(formData); // ✅ 회원가입 API 호출
-      const preLoginUrl = sessionStorage.getItem('preLoginUrl') || '/';
-      navigate(preLoginUrl);
-      sessionStorage.removeItem('preLoginUrl');
-    } catch (error) {
-      console.error('회원가입 실패:', error);
-      alert('회원가입 중 오류가 발생했습니다.');
-    }
-  };
+      if (nicknameCheck === false || emailCheck === false) {
+        alert('중복 확인이 필요합니다.');
+        return;
+      }
+
+      // 휴대폰 번호 유효성 검사
+      if (!/^\d{3}-\d{4}-\d{4}$/.test(formData.phone)) {
+        setPhoneError('휴대폰 번호를 다시 입력해주세요. \nex) 010-XXXX-XXXX');
+        return;
+      } else {
+        setPhoneError('');
+      }
+
+      try {
+        await handleRegister(formData); // ✅ 회원가입 API 호출
+        const preLoginUrl = sessionStorage.getItem('preLoginUrl') || '/';
+        navigate(preLoginUrl);
+        sessionStorage.removeItem('preLoginUrl');
+      } catch (error) {
+        console.error('회원가입 실패:', error);
+        alert('회원가입 중 오류가 발생했습니다.');
+      }
+    },
+    [formData, nicknameCheck, emailCheck, birthError, phoneError, navigate]
+  );
 
   // 입력값 변경 핸들러
-  const handleChange = (e) => {
+  const handleChange = useCallback((e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
     });
-  };
+  }, []);
 
   // 닉네임 중복 확인 핸들러
-  const handleNicknameCheck = async () => {
+  const handleNicknameCheck = useCallback(async () => {
     const nickname = formData.nickname.trim();
     if (nickname === '') {
       alert('닉네임을 입력해주세요.');
@@ -117,10 +121,10 @@ const UserInsert = () => {
       alert('사용 가능한 닉네임입니다.');
       setNicknameCheck(true); // ✅ 중복 확인 성공 시 제출 가능 상태로 변경
     }
-  };
+  }, [formData.nickname]);
 
   // 이메일 중복 확인 핸들러
-  const handleEmailCheck = async () => {
+  const handleEmailCheck = useCallback(async () => {
     const email = formData.email.trim();
     if (email === '') {
       alert('이메일을 입력해주세요.');
@@ -139,8 +143,8 @@ const UserInsert = () => {
       setEmailCheck(true); // ✅ 중복 확인 성공 시 제출 가능 상태로 변경
       alert('사용 가능한 이메일입니다.');
     }
-  };
-  
+  }, [formData.email]);
+
   useEffect(() => {
     setNicknameCheck(false);
   }, [formData.nickname]);
@@ -279,7 +283,9 @@ const UserInsert = () => {
                     required
                   />
                   {/* 전화번호 형식 오류 메시지 */}
-                  {phoneError && <FormText className="text-danger">{phoneError}</FormText>}
+                  {phoneError && (
+                    <FormText className="text-danger">{phoneError}</FormText>
+                  )}
                 </div>
 
                 {/* 성별 입력 필드 */}
@@ -310,7 +316,9 @@ const UserInsert = () => {
                     required
                   />
                   {/* 생년월일 오류 메시지 */}
-                  {birthError && <FormText className="text-danger">{birthError}</FormText>}
+                  {birthError && (
+                    <FormText className="text-danger">{birthError}</FormText>
+                  )}
                 </div>
 
                 {/* 지역 코드 입력 필드 */}

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { checkEmail, checkId, checkNickName, handleRegister } from './userApi';
 import { Button, Container, Form } from 'react-bootstrap';
@@ -36,7 +36,7 @@ const UserInsert = () => {
   const [birthError, setBirthError] = useState(''); // 생년월일 오류 메시지 상태 추가
 
   // 닉네임 중복 확인 핸들러
-  const handleNicknameCheck = async () => {
+  const handleNicknameCheck = useCallback(async () => {
     const nickname = formData.nickname.trim();
     if (nickname === '') {
       alert('닉네임을 입력해주세요.');
@@ -54,10 +54,10 @@ const UserInsert = () => {
       alert('사용 가능한 닉네임입니다.');
       setNicknameCheck(true); // ✅ 중복 확인 성공 시 제출 가능 상태로 변경
     }
-  };
+  }, [formData.nickname]);
 
   // 아이디 중복 확인 핸들러
-  const handleIdCheck = async () => {
+  const handleIdCheck = useCallback(async () => {
     const id = formData.id.trim();
     if (id === '') {
       alert('아이디를 입력해주세요.');
@@ -75,10 +75,10 @@ const UserInsert = () => {
       alert('사용 가능한 아이디입니다.');
       setIdCheck(true); // ✅ 중복 확인 성공 시 제출 가능 상태로 변경
     }
-  };
+  }, [formData.id]);
 
   // 이메일 중복 확인 핸들러
-  const handleEmailCheck = async () => {
+  const handleEmailCheck = useCallback(async () => {
     const email = formData.email.trim();
     if (email === '') {
       alert('이메일을 입력해주세요.');
@@ -97,35 +97,38 @@ const UserInsert = () => {
       setEmailCheck(true); // ✅ 중복 확인 성공 시 제출 가능 상태로 변경
       alert('사용 가능한 이메일입니다.');
     }
-  };
+  }, [formData.email]);
 
   // 비밀번호 변경 시 일치 여부 확인
-  const handlePasswordChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-    // 비밀번호 길이 검사 (8자리 이상)
-    if (name === 'pwd' && value.length < 8) {
-      setPasswordLengthError('비밀번호는 8자리 이상이어야 합니다.');
-      setPwdCheck(false);
-      return; // 추가 검사를 막기 위해 return
-    } else {
-      setPasswordLengthError('');
-    }
-    if (name === 'confirmPwd') {
-      if (value !== formData.pwd) {
-        setPasswordError('비밀번호가 일치하지 않습니다.');
-        setPasswordSuccess('');
+  const handlePasswordChange = useCallback(
+    (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+      // 비밀번호 길이 검사 (8자리 이상)
+      if (name === 'pwd' && value.length < 8) {
+        setPasswordLengthError('비밀번호는 8자리 이상이어야 합니다.');
         setPwdCheck(false);
+        return; // 추가 검사를 막기 위해 return
       } else {
-        setPasswordError('');
-        setPasswordSuccess('비밀번호가 일치합니다.');
-        setPwdCheck(true);
+        setPasswordLengthError('');
       }
-    }
-  };
+      if (name === 'confirmPwd') {
+        if (value !== formData.pwd) {
+          setPasswordError('비밀번호가 일치하지 않습니다.');
+          setPasswordSuccess('');
+          setPwdCheck(false);
+        } else {
+          setPasswordError('');
+          setPasswordSuccess('비밀번호가 일치합니다.');
+          setPwdCheck(true);
+        }
+      }
+    },
+    [formData.pwd]
+  );
 
   // 생년월일 체크 및 만 14세 미만 확인
-  const handleBirthChange = (e) => {
+  const handleBirthChange = useCallback((e) => {
     const { value } = e.target;
     setFormData({ ...formData, birth: value });
 
@@ -137,44 +140,62 @@ const UserInsert = () => {
     const day = today.getDate() - birthDate.getDate();
 
     if (age < 14 || (age === 14 && (month < 0 || (month === 0 && day < 0)))) {
-      setBirthError('만 14세 이상의 회원만 가입 가능합니다. \n생년월일을 다시 입력해주세요.');
+      setBirthError(
+        '만 14세 이상의 회원만 가입 가능합니다. \n생년월일을 다시 입력해주세요.'
+      );
     } else {
       setBirthError('');
     }
-  };
+  }, []);
 
   // 제출 핸들러
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (idCheck === false || nicknameCheck === false || emailCheck === false) {
-      alert('중복 확인이 필요합니다.');
-      return;
-    }
-    if (pwdCheck === false) {
-      alert('비밀번호가 일치하지 않습니다.');
-      return;
-    }
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+      if (
+        idCheck === false ||
+        nicknameCheck === false ||
+        emailCheck === false
+      ) {
+        alert('중복 확인이 필요합니다.');
+        return;
+      }
+      if (pwdCheck === false) {
+        alert('비밀번호가 일치하지 않습니다.');
+        return;
+      }
 
-    if (birthError) {
-      alert(birthError); // 만약 만 14세 미만이면 에러 메세지 출력
-      return;
-    }
+      if (birthError) {
+        alert(birthError); // 만약 만 14세 미만이면 에러 메세지 출력
+        return;
+      }
 
-    try {
-      await handleRegister(formData); // ✅ 회원가입 API 호출
-      const preLoginUrl = sessionStorage.getItem('preLoginUrl') || '/';
-      navigate(preLoginUrl);
-      sessionStorage.removeItem('preLoginUrl');
-    } catch (error) {
-      console.error('회원가입 실패:', error);
-      alert('회원가입 중 오류가 발생했습니다.');
-    }
-  };
+      try {
+        await handleRegister(formData); // ✅ 회원가입 API 호출
+        const preLoginUrl = sessionStorage.getItem('preLoginUrl') || '/';
+        navigate(preLoginUrl);
+        sessionStorage.removeItem('preLoginUrl');
+      } catch (error) {
+        console.error('회원가입 실패:', error);
+        alert('회원가입 중 오류가 발생했습니다.');
+      }
+    },
+    [
+      formData,
+      idCheck,
+      nicknameCheck,
+      emailCheck,
+      pwdCheck,
+      birthError,
+      navigate,
+    ]
+  );
 
-  const handleChange = (e) => {
+  const handleChange = useCallback((e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-  };
+  }, []);
+
   useEffect(() => {
     setIdCheck(false);
   }, [formData.id]);
@@ -185,9 +206,12 @@ const UserInsert = () => {
     setEmailCheck(false);
   }, [formData.email]);
 
+  const header = useMemo(() => <Header />, []);
+  const footer = useMemo(() => <Footer />, []);
+
   return (
     <>
-      <Header />
+      {header}
       <div className={`UserInsert-container`}>
         <header className="UserInsert-header">
           <h1>회원가입</h1>
@@ -238,7 +262,6 @@ const UserInsert = () => {
                       확인완료
                     </Button>
                   )}
-                
                 </div>
                 {/* 비밀번호 입력 필드 (선택 사항) */}
                 <div className="UserInsert-input-group">
@@ -272,18 +295,18 @@ const UserInsert = () => {
                     required
                   />
                   {/* 비밀번호 일치 시 초록색 메시지 출력 */}
-                    {/* 비밀번호 확인 오류 메시지 */}
-                    {passwordError && (
-                      <Form.Text className="text-danger">
-                        {passwordError} {/* 빨간색 텍스트 */}
-                      </Form.Text>
-                    )}
-                    {/* 비밀번호 확인 성공 메시지 */}
-                    {passwordSuccess && (
-                      <Form.Text className="text-success">
-                        {passwordSuccess} {/* 초록색 텍스트 */}
-                      </Form.Text>
-                    )}
+                  {/* 비밀번호 확인 오류 메시지 */}
+                  {passwordError && (
+                    <Form.Text className="text-danger">
+                      {passwordError} {/* 빨간색 텍스트 */}
+                    </Form.Text>
+                  )}
+                  {/* 비밀번호 확인 성공 메시지 */}
+                  {passwordSuccess && (
+                    <Form.Text className="text-success">
+                      {passwordSuccess} {/* 초록색 텍스트 */}
+                    </Form.Text>
+                  )}
                 </div>
                 {/* 이름 입력 필드 */}
                 <div className="UserInsert-input-group">
@@ -420,8 +443,8 @@ const UserInsert = () => {
                     className="UserInsert-input-field"
                     required
                   />
-                   {/* 만약 만 14세 미만이면 에러 메시지 출력 */}
-                   {birthError && (
+                  {/* 만약 만 14세 미만이면 에러 메시지 출력 */}
+                  {birthError && (
                     <Form.Text className="text-danger">
                       {birthError} {/* 빨간색 텍스트 */}
                     </Form.Text>
@@ -464,7 +487,7 @@ const UserInsert = () => {
           </div>
         </form>
       </div>
-      <Footer />
+      {footer}
     </>
   );
 };

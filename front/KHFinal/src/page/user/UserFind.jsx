@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useCallback } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { Context } from '../../Context';
 import { ButtonDarkMode } from '../../components/ui';
@@ -26,16 +26,16 @@ const UserFind = ({ type }) => {
   const [message, setMessage] = useState('');
 
   // 아이디 찾기 (목업)
-  const handleFindId = async () => {
+  const handleFindId = useCallback(async () => {
     const data = await getCommonUserIdByEmail(email);
     if (data !== null) {
       await sendIdByEmail(email, data.id);
       alert('📨 이메일로 아이디를 발송했습니다.');
     }
-  };
+  }, [email]);
 
   // 임시 비밀번호 발급
-  const handleFindPassword = async () => {
+  const handleFindPassword = useCallback(async () => {
     const data = await getCommonUserPwdByEmail(email, userId);
     if (data !== null) {
       const randomPwd = generateRandomPassword();
@@ -43,7 +43,7 @@ const UserFind = ({ type }) => {
         (await sendPwdByEmail(email, randomPwd));
       alert('📨 이메일로 임시 비밀번호를 발송했습니다.');
     }
-  };
+  }, [email, userId]);
 
   return (
     <div className={`p-3`}>

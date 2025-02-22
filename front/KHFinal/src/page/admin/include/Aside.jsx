@@ -1,8 +1,8 @@
-import React from "react";
-import "./css/Aside.css";
-import { NavLink } from "react-router";
-import { Navbar, Nav } from "react-bootstrap";
-import ViVaFesta from "../../../assets/vivafesta.png";
+import React from 'react';
+import './css/Aside.css';
+import { NavLink } from 'react-router';
+import { Navbar, Nav } from 'react-bootstrap';
+import ViVaFesta from '../../../assets/VIVAFESTAB.png';
 
 const Aside = () => {
   return (
