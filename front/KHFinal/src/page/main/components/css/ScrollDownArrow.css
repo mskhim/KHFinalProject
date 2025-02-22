@@ -1,15 +1,14 @@
 .scroll-down-arrow {
   text-align: center;
-  margin: 60px 0;
   position: relative;
   height: 70px;
   opacity: 1;
 }
 
 .arrow {
-  font-size: 4rem;
+  font-size: 3rem;
   left: 50%;
-  transform: translateX(-50%);
+  transform: scaleX(1.5); /* 가로 방향으로 늘리기 */
 }
 
 .arrow:nth-child(1) {

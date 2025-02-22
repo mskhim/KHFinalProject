@@ -1,6 +1,5 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import CommonLayout from '../page/layout/CommonLayout';
-import Main from '../page/main/Main'; // ✅ 레이지 로딩 제거 (일반 import)
 import { lazy, useEffect, useContext, Suspense } from 'react';
 import ErrorBoundary from '../components/ErrorBoundary';
 import { Context } from '../Context';
@@ -26,6 +25,7 @@ const UserInsertCommon = lazy(() => import('../page/user/UserInsertCommon'));
 const UserFind = lazy(() => import('../page/user/UserFind'));
 const Unauthorized = lazy(() => import('../components/Unauthorized'));
 const NotFound = lazy(() => import('../page/common/NotFound'));
+const Main = lazy(() => import('../page/main/Main'));
 
 const RouterComponentCommon = () => {
   const { login, isAuthenticated } = useContext(Context);
@@ -64,8 +64,14 @@ const RouterComponentCommon = () => {
     <ErrorBoundary>
       <Routes>
         <Route path="/" element={<CommonLayout />}>
-          {/* ✅ 메인 페이지 (레이지 로딩 제거) */}
-          <Route index element={<Main />} />
+          <Route
+            index
+            element={
+              <Suspense fallback={<Loading />}>
+                <Main />
+              </Suspense>
+            }
+          />
 
           {/* ✅ 레이지 로딩이 적용된 페이지들 */}
           <Route

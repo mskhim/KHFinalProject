@@ -25,11 +25,6 @@
     opacity: 0;
   }
 }
-.section {
-  opacity: 1 !important;
-  transform: none !important;
-  transition: none !important;
-}
 
 .arrow-container {
   position: relative;
@@ -48,6 +43,7 @@
   min-height: 600px;
   opacity: 1;
   transition: opacity 0.3s ease-in-out;
+  min-height: 600px;
 }
 
 /* ✅ 화살표 위치 조정 */
@@ -56,4 +52,13 @@
   justify-content: center;
   align-items: center;
   position: relative;
+}
+
+.main-carousel-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.container-sm {
+  min-width: 600px;
 }

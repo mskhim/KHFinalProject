@@ -36,7 +36,11 @@ export default function EndFestival() {
         className="carousel-image EndFestival-image"
       />
       <br />
-      <h5>{event.name}</h5>
+      <h5>
+        {event.name.length > 20
+          ? `${event.name.substring(0, 18)}...`
+          : event.name}
+      </h5>
     </div>
   ));
 

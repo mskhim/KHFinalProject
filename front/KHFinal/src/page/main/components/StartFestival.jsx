@@ -36,7 +36,11 @@ function StartFestival() {
         className="carousel-image StartFestival-image"
       />
       <br />
-      <h5>{event.name}</h5>
+      <h5>
+        {event.name.length > 20
+          ? `${event.name.substring(0, 20)}...`
+          : event.name}
+      </h5>
     </div>
   ));
 

@@ -23,6 +23,12 @@ export default function Top4() {
     navigate(`/eventRead/${no}`);
   };
 
+  const truncateText = (text, maxLength) => {
+    return text.length > maxLength
+      ? text.substring(0, maxLength) + '...'
+      : text;
+  };
+
   return (
     <>
       <div className="Top4-head">
@@ -54,11 +60,17 @@ export default function Top4() {
                 />
                 <Card.ImgOverlay>
                   <div className="Top4-card-overlay">
-                    <Card.Title className="Top4-card-name">
-                      {top4Events[0].name}
+                    <Card.Title
+                      className="Top4-card-name"
+                      style={{ fontSize: '1.5rem' }}
+                    >
+                      {truncateText(top4Events[0].name, 18)}
                     </Card.Title>
-                    <h3 className="Top4-card-address">
-                      {top4Events[0].address}
+                    <h3
+                      className="Top4-card-address"
+                      style={{ fontSize: '1rem' }}
+                    >
+                      {top4Events[0].address || '주소 정보 없음'}
                     </h3>
                   </div>
                 </Card.ImgOverlay>
@@ -91,11 +103,17 @@ export default function Top4() {
                   />
                   <Card.ImgOverlay>
                     <div className="Top4-card-overlay">
-                      <Card.Title className="Top4-card-name">
-                        {top4Events[1].name}
+                      <Card.Title
+                        className="Top4-card-name"
+                        style={{ fontSize: '1.25rem' }}
+                      >
+                        {truncateText(top4Events[1].name, 18)}
                       </Card.Title>
-                      <h4 className="Top4-card-address">
-                        {top4Events[1].address}
+                      <h4
+                        className="Top4-card-address"
+                        style={{ fontSize: '0.875rem' }}
+                      >
+                        {top4Events[1].address || '주소 정보 없음'}
                       </h4>
                     </div>
                   </Card.ImgOverlay>
@@ -127,11 +145,17 @@ export default function Top4() {
                     />
                     <Card.ImgOverlay>
                       <div className="Top4-card-overlay">
-                        <Card.Title className="Top4-card-name">
-                          {top4Events[2].name}
+                        <Card.Title
+                          className="Top4-card-name"
+                          style={{ fontSize: '1.25rem' }}
+                        >
+                          {truncateText(top4Events[2].name, 18)}
                         </Card.Title>
-                        <h4 className="Top4-card-address">
-                          {top4Events[2].address}
+                        <h4
+                          className="Top4-card-address"
+                          style={{ fontSize: '0.875rem' }}
+                        >
+                          {top4Events[2].address || '주소 정보 없음'}
                         </h4>
                       </div>
                     </Card.ImgOverlay>
@@ -162,11 +186,17 @@ export default function Top4() {
                     />
                     <Card.ImgOverlay>
                       <div className="Top4-card-overlay">
-                        <Card.Title className="Top4-card-name">
-                          {top4Events[3].name}
+                        <Card.Title
+                          className="Top4-card-name"
+                          style={{ fontSize: '1.25rem' }}
+                        >
+                          {truncateText(top4Events[3].name, 18)}
                         </Card.Title>
-                        <h4 className="Top4-card-address">
-                          {top4Events[3].address}
+                        <h4
+                          className="Top4-card-address"
+                          style={{ fontSize: '0.875rem' }}
+                        >
+                          {top4Events[3].address || '주소 정보 없음'}
                         </h4>
                       </div>
                     </Card.ImgOverlay>

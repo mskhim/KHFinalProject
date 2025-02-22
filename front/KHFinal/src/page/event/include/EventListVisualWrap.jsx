@@ -15,7 +15,7 @@ const EventListVisualWrap = ({ eventList }) => {
     const formattedImages = eventList.slice(0, 3).map((event) => ({
       src: event?.thumbUrl || '',
       text: event?.name || 'No Name',
-      address: formatAddress(event?.address) || 'No Address',
+      address: formatAddress(event?.address) || '지역 정보 없음',
       date: event.startDate + ' ~ ' + event.endDate || 'No Date',
       no: event?.no || null,
     }));
@@ -59,7 +59,7 @@ const EventListVisualWrap = ({ eventList }) => {
             <div className="EventListVisualWrap-text-container">
               <div className="EventListVisualWrap-text">
                 <h3>{item.text}</h3>
-                <p>{item.address}</p>
+                <p>{item.address || '-'}</p>
                 <p className="EventListVisualWrap-date">{item.date}</p>
               </div>
             </div>
