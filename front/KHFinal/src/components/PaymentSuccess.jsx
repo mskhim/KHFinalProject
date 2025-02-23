@@ -28,8 +28,6 @@ const PaymentSuccess = () => {
           alert('인증이 필요합니다.');
           navigate('/login');
         } else if (result.message === '결제 성공 및 예약 확정 완료') {
-          alert('결제가 완료되었습니다!');
-
           // ✅ URL에서 쿼리 파라미터 제거 (뒤로가기 시 결제 재요청 방지)
           window.history.replaceState(null, '', '/user/orderHistory');
 
