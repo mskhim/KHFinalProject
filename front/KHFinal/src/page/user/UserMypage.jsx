@@ -234,6 +234,7 @@ function UserMypage() {
           setUserInfo({}); // 회원 정보 삭제
           closeDeleteModal();
           logout();
+          navigate('/'); // ✅ 탈퇴 후 메인 페이지로 이동
         } else {
           alert('회원 탈퇴에 실패했습니다. 다시 시도해주세요.');
         }
