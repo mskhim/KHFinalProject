@@ -24,12 +24,13 @@ function UserMypage() {
   const [selectedSection, setSelectedSection] = useState('info-view');
   const [isEditable, setIsEditable] = useState(false); // Edit Mode
   const [userInfo, setUserInfo] = useState({}); // 사용자 정보.
-  const [nicknameCheck, setNicknameCheck] = useState(false); // 닉네임 중복 확인 상태
+  const [nicknameCheck, setNicknameCheck] = useState(true); // 닉네임 중복 확인 상태
   const [formData, setFormData] = useState(userInfo); // 수정을 위한 form data.
   const [showDeleteModal, setShowDeleteModal] = useState(false); // 회원 탈퇴 확인 모달
   const [deleteEmail, setDeleteEmail] = useState(''); // 탈퇴 시 이메일 상태
   const [emailError, setEmailError] = useState(''); // 이메일 오류 상태
   const [isLoading, setIsLoading] = useState(true); // Loading state
+  const [constNickname, setConstNickname] = useState(''); // 닉네임 중복 확인 상태
   const navigate = useNavigate(); // useNavigate 훅 추가
 
   /**userApi.js의 getUserData()함수를 호출하여
@@ -38,8 +39,9 @@ function UserMypage() {
     const setData = async () => {
       const data = await getUserData();
       setUserInfo(data);
-      setFormData(data);
+      setFormData({ ...data, pwd: '' }); // 비밀번호 초기화
       setIsLoading(false); // 데이터 로딩 후 로딩 상태를 변경.
+      setConstNickname(data.nickname); // 닉네임 중복 확인 상태
       console.log(data);
     };
     setData();
@@ -49,7 +51,7 @@ function UserMypage() {
   const idInputRef = useRef(null);
 
   // 닉네임 중복 확인 핸들러
-  const handleNicknameCheck = useCallback(async () => {
+  const handleNicknameCheck = async () => {
     const nickname = formData.nickname.trim();
     if (nickname === '') {
       alert('닉네임을 입력해주세요.');
@@ -59,6 +61,11 @@ function UserMypage() {
       alert('닉네임은 최소 3글자 이상이어야 합니다.');
       return;
     }
+    if (nickname === constNickname) {
+      alert('기존 닉네임과 동일합니다.');
+      setNicknameCheck(true); // ✅ 중복 확인 성공 시 제출 가능 상태로 변경
+      return;
+    }
     const flag = await checkNickName(nickname); // ✅ 닉네임 중복 확인 API 호출
     if (!flag) {
       setNicknameCheck(false); // ✅ 중복 확인 실패 시 제출 불가능 상태로 변경
@@ -66,6 +73,13 @@ function UserMypage() {
     } else {
       alert('사용 가능한 닉네임입니다.');
       setNicknameCheck(true); // ✅ 중복 확인 성공 시 제출 가능 상태로 변경
+    }
+  };
+  useEffect(() => {
+    if (formData.nickname !== constNickname) {
+      setNicknameCheck(false); // ✅ 닉네임이 변경될 때마다 중복 확인 상태 초기화
+    } else {
+      setNicknameCheck(true); // ✅ 닉네임이 변경되지 않았을 때 중복 확인 성공 상태로 변경
     }
   }, [formData.nickname]);
 

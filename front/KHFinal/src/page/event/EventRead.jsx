@@ -30,6 +30,7 @@ const EventRead = () => {
   const { getDarkMode, getDarkModeHover } = useContext(Context); // 다크모드 적용
   const [mainImage, setMainImage] = useState(''); // ✅ 현재 메인 이미지 상태
   const [subImages, setSubImages] = useState([]); // ✅ 서브 이미지 상태
+  const [mainImageHeight, setMainImageHeight] = useState(0); // Add state for main image height
   const [isLoading, setIsLoading] = useState(true); // Add loading state
   useEffect(() => {
     const eventData = async () => {
@@ -37,6 +38,9 @@ const EventRead = () => {
       setEventInfo(response.eventSelectRead);
       setMainImage(response.eventSelectRead.thumburl);
       setSubImages(response.url);
+      const img = new Image();
+      img.src = response.eventSelectRead.thumburl;
+      img.onload = () => setMainImageHeight(img.height); // Set main image height after loading
       setIsLoading(false); // Set loading to false after data is fetched
     };
     eventData();
@@ -112,11 +116,18 @@ const EventRead = () => {
               {/* 📌 좌측: 메인 이미지 + 서브 이미지 */}
               <Col md={7} className="position-relative">
                 <Card className="border-0 align-items-center mb-2 h-100">
-                  <Card.Img
-                    src={mainImage}
-                    alt="Main Event"
-                    className="img-fluid rounded EventReadTitle-main-image fade-in"
-                  />
+                  <div
+                    style={{
+                      height: mainImageHeight,
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <Card.Img
+                      src={mainImage}
+                      alt="Main Event"
+                      className="img-fluid rounded EventReadTitle-main-image fade-in"
+                    />
+                  </div>
                 </Card>
 
                 {/* ✅ 서브 이미지: 좌우 버튼으로 이동 */}
