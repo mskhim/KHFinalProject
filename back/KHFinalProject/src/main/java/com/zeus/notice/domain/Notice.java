@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class Notice {
+	private int rowNo;
     private int no;            // 공지사항 번호 (PK)
     private String title;      // 제목
     private String content;    // 내용

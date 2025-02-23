@@ -4,22 +4,27 @@
 
 <!-- 전체 공지사항 불러오기 (검색 기능 포함) -->
 <select id="getAllNotices" resultType="Notice">
-    SELECT NO, TITLE, CONTENT, SUB_DATE 
+    SELECT NO, TITLE, CONTENT, SUB_DATE, 
+           ROW_NUMBER() OVER (ORDER BY NO DESC) AS rowNo  <!-- rowNo 추가 -->
     FROM NOTICE 
     WHERE TITLE LIKE '%' || #{keyword} || '%' 
        OR CONTENT LIKE '%' || #{keyword} || '%'
     ORDER BY NO DESC
 </select>
 
-    <select id="getNoticesByPage" resultType="Notice">
-        SELECT * FROM (
-        SELECT n.*, ROWNUM AS rnum FROM (
-            SELECT NO, TITLE, CONTENT, SUB_DATE 
-            FROM NOTICE 
-            ORDER BY NO DESC
-        ) n WHERE ROWNUM <![CDATA[<]]>= #{page} * #{pageSize}
-    ) WHERE rnum <![CDATA[>]]> (#{page} - 1) * #{pageSize}
-    </select>
+<!-- 페이징 처리된 공지사항 불러오기 -->
+<select id="getNoticesByPage" resultType="Notice">
+    SELECT * FROM (
+        SELECT NO, TITLE, CONTENT, SUB_DATE, rowNo
+        FROM (
+            SELECT NO, TITLE, CONTENT, SUB_DATE, 
+                   ROW_NUMBER() OVER (ORDER BY NO DESC) AS rowNo  <!-- rowNo 추가 -->
+            FROM NOTICE
+        ) WHERE rowNo <![CDATA[<=]]> #{page} * #{pageSize}
+    ) WHERE rowNo <![CDATA[>]]> (#{page} - 1) * #{pageSize}
+    order by rowNo desc
+</select>
+
     
 	
     <!-- ✅ 특정 공지사항 조회 -->

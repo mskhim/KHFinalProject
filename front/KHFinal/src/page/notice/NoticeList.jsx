@@ -156,7 +156,7 @@ const NoticeList = () => {
                 {notices.length > 0 ? (
                   notices.map((data) => (
                     <tr key={data.no}>
-                      <td>{data.no}</td>
+                      <td>{data.rowNo}</td>
                       <td className="Notice-td-title">
                         <Link
                           to={`/noticeRead/${data.no}`}
