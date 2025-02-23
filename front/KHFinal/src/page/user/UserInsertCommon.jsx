@@ -103,7 +103,7 @@ const UserInsert = () => {
   const handlePasswordChange = useCallback(
     (e) => {
       const { name, value } = e.target;
-      setFormData({ ...formData, [name]: value });
+      setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
       // 비밀번호 길이 검사 (8자리 이상)
       if (name === 'pwd' && value.length < 8) {
         setPasswordLengthError('비밀번호는 8자리 이상이어야 합니다.');
@@ -130,7 +130,7 @@ const UserInsert = () => {
   // 생년월일 체크 및 만 14세 미만 확인
   const handleBirthChange = useCallback((e) => {
     const { value } = e.target;
-    setFormData({ ...formData, birth: value });
+    setFormData((prevFormData) => ({ ...prevFormData, birth: value }));
 
     // 생년월일로 만 14세 미만인지 체크
     const today = new Date();
@@ -193,7 +193,7 @@ const UserInsert = () => {
 
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   }, []);
 
   useEffect(() => {
