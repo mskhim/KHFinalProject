@@ -322,7 +322,6 @@ public class UserController {
 	    String provider = JwtUtil.validateToken(refreshToken).get("provider", String.class);
 	    String pwd = JwtUtil.validateToken(refreshToken).get("pwd", String.class);
 	    User user = new User();
-	    
 	    user.setId(userId);
 	    user.setProvider(provider);
 	    user.setPwd(pwd);

@@ -164,7 +164,10 @@ const UserInsert = () => {
         alert('비밀번호가 일치하지 않습니다.');
         return;
       }
-
+      if (!/^\d{3}-\d{4}-\d{4}$/.test(formData.phone)) {
+        alert('휴대폰 번호를 다시 입력해주세요. \nex) 010-XXXX-XXXX');
+        return;
+      }
       if (birthError) {
         alert(birthError); // 만약 만 14세 미만이면 에러 메세지 출력
         return;
