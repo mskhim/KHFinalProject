@@ -76,6 +76,8 @@ public class QnaServiceImpl implements QnaService {
 	@Override
 	public void deletePostAndReplies(int no) {
 		log.info(no+"");
-	    qnaMapper.deletePostAndReplies(no);
+	    qnaMapper.deletePost(no);
+	    qnaMapper.deleteReply(no);
+	   
 	}
 }

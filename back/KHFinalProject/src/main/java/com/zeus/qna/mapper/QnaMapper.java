@@ -20,4 +20,6 @@ public interface QnaMapper {
 	int getPageCount(SortDTO sortDTO);
 	int getisAuthenticated(Qna qna);
 	void deletePostAndReplies(int no);
+	void deletePost(int no);
+	void deleteReply(int no);
 }
