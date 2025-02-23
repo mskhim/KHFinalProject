@@ -62,14 +62,11 @@ public class PaymentController {
 			if (orderData.length < 2) {
 				return ResponseEntity.badRequest().body(Map.of("message", "잘못된 orderId 형식"));
 			}
-
 			// ✅ 첫 번째 데이터가 'data'인 경우, 실제 결제 ID는 두 번째 요소로 설정
 			String verifiedPaymentId = orderData[0].equals("data") ? orderData[1] : orderData[0];
-
 			// ✅ 이벤트-수량-ID 정보 파싱 (2번째 요소 이후부터)
 			List<PaymentRequest> requestList = new ArrayList<>();
 			int totalCalculatedAmount = 0; // DB에서 조회한 가격 검증용
-
 			for (int i = 1; i < orderData.length; i++) { // 첫 번째 데이터는 결제 ID라 제외
 				String[] parts = orderData[i].split("-"); // "eventNo-qt-cartNo" 형식
 				if (parts.length == 3) {
@@ -82,20 +79,17 @@ public class PaymentController {
 					if (pricePerUnit == null) {
 						return ResponseEntity.badRequest().body(Map.of("message", "해당 이벤트 가격 정보 없음: " + eventNo));
 					}
-
 					int totalPrice = pricePerUnit * qt;
 					totalCalculatedAmount += totalPrice; // 총 가격 계산
-
 					// ✅ PaymentRequest 객체 생성
 					PaymentRequest paymentRequest = new PaymentRequest();
 					paymentRequest.setVerifiedPaymentId(verifiedPaymentId);
-					paymentRequest.setReservationId(verifiedPaymentId + "-" + eventNo); // 예매번호 조합
+					paymentRequest.setReservationId(verifiedPaymentId + "-" + eventNo+"-"+userNo+"-"+cartNo); // 예매번호 조합
 					paymentRequest.setUserAccountNo(userNo);
 					paymentRequest.setId(cartNo); // 장바구니 아이템 ID
 					paymentRequest.setEventNo(eventNo);
 					paymentRequest.setPrice(totalPrice);
 					paymentRequest.setQt(qt);
-
 					requestList.add(paymentRequest);
 				}
 			}
