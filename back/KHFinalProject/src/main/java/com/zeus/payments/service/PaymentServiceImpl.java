@@ -68,7 +68,7 @@ public class PaymentServiceImpl implements PaymentService {
 		}
 
 		// ✅ 검증 성공 시 결제번호 생성
-		String paymentId = UUID.randomUUID().toString();
+		String paymentId = UUID.randomUUID().toString().replace("-", "").substring(0, 8);
 
 		return createResponse(true, "결제 검증 성공", paymentId);
 	}
