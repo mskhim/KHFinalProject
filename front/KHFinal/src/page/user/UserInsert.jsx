@@ -96,10 +96,10 @@ const UserInsert = () => {
   // 입력값 변경 핸들러
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prevFormData) => ({
+      ...prevFormData,
       [name]: value,
-    });
+    }));
   }, []);
 
   // 닉네임 중복 확인 핸들러
@@ -125,8 +125,8 @@ const UserInsert = () => {
 
   // 이메일 중복 확인 핸들러
   const handleEmailCheck = useCallback(async () => {
-    const email = formData.email.trim();
-    if (email === '') {
+    const email = formData.email?.trim(); // `formData.email`이 `undefined`일 수 있으므로 옵셔널 체이닝 사용
+    if (!email) {
       alert('이메일을 입력해주세요.');
       return;
     }
