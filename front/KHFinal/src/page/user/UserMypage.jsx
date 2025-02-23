@@ -20,7 +20,8 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 function UserMypage() {
-  const { getDarkMode, getDarkModeHover, logout } = useContext(Context);
+  const { getDarkMode, getDarkModeHover, logout, setUserNickname } =
+    useContext(Context);
   const [selectedSection, setSelectedSection] = useState('info-view');
   const [isEditable, setIsEditable] = useState(false); // Edit Mode
   const [userInfo, setUserInfo] = useState({}); // 사용자 정보.
@@ -180,6 +181,7 @@ function UserMypage() {
       if (updateResponse.authenticated) {
         setUserInfo(updatedFormData); // 서버에서 수정된 데이터로 회원 정보 업데이트.
         alert('회원 정보 수정이 완료되었습니다.');
+        setUserNickname(updatedFormData.nickname); // ✅ 닉네임 변경 시 상단바 닉네임 변경
         toggleEdit(); // 수정 모드 종료.
       } else {
         alert('회원 정보 수정에 실패했습니다. 다시 시도해주세요.');

@@ -88,6 +88,7 @@ export const Provider = ({ children }) => {
       login,
       isAuthenticated,
       userNickname,
+      setUserNickname,
       setIsAuthenticated,
       logout,
       loginTime,
