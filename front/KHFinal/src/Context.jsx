@@ -49,7 +49,6 @@ export const Provider = ({ children }) => {
     sessionStorage.setItem('userNickname', nickname);
     sessionStorage.setItem('loginTime', currentTime.toString());
   };
-  const navigate = useNavigate;
   // ✅ 로그아웃 함수
   const logout = () => {
     handleLogout();

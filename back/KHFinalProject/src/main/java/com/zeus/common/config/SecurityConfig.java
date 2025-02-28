@@ -24,6 +24,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+        .headers(headers -> headers
+                .contentSecurityPolicy(csp -> csp
+                    .policyDirectives("default-src 'self'; " +  // 기본적으로 현재 도메인('self')만 허용
+                                      "script-src 'self' https://trusted-cdn.com; " + // 신뢰할 수 있는 CDN만 스크립트 실행 허용
+                                      "style-src 'self' 'unsafe-inline'; " + // 스타일은 인라인 허용 (필요하면 변경)
+                                      "img-src 'self' data:; " + // 이미지 소스 허용
+                                      "connect-src 'self'; " + // AJAX, Fetch 요청 가능 출처 제한
+                                      "frame-ancestors 'none'") // iframe 삽입 차단 (Clickjacking 공격 방어)
+                )
+            )
             .csrf(csrf -> csrf.disable()) // ✅ CSRF 비활성화 (JWT 사용 시 필요)
             .cors(cors -> cors.configure(http)) // ✅ CORS 설정 활성화
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // ✅ 세션 사용 안함 (JWT 기반 인증)

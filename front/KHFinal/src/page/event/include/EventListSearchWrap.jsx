@@ -10,7 +10,6 @@ const EventListSearchWrap = ({ setSortOption, sortOption }) => {
   const [searchRegion, setSearchRegion] = useState('');
   const [searchName, setSearchName] = useState('');
   const [isSearching, setIsSearching] = useState(false);
-  const isFirstRender = useRef(true); // ✅ 처음 렌더링 여부를 저장하는 ref
   const [regions, setRegions] = useState([
     { id: 1, name: '서울', value: '서울' },
     { id: 2, name: '부산', value: '부산' },
@@ -35,10 +34,6 @@ const EventListSearchWrap = ({ setSortOption, sortOption }) => {
     setIsSearching(!isSearching);
   };
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
     if (!isSearching) {
       setSearchDate('');
       setSearchRegion('');
